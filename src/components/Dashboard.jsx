@@ -10,6 +10,7 @@ import {
 } from "../api";
 import { useAuth } from "../context/AuthContext";
 import Icons from "./Icons";
+import Select from "react-select";
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -255,6 +256,42 @@ export default function Dashboard() {
     return Array.from(m.values());
   }, [jobs]);
 
+  const locationOptions = useMemo(
+    () => uniqueLocations.map(loc => ({ value: loc, label: loc })),
+    [uniqueLocations]
+  );
+
+  const companyOptions = useMemo(
+    () => uniqueCompanies.map(comp => ({ value: comp, label: comp })),
+    [uniqueCompanies]
+  );
+
+  const selectStyles = {
+    control: (base) => ({
+      ...base,
+      minHeight: 40,
+      fontSize: 14,
+      borderRadius: 8,
+    }),
+    valueContainer: (base) => ({
+      ...base,
+      padding: "2px 10px",
+    }),
+    option: (base, state) => ({
+      ...base,
+      padding: "10px 12px",        // 👈 chiều cao option
+      fontSize: 14,
+      backgroundColor: state.isFocused ? "#f3f4f6" : "#fff",
+      color: "#111",
+      cursor: "pointer",
+      whiteSpace: "normal",        // 👈 text dài tự xuống dòng
+    }),
+    menu: (base) => ({
+      ...base,
+      zIndex: 9999,
+    }),
+  };
+
   return (
     <div className="dashboard-container">
       <div className="dashboard-grid">
@@ -274,27 +311,34 @@ export default function Dashboard() {
 
         {/* Filters */}
         <div className="filter-bar" style={{ marginTop: 8 }}>
-          <select
-            value={filterLocation}
-            onChange={(e) => setFilterLocation(e.target.value)}
-            className="filter-select"
-          >
-            <option value="">All locations</option>
-            {uniqueLocations.map((loc) => (
-              <option key={loc} value={loc}>{loc}</option>
-            ))}
-          </select>
+            <div style={{ flex: 1 }}>
+          <Select
+            options={locationOptions}
+            placeholder="All locations"
+            isClearable
+            styles={selectStyles}
+            value={
+              filterLocation
+                ? { value: filterLocation, label: filterLocation }
+                : null
+            }
+            onChange={(option) => setFilterLocation(option?.value || "")}
+          /></div>
 
-          <select
-            value={filterCompany}
-            onChange={(e) => setFilterCompany(e.target.value)}
-            className="filter-select"
-          >
-            <option value="">All companies</option>
-            {uniqueCompanies.map((comp) => (
-              <option key={comp} value={comp}>{comp}</option>
-            ))}
-          </select>
+           <div style={{ flex: 1 }}>
+          <Select
+            options={companyOptions}
+            placeholder="All companies"
+            isClearable
+            styles={selectStyles}
+            value={
+              filterCompany
+                ? { value: filterCompany, label: filterCompany }
+                : null
+            }
+            onChange={(option) => setFilterCompany(option?.value || "")}
+          />  </div>
+
         </div>
 
         {/* Category Chips - derived from job titles */}

@@ -1,5 +1,9 @@
 import React, { useMemo, useState, useEffect } from "react";
-import { listSubmissions, listArchivedSubmissions, getBalances } from "../../api";
+import {
+  listSubmissions,
+  listArchivedSubmissions,
+  getBalances,
+} from "../../api";
 import { useAuth } from "../../context/AuthContext";
 import "../Admin/CandidateManagement.css";
 import Icons from "../Icons";
@@ -14,6 +18,7 @@ const STATUS_OPTIONS = [
   "rejected",
 ];
 
+/* ================= TRACKER ================= */
 function CandidateTracker({ candidates, name }) {
   const [filters, setFilters] = useState({
     candidate: "",
@@ -22,7 +27,6 @@ function CandidateTracker({ candidates, name }) {
     status: "all",
   });
 
-  // ✅ Áp dụng lọc
   const filteredCandidates = useMemo(() => {
     return candidates.filter((c) => {
       const matchStatus =
@@ -43,7 +47,6 @@ function CandidateTracker({ candidates, name }) {
     });
   }, [candidates, filters]);
 
-  // ✅ Tạo danh sách job/status có sẵn để người dùng chọn
   const uniqueJobs = [...new Set(candidates.map((c) => c.job).filter(Boolean))];
   const uniqueCandidates = [
     ...new Set(candidates.map((c) => c.candidate).filter(Boolean)),
@@ -53,84 +56,84 @@ function CandidateTracker({ candidates, name }) {
   ];
 
   return (
-    <div className="candidate-tracker">
-      <h2>{name}</h2>
+    <section className="table-section">
+      <div className="table-header">
+        <h3>{name}</h3>
 
-      {/* 🧭 Bộ lọc */}
-      <div className="filter-bar">
-        <div className="filter-item">
-          <label>Status:</label>
-          <select
-            value={filters.status}
-            onChange={(e) =>
-              setFilters((f) => ({ ...f, status: e.target.value }))
-            }
-          >
-            <option value="all">All</option>
-            {STATUS_OPTIONS.map((s) => (
-              <option key={s} value={s}>
-                {s
-                  .split("_")
-                  .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-                  .join(" ")}
-              </option>
-            ))}
-          </select>
-        </div>
+        <div className="filter-row">
+          <div className="filter-wrapper">
+            <label>Status</label>
+            <select
+              value={filters.status}
+              onChange={(e) =>
+                setFilters((f) => ({ ...f, status: e.target.value }))
+              }
+            >
+              <option value="all">All</option>
+              {STATUS_OPTIONS.map((s) => (
+                <option key={s} value={s}>
+                  {s
+                    .split("_")
+                    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+                    .join(" ")}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        <div className="filter-item">
-          <label>Candidate:</label>
-          <select
-            value={filters.candidate}
-            onChange={(e) =>
-              setFilters((f) => ({ ...f, candidate: e.target.value }))
-            }
-          >
-            <option value="">All</option>
-            {uniqueCandidates.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
-        </div>
+          <div className="filter-wrapper">
+            <label>Candidate</label>
+            <select
+              value={filters.candidate}
+              onChange={(e) =>
+                setFilters((f) => ({ ...f, candidate: e.target.value }))
+              }
+            >
+              <option value="">All</option>
+              {uniqueCandidates.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        <div className="filter-item">
-          <label>Job:</label>
-          <select
-            value={filters.job}
-            onChange={(e) =>
-              setFilters((f) => ({ ...f, job: e.target.value }))
-            }
-          >
-            <option value="">All</option>
-            {uniqueJobs.map((j) => (
-              <option key={j} value={j}>
-                {j}
-              </option>
-            ))}
-          </select>
-        </div>
+          <div className="filter-wrapper">
+            <label>Job</label>
+            <select
+              value={filters.job}
+              onChange={(e) =>
+                setFilters((f) => ({ ...f, job: e.target.value }))
+              }
+            >
+              <option value="">All</option>
+              {uniqueJobs.map((j) => (
+                <option key={j} value={j}>
+                  {j}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        <div className="filter-item">
-          <label>Email:</label>
-          <select
-            value={filters.email}
-            onChange={(e) =>
-              setFilters((f) => ({ ...f, email: e.target.value }))
-            }
-          >
-            <option value="">All</option>
-            {uniqueEmails.map((em) => (
-              <option key={em} value={em}>
-                {em}
-              </option>
-            ))}
-          </select>
+          <div className="filter-wrapper">
+            <label>Email</label>
+            <select
+              value={filters.email}
+              onChange={(e) =>
+                setFilters((f) => ({ ...f, email: e.target.value }))
+              }
+            >
+              <option value="">All</option>
+              {uniqueEmails.map((em) => (
+                <option key={em} value={em}>
+                  {em}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
 
-      {/* 🧾 Table */}
       <div className="table-wrapper">
         <table className="admin-table">
           <thead>
@@ -148,6 +151,7 @@ function CandidateTracker({ candidates, name }) {
               <th>Time</th>
             </tr>
           </thead>
+
           <tbody>
             {filteredCandidates.map((c) => (
               <tr key={c.id}>
@@ -158,7 +162,9 @@ function CandidateTracker({ candidates, name }) {
                   {c.status
                     ? c.status
                         .split("_")
-                        .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+                        .map(
+                          (w) => w.charAt(0).toUpperCase() + w.slice(1)
+                        )
                         .join(" ")
                     : "-"}
                 </td>
@@ -167,12 +173,7 @@ function CandidateTracker({ candidates, name }) {
                 <td data-label="Phone">{c.phone || "-"}</td>
                 <td data-label="CV">
                   {c.cv ? (
-                    <a
-                      href={c.cvUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {/* {c.cv} */}
+                    <a href={c.cvUrl} target="_blank" rel="noreferrer">
                       Link
                     </a>
                   ) : (
@@ -206,14 +207,18 @@ function CandidateTracker({ candidates, name }) {
             ))}
           </tbody>
         </table>
+
         {filteredCandidates.length === 0 && (
-          <p style={{ padding: 12, color: "gray" }}>No candidates found.</p>
+          <p style={{ padding: 12, color: "#6b7280" }}>
+            No candidates found.
+          </p>
         )}
       </div>
-    </div>
+    </section>
   );
 }
 
+/* ================= MAIN PAGE ================= */
 export default function MyCandidates() {
   const { user } = useAuth();
   const ctvId = useMemo(() => user?._id, [user]);
@@ -228,6 +233,7 @@ export default function MyCandidates() {
         setArchived(arch.filter((a) => String(a.ctv) === String(ctvId)));
       }
     );
+
     getBalances().then((b) => {
       const id = user?._id || user?.id || user?.email;
       setBalance(b.ctvBonusById?.[id] || 0);
@@ -235,21 +241,20 @@ export default function MyCandidates() {
   }, [ctvId, user]);
 
   return (
-    <div style={{ padding: 16 }}>
-      <h2>My Candidates</h2>
-      <div
-        style={{ marginBottom: 12, fontWeight: 500, color: "#0d6efd" }}
-      >
-        Your Balance: {balance} USD
-      </div>
+    <div className="dashboard-container candidate-page">
+      <header className="page-header">
+        <h2>My Candidates</h2>
+        <div className="credit-info">
+          Your Balance: <span>${balance}</span>
+        </div>
+      </header>
 
-      <div style={{ marginBottom: 32 }}>
-        <CandidateTracker candidates={candidates} name="Candidate Tracking" />
-      </div>
+      <CandidateTracker
+        candidates={candidates}
+        name="Candidate Tracking"
+      />
 
-      <div>
-        <CandidateTracker candidates={archived} name="Completed" />
-      </div>
+      <CandidateTracker candidates={archived} name="Completed" />
 
       <Icons />
     </div>

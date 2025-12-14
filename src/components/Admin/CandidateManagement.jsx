@@ -345,9 +345,8 @@ export default function CandidateManagement() {
     </section>
   );
 
-  return (
-    <div className="candidate-page">
-
+   return (
+    <div className="dashboard-container candidate-page">
       {successMessage && (
         <div className="success-banner">{successMessage}</div>
       )}
@@ -380,4 +379,5 @@ export default function CandidateManagement() {
       )}
     </div>
   );
+
 }

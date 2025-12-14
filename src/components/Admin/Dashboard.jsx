@@ -16,6 +16,7 @@ import {
 } from "../../api";
 import { useAuth } from "../../context/AuthContext";
 import { NavLink, useNavigate } from "react-router-dom";
+import Select from "react-select";
 
 // ReactQuill
 import ReactQuill from "react-quill-new";
@@ -463,6 +464,9 @@ export default function AdminDashboard() {
     }
   };
 
+
+
+
   // -----------------------------------------
   // ACTIVE / INACTIVE jobs separation
   // -----------------------------------------
@@ -525,6 +529,20 @@ export default function AdminDashboard() {
     });
   }, [jobs, searchText, filterLocation, filterCompany, filterCategory]);
 
+    const locationOptions = React.useMemo(
+      () => uniqueLocations.map(loc => ({ value: loc, label: loc })),
+      [uniqueLocations]
+    );
+
+    const companyOptions = React.useMemo(
+      () => uniqueCompanies.map(c => ({ value: c, label: c })),
+      [uniqueCompanies]
+    );
+
+    const categoryOptions = React.useMemo(
+      () => categoriesAvailable.map(cat => ({ value: cat, label: cat })),
+      [categoriesAvailable]
+    );
   const activeJobs = filteredJobs.filter((job) => {
     const deadlineDate = job.deadline ? new Date(job.deadline) : null;
     const isPastDeadline = deadlineDate && today > deadlineDate;
@@ -706,6 +724,33 @@ export default function AdminDashboard() {
     );
   };
 
+  const selectStyles = {
+    control: (base) => ({
+      ...base,
+      minHeight: 40,
+      borderRadius: 8,
+      fontSize: 14,
+    }),
+    valueContainer: (base) => ({
+      ...base,
+      padding: "2px 10px",
+    }),
+    option: (base, state) => ({
+      ...base,
+      padding: "10px 12px",   // 👈 chiều cao option
+      fontSize: 14,
+      backgroundColor: state.isFocused ? "#f3f4f6" : "#fff",
+      color: "#111",
+      whiteSpace: "normal",   // 👈 text dài tự xuống dòng
+      cursor: "pointer",
+    }),
+    menu: (base) => ({
+      ...base,
+      zIndex: 9999,
+    }),
+  };
+
+
   return (
     <div className="admin-dashboard">
 
@@ -729,45 +774,64 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-          <div className="filter-bar">
-        <input
-          type="text"
-          placeholder="Search jobs, companies, skills..."
-          className="filter-input"
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-        />
-        <select
-          className="filter-select"
-          value={filterLocation}
-          onChange={(e) => setFilterLocation(e.target.value)}
-        >
-          <option value="">All Locations</option>
-          {uniqueLocations.map((loc, i) => (
-            <option key={i} value={loc}>{loc}</option>
-          ))}
-        </select>
-        <select
-          className="filter-select"
-          value={filterCompany}
-          onChange={(e) => setFilterCompany(e.target.value)}
-        >
-          <option value="">All Companies</option>
-          {uniqueCompanies.map((c, i) => (
-            <option key={i} value={c}>{c}</option>
-          ))}
-        </select>
-        <select
-          className="filter-select"
-          value={filterCategory}
-          onChange={(e) => setFilterCategory(e.target.value)}
-        >
-          <option value="">All Categories</option>
-          {categoriesAvailable.map((cat) => (
-            <option key={cat} value={cat}>{cat}</option>
-          ))}
-        </select>
-      </div>
+         <div className="filter-bar">
+          <input
+            type="text"
+            placeholder="Search jobs, companies, skills..."
+            className="filter-input"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+          />
+
+          {/* LOCATION */}
+          <div style={{ minWidth: 200, flex: 1 }}>
+            <Select
+              placeholder="All Locations"
+              options={locationOptions}
+              isClearable
+              styles={selectStyles}
+              value={
+                filterLocation
+                  ? { value: filterLocation, label: filterLocation }
+                  : null
+              }
+              onChange={(opt) => setFilterLocation(opt?.value || "")}
+            />
+          </div>
+
+          {/* COMPANY */}
+          <div style={{ minWidth: 200, flex: 1 }}>
+            <Select
+              placeholder="All Companies"
+              options={companyOptions}
+              isClearable
+              styles={selectStyles}
+              value={
+                filterCompany
+                  ? { value: filterCompany, label: filterCompany }
+                  : null
+              }
+              onChange={(opt) => setFilterCompany(opt?.value || "")}
+            />
+          </div>
+
+          {/* CATEGORY */}
+          <div style={{ minWidth: 180 }}>
+            <Select
+              placeholder="All Categories"
+              options={categoryOptions}
+              isClearable
+              styles={selectStyles}
+              value={
+                filterCategory
+                  ? { value: filterCategory, label: filterCategory }
+                  : null
+              }
+              onChange={(opt) => setFilterCategory(opt?.value || "")}
+            />
+          </div>
+        </div>
+
 
         <div className="jobs-grid">{displayedActiveJobs.map((job) => renderJobCard(job, false))}</div>
 
