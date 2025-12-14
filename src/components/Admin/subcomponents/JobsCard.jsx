@@ -23,9 +23,10 @@ export default function JobCard({ job, isInactive, savedJobs, user, onSaveToggle
         transition: 'filter 0.2s',
       }}
       onClick={isInactive ? undefined : () => {
-        const base = import.meta.env.BASE_URL || "/";
-        const prefix = base === "/" ? "" : base.replace(/\/$/, "");
-        navigate(`${prefix}/job/${job.id}`);
+        // const base = import.meta.env.BASE_URL || "/";
+        // const prefix = base === "/" ? "" : base.replace(/\/$/, "");
+        // navigate(`${prefix}/job/${job.id}`);
+        window.open(`${window.location.origin}/job/${job.id}`, "_blank");
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>

@@ -1,3 +1,117 @@
+.job-detail {
+  background: #f9fafb;
+}
+
+.job-layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 24px;
+}
+
+/* TAGS */
+.job-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.job-tags span {
+  background: #eef2ff;
+  color: #3730a3;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* INFO GRID */
+.job-info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.info-box {
+  background: #fff;
+  border-radius: 10px;
+  padding: 14px;
+  border: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.info-box label {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.info-box.highlight strong {
+  color: #f59e0b;
+}
+
+/* SECTIONS */
+.job-section {
+  margin-bottom: 28px;
+}
+
+.job-section h4 {
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+/* SIDEBAR */
+.job-sidebar .card {
+  margin-bottom: 16px;
+}
+
+.primary {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+}
+
+/* MODAL */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: grid;
+  place-items: center;
+  z-index: 999;
+}
+
+.modal-form {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+/* MOBILE */
+@media (max-width: 900px) {
+  .job-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .job-info-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+
 .job-html-content ul {
   list-style-type: disc;
   margin-left: 1.25rem;
