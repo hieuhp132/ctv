@@ -1,0 +1,9 @@
+:root {
+  --header-gradient: linear-gradient(135deg, #FFA500, #FF5E62);
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: whitesmoke;
+}
+  

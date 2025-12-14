@@ -1,0 +1,75 @@
+.user-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    padding: 20px;
+  }
+  
+  .user-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .user-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 14px rgba(0, 0, 0, 0.15);
+  }
+  
+  .user-card div {
+    margin-bottom: 10px;
+  }
+  
+  .user-card strong {
+    font-size: 14px;
+    color: #333;
+  }
+  
+  .user-card p {
+    margin: 4px 0 0;
+    font-size: 15px;
+    color: #555;
+  }
+  .user-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  
+  .user-actions button {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s ease;
+  }
+  
+  .user-actions button:hover {
+    opacity: 0.9;
+  }
+  
+  .user-actions .danger {
+    background-color: #e74c3c;
+    color: #fff;
+  }
+  
+  .user-actions button:not(.danger) {
+    background-color: #3498db;
+    color: #fff;
+  }
+
+  .password-input {
+    margin-top: 6px;
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+  }
+  

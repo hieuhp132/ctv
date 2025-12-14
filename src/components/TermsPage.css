@@ -1,0 +1,331 @@
+/* ========================================
+   NEW 2-COLUMN MODERN LAYOUT
+   ======================================== */
+
+:root {
+  --primary: #f97316;
+  --primary-dark: #ea580c;
+  --bg: #fafafa;
+  --bg-card: #ffffff;
+  --border: #e2e8f0;
+  --text-dark: #1e293b;
+  --text-muted: #64748b;
+  --text-header: white;
+  --shadow: 0 4px 14px rgba(0,0,0,0.07);
+}
+
+/* PAGE */
+.terms-page {
+  background: var(--bg);
+  min-height: 100vh;
+  font-family: Inter, sans-serif;
+}
+
+/* HEADER (giữ nguyên style cam đẹp) */
+.terms-header {
+  background: linear-gradient(135deg, var(--primary), #fb923c);
+  padding: 0.7rem 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+
+.logo-text {
+  color: white;
+}
+
+/* TITLE SECTION (full width) */
+.terms-title-section {
+  text-align: center;
+  margin: 1.8rem 0;
+}
+
+.terms-title-section h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text-dark);
+}
+
+.terms-title-section p {
+  color: var(--text-muted);
+  max-width: 560px;
+  margin: 0.5rem auto;
+  font-size: 1rem;
+}
+
+/* ============= 2 COLUMNS ============== */
+.terms-container {
+  display: grid;
+  grid-template-columns: 22% 1fr;
+  gap: 2rem;
+  max-width: 1300px;
+  margin: auto;
+  padding: 0 1.5rem;
+}
+
+/* LEFT COLUMN (Navigation/Menu) */
+.terms-nav {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.4rem;
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 90px;
+  height: fit-content;
+}
+
+.terms-nav h3 {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  color: var(--text-dark);
+}
+
+.nav-item {
+  padding: 0.6rem 0.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: 0.2s;
+  font-size: 0.95rem;
+}
+
+.nav-item:hover,
+.nav-item.active {
+  background: #fff7ed;
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* RIGHT COLUMN (Main Content) */
+.terms-right {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.terms-section {
+  background: var(--bg-card);
+  padding: 1.5rem 1.7rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+
+.section-content {
+  margin-top: 0.8rem;
+  color: var(--text-dark);
+  line-height: 1.6;
+  font-size: 0.97rem;
+}
+
+.section-content li {
+  margin-bottom: 0.35rem;
+}
+
+/* CONTACT + AGREEMENT (Full width) */
+.full-width-footer {
+  max-width: 1300px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+}
+
+.contact-box,
+.agreement-box {
+  background: white;
+  padding: 1.6rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  margin-bottom: 1rem;
+}
+
+/* BUTTONS */
+.btn-primary {
+  background: var(--primary);
+  padding: 0.65rem 1.4rem;
+  color: white;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: 0.2s ease;
+  display: inline-block;
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+}
+
+/* RESPONSIVE */
+@media (max-width: 960px) {
+  .terms-container {
+    grid-template-columns: 1fr;
+  }
+  .terms-nav {
+    position: relative;
+    top: auto;
+    margin-bottom: 1rem;
+  }
+}
+
+/* =========================================================
+   CONTACT INFORMATION (Full-width box)
+   ========================================================= */
+
+.contact-section {
+  background: var(--bg-card);
+  padding: 1.8rem 2rem;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  margin-bottom: 1.5rem;
+}
+
+.contact-section .section-title {
+  color: var(--primary-dark);
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.contact-content p {
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.contact-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  font-size: 0.98rem;
+  color: var(--text-dark);
+}
+
+.contact-item strong {
+  color: var(--primary-dark);
+  font-weight: 700;
+  margin-right: 4px;
+}
+
+.contact-item a {
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.contact-item a:hover {
+  text-decoration: underline;
+}
+
+/* =========================================================
+   AGREEMENT BOX
+   ========================================================= */
+
+.agreement-section {
+  margin-top: 1.5rem;
+}
+
+.agreement-box {
+  background: var(--bg-card);
+  padding: 1.8rem 2rem;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  text-align: left;
+}
+
+.agreement-box h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+  margin-bottom: 1rem;
+}
+
+.agreement-box p {
+  color: var(--text-dark);
+  margin-bottom: 1.4rem;
+  line-height: 1.55;
+}
+
+.agreement-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn-agree,
+.btn-decline {
+  padding: 0.65rem 1.4rem;
+  border-radius: 8px;
+  font-weight: 600;
+  display: inline-block;
+  text-align: center;
+  transition: 0.25s ease;
+}
+
+/* Agree button */
+.btn-agree {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-agree:hover {
+  background: var(--primary-dark);
+}
+
+/* Decline button */
+.btn-decline {
+  background: #e2e8f0;
+  color: var(--text-dark);
+}
+
+.btn-decline:hover {
+  background: #cbd5e1;
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+.terms-footer {
+  margin-top: 2rem;
+  padding: 1.3rem 0;
+  background: white;
+  border-top: 1px solid var(--border);
+}
+
+.footer-content {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.footer-content p:first-child {
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+/* =========================================================
+   RESPONSIVE (Mobile Optimization)
+   ========================================================= */
+
+@media (max-width: 760px) {
+  .agreement-actions {
+    flex-direction: column;
+  }
+  
+  .contact-section,
+  .agreement-box {
+    padding: 1.4rem;
+  }
+}

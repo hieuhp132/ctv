@@ -1,0 +1,50 @@
+.auth-container {
+    display: flex;
+    flex-direction: column;
+
+    height: 100vh;
+    background: linear-gradient(135deg, #FFA500, #FF5E62);
+    animation: fadeInBg 1s ease-in-out;
+    
+  }
+  
+  /* Header */
+  .auth-header {
+    padding: 15px 0;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  
+  .auth-header nav button {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 0.8rem;
+    margin: 0 15px;
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: color 0.3s ease, border-bottom 0.3s ease;
+  }
+  
+  .auth-header nav button:hover {
+    color: #FFD580;
+  }
+  
+  .auth-header nav button.active {
+    border-bottom: 2px solid #FFD580;
+    font-weight: bold;
+  }
+  
+  main {
+    flex: 1;
+    background-color: whitesmoke;
+  }
+  
+  @media (max-width: 768px) {
+   
+  
+    
+  }
