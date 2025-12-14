@@ -128,7 +128,7 @@ export default function Navbar() {
           </nav>
         ) : (
           <div className="profile-dropdown" onMouseLeave={() => setOpen(false)}>
-            <div className="search-container">
+            {/* <div className="search-container">
               {!showSearch ? (
                 <button onClick={() => setShowSearch(true)} className="nav-icon-btn" title="Search">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
@@ -159,9 +159,9 @@ export default function Navbar() {
                   )}
                 </form>
               )}
-            </div>
+            </div> */}
 
-            <div className="notif" onClick={() => { setOpenNotif(!openNotif); const ids = notifications.map(n => n.id); setReadNotifIds(prev => Array.from(new Set([...prev, ...ids]))) }}>
+            {/* <div className="notif" onClick={() => { setOpenNotif(!openNotif); const ids = notifications.map(n => n.id); setReadNotifIds(prev => Array.from(new Set([...prev, ...ids]))) }}>
               <span className="bell">🔔</span>
               {notifications.length > 0 && (<span className={`dot ${unreadCount === 0 ? "gray" : ""}`}></span>)}
               {openNotif && (
@@ -176,7 +176,7 @@ export default function Navbar() {
                   ))}
                 </div>
               )}
-            </div>
+            </div> */}
             {user.role === "admin" && (<span className="stat-pill">Credit: {balances.adminCredit}$</span>)}
             {user.role === "CTV" && (<span className="stat-pill">Bonus: {ctvBonus}$</span>)}
             <div className="profile-box" onClick={() => setOpen(!open)}>
