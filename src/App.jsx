@@ -19,45 +19,49 @@ import AdminSavedJobs from "./components/Admin/SavedJobs";
 import UsersManagement from "./components/Admin/UsersManagement";
 import AuthCallback from "./components/auth/AuthPage";
 
-// ---------------- PRIVATE ROUTE ----------------
+/* ================= PRIVATE ROUTE ================= */
 function PrivateRoute({ children, roles }) {
   const { user, authReady } = useAuth();
 
   if (!authReady) return null;
+  if (!user) return <Navigate to="/login" replace />;
 
-  if (!user) return <Navigate to="/login" />;
-
-  // Nếu roles được truyền và user.role không có trong roles -> chặn
   if (roles && !roles.includes(user.role)) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/login" replace />;
   }
 
   return children;
 }
 
-
-// ---------------- ROOT REDIRECT ----------------
-function RootRedirect() {
+/* ================= ROOT HANDLER ================= */
+function RootPage() {
   const { user, authReady } = useAuth();
+
   if (!authReady) return null;
-  if (!user) return <Navigate to="/home" />;
-  return <Navigate to={user.role === "admin" ? "/admin" : "/dashboard"} />;
+
+  // Đã login → redirect dashboard tương ứng
+  if (user) {
+    return <Navigate to={user.role === "admin" ? "/admin" : "/dashboard"} replace />;
+  }
+
+  // Chưa login → HomePage (SEO)
+  return <HomePage />;
 }
 
-// ---------------- MAIN APP ----------------
+/* ================= MAIN APP ================= */
 export default function App() {
   return (
     <Router>
       <AuthProvider>
         <Routes>
-          <Route path="/" element={<RootRedirect />} />
-          <Route path="/home" element={<HomePage />} />
+
+          {/* ✅ ROOT = HOME PAGE */}
+          <Route path="/" element={<RootPage />} />
+
           <Route path="/login" element={<><Navbar /><Login /></>} />
           <Route path="/signup" element={<><Navbar /><SignUp /></>} />
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/auth/callback" element={<AuthCallback />} />
-
-
 
           {/* ---------------- PRIVATE ROUTES ---------------- */}
           <Route
@@ -70,31 +74,10 @@ export default function App() {
             }
           />
 
-
-          <Route
-            path="/user-management"
-            element={
-              <PrivateRoute role="admin">
-                <Navbar />
-                <UsersManagement />
-              </PrivateRoute>
-            }
-          />
-
-          <Route
-            path="/admin-dashboard"
-            element={
-              <PrivateRoute role="admin">
-                <Navbar />
-                <AdminDashboardBeta />
-              </PrivateRoute>
-            }
-          />
-
           <Route
             path="/admin"
             element={
-              <PrivateRoute role="admin">
+              <PrivateRoute roles={["admin"]}>
                 <Navbar />
                 <AdminDashboard />
               </PrivateRoute>
@@ -102,9 +85,29 @@ export default function App() {
           />
 
           <Route
+            path="/admin-dashboard"
+            element={
+              <PrivateRoute roles={["admin"]}>
+                <Navbar />
+                <AdminDashboardBeta />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/user-management"
+            element={
+              <PrivateRoute roles={["admin"]}>
+                <Navbar />
+                <UsersManagement />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
             path="/candidate-management"
             element={
-              <PrivateRoute role="admin">
+              <PrivateRoute roles={["admin"]}>
                 <Navbar />
                 <CandidateManagement />
               </PrivateRoute>
@@ -154,7 +157,7 @@ export default function App() {
           <Route
             path="/saved-jobs"
             element={
-              <PrivateRoute role="recruiter">
+              <PrivateRoute roles={["recruiter"]}>
                 <Navbar />
                 <SavedJobs />
               </PrivateRoute>
@@ -164,15 +167,16 @@ export default function App() {
           <Route
             path="/admin/saved-jobs"
             element={
-              <PrivateRoute role="admin">
+              <PrivateRoute roles={["admin"]}>
                 <Navbar />
                 <AdminSavedJobs />
               </PrivateRoute>
             }
           />
 
-          {/* ---------------- 404 fallback ---------------- */}
-          <Route path="*" element={<Navigate to="/" />} />
+          {/* 404 */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+
         </Routes>
       </AuthProvider>
     </Router>
