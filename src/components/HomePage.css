@@ -882,7 +882,7 @@
   bottom: 100px;
   right: 32px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 16px;
   z-index: 1000;
 }
@@ -994,6 +994,8 @@
   .floating-icons {
     right: 16px;
     bottom: 80px;
+    display: flex;
+    flex-direction: column;
   }
 
   .hero-search {

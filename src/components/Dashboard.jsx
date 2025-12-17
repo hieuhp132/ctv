@@ -106,7 +106,7 @@ export default function Dashboard() {
         const isPastDeadline = deadlineDate && today > deadlineDate;
         return job.status === "Active" && !isPastDeadline;
       });
-      console.log("Fetched jobs:", activeOnly);
+      // console.log("Fetched jobs:", activeOnly);
       setJobs(activeOnly);
     } catch (error) {}
   };
