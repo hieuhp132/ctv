@@ -5,7 +5,7 @@ import "./HomePage.css";
 import logoImg from "../assets/logo.png";
 import fbIcon from "../assets/fb.jpg";
 import teleIcon from "../assets/tele.png";
-import { fetchJobs } from "../api";
+import { fetchAllJobs } from "../api";
 import { useAuth } from "../context/AuthContext";
 
 export default function HomePage() {
@@ -34,14 +34,17 @@ export default function HomePage() {
   useEffect(() => {
     let mounted = true;
     setLoading(true);
-    fetchJobs({ limit: 12 })
+
+    fetchAllJobs(12) // limit to 12 jobs
       .then((list) => {
         if (mounted) setJobs(Array.isArray(list) ? list : []);
       })
       .catch(() => setError("Không tải được danh sách công việc"))
       .finally(() => mounted && setLoading(false));
+
     return () => { mounted = false; };
   }, []);
+
 
   useEffect(() => {
   let cancelled = false;

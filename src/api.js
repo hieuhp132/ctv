@@ -182,6 +182,20 @@ export async function fetchJobs({ page = 1, limit = 1000, q = "" } = {}) {
   }
 }
 
+export async function fetchAllJobs(limit) {
+  try {
+    const res = await fetch(`${API_BASE}/local/jobs`);
+    if (!res.ok) return [];
+
+    let data = await res.json();
+    if (limit) data = data.slice(0, limit); // limit here
+    return data;
+  } catch (error) {
+    return [];
+  }
+}
+
+
 export async function getJobById(id) {
   const res = await fetch(`${API_BASE}/api/jobs/${id}`);
   if (!res.ok) return null;
