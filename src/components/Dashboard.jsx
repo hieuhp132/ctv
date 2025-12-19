@@ -21,6 +21,7 @@ export default function Dashboard() {
   const [savedJobs, setSavedJobs] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [page, setPage] = useState(1);
   const pageSize = 9;
@@ -30,7 +31,6 @@ export default function Dashboard() {
   const [filterCompany, setFilterCompany] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
 
-  // Category keywords
   const CATEGORY_KEYWORDS = {
     Developer: ["dev", "developer", "engineer", "software", "frontend", "backend", "fullstack", "react", "node", "vue", "angular", "solidity", "smart contract"],
     Data: ["data", "machine learning", "ml", "data scientist", "data engineer"],
@@ -45,38 +45,46 @@ export default function Dashboard() {
   // -------------------- Load jobs + saved jobs --------------------
   const loadData = async () => {
     setLoading(true);
+    let jobsData = [];
+    let savedData = { items: [] };
+
     try {
-      const userId = user?.id || user?.email;
-      const [jobsData, savedData] = await Promise.all([
-        fetchAllJobs(),
-        userId ? fetchSavedJobs(userId) : Promise.resolve({ items: [] }),
-      ]);
-
-      const backendSavedJobs = (savedData.items || []).map((item) => ({
-        id: item.jobId || item.id || item._id || item.jobLink || "undefined-id",
-        title: item.title,
-        company: item.company,
-        location: item.location,
-        salary: item.salary,
-        deadline: item.deadline,
-        bonus: item.bonus,
-      }));
-
-      // Mark saved jobs
-      const savedJobIds = new Set(backendSavedJobs.map((j) => j.id));
-      const jobsWithSavedFlag = (jobsData || []).map((job) => ({
-        ...job,
-        isSaved: savedJobIds.has(job.id),
-      }));
-
-      setJobs(jobsWithSavedFlag);
-      setSavedJobs(backendSavedJobs);
-      localStorage.setItem("savedJobs", JSON.stringify(backendSavedJobs));
+      jobsData = await fetchAllJobs();
     } catch (err) {
-      console.error("Failed to load jobs or saved jobs:", err);
-    } finally {
-      setLoading(false);
+      console.error("Failed to fetch jobs", err);
     }
+
+    if (user?.id || user?.email) {
+      try {
+        savedData = await fetchSavedJobs(user.id || user.email);
+      } catch (err) {
+        console.error("Failed to fetch saved jobs", err);
+        savedData = { items: [] };
+      }
+    }
+
+    // Format saved jobs
+    const backendSavedJobs = (savedData.items || []).map((item) => ({
+      id: item.jobId || item.id || item._id || item.jobLink || "undefined-id",
+      title: item.title,
+      company: item.company,
+      location: item.location,
+      salary: item.salary,
+      deadline: item.deadline,
+      bonus: item.bonus,
+    }));
+
+    // Mark saved jobs in job list
+    const savedJobIds = new Set(backendSavedJobs.map((j) => j.id));
+    const jobsWithSavedFlag = (jobsData || []).map((job) => ({
+      ...job,
+      isSaved: savedJobIds.has(job.id),
+    }));
+
+    setJobs(jobsWithSavedFlag);
+    setSavedJobs(backendSavedJobs);
+    localStorage.setItem("savedJobs", JSON.stringify(backendSavedJobs));
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -190,7 +198,6 @@ export default function Dashboard() {
 
   // -------------------- Modal --------------------
   const closeModal = () => setSelectedJob(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!selectedJob) return;
