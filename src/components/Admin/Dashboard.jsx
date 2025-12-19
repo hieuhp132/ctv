@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import "./Dashboard.css";
 import "../Dashboard.css";
 import {
-  fetchJobs,
+  fetchAllJobs,
   listSubmissions,
   listArchivedSubmissions,
   getBalances,
@@ -403,7 +403,7 @@ export default function AdminDashboard() {
       const [subs, arch, js, bal] = await Promise.all([
         listSubmissions(),
         listArchivedSubmissions(),
-        fetchJobs(),
+        fetchAllJobs(),
         getBalances(),
       ]);
 
@@ -423,7 +423,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     const loadJobs = async () => {
       try {
-        const jobsData = await fetchJobs();
+        const jobsData = await fetchAllJobs();
         setJobs(jobsData);
 
         const userId = user?.id || user?.email;

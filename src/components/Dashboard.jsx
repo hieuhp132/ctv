@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
 import {
-  fetchJobs,
+  fetchAllJobs,
   createSubmission,
   fetchSavedJobs,
   saveJob,
@@ -99,7 +99,7 @@ export default function Dashboard() {
 
   const loadJobs = async () => {
     try {
-      const jobsData = await fetchJobs();
+      const jobsData = await fetchAllJobs();
       const today = new Date();
       const activeOnly = jobsData.filter((job) => {
         const deadlineDate = job.deadline ? new Date(job.deadline) : null;
