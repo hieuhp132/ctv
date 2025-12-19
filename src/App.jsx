@@ -18,6 +18,7 @@ import TermsPage from "./components/TermsPage";
 import AdminSavedJobs from "./components/Admin/SavedJobs";
 import UsersManagement from "./components/Admin/UsersManagement";
 import AuthCallback from "./components/auth/AuthPage";
+import Updated from "./components/Updated";
 
 /* ================= PRIVATE ROUTE ================= */
 function PrivateRoute({ children, roles }) {
@@ -45,7 +46,8 @@ function RootPage() {
   }
 
   // Chưa login → HomePage (SEO)
-  return <HomePage />;
+  // return <HomePage />;
+  return <Updated />;
 }
 
 /* ================= MAIN APP ================= */
