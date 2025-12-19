@@ -309,6 +309,32 @@ export async function apiLogin(email, password) {
   }
 }
 
+export async function llogin(email, password) {
+  try {
+    const res = await fetch(`${API_BASE}/local/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok || !data.success) {
+      // Backend trả success: false hoặc HTTP error
+      throw new Error(data.message || "Login failed");
+    }
+
+    // user object đã có token bên backend
+    return {
+      user: data.user,
+      token: data.user.token,
+    };
+  } catch (err) {
+    console.error("API login() error:", err);
+    throw err;
+  }
+}
+
 export async function signup({ name, email, password, promoCode = null, fromSupabase }) {
   try {
     const res = await fetch(`${API_BASE}/db/users/signup`, {

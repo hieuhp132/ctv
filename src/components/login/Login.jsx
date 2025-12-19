@@ -8,7 +8,7 @@ import fbIcon from "../../assets/fb.jpg";
 import teleIcon from "../../assets/tele.png";
 
 import { useAuth } from "../../context/AuthContext";
-import { API_BASE, apiLogin } from "../../api";
+import { API_BASE, apiLogin, llogin } from "../../api";
 import { supabase } from "../../supabaseClient";
 
 import "./Login.css";
@@ -79,7 +79,7 @@ const handleSubmit = async (e) => {
   setLoading(true);
 
   try {
-    const { user, token } = await apiLogin(email, password); // 🔥 dùng API file riêng
+    const { user, token } = await llogin(email, password); // 🔥 dùng API file riêng
 
     // Gọi AuthProvider login → tự lưu session + redirect
     login(user, token);
