@@ -240,7 +240,7 @@ export default function Dashboard() {
           <span style={{ marginLeft: 8 }}>Applicants: {job.applicants}</span>
         </div>
           <span style={{ marginLeft: 8, fontWeight: "bold", color: isInactive ? "red" : "green" }}>
-            Status: {isInactive ? "Inactive" : "Active"}
+            Status: Active
           </span>
         <div className="reward-line">
           <span className="reward-badge">USD {job.rewardCandidateUSD} / Headhunter</span>
