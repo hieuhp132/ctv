@@ -276,8 +276,8 @@ export default function MyCandidates() {
           return [
             id,
             {
-              title: job?.title || "-",
-              salary: job?.salary || "-"
+              title: job?.job.title || "-",
+              salary: job?.job.salary || "-"
             }
           ];
         })
