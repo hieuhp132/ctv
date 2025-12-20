@@ -1,7 +1,7 @@
 // src/components/JobDetail.jsx
 import React, { useEffect, useMemo, useState } from "react";
 import {
-  getJobById,
+  getJobByIdL,
   createSubmission,
   listSubmissions,
   listArchivedSubmissions,
@@ -28,7 +28,7 @@ export default function JobDetail() {
   const [file, setFile] = useState(null);
 
   useEffect(() => {
-    getJobById(id).then(setJob);
+    getJobByIdL(id).then(setJob);
   }, [id]);
 
   useEffect(() => {

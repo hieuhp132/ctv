@@ -203,6 +203,12 @@ export async function getJobById(id) {
   return mapJobFromServer(j);
 }
 
+export async function getJobByIdL(id) {
+  const res = await fetch(`${API_BASE}/local/job/${id}`);
+  if (!res.ok) return null;
+  const j = await res.json();
+  return j;
+}
 
 export async function createJob(job) {
   const body = {
