@@ -13,6 +13,8 @@ import { useAuth } from "../context/AuthContext";
 import Icons from "./Icons";
 import Select from "react-select";
 
+const asArray = (v) => (Array.isArray(v) ? v : []);
+
 export default function Dashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
