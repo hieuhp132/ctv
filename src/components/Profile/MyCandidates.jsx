@@ -1,8 +1,8 @@
 import React, { useMemo, useState, useEffect } from "react";
 import {
-  listSubmissionsL,
   listArchivedSubmissions,
   getBalances,
+  listReferrals,
 } from "../../api";
 import { useAuth } from "../../context/AuthContext";
 import "../Admin/CandidateManagement.css";
@@ -227,7 +227,7 @@ export default function MyCandidates() {
   const [balance, setBalance] = useState(0);
 
   useEffect(() => {
-    Promise.all([listSubmissionsL(), listArchivedSubmissions()]).then(
+    Promise.all([listReferrals({ id: ctvId, isAdmin: false }), listArchivedSubmissions()]).then(
       ([subs, arch]) => {
         setCandidates(subs.filter((s) => String(s.ctv) === String(ctvId)));
         setArchived(arch.filter((a) => String(a.ctv) === String(ctvId)));

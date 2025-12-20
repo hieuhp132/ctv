@@ -453,37 +453,42 @@ export async function listSubmissions({ page = 1, limit = 1000, status, jobId, q
   return items.filter((s) => !finals.includes(s.status));
 }
 
-export async function listSubmissionsL({
+export async function listReferrals({
+  id,
+  isAdmin = false,
   page = 1,
   limit = 1000,
   status,
   jobId,
   q,
-  finalized = false,
+  finalized,
 } = {}) {
-  const user = getCurrentUser();
-  if (!user) return [];
+  if (!id) return [];
 
-  const params = new URLSearchParams();
-  params.set("page", String(page));
-  params.set("limit", String(limit));
+  const params = new URLSearchParams({
+    id,
+    isAdmin: String(isAdmin),
+    page,
+    limit,
+  });
 
-  if (status) params.set("status", String(status).toLowerCase());
-  if (jobId) params.set("jobId", String(jobId));
+  if (status) params.set("status", status);
+  if (jobId) params.set("jobId", jobId);
   if (q) params.set("q", q);
   if (finalized !== undefined) {
     params.set("finalized", String(finalized));
   }
 
-  const res = await fetch(`${API_BASE}/local/referrals?${params.toString()}`);
+  const res = await fetch(
+    `${API_BASE}/local/referrals?${params.toString()}`
+  );
+
   if (!res.ok) return [];
 
   const data = await res.json();
-  console.log("listSubmissionsL data:", data);
-  const list = Array.isArray(data?.items) ? data.items : [];
-
-  return list.map(mapReferralToClient);
+  return Array.isArray(data.items) ? data.items : [];
 }
+
 
 
 export async function listArchivedSubmissions(opts = {}) {
