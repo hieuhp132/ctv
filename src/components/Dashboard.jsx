@@ -6,7 +6,7 @@ import {
   saveJobL,
   unsaveJobL,
   createSubmissionL,
-  uploadCVL,
+  uploadFile,
 } from "../api";
 import { useAuth } from "../context/AuthContext";
 import Icons from "./Icons";
