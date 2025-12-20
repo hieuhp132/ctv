@@ -212,9 +212,9 @@ export default function Dashboard() {
               </span>
 
               <div className="reward-line">
-                {job.rewardCandidateUSD && <span className="reward-badge">USDs {job.rewardCandidateUSD} / Headhunter</span>}
-                {job.rewardInterviewUSD && <span className="reward-badge secondary">+USDs {job.rewardInterviewUSD} / Interview</span>}
-                {job.bonus && <span className="job-bonus">+USD {job.bonus}</span>}
+                <span className="reward-badge">USD {job.rewardCandidateUSD} / Headhunter</span>
+                <span className="reward-badge secondary">+USD {job.rewardInterviewUSD} / Interview</span>
+                <span className="job-bonus">+USD {job.bonus}</span>
               </div>
 
               <button className="submit-btn" onClick={(e) => { e.stopPropagation(); setSelectedJob(job); setShowSubmit(true); }}>
