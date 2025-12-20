@@ -60,15 +60,20 @@ export default function Dashboard() {
 
       // Load from backend (SOURCE OF TRUTH)
       if (user?.id || user?.email) {
-        console.log("Loading saved jobs from backend for", user.id || user.email);
-        const savedRes = await fetchSavedJobsL(user.id || user.email);
+        console.log("Loading saved jobs from backend for", user.email);
+        const savedRes = await fetchSavedJobsL(user.email);
         const savedItems = asArray(savedRes?.items);
+
+        console.log("Saved jobs response:", savedRes);
+        console.log("Fetched saved jobs:", savedItems);
 
         savedItems.forEach((item) => {
           const id = item.jobId || item._id;
           if (id) savedIds.add(id);
         });
 
+        console.log("Final saved job IDs:", savedIds);
+        
         // Persist clean data to localStorage
         localStorage.setItem(
           "savedJobs",
