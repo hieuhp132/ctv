@@ -10,7 +10,6 @@ import {
 } from "../api";
 import { useAuth } from "../context/AuthContext";
 import Icons from "./Icons";
-import Select from "react-select";
 
 /* ================== HELPERS ================== */
 const asArray = (v) => (Array.isArray(v) ? v : []);
@@ -64,7 +63,6 @@ export default function Dashboard() {
         }));
 
         let savedIds = new Set();
-
         if (user?.email || user?.id) {
           const savedRes = await fetchSavedJobsL(user.email);
           asArray(savedRes?.jobs).forEach((j) => {
@@ -181,8 +179,17 @@ export default function Dashboard() {
       });
 
       alert("Candidate submitted");
-      setShowSubmit(false);
+
+      setCandidateForm({
+        candidateName: "",
+        candidateEmail: "",
+        candidatePhone: "",
+        linkedin: "",
+        portfolio: "",
+        suitability: "",
+      });
       setCvFile(null);
+      setShowSubmit(false);
     } catch {
       alert("Submit failed");
     } finally {
@@ -200,7 +207,11 @@ export default function Dashboard() {
       ) : (
         <div className="job-list">
           {displayedJobs.map((job) => (
-            <div key={job._id} className="job-card">
+            <div
+              key={job._id}
+              className="job-card"
+              onClick={() => window.open(`/job/${job._id}`, "_blank")}
+            >
               <div className="job-card-header">
                 <div>
                   <h3>{job.title}</h3>
@@ -220,10 +231,13 @@ export default function Dashboard() {
 
               <div>📍 {job.location}</div>
               <div>💲 {job.salary || "N/A"}</div>
+              {job.deadline && <div>⏰ Deadline: {new Date(job.deadline).toLocaleDateString()}</div>}
+              {job.category && <div>🏷 Category: {job.category}</div>}
 
               <button
                 className="submit-btn"
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
                   setSelectedJob(job);
                   setShowSubmit(true);
                 }}
@@ -236,29 +250,54 @@ export default function Dashboard() {
       )}
 
       {/* SUBMIT MODAL */}
-      {showSubmit && (
+      {showSubmit && selectedJob && (
         <div className="modal-overlay">
           <div className="modal">
-            <h3>Submit Candidate</h3>
+            <h3>Submit Candidate – {selectedJob.title}</h3>
 
-            <input
-              placeholder="Candidate name"
-              onChange={(e) =>
-                setCandidateForm((f) => ({ ...f, candidateName: e.target.value }))
-              }
-            />
+            {[
+              ["Candidate Name", "candidateName"],
+              ["Email", "candidateEmail"],
+              ["Phone", "candidatePhone"],
+              ["LinkedIn", "linkedin"],
+              ["Portfolio", "portfolio"],
+            ].map(([label, key]) => (
+              <div className="form-group" key={key}>
+                <label>{label}</label>
+                <input
+                  value={candidateForm[key]}
+                  onChange={(e) =>
+                    setCandidateForm((f) => ({ ...f, [key]: e.target.value }))
+                  }
+                />
+              </div>
+            ))}
 
-            <input
-              type="file"
-              onChange={(e) => setCvFile(e.target.files[0])}
-            />
+            <div className="form-group">
+              <label>Suitability</label>
+              <textarea
+                value={candidateForm.suitability}
+                onChange={(e) =>
+                  setCandidateForm((f) => ({ ...f, suitability: e.target.value }))
+                }
+              />
+            </div>
+
+            <div className="form-group">
+              <label>CV (PDF / DOC)</label>
+              <input
+                type="file"
+                accept=".pdf,.doc,.docx"
+                onChange={(e) => setCvFile(e.target.files[0])}
+              />
+            </div>
 
             <div className="modal-actions">
               <button
                 onClick={handleSubmitCandidate}
                 disabled={isSubmitting || uploadingCV}
               >
-                Submit
+                {uploadingCV ? "Uploading..." : "Submit"}
               </button>
               <button onClick={() => setShowSubmit(false)}>Cancel</button>
             </div>
