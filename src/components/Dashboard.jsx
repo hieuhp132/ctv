@@ -139,7 +139,7 @@ const handleSubmitCandidate = async () => {
 
     // 2. Submit referral
     await createSubmissionL({
-      job: selectedJob._id,
+      jobId: selectedJob._id,
       recruiterId,
       ...candidateForm,
       cvUrl, // ✅ STRING URL
