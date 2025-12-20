@@ -273,7 +273,7 @@ useEffect(() => {
         console.log("Fetching job:", id);
         const job = await getJobByIdL(id);
         console.log("Job result:", job);
-        return [id, job?.title || "-"];
+        return [id, job?.job.title || "-"];
       })
     );
 
