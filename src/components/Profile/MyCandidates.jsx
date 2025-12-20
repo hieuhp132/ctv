@@ -233,7 +233,7 @@ export default function MyCandidates() {
         setArchived(arch.filter((a) => String(a.ctv) === String(ctvId)));
       }
     );
-
+    
     getBalances().then((b) => {
       const id = user?._id || user?.id || user?.email;
       setBalance(b.ctvBonusById?.[id] || 0);

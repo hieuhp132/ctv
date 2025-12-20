@@ -479,6 +479,7 @@ export async function listSubmissionsL({
   if (!res.ok) return [];
 
   const data = await res.json();
+  console.log("listSubmissionsL data:", data);
   const list = Array.isArray(data?.items) ? data.items : [];
 
   return list.map(mapReferralToClient);
