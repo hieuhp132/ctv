@@ -363,12 +363,12 @@ export async function signup({ name, email, password, promoCode = null, fromSupa
   }
 }
 
-export async function lregister({ name, email, password, promoCode = null }) {
+export async function lregister({ name, email, password, promoCode = null, fromSupabase }) {
   try {
     const res = await fetch(`${API_BASE}/local/register`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, password, promoCode }),
+      body: JSON.stringify({ name, email, password, promoCode, fromSupabase }),
     });
     
     const data = await res.json();
