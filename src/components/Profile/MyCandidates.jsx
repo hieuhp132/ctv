@@ -37,7 +37,7 @@ function CandidateTracker({ candidates, name, jobMap }) {
         .toLowerCase()
         .includes(filters.candidate.toLowerCase());
 
-      const matchJob = (jobMap?.[c.job] || "")
+      const matchJob = (jobMap?.[c.job]?.title || "")
         .toLowerCase()
         .includes(filters.job.toLowerCase());
 
@@ -52,7 +52,7 @@ function CandidateTracker({ candidates, name, jobMap }) {
   const uniqueJobs = [
     ...new Set(
       candidates
-        .map((c) => jobMap?.[c.job])
+        .map((c) => jobMap?.[c.job]?.title)
         .filter(Boolean)
     ),
   ];
@@ -166,8 +166,8 @@ function CandidateTracker({ candidates, name, jobMap }) {
             {filteredCandidates.map((c) => (
               <tr key={c._id}>
                 <td>{c.candidateName}</td>
-                <td>{jobMap?.[c.job] || "-"}</td>
-                <td>-</td>
+                <td>{jobMap?.[c.job]?.title || "-"}</td>
+                <td>{jobMap?.[c.job]?.salary || "-"}</td>
                 <td>
                   {c.status
                     ? c.status
@@ -260,31 +260,37 @@ export default function MyCandidates() {
     });
   }, [ctvId, user]);
 
-  /* ===== LOAD JOB TITLES ===== */
-useEffect(() => {
-  const loadJobs = async () => {
-    const all = [...candidates, ...archived];
-    const jobIds = [...new Set(all.map(c => c.job).filter(Boolean))];
+  /* ===== LOAD JOB TITLE + SALARY ===== */
+  useEffect(() => {
+    const loadJobs = async () => {
+      const all = [...candidates, ...archived];
+      const jobIds = [...new Set(all.map(c => c.job).filter(Boolean))];
 
-    console.log("JOB IDS:", jobIds);
+      if (jobIds.length === 0) return;
 
-    const entries = await Promise.all(
-      jobIds.map(async (id) => {
-        console.log("Fetching job:", id);
-        const job = await getJobByIdL(id);
-        console.log("Job result:", job);
-        return [id, job?.job.title || "-"];
-      })
-    );
+      const entries = await Promise.all(
+        jobIds.map(async (id) => {
+          if (jobMap[id]) return [id, jobMap[id]];
 
-    console.log("JOB MAP ENTRIES:", entries);
+          const job = await getJobByIdL(id);
+          return [
+            id,
+            {
+              title: job?.title || "-",
+              salary: job?.salary || "-"
+            }
+          ];
+        })
+      );
 
-    setJobMap(prev => ({ ...prev, ...Object.fromEntries(entries) }));
-  };
+      setJobMap(prev => ({
+        ...prev,
+        ...Object.fromEntries(entries)
+      }));
+    };
 
-  loadJobs();
-}, [candidates, archived]);
-
+    loadJobs();
+  }, [candidates, archived]); // intentionally not adding jobMap
 
   return (
     <div className="dashboard-container candidate-page">
