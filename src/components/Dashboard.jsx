@@ -44,49 +44,60 @@ export default function Dashboard() {
   };
 
   // -------------------- Load jobs + saved jobs --------------------
-  const loadData = async () => {
-    setLoading(true);
-    let jobsData = [];
-    let savedData = { items: [] };
+const loadData = async () => {
+  setLoading(true);
 
+  let jobsResponse = [];
+  let savedResponse = { items: [] };
+
+  try {
+    jobsResponse = await fetchAllJobs();
+  } catch (err) {
+    console.error("Failed to fetch jobs", err);
+  }
+
+  if (user?.id || user?.email) {
     try {
-      jobsData = await fetchAllJobs();
+      savedResponse = await fetchSavedJobsL(user.id || user.email);
     } catch (err) {
-      console.error("Failed to fetch jobs", err);
+      console.error("Failed to fetch saved jobs", err);
     }
+  }
 
-    if (user?.id || user?.email) {
-      try {
-        savedData = await fetchSavedJobsL(user.id || user.email);
-      } catch (err) {
-        console.error("Failed to fetch saved jobs", err);
-        savedData = { items: [] };
-      }
-    }
+  // -------- Normalize responses --------
+  const jobsArray =
+    asArray(jobsResponse) ||
+    asArray(jobsResponse?.items) ||
+    asArray(jobsResponse?.data);
 
-    // Format saved jobs
-    const backendSavedJobs = (savedData.items || []).map((item) => ({
-      id: item.jobId || item.id || item._id || item.jobLink || "undefined-id",
-      title: item.title,
-      company: item.company,
-      location: item.location,
-      salary: item.salary,
-      deadline: item.deadline,
-      bonus: item.bonus,
-    }));
+  const savedItems = asArray(savedResponse?.items);
 
-    // Mark saved jobs in job list
-    const savedJobIds = new Set(backendSavedJobs.map((j) => j.id));
-    const jobsWithSavedFlag = (jobsData || []).map((job) => ({
-      ...job,
-      isSaved: savedJobIds.has(job.id),
-    }));
+  // -------- Format saved jobs --------
+  const backendSavedJobs = savedItems.map((item) => ({
+    id: item.jobId || item.id || item._id || item.jobLink,
+    title: item.title || "",
+    company: item.company || "",
+    location: item.location || "",
+    salary: item.salary,
+    deadline: item.deadline,
+    bonus: item.bonus,
+  }));
 
-    setJobs(jobsWithSavedFlag);
-    setSavedJobs(backendSavedJobs);
-    localStorage.setItem("savedJobs", JSON.stringify(backendSavedJobs));
-    setLoading(false);
-  };
+  // -------- Mark saved jobs --------
+  const savedJobIds = new Set(backendSavedJobs.map((j) => j.id));
+
+  const jobsWithSavedFlag = jobsArray.map((job) => ({
+    ...job,
+    id: job.id || job._id, // normalize ID
+    isSaved: savedJobIds.has(job.id || job._id),
+  }));
+
+  setJobs(jobsWithSavedFlag);
+  setSavedJobs(backendSavedJobs);
+  localStorage.setItem("savedJobs", JSON.stringify(backendSavedJobs));
+  setLoading(false);
+};
+
 
   useEffect(() => {
     if (user) loadData();
