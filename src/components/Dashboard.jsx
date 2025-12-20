@@ -4,7 +4,7 @@ import "./Dashboard.css";
 import {
   fetchAllJobs,
   createSubmission,
-  fetchSavedJobs,
+  fetchSavedJobsL,
   saveJob,
   unsaveJob,
 } from "../api";
@@ -56,7 +56,7 @@ export default function Dashboard() {
 
     if (user?.id || user?.email) {
       try {
-        savedData = await fetchSavedJobs(user.id || user.email);
+        savedData = await fetchSavedJobsL(user.id || user.email);
       } catch (err) {
         console.error("Failed to fetch saved jobs", err);
         savedData = { items: [] };
