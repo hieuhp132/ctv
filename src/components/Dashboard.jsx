@@ -201,7 +201,7 @@ export default function Dashboard() {
         <div style={{minWidth: 200, flex: 1, marginTop: 10, marginBottom: 10}}>
           <Select
             placeholder="All Locations"
-            options={locations.map((loc) => (<option key={loc} value={loc}>{loc}</option>))}
+            options={locations.map((loc) => ({ value: loc, label: loc }))}  // <-- Sửa đây
             isClearable
             styles={selectStyles}
             value={filterLocation ? { value: filterLocation, label: filterLocation } : null}
@@ -211,14 +211,14 @@ export default function Dashboard() {
 
         <div style={{minWidth: 200, flex: 1, marginTop: 10, marginBottom: 10}}>
           <Select
-            text="text"
             placeholder="All Companies"
-            options={companies.map((comp) => ({ value: comp, label: comp }))}
+            options={companies.map((comp) => ({ value: comp, label: comp }))}  // Đã đúng rồi
             isClearable
             styles={selectStyles}
             value={filterCompany ? { value: filterCompany, label: filterCompany } : null}
             onChange={(selected) => setFilterCompany(selected ? selected.value : "")}
           />
+
         </div>
 
         <div style={{minWidth: 200, flex: 1, marginTop: 10, marginBottom: 10}}>
