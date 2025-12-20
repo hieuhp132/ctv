@@ -31,9 +31,12 @@ export default function JobDetail() {
   const [file, setFile] = useState(null);
 
   useEffect(() => {
-    
-    getJobByIdL(id).then(setJob);
+    getJobByIdL(id).then((data) => {
+      setJob(data);
+      console.log("Fetched Job Detail:", data); // <-- Log the job detail here
+    });
   }, [id]);
+
 
   useEffect(() => {
     if (!job) return;
@@ -102,7 +105,6 @@ export default function JobDetail() {
 
   return (
     <div className="dashboard-container job-detail">
-      {console.log("JobDetail render job:", job)}
       <header className="page-header">
         <h2>{job.title}</h2>
       </header>
