@@ -19,7 +19,7 @@ export default function JobDetail() {
   const { user } = useAuth();
 
   console.log("JobDetail id:", id);
-  
+
   const isCTV = user?.role === "recruiter";
   const isAdmin = user?.role === "admin";
   const ctvId = useMemo(() => user?.email || user?.id || "CTV", [user]);
@@ -102,6 +102,7 @@ export default function JobDetail() {
 
   return (
     <div className="dashboard-container job-detail">
+      {console.log("JobDetail render job:", job)}
       <header className="page-header">
         <h2>{job.title}</h2>
       </header>
