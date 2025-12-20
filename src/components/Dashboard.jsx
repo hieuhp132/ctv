@@ -10,6 +10,7 @@ import {
 } from "../api";
 import { useAuth } from "../context/AuthContext";
 import Icons from "./Icons";
+import Select from "react-select";
 
 export default function Dashboard() {
   const { user } = useAuth();
@@ -50,7 +51,6 @@ export default function Dashboard() {
       setLoading(true);
       try {
         const jobsRes = await fetchAllJobs();
-        console.log("Fetched jobs:", jobsRes.jobs);
         const jobsArray = asArray(jobsRes?.jobs).map((j) => ({ ...j, _id: getJobId(j) }));
 
         let savedIds = new Set();
@@ -158,20 +158,83 @@ export default function Dashboard() {
   const companies = [...new Set(jobs.map((j) => j.company))];
   const categories = Object.keys(CATEGORY_KEYWORDS);
 
+  const selectStyles = {
+    control: (base) => ({
+      ...base,
+      minHeight: 40,
+      borderRadius: 8,
+      fontSize: 14,
+    }),
+    valueContainer: (base) => ({
+      ...base,
+      padding: "2px 10px",
+    }),
+    option: (base, state) => ({
+      ...base,
+      padding: "10px 12px",   // 👈 chiều cao option
+      fontSize: 14,
+      backgroundColor: state.isFocused ? "#f3f4f6" : "#fff",
+      color: "#111",
+      whiteSpace: "normal",   // 👈 text dài tự xuống dòng
+      cursor: "pointer",
+    }),
+    menu: (base) => ({
+      ...base,
+      zIndex: 9999,
+    }),
+  };
+
   return (
     <div className="dashboard-container">
       <h2>Active Jobs</h2>
 
       {/* Search & Filters */}
-      <div className="filters">
+      <div className="filter-bar">
         <input
-          placeholder="Search by title/company/location"
+          type="text"
+          placeholder="Search jobs, companies, locations..."
+          className="filter-input"
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
         />
-        <select value={filterLocation} onChange={(e) => setFilterLocation(e.target.value)}>
+
+        <div style={{minWidth: 200, flex: 1}}>
+          <Select
+            placeholder="All Locations"
+            options={locations.map((loc) => (<option key={loc} value={loc}>{loc}</option>))}
+            isClearable
+            styles={selectStyles}
+            value={filterLocation ? { value: filterLocation, label: filterLocation } : null}
+            onChange={(selected) => setFilterLocation(selected ? selected.value : "")}
+          />
+        </div>
+
+        <div style={{minWidth: 200, flex: 1}}>
+          <Select
+            text="text"
+            placeholder="All Companies"
+            options={companies.map((comp) => ({ value: comp, label: comp }))}
+            isClearable
+            styles={selectStyles}
+            value={filterCompany ? { value: filterCompany, label: filterCompany } : null}
+            onChange={(selected) => setFilterCompany(selected ? selected.value : "")}
+          />
+        </div>
+
+        <div style={{minWidth: 200, flex: 1}}>
+          <Select
+            placeholder="All Categories"
+            options={categories.map((cat) => ({ value: cat, label: cat }))}
+            isClearable
+            styles={selectStyles}
+            value={filterCategory ? { value: filterCategory, label: filterCategory } : null}
+            onChange={(selected) => setFilterCategory(selected ? selected.value : "")}
+          />
+        </div>
+
+        {/* <select value={filterLocation} onChange={(e) => setFilterLocation(e.target.value)}>
           <option value="">All Locations</option>
-          {locations.map((loc) => (<option key={loc} value={loc}>{loc}</option>))}
+          
         </select>
         <select value={filterCompany} onChange={(e) => setFilterCompany(e.target.value)}>
           <option value="">All Companies</option>
@@ -180,7 +243,7 @@ export default function Dashboard() {
         <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)}>
           <option value="">All Categories</option>
           {categories.map((cat) => (<option key={cat} value={cat}>{cat}</option>))}
-        </select>
+        </select> */}
       </div>
 
       {loading ? <p>Loading...</p> : (
