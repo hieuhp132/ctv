@@ -60,6 +60,7 @@ export default function Dashboard() {
 
       // Load from backend (SOURCE OF TRUTH)
       if (user?.id || user?.email) {
+        console.log("Loading saved jobs from backend for", user.id || user.email);
         const savedRes = await fetchSavedJobsL(user.id || user.email);
         const savedItems = asArray(savedRes?.items);
 
