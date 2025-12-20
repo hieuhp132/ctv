@@ -178,7 +178,7 @@
   background: #fee2e2;
   border-color: #dc2626;
 }
-
+/* 
 button {
   padding: 10px 20px;
   border: none;
@@ -190,7 +190,7 @@ button {
   background: linear-gradient(135deg, #f97316, #ea580c);
   color: white;
   box-shadow: 0 2px 4px rgba(249, 115, 22, 0.2);
-}
+} */
 
 button:hover:not(:disabled) {
   transform: translateY(-2px);
