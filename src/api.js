@@ -496,8 +496,7 @@ export async function createSubmissionL({ candidateName, jobId, jobTitle, ctvId,
   }
 
   const r = await res.json();
-  const item = mapReferralToClient(r);
-  return item;
+  return r;
 }
 
 

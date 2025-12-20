@@ -54,6 +54,7 @@ const loadData = async () => {
 
   try {
     jobsResponse = await fetchAllJobs();
+    console.log(fetchAllJobs());
   } catch (err) {
     console.error("Failed to fetch jobs", err);
   }
