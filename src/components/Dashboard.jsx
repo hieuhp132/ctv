@@ -258,7 +258,7 @@ export default function Dashboard() {
         {loading ? <p>Loading jobs...</p> : (
           <div className="job-list">
             {displayedJobs.map((job) => (
-              <div key={job.id} className="job-card" onClick={() => window.open(`${window.location.origin}/job/${job.id}`, "_blank")} style={{ cursor: "pointer" }}>
+              <div key={job.id} className="job-card" onClick={() => window.open(`${window.location.origin}/job/${job._id}`, "_blank")} style={{ cursor: "pointer" }}>
                 <div className="job-card-header">
                   <div className="job-title-company">
                     <h3>{job.title}</h3>
