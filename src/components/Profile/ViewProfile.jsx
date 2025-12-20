@@ -72,7 +72,7 @@ export default function ViewProfile() {
 
   const handleSave = async () => {
     try {
-      const res = await updateBasicInfoOnServer(basicInfo);
+      const res = await updateBasicInfoOnServerL(user._id, basicInfo);
       if (res?.success) {
         const updated = await fetchProfileFromServerL(user._id);
         setUser(updated);

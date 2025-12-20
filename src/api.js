@@ -685,6 +685,29 @@ export async function updateBasicInfoOnServer(basicInfo) {
   }
 }
 
+export async function updateBasicInfoOnServerL(userId, basicInfo) {
+  if (!userId) return { success: false, error: 'User ID is required' };
+
+  try {
+    const res = await fetch(`${API_BASE}/local/users/updateBasicInfo/${userId}`, {
+      method: "PUT",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(basicInfo),
+    });
+
+    if (!res.ok) {
+      const errorBody = await res.json().catch(() => ({ message: 'Failed to update basic info' }));
+      throw new Error(errorBody.message);
+    }
+
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error("updateBasicInfoOnServerL error:", err);
+    return { success: false, error: err.message };
+  }
+}
+
 export async function fetchProfileFromServer() {
   try {
     const headers = { 'Content-Type': 'application/json', ...authHeaders() };
