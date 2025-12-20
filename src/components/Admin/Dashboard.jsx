@@ -4,15 +4,14 @@ import "./Dashboard.css";
 import "../Dashboard.css";
 import {
   fetchAllJobs,
-  listSubmissions,
-  listArchivedSubmissions,
   getBalances,
   createJob,
   updateJob,
   deleteJob,
-  saveJob,
-  unsaveJob,
   fetchSavedJobs,
+  
+  unsaveJobL,
+  saveJobL,
 } from "../../api";
 import { useAuth } from "../../context/AuthContext";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -400,9 +399,7 @@ export default function AdminDashboard() {
 
   const refresh = async () => {
     try {
-      const [subs, arch, js, bal] = await Promise.all([
-        listSubmissions(),
-        listArchivedSubmissions(),
+      const [js, bal] = await Promise.all([
         fetchAllJobs(),
         getBalances(),
       ]);
@@ -613,9 +610,9 @@ export default function AdminDashboard() {
 
               try {
                 if (isSaved) {
-                  await unsaveJob(job.id, user.id || user.email);
+                  await unsaveJobL(job.id, user.id || user.email);
                 } else {
-                  await saveJob(job.id, user.id || user.email);
+                  await saveJobL(job.id, user.id || user.email);
                 }
                 await refresh();
               } catch (err) {
