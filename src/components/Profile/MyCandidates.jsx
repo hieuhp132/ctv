@@ -71,7 +71,8 @@ function CandidateTracker({ candidates, name, jobMap }) {
         <h3>{name}</h3>
 
         <div className="filter-row">
-          <div className="filter-wrapper">
+          {name !== "Completed" && (
+            <div className="filter-wrapper">
             <label>Status</label>
             <select
               value={filters.status}
@@ -89,7 +90,8 @@ function CandidateTracker({ candidates, name, jobMap }) {
                 </option>
               ))}
             </select>
-          </div>
+            </div>
+          )}
 
           <div className="filter-wrapper">
             <label>Candidate</label>
