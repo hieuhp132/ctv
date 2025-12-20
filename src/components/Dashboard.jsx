@@ -3,10 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
 import {
   fetchAllJobs,
-  createSubmission,
   fetchSavedJobsL,
-  saveJob,
-  unsaveJob,
   saveJobL,
   unsaveJobL,
   createSubmissionL,
@@ -48,59 +45,65 @@ export default function Dashboard() {
   };
 
   // -------------------- Load jobs + saved jobs --------------------
-const loadData = async () => {
-  setLoading(true);
+  const loadData = async () => {
+    setLoading(true);
 
-  let jobsResponse = [];
-  let savedResponse = { items: [] };
+    let jobsResponse = [];
+    let savedResponse = { items: [] };
 
-  try {
-    jobsResponse = await fetchAllJobs();
-    console.log("jobsResponse", jobsResponse);
-  } catch (err) {
-    console.error("Failed to fetch jobs", err);
-  }
+    // Load saved jobs from localStorage first
+    const localSaved = JSON.parse(localStorage.getItem("savedJobs") || "[]");
+    const savedJobIdsLocal = new Set(localSaved.map((j) => j.id));
 
-  if (user?.id || user?.email) {
     try {
-      savedResponse = await fetchSavedJobsL(user.id || user.email);
-      console.log("savedResponse", savedResponse);
+      jobsResponse = await fetchAllJobs();
+      console.log("jobsResponse", jobsResponse);
     } catch (err) {
-      console.error("Failed to fetch saved jobs", err);
+      console.error("Failed to fetch jobs", err);
     }
-  }
 
-  // // -------- Normalize responses --------
-  const jobsArray = asArray(jobsResponse?.jobs);
+    if (user?.id || user?.email) {
+      try {
+        savedResponse = await fetchSavedJobsL(user.id || user.email);
+        console.log("savedResponse", savedResponse);
+      } catch (err) {
+        console.error("Failed to fetch saved jobs", err);
+      }
+    }
 
-  const savedItems = asArray(savedResponse?.items);
+    // Normalize arrays
+    const jobsArray = asArray(jobsResponse?.jobs);
+    const savedItems = asArray(savedResponse?.items);
 
-  // -------- Format saved jobs --------
-  const backendSavedJobs = savedItems.map((item) => ({
-    id: item.jobId || item.id || item._id || item.jobLink,
-    title: item.title || "",
-    company: item.company || "",
-    location: item.location || "",
-    salary: item.salary,
-    deadline: item.deadline,
-    bonus: item.bonus,
-  }));
+    // Format saved jobs from backend
+    const backendSavedJobs = savedItems.map((item) => ({
+      id: item.jobId || item.id || item._id || item.jobLink,
+      title: item.title || "",
+      company: item.company || "",
+      location: item.location || "",
+      salary: item.salary,
+      deadline: item.deadline,
+      bonus: item.bonus,
+    }));
 
-  // -------- Mark saved jobs --------
-  const savedJobIds = new Set(backendSavedJobs.map((j) => j.id));
+    // Merge localStorage saved jobs with backend saved jobs
+    const savedJobIds = new Set([
+      ...backendSavedJobs.map((j) => j.id),
+      ...savedJobIdsLocal,
+    ]);
 
-  const jobsWithSavedFlag = jobsArray.map((job) => ({
-    ...job,
-    id: job.id || job._id, // normalize ID
-    isSaved: savedJobIds.has(job.id || job._id),
-  }));
+    // Add isSaved flag
+    const jobsWithSavedFlag = jobsArray.map((job) => ({
+      ...job,
+      id: job.id || job._id,
+      isSaved: savedJobIds.has(job.id || job._id),
+    }));
 
-  setJobs(jobsWithSavedFlag);
-  setSavedJobs(backendSavedJobs);
-  localStorage.setItem("savedJobs", JSON.stringify(backendSavedJobs));
-  setLoading(false);
-};
-
+    setJobs(jobsWithSavedFlag);
+    setSavedJobs(backendSavedJobs);
+    localStorage.setItem("savedJobs", JSON.stringify(backendSavedJobs));
+    setLoading(false);
+  };
 
   useEffect(() => {
     if (user) loadData();
@@ -109,7 +112,9 @@ const loadData = async () => {
   // -------------------- Active + filtered jobs --------------------
   const activeJobs = useMemo(() => {
     const today = new Date();
-    return jobs.filter((job) => job.status === "Active" && (!job.deadline || new Date(job.deadline) >= today));
+    return jobs.filter(
+      (job) => job.status === "Active" && (!job.deadline || new Date(job.deadline) >= today)
+    );
   }, [jobs]);
 
   const filteredJobs = useMemo(() => {
@@ -138,8 +143,13 @@ const loadData = async () => {
     });
   }, [activeJobs, searchText, filterLocation, filterCompany, filterCategory]);
 
-  const totalPages = useMemo(() => Math.max(1, Math.ceil(filteredJobs.length / pageSize)), [filteredJobs.length]);
-  useEffect(() => { if (page > totalPages) setPage(totalPages); }, [totalPages]);
+  const totalPages = useMemo(
+    () => Math.max(1, Math.ceil(filteredJobs.length / pageSize)),
+    [filteredJobs.length]
+  );
+  useEffect(() => {
+    if (page > totalPages) setPage(totalPages);
+  }, [totalPages]);
 
   const displayedJobs = useMemo(() => {
     const start = (page - 1) * pageSize;
@@ -152,19 +162,27 @@ const loadData = async () => {
       const userId = user?.id || user?.email;
       if (!userId) return;
 
+      let newSaved = [];
+
       if (job.isSaved) {
         const response = await unsaveJobL(job.id, userId);
         if (response?.success) {
-          setSavedJobs((prev) => prev.filter((j) => j.id !== job.id));
-          setJobs((prev) => prev.map((j) => j.id === job.id ? { ...j, isSaved: false } : j));
-        }
+          newSaved = savedJobs.filter((j) => j.id !== job.id);
+        } else return;
       } else {
         const response = await saveJobL(job.id, userId);
         if (response?.success) {
-          setSavedJobs((prev) => [...prev, job]);
-          setJobs((prev) => prev.map((j) => j.id === job.id ? { ...j, isSaved: true } : j));
-        }
+          newSaved = [...savedJobs, job];
+        } else return;
       }
+
+      setSavedJobs(newSaved);
+      localStorage.setItem("savedJobs", JSON.stringify(newSaved));
+      setJobs((prev) =>
+        prev.map((j) =>
+          j.id === job.id ? { ...j, isSaved: !job.isSaved } : j
+        )
+      );
     } catch (err) {
       alert("Failed to save/unsave job");
     }
@@ -201,18 +219,33 @@ const loadData = async () => {
     return Array.from(m.values());
   }, [jobs]);
 
-  const locationOptions = useMemo(() => uniqueLocations.map((l) => ({ value: l, label: l })), [uniqueLocations]);
-  const companyOptions = useMemo(() => uniqueCompanies.map((c) => ({ value: c, label: c })), [uniqueCompanies]);
+  const locationOptions = useMemo(
+    () => uniqueLocations.map((l) => ({ value: l, label: l })),
+    [uniqueLocations]
+  );
+  const companyOptions = useMemo(
+    () => uniqueCompanies.map((c) => ({ value: c, label: c })),
+    [uniqueCompanies]
+  );
 
   const selectStyles = {
     control: (base) => ({ ...base, minHeight: 40, fontSize: 14, borderRadius: 8 }),
     valueContainer: (base) => ({ ...base, padding: "2px 10px" }),
-    option: (base, state) => ({ ...base, padding: "10px 12px", fontSize: 14, backgroundColor: state.isFocused ? "#f3f4f6" : "#fff", color: "#111", cursor: "pointer", whiteSpace: "normal" }),
+    option: (base, state) => ({
+      ...base,
+      padding: "10px 12px",
+      fontSize: 14,
+      backgroundColor: state.isFocused ? "#f3f4f6" : "#fff",
+      color: "#111",
+      cursor: "pointer",
+      whiteSpace: "normal",
+    }),
     menu: (base) => ({ ...base, zIndex: 9999 }),
   };
 
   // -------------------- Modal --------------------
   const closeModal = () => setSelectedJob(null);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!selectedJob) return;
@@ -251,35 +284,77 @@ const loadData = async () => {
         <h2>Active Jobs</h2>
 
         <div className="filter-bar">
-          <input type="text" placeholder="Search jobs, companies, skills..." value={searchText} onChange={(e) => setSearchText(e.target.value)} className="filter-input" />
-          <button className="find-jobs-btn" type="button">Search</button>
+          <input
+            type="text"
+            placeholder="Search jobs, companies, skills..."
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            className="filter-input"
+          />
+          <button className="find-jobs-btn" type="button">
+            Search
+          </button>
         </div>
 
         <div className="filter-bar" style={{ marginTop: 8 }}>
           <div style={{ flex: 1 }}>
-            <Select options={locationOptions} placeholder="All locations" isClearable styles={selectStyles} value={filterLocation ? { value: filterLocation, label: filterLocation } : null} onChange={(opt) => setFilterLocation(opt?.value || "")} />
+            <Select
+              options={locationOptions}
+              placeholder="All locations"
+              isClearable
+              styles={selectStyles}
+              value={filterLocation ? { value: filterLocation, label: filterLocation } : null}
+              onChange={(opt) => setFilterLocation(opt?.value || "")}
+            />
           </div>
           <div style={{ flex: 1 }}>
-            <Select options={companyOptions} placeholder="All companies" isClearable styles={selectStyles} value={filterCompany ? { value: filterCompany, label: filterCompany } : null} onChange={(opt) => setFilterCompany(opt?.value || "")} />
+            <Select
+              options={companyOptions}
+              placeholder="All companies"
+              isClearable
+              styles={selectStyles}
+              value={filterCompany ? { value: filterCompany, label: filterCompany } : null}
+              onChange={(opt) => setFilterCompany(opt?.value || "")}
+            />
           </div>
         </div>
 
         <div className="category-chips">
           {categoriesAvailable.map((cat) => (
-            <button key={cat} className={`chip ${filterCategory === cat ? "active" : ""}`} onClick={() => setFilterCategory((c) => (c === cat ? "" : cat))} type="button">{cat}</button>
+            <button
+              key={cat}
+              className={`chip ${filterCategory === cat ? "active" : ""}`}
+              onClick={() => setFilterCategory((c) => (c === cat ? "" : cat))}
+              type="button"
+            >
+              {cat}
+            </button>
           ))}
         </div>
 
-        {loading ? <p>Loading jobs...</p> : (
+        {loading ? (
+          <p>Loading jobs...</p>
+        ) : (
           <div className="job-list">
             {displayedJobs.map((job) => (
-              <div key={job.id} className="job-card" onClick={() => window.open(`${window.location.origin}/job/${job._id}`, "_blank")} style={{ cursor: "pointer" }}>
+              <div
+                key={job.id}
+                className="job-card"
+                onClick={() => window.open(`${window.location.origin}/job/${job._id}`, "_blank")}
+                style={{ cursor: "pointer" }}
+              >
                 <div className="job-card-header">
                   <div className="job-title-company">
                     <h3>{job.title}</h3>
                     <p>{job.company}</p>
                   </div>
-                  <button className={`save-btn ${job.isSaved ? "saved" : ""}`} onClick={(e) => { e.stopPropagation(); handleSaveUnsaveJob(job); }}>
+                  <button
+                    className={`save-btn ${job.isSaved ? "saved" : ""}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleSaveUnsaveJob(job);
+                    }}
+                  >
                     {job.isSaved ? "★" : "☆"}
                   </button>
                 </div>
@@ -293,16 +368,28 @@ const loadData = async () => {
                   <div className="info-item online-days">Online {job.onlineDaysAgo} days ago</div>
                 </div>
                 <hr className="job-divider" />
-                <button className="submit-btn" onClick={(e) => { e.stopPropagation(); setSelectedJob(job); }}>Submit Candidate</button>
+                <button
+                  className="submit-btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedJob(job);
+                  }}
+                >
+                  Submit Candidate
+                </button>
               </div>
             ))}
           </div>
         )}
 
         <div className="pagination">
-          <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page <= 1}>Prev</button>
+          <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page <= 1}>
+            Prev
+          </button>
           <span>Page {page} / {totalPages}</span>
-          <button onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={page >= totalPages}>Next</button>
+          <button onClick={() => setPage((p) => Math.min(totalPages, p + 1))} disabled={page >= totalPages}>
+            Next
+          </button>
         </div>
       </div>
 
