@@ -44,6 +44,25 @@ export async function saveJob(jobId, userId) {
 }
 // src/api.js
 
+export async function saveJobL(jobId, userId) {
+  const res = await fetch(`${API_BASE}/local/jobs/${jobId}/save`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ userId })
+  });
+  if (!res.ok) throw new Error('Failed to save job locally');
+  return await res.json();
+}
+export async function unsaveJobL(jobId, userId) {
+  const res = await fetch(`${API_BASE}/local/jobs/${jobId}/unsave`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ userId })
+  });
+  if (!res.ok) throw new Error('Failed to unsave job locally');
+  return await res.json();
+}
+
 const LS_SUBMISSIONS = "submissions"; // active
 const LS_ARCHIVED = "submissionsArchived"; // finalized (onboard/Rejected)
 const LS_NOTIFICATIONS = "notifications";

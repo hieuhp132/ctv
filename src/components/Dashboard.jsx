@@ -7,6 +7,8 @@ import {
   fetchSavedJobsL,
   saveJob,
   unsaveJob,
+  saveJobL,
+  unsaveJobL,
   createSubmissionL,
 } from "../api";
 import { useAuth } from "../context/AuthContext";
@@ -151,13 +153,13 @@ const loadData = async () => {
       if (!userId) return;
 
       if (job.isSaved) {
-        const response = await unsaveJob(job.id, userId);
+        const response = await unsaveJobL(job.id, userId);
         if (response?.success) {
           setSavedJobs((prev) => prev.filter((j) => j.id !== job.id));
           setJobs((prev) => prev.map((j) => j.id === job.id ? { ...j, isSaved: false } : j));
         }
       } else {
-        const response = await saveJob(job.id, userId);
+        const response = await saveJobL(job.id, userId);
         if (response?.success) {
           setSavedJobs((prev) => [...prev, job]);
           setJobs((prev) => prev.map((j) => j.id === job.id ? { ...j, isSaved: true } : j));
