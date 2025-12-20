@@ -561,6 +561,12 @@ export async function fetchSavedJobs(userId) {
   return await res.json();
 }
 
+export async function fetchSavedJobsL(userId) {
+  const res = await fetch(`${API_BASE}/local/jobs?savedBy=${userId}`);
+  if (!res.ok) throw new Error('Failed to fetch saved jobs from local');
+  return await res.json();
+}
+
 // Update referral fields
 export async function updateReferralFields(referralId, updates) {
   const headers = { 'Content-Type': 'application/json', ...authHeaders() };
