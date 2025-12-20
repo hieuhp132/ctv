@@ -261,26 +261,30 @@ export default function MyCandidates() {
   }, [ctvId, user]);
 
   /* ===== LOAD JOB TITLES ===== */
-  useEffect(() => {
-    const loadJobs = async () => {
-      const all = [...candidates, ...archived];
-      const jobIds = [...new Set(all.map((c) => c.job).filter(Boolean))];
+useEffect(() => {
+  const loadJobs = async () => {
+    const all = [...candidates, ...archived];
+    const jobIds = [...new Set(all.map(c => c.job).filter(Boolean))];
 
-      if (jobIds.length === 0) return;
+    console.log("JOB IDS:", jobIds);
 
-      const entries = await Promise.all(
-        jobIds.map(async (id) => {
-          if (jobMap[id]) return [id, jobMap[id]]; // cache
-          const job = await getJobByIdL(id);
-          return [id, job?.title || "-"];
-        })
-      );
+    const entries = await Promise.all(
+      jobIds.map(async (id) => {
+        console.log("Fetching job:", id);
+        const job = await getJobByIdL(id);
+        console.log("Job result:", job);
+        return [id, job?.title || "-"];
+      })
+    );
 
-      setJobMap((prev) => ({ ...prev, ...Object.fromEntries(entries) }));
-    };
+    console.log("JOB MAP ENTRIES:", entries);
 
-    loadJobs();
-  }, [candidates, archived]); // intentionally not adding jobMap
+    setJobMap(prev => ({ ...prev, ...Object.fromEntries(entries) }));
+  };
+
+  loadJobs();
+}, [candidates, archived]);
+
 
   return (
     <div className="dashboard-container candidate-page">
