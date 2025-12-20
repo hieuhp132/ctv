@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { useNavigate } from "react-router-dom";
 import "./Dashboard.css";
 import {
   fetchAllJobs,
@@ -7,115 +6,123 @@ import {
   saveJobL,
   unsaveJobL,
   createSubmissionL,
+  uploadCVL,
 } from "../api";
 import { useAuth } from "../context/AuthContext";
 import Icons from "./Icons";
 
-/* ================== HELPERS ================== */
+/* ================= HELPERS ================= */
 const asArray = (v) => (Array.isArray(v) ? v : []);
 const getJobId = (job) => job?._id || job?.id;
 
-/* ================== COMPONENT ================== */
+/* ================= COMPONENT ================= */
 export default function Dashboard() {
   const { user } = useAuth();
-  const navigate = useNavigate();
-
-  const recruiterId = useMemo(
-    () => user?.id || user?.email,
-    [user]
-  );
+  const recruiterId = user?._id || user?.id || user?.email;
 
   const [jobs, setJobs] = useState([]);
   const [savedJobIds, setSavedJobIds] = useState(new Set());
   const [loading, setLoading] = useState(true);
 
-  /* ===== SUBMIT STATE ===== */
-  const [selectedJob, setSelectedJob] = useState(null);
+  /* ===== SUBMIT MODAL ===== */
   const [showSubmit, setShowSubmit] = useState(false);
+  const [selectedJob, setSelectedJob] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [uploadingCV, setUploadingCV] = useState(false);
+  const [cvFile, setCvFile] = useState(null);
 
   const [candidateForm, setCandidateForm] = useState({
     candidateName: "",
     candidateEmail: "",
     candidatePhone: "",
-    cvUrl: "",
     linkedin: "",
     portfolio: "",
-    suitability: "", // ✅ THÊM
+    suitability: "",
   });
 
-  /* ================== LOAD JOBS ================== */
-  useEffect(() => {
-    if (!user) return;
-
-    const loadData = async () => {
-      setLoading(true);
-      try {
-        const jobsRes = await fetchAllJobs();
-        const jobsArray = asArray(jobsRes?.jobs).map((j) => ({
-          ...j,
-          _id: getJobId(j),
-        }));
-
-        let saved = new Set();
-        if (recruiterId) {
-          const savedRes = await fetchSavedJobsL(recruiterId);
-          asArray(savedRes?.jobs).forEach((j) => {
-            const id = j.jobId || j._id;
-            if (id) saved.add(id);
-          });
-        }
-
-        setSavedJobIds(saved);
-
-        setJobs(
-          jobsArray.map((j) => ({
-            ...j,
-            isSaved: saved.has(j._id),
-          }))
-        );
-      } catch (err) {
-        console.error("Load jobs failed", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadData();
-  }, [user, recruiterId]);
-
-  /* ================== SAVE / UNSAVE ================== */
-  const handleSaveUnsaveJob = async (job) => {
-    if (!recruiterId || !job?._id) return;
-
-    const next = new Set(savedJobIds);
-
+  /* ================= LOAD DATA ================= */
+  const loadData = async () => {
+    setLoading(true);
     try {
-      if (job.isSaved) {
-        await unsaveJobL(job._id, recruiterId);
-        next.delete(job._id);
-      } else {
-        await saveJobL(job._id, recruiterId);
-        next.add(job._id);
+      const jobsRes = await fetchAllJobs();
+      const jobsArray = asArray(jobsRes?.jobs).map((job) => ({
+        ...job,
+        _id: getJobId(job),
+      }));
+
+      let savedIds = new Set();
+      if (recruiterId) {
+        const savedRes = await fetchSavedJobsL(recruiterId);
+        asArray(savedRes?.jobs).forEach((j) => {
+          const id = j.jobId || j._id;
+          if (id) savedIds.add(id);
+        });
       }
 
-      setSavedJobIds(next);
-      setJobs((prev) =>
-        prev.map((j) =>
-          j._id === job._id ? { ...j, isSaved: !job.isSaved } : j
-        )
+      setSavedJobIds(savedIds);
+
+      setJobs(
+        jobsArray.map((job) => ({
+          ...job,
+          isSaved: savedIds.has(job._id),
+        }))
       );
-    } catch {
-      alert("Save job failed");
+    } catch (err) {
+      console.error("Load jobs failed", err);
+    } finally {
+      setLoading(false);
     }
   };
 
-  /* ================== SUBMIT HANDLER ================== */
+  useEffect(() => {
+    if (user) loadData();
+  }, [user]);
+
+  /* ================= SAVE / UNSAVE ================= */
+  const handleSaveUnsaveJob = async (job) => {
+    if (!recruiterId) return;
+    const jobId = job._id;
+
+    let next = new Set(savedJobIds);
+
+    if (job.isSaved) {
+      await unsaveJobL(jobId, recruiterId);
+      next.delete(jobId);
+    } else {
+      await saveJobL(jobId, recruiterId);
+      next.add(jobId);
+    }
+
+    setSavedJobIds(next);
+    setJobs((prev) =>
+      prev.map((j) =>
+        j._id === jobId ? { ...j, isSaved: !j.isSaved } : j
+      )
+    );
+  };
+
+  /* ================= SUBMIT ================= */
+  const uploadCV = async () => {
+    if (!cvFile) return null;
+    setUploadingCV(true);
+    try {
+      const res = await uploadFile(cvFile);
+      return res?.url || null;
+    } finally {
+      setUploadingCV(false);
+    }
+  };
+
   const handleSubmitCandidate = async () => {
     if (!selectedJob || !recruiterId) return;
 
     if (!candidateForm.candidateName || !candidateForm.candidateEmail) {
-      alert("Candidate name & email are required");
+      alert("Name & Email are required");
+      return;
+    }
+
+    if (!cvFile) {
+      alert("Please upload CV");
       return;
     }
 
@@ -125,182 +132,134 @@ export default function Dashboard() {
       await createSubmissionL({
         job: selectedJob._id,
         recruiterId,
-        ...candidateForm, // includes suitability
+        ...candidateForm,
+        cvUrl,
       });
 
       alert("Candidate submitted successfully");
 
       setShowSubmit(false);
-      setSelectedJob(null);
+      setCvFile(null);
       setCandidateForm({
         candidateName: "",
         candidateEmail: "",
         candidatePhone: "",
-        cvUrl: "",
         linkedin: "",
         portfolio: "",
         suitability: "",
       });
-    } catch (err) {
-      console.error(err);
+    } catch {
       alert("Submit failed");
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  /* ================== RENDER ================== */
+  /* ================= RENDER ================= */
   return (
     <div className="dashboard-container">
-      <div className="dashboard-grid">
-        <h2>Active Jobs</h2>
+      <h2>Active Jobs</h2>
 
-        {loading ? (
-          <p>Loading jobs...</p>
-        ) : (
-          <div className="job-list">
-            {jobs.map((job) => (
-              <div
-                key={job._id}
-                className="job-card"
-                onClick={() =>
-                  window.open(`/job/${job._id}`, "_blank")
-                }
-              >
-                <div className="job-card-header">
-                  <div>
-                    <h3>{job.title}</h3>
-                    <p>{job.company}</p>
-                  </div>
-
-                  <button
-                    className={`save-btn ${job.isSaved ? "saved" : ""}`}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleSaveUnsaveJob(job);
-                    }}
-                  >
-                    {job.isSaved ? "★" : "☆"}
-                  </button>
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <div className="job-list">
+          {jobs.map((job) => (
+            <div key={job._id} className="job-card">
+              <div className="job-card-header">
+                <div>
+                  <h3>{job.title}</h3>
+                  <p>{job.company}</p>
                 </div>
 
-                <div>📍 {job.location}</div>
-                <div>💲 {job.salary || "N/A"}</div>
-
                 <button
-                  className="submit-btn"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedJob(job);
-                    setShowSubmit(true);
-                  }}
+                  className={`save-btn ${job.isSaved ? "saved" : ""}`}
+                  onClick={() => handleSaveUnsaveJob(job)}
                 >
-                  Submit Candidate
+                  {job.isSaved ? "★" : "☆"}
                 </button>
               </div>
-            ))}
-          </div>
-        )}
-      </div>
 
-      {/* ===== SUBMIT MODAL ===== */}
-      {showSubmit && selectedJob && (
+              <div>📍 {job.location}</div>
+              <div>💲 {job.salary || "N/A"}</div>
+
+              <button
+                className="submit-btn"
+                onClick={() => {
+                  setSelectedJob(job);
+                  setShowSubmit(true);
+                }}
+              >
+                Submit Candidate
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* ================= SUBMIT MODAL ================= */}
+      {showSubmit && (
         <div className="modal-overlay">
           <div className="modal">
             <h3>Submit Candidate</h3>
-            <p>
-              <b>Job:</b> {selectedJob.title}
-            </p>
 
-            <input
-              placeholder="Candidate Name"
-              value={candidateForm.candidateName}
-              onChange={(e) =>
-                setCandidateForm((f) => ({
-                  ...f,
-                  candidateName: e.target.value,
-                }))
-              }
-            />
+            {[
+              ["Candidate Name", "candidateName"],
+              ["Email", "candidateEmail"],
+              ["Phone", "candidatePhone"],
+              ["LinkedIn", "linkedin"],
+              ["Portfolio", "portfolio"],
+            ].map(([label, key]) => (
+              <div className="form-group" key={key}>
+                <label>{label}</label>
+                <input
+                  value={candidateForm[key]}
+                  onChange={(e) =>
+                    setCandidateForm((f) => ({
+                      ...f,
+                      [key]: e.target.value,
+                    }))
+                  }
+                />
+              </div>
+            ))}
 
-            <input
-              placeholder="Candidate Email"
-              value={candidateForm.candidateEmail}
-              onChange={(e) =>
-                setCandidateForm((f) => ({
-                  ...f,
-                  candidateEmail: e.target.value,
-                }))
-              }
-            />
+            <div className="form-group">
+              <label>Suitability</label>
+              <textarea
+                rows={4}
+                value={candidateForm.suitability}
+                onChange={(e) =>
+                  setCandidateForm((f) => ({
+                    ...f,
+                    suitability: e.target.value,
+                  }))
+                }
+              />
+            </div>
 
-            <input
-              placeholder="Candidate Phone"
-              value={candidateForm.candidatePhone}
-              onChange={(e) =>
-                setCandidateForm((f) => ({
-                  ...f,
-                  candidatePhone: e.target.value,
-                }))
-              }
-            />
-
-            <input
-              placeholder="CV URL"
-              value={candidateForm.cvUrl}
-              onChange={(e) =>
-                setCandidateForm((f) => ({
-                  ...f,
-                  cvUrl: e.target.value,
-                }))
-              }
-            />
-
-            <input
-              placeholder="LinkedIn"
-              value={candidateForm.linkedin}
-              onChange={(e) =>
-                setCandidateForm((f) => ({
-                  ...f,
-                  linkedin: e.target.value,
-                }))
-              }
-            />
-
-            <input
-              placeholder="Portfolio"
-              value={candidateForm.portfolio}
-              onChange={(e) =>
-                setCandidateForm((f) => ({
-                  ...f,
-                  portfolio: e.target.value,
-                }))
-              }
-            />
-
-            {/* ✅ SUITABILITY */}
-            <textarea
-              placeholder="Suitability / Why this candidate fits the job"
-              value={candidateForm.suitability}
-              onChange={(e) =>
-                setCandidateForm((f) => ({
-                  ...f,
-                  suitability: e.target.value,
-                }))
-              }
-              rows={4}
-            />
+            <div className="form-group">
+              <label>CV (PDF / DOC)</label>
+              <input
+                type="file"
+                accept=".pdf,.doc,.docx"
+                onChange={(e) => setCvFile(e.target.files[0])}
+              />
+            </div>
 
             <div className="modal-actions">
               <button
                 onClick={handleSubmitCandidate}
-                disabled={isSubmitting}
+                disabled={isSubmitting || uploadingCV}
               >
-                {isSubmitting ? "Submitting..." : "Submit"}
+                {uploadingCV
+                  ? "Uploading CV..."
+                  : isSubmitting
+                  ? "Submitting..."
+                  : "Submit"}
               </button>
-              <button onClick={() => setShowSubmit(false)}>
-                Cancel
-              </button>
+
+              <button onClick={() => setShowSubmit(false)}>Cancel</button>
             </div>
           </div>
         </div>
