@@ -1,8 +1,7 @@
 import React, { useMemo, useState, useEffect } from "react";
 import {
-  listArchivedSubmissions,
-  getBalances,
   listReferrals,
+  getBalances,
   getJobByIdL,
 } from "../../api";
 import { useAuth } from "../../context/AuthContext";
@@ -20,7 +19,7 @@ const STATUS_OPTIONS = [
 ];
 
 /* ================= TRACKER ================= */
-function CandidateTracker({ candidates, name }) {
+function CandidateTracker({ candidates, name, jobMap }) {
   const [filters, setFilters] = useState({
     candidate: "",
     job: "",
@@ -38,7 +37,7 @@ function CandidateTracker({ candidates, name }) {
         .toLowerCase()
         .includes(filters.candidate.toLowerCase());
 
-      const matchJob = (c.job || "")
+      const matchJob = (jobMap?.[c.job] || "")
         .toLowerCase()
         .includes(filters.job.toLowerCase());
 
@@ -48,12 +47,20 @@ function CandidateTracker({ candidates, name }) {
 
       return matchStatus && matchCandidate && matchJob && matchEmail;
     });
-  }, [candidates, filters]);
+  }, [candidates, filters, jobMap]);
 
-  const uniqueJobs = [...new Set(candidates.map((c) => c.job).filter(Boolean))];
+  const uniqueJobs = [
+    ...new Set(
+      candidates
+        .map((c) => jobMap?.[c.job])
+        .filter(Boolean)
+    ),
+  ];
+
   const uniqueCandidates = [
     ...new Set(candidates.map((c) => c.candidateName).filter(Boolean)),
   ];
+
   const uniqueEmails = [
     ...new Set(candidates.map((c) => c.candidateEmail).filter(Boolean)),
   ];
@@ -159,7 +166,7 @@ function CandidateTracker({ candidates, name }) {
             {filteredCandidates.map((c) => (
               <tr key={c._id}>
                 <td>{c.candidateName}</td>
-                <td>{getJobByIdL(c.job)?.title || "-"}</td>
+                <td>{jobMap?.[c.job] || "-"}</td>
                 <td>-</td>
                 <td>
                   {c.status
@@ -229,10 +236,13 @@ function CandidateTracker({ candidates, name }) {
 export default function MyCandidates() {
   const { user } = useAuth();
   const ctvId = useMemo(() => user?._id, [user]);
+
   const [candidates, setCandidates] = useState([]);
   const [archived, setArchived] = useState([]);
   const [balance, setBalance] = useState(0);
+  const [jobMap, setJobMap] = useState({});
 
+  /* ===== LOAD REFERRALS ===== */
   useEffect(() => {
     if (!ctvId) return;
 
@@ -240,8 +250,8 @@ export default function MyCandidates() {
       listReferrals({ id: ctvId, isAdmin: false, finalized: false }),
       listReferrals({ id: ctvId, isAdmin: false, finalized: true }),
     ]).then(([active, done]) => {
-      setCandidates(active);
-      setArchived(done);
+      setCandidates(active || []);
+      setArchived(done || []);
     });
 
     getBalances().then((b) => {
@@ -249,6 +259,28 @@ export default function MyCandidates() {
       setBalance(b?.ctvBonusById?.[id] || 0);
     });
   }, [ctvId, user]);
+
+  /* ===== LOAD JOB TITLES ===== */
+  useEffect(() => {
+    const loadJobs = async () => {
+      const all = [...candidates, ...archived];
+      const jobIds = [...new Set(all.map((c) => c.job).filter(Boolean))];
+
+      if (jobIds.length === 0) return;
+
+      const entries = await Promise.all(
+        jobIds.map(async (id) => {
+          if (jobMap[id]) return [id, jobMap[id]]; // cache
+          const job = await getJobByIdL(id);
+          return [id, job?.title || "-"];
+        })
+      );
+
+      setJobMap((prev) => ({ ...prev, ...Object.fromEntries(entries) }));
+    };
+
+    loadJobs();
+  }, [candidates, archived]); // intentionally not adding jobMap
 
   return (
     <div className="dashboard-container candidate-page">
@@ -261,11 +293,13 @@ export default function MyCandidates() {
 
       <CandidateTracker
         candidates={candidates}
+        jobMap={jobMap}
         name="Candidate Tracking"
       />
 
       <CandidateTracker
         candidates={archived}
+        jobMap={jobMap}
         name="Completed"
       />
 
