@@ -475,6 +475,32 @@ export async function createSubmission({ candidateName, jobId, jobTitle, ctvId, 
   return item;
 }
 
+export async function createSubmissionL({ candidateName, jobId, jobTitle, ctvId, email, phone, linkedin, portfolio, suitability, cvFile, bonus }) {
+  const form = new FormData();
+  form.append("jobId", jobId);
+  form.append("candidateName", candidateName);
+  if (email) form.append("email", email);
+  if (phone) form.append("phone", phone);
+  if (linkedin) form.append("linkedin", linkedin);
+  if (portfolio) form.append("portfolio", portfolio);
+  if (suitability) form.append("suitability", suitability);
+  if (typeof bonus !== 'undefined') form.append("bonus", String(bonus));
+  if (cvFile) form.append("cv", cvFile);
+  const res = await fetch(`${API_BASE}/local/referrals`, {
+    method: "POST",
+    body: form,
+  });
+  if (!res.ok) {
+    alert("Failed to submit candidate v1");
+    throw new Error("Failed to submit candidate");
+  }
+
+  const r = await res.json();
+  const item = mapReferralToClient(r);
+  return item;
+}
+
+
 export async function updateSubmissionStatus({ id, status, bonus }) {
   const body = {};
   if (status) body.status = String(status).toLowerCase();

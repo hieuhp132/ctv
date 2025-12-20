@@ -7,6 +7,7 @@ import {
   fetchSavedJobsL,
   saveJob,
   unsaveJob,
+  createSubmissionL,
 } from "../api";
 import { useAuth } from "../context/AuthContext";
 import Icons from "./Icons";
@@ -205,7 +206,7 @@ export default function Dashboard() {
 
     try {
       const form = e.target;
-      await createSubmission({
+      await createSubmissionL({
         candidateName: form[0].value,
         jobId: selectedJob.id,
         jobTitle: selectedJob.title,
