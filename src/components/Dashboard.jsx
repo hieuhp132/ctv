@@ -198,7 +198,7 @@ export default function Dashboard() {
           onChange={(e) => setSearchText(e.target.value)}
         />
 
-        <div style={{minWidth: 200, flex: 1}}>
+        <div style={{minWidth: 200, flex: 1, marginTop: 10, marginBottom: 10}}>
           <Select
             placeholder="All Locations"
             options={locations.map((loc) => (<option key={loc} value={loc}>{loc}</option>))}
@@ -209,7 +209,7 @@ export default function Dashboard() {
           />
         </div>
 
-        <div style={{minWidth: 200, flex: 1}}>
+        <div style={{minWidth: 200, flex: 1, marginTop: 10, marginBottom: 10}}>
           <Select
             text="text"
             placeholder="All Companies"
@@ -221,7 +221,7 @@ export default function Dashboard() {
           />
         </div>
 
-        <div style={{minWidth: 200, flex: 1}}>
+        <div style={{minWidth: 200, flex: 1, marginTop: 10, marginBottom: 10}}>
           <Select
             placeholder="All Categories"
             options={categories.map((cat) => ({ value: cat, label: cat }))}
