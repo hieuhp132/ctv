@@ -62,7 +62,7 @@ export default function Dashboard() {
       if (user?.id || user?.email) {
         console.log("Loading saved jobs from backend for", user.email);
         const savedRes = await fetchSavedJobsL(user.email);
-        const savedItems = asArray(savedRes?.items);
+        const savedItems = asArray(savedRes?.jobs);
 
         console.log("Saved jobs response:", savedRes);
         console.log("Fetched saved jobs:", savedItems);
@@ -73,7 +73,7 @@ export default function Dashboard() {
         });
 
         console.log("Final saved job IDs:", savedIds);
-        
+
         // Persist clean data to localStorage
         localStorage.setItem(
           "savedJobs",
@@ -112,6 +112,8 @@ export default function Dashboard() {
       (j) => j.status === "Active" && (!j.deadline || new Date(j.deadline) >= today)
     );
   }, [jobs]);
+
+
 
   const filteredJobs = useMemo(() => {
     const text = searchText.toLowerCase();
