@@ -10,7 +10,6 @@ import {
 } from "../api";
 import { useAuth } from "../context/AuthContext";
 import Icons from "./Icons";
-import Select from "react-select";
 
 /* ================== HELPERS ================== */
 const asArray = (v) => (Array.isArray(v) ? v : []);
@@ -20,157 +19,133 @@ const getJobId = (job) => job?._id || job?.id;
 export default function Dashboard() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const ctvId = useMemo(() => user?.email || user?.id || "CTV", [user]);
+
+  const recruiterId = useMemo(
+    () => user?.id || user?.email,
+    [user]
+  );
 
   const [jobs, setJobs] = useState([]);
   const [savedJobIds, setSavedJobIds] = useState(new Set());
-  const [selectedJob, setSelectedJob] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  /* ===== SUBMIT STATE ===== */
+  const [selectedJob, setSelectedJob] = useState(null);
+  const [showSubmit, setShowSubmit] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [page, setPage] = useState(1);
-  const pageSize = 9;
+  const [candidateForm, setCandidateForm] = useState({
+    candidateName: "",
+    candidateEmail: "",
+    candidatePhone: "",
+    cvUrl: "",
+    linkedin: "",
+    portfolio: "",
+    suitability: "", // ✅ THÊM
+  });
 
-  const [searchText, setSearchText] = useState("");
-  const [filterLocation, setFilterLocation] = useState("");
-  const [filterCompany, setFilterCompany] = useState("");
-  const [filterCategory, setFilterCategory] = useState("");
-
-  const CATEGORY_KEYWORDS = {
-    Developer: ["dev", "developer", "engineer", "software", "frontend", "backend", "react", "node"],
-    Data: ["data", "ml", "machine learning", "data engineer"],
-    Designer: ["design", "designer", "ux", "ui"],
-    Sales: ["sales", "business development"],
-    Marketing: ["marketing", "seo", "content"],
-    Manager: ["manager", "lead", "director"],
-  };
-
-  /* ================== LOAD DATA ================== */
-  const loadData = async () => {
-    setLoading(true);
-
-    try {
-      const jobsRes = await fetchAllJobs();
-      const jobsArray = asArray(jobsRes?.jobs).map((job) => ({
-        ...job,
-        _id: getJobId(job),
-      }));
-
-      let savedIds = new Set();
-
-      // Load from backend (SOURCE OF TRUTH)
-      if (user?.id || user?.email) {
-        console.log("Loading saved jobs from backend for", user.email);
-        const savedRes = await fetchSavedJobsL(user.email);
-        const savedItems = asArray(savedRes?.jobs);
-
-        console.log("Saved jobs response:", savedRes);
-        console.log("Fetched saved jobs:", savedItems);
-
-        savedItems.forEach((item) => {
-          const id = item.jobId || item._id;
-          if (id) savedIds.add(id);
-        });
-
-        console.log("Final saved job IDs:", savedIds);
-
-        // Persist clean data to localStorage
-        localStorage.setItem(
-          "savedJobs",
-          JSON.stringify([...savedIds].map((_id) => ({ _id })))
-        );
-      } else {
-        // Fallback localStorage
-        const localSaved = JSON.parse(localStorage.getItem("savedJobs") || "[]");
-        localSaved.forEach((j) => j?._id && savedIds.add(j._id));
-      }
-
-      setSavedJobIds(savedIds);
-
-      // Attach isSaved flag
-      const jobsWithFlags = jobsArray.map((job) => ({
-        ...job,
-        isSaved: savedIds.has(job._id),
-      }));
-
-      setJobs(jobsWithFlags);
-    } catch (err) {
-      console.error("Load jobs failed", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  /* ================== LOAD JOBS ================== */
   useEffect(() => {
-    if (user) loadData();
-  }, [user]);
+    if (!user) return;
 
-  /* ================== FILTER ================== */
-  const activeJobs = useMemo(() => {
-    const today = new Date();
-    return jobs.filter(
-      (j) => j.status === "Active" && (!j.deadline || new Date(j.deadline) >= today)
-    );
-  }, [jobs]);
+    const loadData = async () => {
+      setLoading(true);
+      try {
+        const jobsRes = await fetchAllJobs();
+        const jobsArray = asArray(jobsRes?.jobs).map((j) => ({
+          ...j,
+          _id: getJobId(j),
+        }));
 
+        let saved = new Set();
+        if (recruiterId) {
+          const savedRes = await fetchSavedJobsL(recruiterId);
+          asArray(savedRes?.jobs).forEach((j) => {
+            const id = j.jobId || j._id;
+            if (id) saved.add(id);
+          });
+        }
 
+        setSavedJobIds(saved);
 
-  const filteredJobs = useMemo(() => {
-    const text = searchText.toLowerCase();
-    return activeJobs.filter((job) => {
-      const blob = `${job.title} ${job.company} ${job.location}`.toLowerCase();
-      if (text && !blob.includes(text)) return false;
-      if (filterLocation && job.location !== filterLocation) return false;
-      if (filterCompany && job.company !== filterCompany) return false;
-
-      if (filterCategory) {
-        const title = job.title?.toLowerCase() || "";
-        return CATEGORY_KEYWORDS[filterCategory]?.some((kw) =>
-          title.includes(kw)
+        setJobs(
+          jobsArray.map((j) => ({
+            ...j,
+            isSaved: saved.has(j._id),
+          }))
         );
+      } catch (err) {
+        console.error("Load jobs failed", err);
+      } finally {
+        setLoading(false);
       }
-      return true;
-    });
-  }, [activeJobs, searchText, filterLocation, filterCompany, filterCategory]);
+    };
 
-  const totalPages = Math.max(1, Math.ceil(filteredJobs.length / pageSize));
-  const displayedJobs = filteredJobs.slice(
-    (page - 1) * pageSize,
-    page * pageSize
-  );
+    loadData();
+  }, [user, recruiterId]);
 
   /* ================== SAVE / UNSAVE ================== */
   const handleSaveUnsaveJob = async (job) => {
-    const jobId = job._id;
-    const userId = user?.id || user?.email;
-    if (!jobId || !userId) return;
+    if (!recruiterId || !job?._id) return;
+
+    const next = new Set(savedJobIds);
 
     try {
-      let newSet = new Set(savedJobIds);
-
       if (job.isSaved) {
-        await unsaveJobL(jobId, userId);
-        newSet.delete(jobId);
+        await unsaveJobL(job._id, recruiterId);
+        next.delete(job._id);
       } else {
-        await saveJobL(jobId, userId);
-        newSet.add(jobId);
+        await saveJobL(job._id, recruiterId);
+        next.add(job._id);
       }
 
-      setSavedJobIds(newSet);
-
-      // Persist
-      localStorage.setItem(
-        "savedJobs",
-        JSON.stringify([...newSet].map((_id) => ({ _id })))
-      );
-
+      setSavedJobIds(next);
       setJobs((prev) =>
         prev.map((j) =>
-          j._id === jobId ? { ...j, isSaved: !job.isSaved } : j
+          j._id === job._id ? { ...j, isSaved: !job.isSaved } : j
         )
       );
-    } catch (err) {
+    } catch {
       alert("Save job failed");
+    }
+  };
+
+  /* ================== SUBMIT HANDLER ================== */
+  const handleSubmitCandidate = async () => {
+    if (!selectedJob || !recruiterId) return;
+
+    if (!candidateForm.candidateName || !candidateForm.candidateEmail) {
+      alert("Candidate name & email are required");
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+
+      await createSubmissionL({
+        job: selectedJob._id,
+        recruiterId,
+        ...candidateForm, // includes suitability
+      });
+
+      alert("Candidate submitted successfully");
+
+      setShowSubmit(false);
+      setSelectedJob(null);
+      setCandidateForm({
+        candidateName: "",
+        candidateEmail: "",
+        candidatePhone: "",
+        cvUrl: "",
+        linkedin: "",
+        portfolio: "",
+        suitability: "",
+      });
+    } catch (err) {
+      console.error(err);
+      alert("Submit failed");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -184,7 +159,7 @@ export default function Dashboard() {
           <p>Loading jobs...</p>
         ) : (
           <div className="job-list">
-            {displayedJobs.map((job) => (
+            {jobs.map((job) => (
               <div
                 key={job._id}
                 className="job-card"
@@ -217,6 +192,7 @@ export default function Dashboard() {
                   onClick={(e) => {
                     e.stopPropagation();
                     setSelectedJob(job);
+                    setShowSubmit(true);
                   }}
                 >
                   Submit Candidate
@@ -226,6 +202,109 @@ export default function Dashboard() {
           </div>
         )}
       </div>
+
+      {/* ===== SUBMIT MODAL ===== */}
+      {showSubmit && selectedJob && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <h3>Submit Candidate</h3>
+            <p>
+              <b>Job:</b> {selectedJob.title}
+            </p>
+
+            <input
+              placeholder="Candidate Name"
+              value={candidateForm.candidateName}
+              onChange={(e) =>
+                setCandidateForm((f) => ({
+                  ...f,
+                  candidateName: e.target.value,
+                }))
+              }
+            />
+
+            <input
+              placeholder="Candidate Email"
+              value={candidateForm.candidateEmail}
+              onChange={(e) =>
+                setCandidateForm((f) => ({
+                  ...f,
+                  candidateEmail: e.target.value,
+                }))
+              }
+            />
+
+            <input
+              placeholder="Candidate Phone"
+              value={candidateForm.candidatePhone}
+              onChange={(e) =>
+                setCandidateForm((f) => ({
+                  ...f,
+                  candidatePhone: e.target.value,
+                }))
+              }
+            />
+
+            <input
+              placeholder="CV URL"
+              value={candidateForm.cvUrl}
+              onChange={(e) =>
+                setCandidateForm((f) => ({
+                  ...f,
+                  cvUrl: e.target.value,
+                }))
+              }
+            />
+
+            <input
+              placeholder="LinkedIn"
+              value={candidateForm.linkedin}
+              onChange={(e) =>
+                setCandidateForm((f) => ({
+                  ...f,
+                  linkedin: e.target.value,
+                }))
+              }
+            />
+
+            <input
+              placeholder="Portfolio"
+              value={candidateForm.portfolio}
+              onChange={(e) =>
+                setCandidateForm((f) => ({
+                  ...f,
+                  portfolio: e.target.value,
+                }))
+              }
+            />
+
+            {/* ✅ SUITABILITY */}
+            <textarea
+              placeholder="Suitability / Why this candidate fits the job"
+              value={candidateForm.suitability}
+              onChange={(e) =>
+                setCandidateForm((f) => ({
+                  ...f,
+                  suitability: e.target.value,
+                }))
+              }
+              rows={4}
+            />
+
+            <div className="modal-actions">
+              <button
+                onClick={handleSubmitCandidate}
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? "Submitting..." : "Submit"}
+              </button>
+              <button onClick={() => setShowSubmit(false)}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <Icons />
     </div>
