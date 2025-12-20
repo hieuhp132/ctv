@@ -7,8 +7,8 @@ import {
   FaEyeSlash
 } from "react-icons/fa";
 import "../login/Login";
-import { API_BASE, signup } from "../../api";
-//import {signup} from "../../supabaseClient";
+import { API_BASE, lsignup } from "../../api";
+//import {lsignup} from "../../supabaseClient";
 
 export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
@@ -79,7 +79,7 @@ export default function SignUp() {
     setIsSubmitting(true);
   
     try {
-      await signup({
+      await lsignup({
         name: username,
         email,
         password,

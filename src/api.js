@@ -363,6 +363,29 @@ export async function signup({ name, email, password, promoCode = null, fromSupa
   }
 }
 
+export async function lregister({ name, email, password, promoCode = null }) {
+  try {
+    const res = await fetch(`${API_BASE}/local/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email, password, promoCode }),
+    });
+    
+    const data = await res.json();
+    if (!res.ok || !data.success) {
+      throw new Error(data.message || "Registration failed");
+    }
+
+    // Backend trả success: true hoặc HTTP error
+    return data;
+  }
+
+  catch (err) {
+    console.error("API register() error:", err);
+    throw err;
+  }
+}
+
 // Submissions API (CTV -> Admin)
 function mapReferralToClient(r) {
   return {
