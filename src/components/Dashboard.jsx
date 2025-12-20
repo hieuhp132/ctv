@@ -113,47 +113,59 @@ export default function Dashboard() {
     }
   };
 
-  const handleSubmitCandidate = async () => {
-    if (!selectedJob || !recruiterId) return;
+ const handleSubmitCandidate = async () => {
+  if (!selectedJob || !recruiterId) return;
 
-    if (!candidateForm.candidateName || !candidateForm.candidateEmail) {
-      alert("Name & Email are required");
+  if (!candidateForm.candidateName || !candidateForm.candidateEmail) {
+    alert("Name & Email are required");
+    return;
+  }
+
+  if (!cvFile) {
+    alert("Please upload CV");
+    return;
+  }
+
+  try {
+    setIsSubmitting(true);
+
+    // ✅ 1. Upload CV trước
+    const uploadRes = await uploadCV();
+    if (!uploadRes) {
+      alert("CV upload failed");
       return;
     }
 
-    if (!cvFile) {
-      alert("Please upload CV");
-      return;
-    }
+    const cvUrl = uploadRes.url; // 👈 FIX Ở ĐÂY
 
-    try {
-      setIsSubmitting(true);
+    // ✅ 2. Submit referral
+    await createSubmissionL({
+      job: selectedJob._id,
+      recruiterId,
+      ...candidateForm,
+      cvUrl,
+    });
 
-      await createSubmissionL({
-        job: selectedJob._id,
-        recruiterId,
-        ...candidateForm,
-        cvUrl,
-      });
+    alert("Candidate submitted successfully");
 
-      alert("Candidate submitted successfully");
+    setShowSubmit(false);
+    setCvFile(null);
+    setCandidateForm({
+      candidateName: "",
+      candidateEmail: "",
+      candidatePhone: "",
+      linkedin: "",
+      portfolio: "",
+      suitability: "",
+    });
+  } catch (err) {
+    console.error("SUBMIT ERROR:", err);
+    alert("Submit failed");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
-      setShowSubmit(false);
-      setCvFile(null);
-      setCandidateForm({
-        candidateName: "",
-        candidateEmail: "",
-        candidatePhone: "",
-        linkedin: "",
-        portfolio: "",
-        suitability: "",
-      });
-    } catch {
-      alert("Submit failed");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   /* ================= RENDER ================= */
   return (
