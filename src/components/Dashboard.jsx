@@ -89,19 +89,31 @@ export default function Dashboard() {
   }, [jobs]);
 
   const filteredJobs = useMemo(() => {
-    const text = searchText.toLowerCase();
-    return activeJobs.filter((job) => {
-      const blob = `${job.title} ${job.company} ${job.location}`.toLowerCase();
-      if (text && !blob.includes(text)) return false;
-      if (filterLocation && job.location !== filterLocation) return false;
-      if (filterCompany && job.company !== filterCompany) return false;
-      if (filterCategory) {
-        const title = job.title?.toLowerCase() || "";
-        return CATEGORY_KEYWORDS[filterCategory]?.some((kw) => title.includes(kw));
-      }
-      return true;
-    });
-  }, [activeJobs, searchText, filterLocation, filterCompany, filterCategory]);
+  const text = searchText.toLowerCase();
+  return activeJobs.filter((job) => {
+    const blob = `${job.title} ${job.company} ${job.location}`.toLowerCase();
+
+    if (text && !blob.includes(text)) return false;
+
+    if (
+      filterLocation &&
+      !job.location?.toLowerCase().includes(filterLocation.toLowerCase())
+    ) return false;
+
+    if (
+      filterCompany &&
+      !job.company?.toLowerCase().includes(filterCompany.toLowerCase())
+    ) return false;
+
+    if (filterCategory) {
+      const title = job.title?.toLowerCase() || "";
+      return CATEGORY_KEYWORDS[filterCategory]?.some((kw) => title.includes(kw));
+    }
+
+    return true;
+  });
+}, [activeJobs, searchText, filterLocation, filterCompany, filterCategory]);
+
 
   const totalPages = Math.max(1, Math.ceil(filteredJobs.length / pageSize));
   const displayedJobs = filteredJobs.slice((page - 1) * pageSize, page * pageSize);
