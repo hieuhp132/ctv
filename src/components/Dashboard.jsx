@@ -108,13 +108,13 @@ export default function Dashboard() {
     try {
       const res = await uploadFile(cvFile);
       console.log("UPLOAD RES:", res);
-      return res?.url || null;
+      return res?.publicUrl || null; // ✅ FIX
     } finally {
       setUploadingCV(false);
     }
   };
 
- const handleSubmitCandidate = async () => {
+const handleSubmitCandidate = async () => {
   if (!selectedJob || !recruiterId) return;
 
   if (!candidateForm.candidateName || !candidateForm.candidateEmail) {
@@ -130,21 +130,19 @@ export default function Dashboard() {
   try {
     setIsSubmitting(true);
 
-    // ✅ 1. Upload CV trước
-    const uploadRes = await uploadCV();
-    if (!uploadRes) {
+    // 1. Upload CV
+    const cvUrl = await uploadCV();
+    if (!cvUrl) {
       alert("CV upload failed");
       return;
     }
 
-    const cvUrl = uploadRes.url; // 👈 FIX Ở ĐÂY
-
-    // ✅ 2. Submit referral
+    // 2. Submit referral
     await createSubmissionL({
       job: selectedJob._id,
       recruiterId,
       ...candidateForm,
-      cvUrl,
+      cvUrl, // ✅ STRING URL
     });
 
     alert("Candidate submitted successfully");
@@ -166,6 +164,7 @@ export default function Dashboard() {
     setIsSubmitting(false);
   }
 };
+
 
 
   /* ================= RENDER ================= */
