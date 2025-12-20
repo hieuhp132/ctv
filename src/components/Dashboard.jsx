@@ -68,10 +68,10 @@ const loadData = async () => {
   }
 
   // // -------- Normalize responses --------
-  // const jobsArray =
-  //   asArray(jobsResponse) ||
-  //   asArray(jobsResponse?.items) ||
-  //   asArray(jobsResponse?.data);
+  const jobsArray =
+    asArray(jobsResponse) ||
+    asArray(jobsResponse?.items) ||
+    asArray(jobsResponse?.data);
 
   const savedItems = asArray(savedResponse?.items);
 
