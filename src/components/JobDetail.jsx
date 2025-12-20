@@ -18,44 +18,46 @@ export default function JobDetail() {
   const { id } = useParams();
   const { user } = useAuth();
 
-  console.log("JobDetail id:", id);
-
   const isCTV = user?.role === "recruiter";
   const isAdmin = user?.role === "admin";
   const ctvId = useMemo(() => user?.email || user?.id || "CTV", [user]);
 
   const [job, setJob] = useState(null);
   const [open, setOpen] = useState(false);
-  const [groupedOffers, setGroupedOffers] = useState({});
+  const [groupedOffers, setGroupedOffers] = useState([]);
   const [jdPublicUrl, setJdPublicUrl] = useState(null);
   const [file, setFile] = useState(null);
 
+  // Fetch job by ID
   useEffect(() => {
     getJobByIdL(id).then((data) => {
       setJob(data);
-      console.log("Fetched Job Detail:", data); // <-- Log the job detail here
+      console.log("Fetched Job Detail:", data);
     });
   }, [id]);
 
-
+  // Fetch job JD file
   useEffect(() => {
     if (!job) return;
 
     getListFiles().then((files) => {
-      const matched = files?.find((f) =>
-        decodeURIComponent(f.publicUrl.split("/").pop()) ===
-        decodeURIComponent(job.jdLink?.split("/").pop() || "")
+      const matched = files?.find(
+        (f) =>
+          decodeURIComponent(f.publicUrl.split("/").pop()) ===
+          decodeURIComponent(job.jdLink?.split("/").pop() || "")
       );
       setJdPublicUrl(matched?.publicUrl || null);
       setFile(matched?.name || null);
     });
   }, [job?.jdLink]);
 
+  // Handle JD file upload (Admin)
   const handleFileUploadSuccess = (fileData) => {
     updateJobJD(id, { jdLink: fileData.publicUrl }).then(setJob);
     setJdPublicUrl(fileData.publicUrl);
   };
 
+  // Fetch submissions (Admin)
   useEffect(() => {
     if (!isAdmin) return;
     Promise.all([listSubmissions(), listArchivedSubmissions()]).then(
@@ -70,6 +72,7 @@ export default function JobDetail() {
 
   if (!job) return <p className="loading">Loading...</p>;
 
+  // Candidate submission form
   const submit = async (e) => {
     e.preventDefault();
     const f = e.target;
@@ -93,6 +96,7 @@ export default function JobDetail() {
     f.reset();
   };
 
+  // Section helper
   const section = (title, html) => (
     <section className="job-section">
       <h4>{title}</h4>
@@ -106,9 +110,10 @@ export default function JobDetail() {
   return (
     <div className="dashboard-container job-detail">
       <header className="page-header">
-        <h2>{job.title}</h2>
+        <h2>{job.title || "Untitled Job"}</h2>
       </header>
 
+      {/* Keywords / Tags */}
       {job.keywords?.length > 0 && (
         <div className="job-tags">
           {job.keywords.map((k) => (
@@ -118,33 +123,40 @@ export default function JobDetail() {
       )}
 
       <div className="job-layout">
-        {/* LEFT */}
+        {/* LEFT COLUMN */}
         <div>
           <div className="job-info-grid">
             <div className="info-box">
               <strong>Salary</strong>
-              <span>{ job.salary || "N/A"}</span>
+              <span>{job.salary || "N/A"}</span>
             </div>
             <div className="info-box">
               <strong>Location</strong>
-              <span>{ job.location}</span>
+              <span>{job.location || "N/A"}</span>
             </div>
             <div className="info-box">
               <strong>Reward</strong>
-              <span>{ job.rewardCandidateUSD} USD</span>
+              <span>{job.rewardCandidateUSD ?? 0} USD</span>
             </div>
           </div>
 
-          {section("Job Overview And Responsibility", job.description)}
-          {section("Required Skills and Experience", job.requirements)}
+          {/* Job Sections */}
+          {section(
+            "Job Overview And Responsibility",
+            job.jobsdetail?.description || "<p>No description provided</p>"
+          )}
+          {section(
+            "Required Skills and Experience",
+            job.jobsdetail?.requirement || "<p>No requirements listed</p>"
+          )}
           {section(
             "Why Candidate should apply this position",
-            job.benefits
+            job.jobsdetail?.benefits || "<p>No benefits listed</p>"
           )}
-          {section("Other", job.other || "No specific notice")}
+          {section("Other", job.other || "<p>No specific notice</p>")}
         </div>
 
-        {/* RIGHT */}
+        {/* RIGHT SIDEBAR */}
         <aside className="job-sidebar">
           {isCTV && (
             <div className="card">
@@ -159,13 +171,14 @@ export default function JobDetail() {
             <div className="card admin">
               <h4>Admin: Manage JD File</h4>
               <FilesView publicUrl={jdPublicUrl} name={file} />
-              <div style={{height: 12}}></div>
+              <div style={{ height: 12 }} />
               <FileUploader onUploadSuccess={handleFileUploadSuccess} />
             </div>
           )}
         </aside>
       </div>
 
+      {/* Modal for candidate submission */}
       {open && (
         <div className="modal-overlay" onClick={() => setOpen(false)}>
           <form
