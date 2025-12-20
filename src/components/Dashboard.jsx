@@ -107,6 +107,7 @@ export default function Dashboard() {
     setUploadingCV(true);
     try {
       const res = await uploadFile(cvFile);
+      console.log("UPLOAD RES:", res);
       return res?.url || null;
     } finally {
       setUploadingCV(false);
