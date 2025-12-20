@@ -31,8 +31,8 @@ export default function JobDetail() {
   // Fetch job by ID
   useEffect(() => {
     getJobByIdL(id).then((data) => {
-      setJob(data);
-      console.log("Fetched Job Detail:", data);
+      setJob(data.job);
+      console.log("Fetched Job Detail:", data.job);
     });
   }, [id]);
 
