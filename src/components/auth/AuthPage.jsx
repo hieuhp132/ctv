@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { supabase } from "../../supabaseClient";
 import { useNavigate } from "react-router-dom";
-import { apiLogin, signup } from "../../api";
+import { llogin, lregister } from "../../api";
 import { useAuth } from "../../context/AuthContext";
 
 export default function AuthCallback() {
@@ -43,9 +43,9 @@ export default function AuthCallback() {
 
       // ----------- GỌI BACKEND REGISTER -----------
       try {
-        // console.log("👉 Sending signup request to backend...");
+        // console.log("👉 Sending lregister request to backend...");
 
-        const reg = await signup({
+        const reg = await lregister({
           name,
           email,
           password: defaultPassword,
@@ -58,20 +58,20 @@ export default function AuthCallback() {
         // backend có 3 trạng thái:
         // - user mới → success
         // - user cũ + có password → vẫn success vì fromSupabase:true
-        // - user cũ + có password nhưng signup bị chặn → code EMAIL_Exist_with_Password
+        // - user cũ + có password nhưng lregister bị chặn → code EMAIL_Exist_with_Password
         if (reg.code === "EMAIL_Exist_with_Password") {
           // Không bao giờ xảy ra vì fromSupabase:true luôn bypass
-          // console.warn("Blocked signup:", reg);
+          // console.warn("Blocked lregister:", reg);
         }
       } catch (err) {
-        // console.error("❌ Backend signup failed:", err);
+        // console.error("❌ Backend lregister failed:", err);
         return navigate("/login");
       }
 
       // ----------- GỌI LOGIN BACKEND (SSO PASSWORD) -----------
       let backendLoginResponse;
       try {
-        backendLoginResponse = await apiLogin(email, defaultPassword);
+        backendLoginResponse = await llogin(email, defaultPassword);
       } catch (err) {
         console.error("❌ Backend login failed:", err);
         return navigate("/login");
