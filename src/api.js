@@ -453,6 +453,38 @@ export async function listSubmissions({ page = 1, limit = 1000, status, jobId, q
   return items.filter((s) => !finals.includes(s.status));
 }
 
+export async function listSubmissionsL({
+  page = 1,
+  limit = 1000,
+  status,
+  jobId,
+  q,
+  finalized = false,
+} = {}) {
+  const user = getCurrentUser();
+  if (!user) return [];
+
+  const params = new URLSearchParams();
+  params.set("page", String(page));
+  params.set("limit", String(limit));
+
+  if (status) params.set("status", String(status).toLowerCase());
+  if (jobId) params.set("jobId", String(jobId));
+  if (q) params.set("q", q);
+  if (finalized !== undefined) {
+    params.set("finalized", String(finalized));
+  }
+
+  const res = await fetch(`${API_BASE}/local/referrals?${params.toString()}`);
+  if (!res.ok) return [];
+
+  const data = await res.json();
+  const list = Array.isArray(data?.items) ? data.items : [];
+
+  return list.map(mapReferralToClient);
+}
+
+
 export async function listArchivedSubmissions(opts = {}) {
   const user = getCurrentUser();
   if (!user) return [];

@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect } from "react";
 import {
-  listSubmissions,
+  listSubmissionsL,
   listArchivedSubmissions,
   getBalances,
 } from "../../api";
@@ -227,7 +227,7 @@ export default function MyCandidates() {
   const [balance, setBalance] = useState(0);
 
   useEffect(() => {
-    Promise.all([listSubmissions(), listArchivedSubmissions()]).then(
+    Promise.all([listSubmissionsL(), listArchivedSubmissions()]).then(
       ([subs, arch]) => {
         setCandidates(subs.filter((s) => String(s.ctv) === String(ctvId)));
         setArchived(arch.filter((a) => String(a.ctv) === String(ctvId)));
