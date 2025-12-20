@@ -31,15 +31,17 @@ function CandidateTracker({ candidates, name }) {
     return candidates.filter((c) => {
       const matchStatus =
         filters.status === "all" ||
-        (c.status || "").toLowerCase() === filters.status.toLowerCase();
+        String(c.status).toLowerCase() === filters.status.toLowerCase();
 
-      const matchCandidate = (c.candidate || "")
+      const matchCandidate = (c.candidateName || "")
         .toLowerCase()
         .includes(filters.candidate.toLowerCase());
+
       const matchJob = (c.job || "")
         .toLowerCase()
         .includes(filters.job.toLowerCase());
-      const matchEmail = (c.email || "")
+
+      const matchEmail = (c.candidateEmail || "")
         .toLowerCase()
         .includes(filters.email.toLowerCase());
 
@@ -49,10 +51,10 @@ function CandidateTracker({ candidates, name }) {
 
   const uniqueJobs = [...new Set(candidates.map((c) => c.job).filter(Boolean))];
   const uniqueCandidates = [
-    ...new Set(candidates.map((c) => c.candidate).filter(Boolean)),
+    ...new Set(candidates.map((c) => c.candidateName).filter(Boolean)),
   ];
   const uniqueEmails = [
-    ...new Set(candidates.map((c) => c.email).filter(Boolean)),
+    ...new Set(candidates.map((c) => c.candidateEmail).filter(Boolean)),
   ];
 
   return (
@@ -154,11 +156,11 @@ function CandidateTracker({ candidates, name }) {
 
           <tbody>
             {filteredCandidates.map((c) => (
-              <tr key={c.id}>
-                <td data-label="Name">{c.candidate}</td>
-                <td data-label="Job">{c.job}</td>
-                <td data-label="Salary">{c.salary || "-"}</td>
-                <td data-label="Status">
+              <tr key={c._id}>
+                <td>{c.candidateName}</td>
+                <td>{c.job}</td>
+                <td>-</td>
+                <td>
                   {c.status
                     ? c.status
                         .split("_")
@@ -168,11 +170,12 @@ function CandidateTracker({ candidates, name }) {
                         .join(" ")
                     : "-"}
                 </td>
-                <td data-label="Bonus">{c.bonus || "-"}</td>
-                <td data-label="Email">{c.email || "-"}</td>
-                <td data-label="Phone">{c.phone || "-"}</td>
-                <td data-label="CV">
-                  {c.cv ? (
+                <td>{c.bonus ?? "-"}</td>
+                <td>{c.candidateEmail || "-"}</td>
+                <td>{c.candidatePhone || "-"}</td>
+
+                <td>
+                  {c.cvUrl ? (
                     <a href={c.cvUrl} target="_blank" rel="noreferrer">
                       Link
                     </a>
@@ -180,7 +183,8 @@ function CandidateTracker({ candidates, name }) {
                     "-"
                   )}
                 </td>
-                <td data-label="LinkedIn">
+
+                <td>
                   {c.linkedin ? (
                     <a href={c.linkedin} target="_blank" rel="noreferrer">
                       Link
@@ -189,7 +193,8 @@ function CandidateTracker({ candidates, name }) {
                     "-"
                   )}
                 </td>
-                <td data-label="Portfolio">
+
+                <td>
                   {c.portfolio ? (
                     <a href={c.portfolio} target="_blank" rel="noreferrer">
                       Link
@@ -198,7 +203,8 @@ function CandidateTracker({ candidates, name }) {
                     "-"
                   )}
                 </td>
-                <td data-label="Time">
+
+                <td>
                   {c.createdAt
                     ? new Date(c.createdAt).toLocaleString()
                     : "-"}
@@ -227,16 +233,19 @@ export default function MyCandidates() {
   const [balance, setBalance] = useState(0);
 
   useEffect(() => {
-    Promise.all([listReferrals({ id: ctvId, isAdmin: false }), listArchivedSubmissions()]).then(
-      ([subs, arch]) => {
-        setCandidates(subs.filter((s) => String(s.ctv) === String(ctvId)));
-        setArchived(arch.filter((a) => String(a.ctv) === String(ctvId)));
-      }
-    );
-    
+    if (!ctvId) return;
+
+    Promise.all([
+      listReferrals({ id: ctvId, isAdmin: false, finalized: false }),
+      listReferrals({ id: ctvId, isAdmin: false, finalized: true }),
+    ]).then(([active, done]) => {
+      setCandidates(active);
+      setArchived(done);
+    });
+
     getBalances().then((b) => {
       const id = user?._id || user?.id || user?.email;
-      setBalance(b.ctvBonusById?.[id] || 0);
+      setBalance(b?.ctvBonusById?.[id] || 0);
     });
   }, [ctvId, user]);
 
@@ -254,7 +263,10 @@ export default function MyCandidates() {
         name="Candidate Tracking"
       />
 
-      <CandidateTracker candidates={archived} name="Completed" />
+      <CandidateTracker
+        candidates={archived}
+        name="Completed"
+      />
 
       <Icons />
     </div>
