@@ -54,7 +54,7 @@ const loadData = async () => {
 
   try {
     jobsResponse = await fetchAllJobs();
-    console.log(jobsResponse);
+    console.log("jobsResponse", jobsResponse);
   } catch (err) {
     console.error("Failed to fetch jobs", err);
   }
@@ -62,16 +62,14 @@ const loadData = async () => {
   if (user?.id || user?.email) {
     try {
       savedResponse = await fetchSavedJobsL(user.id || user.email);
+      console.log("savedResponse", savedResponse);
     } catch (err) {
       console.error("Failed to fetch saved jobs", err);
     }
   }
 
   // // -------- Normalize responses --------
-  const jobsArray =
-    asArray(jobsResponse) ||
-    asArray(jobsResponse?.items) ||
-    asArray(jobsResponse?.data);
+  const jobsArray = asArray(jobsResponse?.jobs);
 
   const savedItems = asArray(savedResponse?.items);
 
