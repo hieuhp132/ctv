@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import {
   updateBasicInfoOnServer,
-  fetchProfileFromServer,
+  fetchProfileFromServerL,
 } from "../../api";
 import {
   FaEdit,
@@ -36,9 +36,12 @@ export default function ViewProfile() {
     registeredPhone: "",
   });
 
+  /* ===== LOAD PROFILE ===== */
   useEffect(() => {
+    if (!user?._id) return;
+
     const loadProfile = async () => {
-      const data = await fetchProfileFromServer();
+      const data = await fetchProfileFromServerL(user._id);
       if (data) {
         setUser(data);
         setBasicInfo({
@@ -47,10 +50,15 @@ export default function ViewProfile() {
           role: data.role || "",
           newPassword: "",
         });
+
+        if (data.bankInfo) {
+          setBankInfo((prev) => ({ ...prev, ...data.bankInfo }));
+        }
       }
     };
+
     loadProfile();
-  }, []);
+  }, [user?._id]);
 
   const handleBasicChange = (e) => {
     const { name, value } = e.target;
@@ -65,8 +73,8 @@ export default function ViewProfile() {
   const handleSave = async () => {
     try {
       const res = await updateBasicInfoOnServer(basicInfo);
-      if (res.success) {
-        const updated = await fetchProfileFromServer();
+      if (res?.success) {
+        const updated = await fetchProfileFromServerL(user._id);
         setUser(updated);
         setIsEditing(false);
       }
@@ -97,7 +105,10 @@ export default function ViewProfile() {
             <button className="btn success" onClick={handleSave}>
               <FaSave /> Save
             </button>
-            <button className="btn danger" onClick={() => setIsEditing(false)}>
+            <button
+              className="btn danger"
+              onClick={() => setIsEditing(false)}
+            >
               <FaTimes /> Cancel
             </button>
           </div>

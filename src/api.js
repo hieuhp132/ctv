@@ -699,6 +699,25 @@ export async function fetchProfileFromServer() {
   }
 }
 
+export async function fetchProfileFromServerL(userId) {
+  if (!userId) return null;
+
+  try {
+    const res = await fetch(
+      `${API_BASE}/local/users/profile/${userId}`
+    );
+
+    if (!res.ok) return null;
+
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error("fetchProfileFromServerL error:", err);
+    return null;
+  }
+}
+
+
 export async function removeCandidateById(id) {
   try {
     const headers = { 'Content-Type': 'application/json', ...authHeaders() };
