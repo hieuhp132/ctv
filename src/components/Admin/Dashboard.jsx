@@ -424,8 +424,7 @@ export default function AdminDashboard() {
     const loadJobs = async () => {
       try {
         const jobsData = await fetchAllJobs();
-        console.log("Fetched jobs:", jobsData);
-        setJobs(jobsData);
+        setJobs(jobsData.jobs);
 
         const userId = user?.id || user?.email;
         if (userId) {
