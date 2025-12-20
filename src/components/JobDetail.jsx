@@ -17,6 +17,9 @@ import "./JobDetail.css";
 export default function JobDetail() {
   const { id } = useParams();
   const { user } = useAuth();
+
+  console.log("JobDetail id:", id);
+  
   const isCTV = user?.role === "recruiter";
   const isAdmin = user?.role === "admin";
   const ctvId = useMemo(() => user?.email || user?.id || "CTV", [user]);
@@ -28,6 +31,7 @@ export default function JobDetail() {
   const [file, setFile] = useState(null);
 
   useEffect(() => {
+    
     getJobByIdL(id).then(setJob);
   }, [id]);
 
