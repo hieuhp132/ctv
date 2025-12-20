@@ -564,3 +564,168 @@ h2 {
     font-size: 13px;
   }
 }
+
+/* ================= SUBMIT MODAL FORM ================= */
+
+.modal {
+  background: #fff;
+  padding: 24px 24px 20px;
+  border-radius: 14px;
+  max-width: 420px;
+  width: 92%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+  animation: modalFadeIn 0.25s ease;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal h3 {
+  margin: 0 0 18px 0;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  color: #222;
+}
+
+/* Form group */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.form-group label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #444;
+}
+
+/* Input & textarea */
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #fa615a;
+  box-shadow: 0 0 0 2px rgba(250, 97, 90, 0.15);
+}
+
+/* File upload */
+.form-group input[type="file"] {
+  padding: 8px;
+  background: #fafafa;
+  border: 1px dashed #ccc;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.form-group input[type="file"]::file-selector-button {
+  background: linear-gradient(135deg, #fc813d, #fa615a);
+  border: none;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.form-group input[type="file"]::file-selector-button:hover {
+  filter: brightness(0.9);
+}
+
+/* Actions */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.modal-actions button {
+  padding: 8px 18px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: filter 0.2s ease, transform 0.1s ease;
+}
+
+.modal-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Submit */
+.modal-actions button:first-child {
+  background: linear-gradient(135deg, #fc813d, #fa615a);
+  color: white;
+}
+
+.modal-actions button:first-child:hover:not(:disabled) {
+  filter: brightness(0.9);
+  transform: translateY(-1px);
+}
+
+/* Cancel */
+.modal-actions button:last-child {
+  background: #f1f1f1;
+  color: #555;
+}
+
+.modal-actions button:last-child:hover {
+  background: #e5e5e5;
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 480px) {
+  .modal {
+    padding: 16px;
+  }
+
+  .modal h3 {
+    font-size: 16px;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    font-size: 13px;
+    padding: 8px 10px;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .modal-actions button {
+    width: 100%;
+    font-size: 13px;
+    padding: 10px 0;
+  }
+}
