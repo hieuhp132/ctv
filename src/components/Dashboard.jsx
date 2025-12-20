@@ -239,7 +239,7 @@ export default function Dashboard() {
           <span>Vacancies: {job.vacancies}</span>
           <span style={{ marginLeft: 8 }}>Applicants: {job.applicants}</span>
         </div>
-          <span style={{ marginLeft: 8, fontWeight: "bold", color: isInactive ? "red" : "green" }}>
+          <span style={{ marginLeft: 8, fontWeight: "bold", color: "green" }}>
             Status: Active
           </span>
         <div className="reward-line">
