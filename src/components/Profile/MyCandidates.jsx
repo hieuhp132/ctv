@@ -3,6 +3,7 @@ import {
   listArchivedSubmissions,
   getBalances,
   listReferrals,
+  getJobByIdL,
 } from "../../api";
 import { useAuth } from "../../context/AuthContext";
 import "../Admin/CandidateManagement.css";
@@ -158,7 +159,7 @@ function CandidateTracker({ candidates, name }) {
             {filteredCandidates.map((c) => (
               <tr key={c._id}>
                 <td>{c.candidateName}</td>
-                <td>{c.job}</td>
+                <td>{getJobByIdL(c.job)?.title || "-"}</td>
                 <td>-</td>
                 <td>
                   {c.status
