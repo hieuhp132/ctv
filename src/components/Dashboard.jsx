@@ -234,6 +234,21 @@ export default function Dashboard() {
               {job.deadline && <div>⏰ Deadline: {new Date(job.deadline).toLocaleDateString()}</div>}
               {job.category && <div>🏷 Category: {job.category}</div>}
 
+              
+        <div style={{ fontSize: "12px", color: "#666", marginBottom: 6 }}>
+          <span>Vacancies: {job.vacancies}</span>
+          <span style={{ marginLeft: 8 }}>Applicants: {job.applicants}</span>
+        </div>
+          <span style={{ marginLeft: 8, fontWeight: "bold", color: isInactive ? "red" : "green" }}>
+            Status: {isInactive ? "Inactive" : "Active"}
+          </span>
+        <div className="reward-line">
+          <span className="reward-badge">USD {job.rewardCandidateUSD} / Headhunter</span>
+          <span className="reward-badge secondary">+USD {job.rewardInterviewUSD} / Interview</span>
+          <span className="job-bonus">+USD {job.bonus}</span>
+
+        </div>
+
               <button
                 className="submit-btn"
                 onClick={(e) => {
