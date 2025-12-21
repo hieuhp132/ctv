@@ -8,6 +8,7 @@ import {
   getBalances,
   finalizeSubmission,
   removeCandidateById,
+  listReferrals,
 } from "../../api";
 
 const STATUS_OPTIONS = [
@@ -25,6 +26,10 @@ function getRefId(sub) {
 }
 
 export default function CandidateManagement() {
+  
+  const {user} = useAuth();
+  const adminId = user?.id || user?.email;
+  const email = user?.email || "";
   const [submissions, setSubmissions] = useState([]);
   const [archived, setArchived] = useState([]);
   const [balances, setBalances] = useState({ adminCredit: 0, ctvBonusById: {} });
@@ -61,14 +66,16 @@ export default function CandidateManagement() {
 
   const refresh = async () => {
     const [subs, arch, bal] = await Promise.all([
-      listSubmissions(),
-      listArchivedSubmissions(),
+      listReferrals({ id: adminId, email: email, isAdmin: true, finalized: false }),
+      listReferrals({ id: adminId, email: email, isAdmin: true, finalized: true }),
       getBalances(),
     ]);
 
     const filteredSubs = Array.isArray(subs)
       ? subs.filter((sub) => !sub.finalized)
       : [];
+
+    console.log("Loaded submissions:", filteredSubs);
 
     setSubmissions(filteredSubs);
     setArchived(arch || []);
