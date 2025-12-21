@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import "./CandidateManagement.css";
 import {
   updateSubmissionStatus,
+  finalizeSubmission,
   removeCandidateById,
   listReferrals,
 } from "../../api";
@@ -19,28 +20,15 @@ const STATUS_OPTIONS = [
   "rejected",
 ];
 
-const SORT_FIELDS = [
-  { key: "candidateName", label: "Name" },
-  { key: "job", label: "Job" },
-  { key: "recruiter", label: "CTV" },
-  { key: "candidateEmail", label: "Email" },
-  { key: "status", label: "Status" },
-  { key: "bonus", label: "Bonus" },
-];
+const PAGE_SIZE = 10;
 
 /* ================= HELPERS ================= */
 
-const getRefId = (r) => r?._id;
-
-const uniqueValues = (data, key) =>
-  [...new Set(data.map((i) => i[key]).filter(Boolean))];
-
 const sortData = (data, { key, direction }) => {
   if (!key || !direction) return data;
-
   return [...data].sort((a, b) => {
-    let av = a[key];
-    let bv = b[key];
+    const av = a[key];
+    const bv = b[key];
 
     if (av == null) return 1;
     if (bv == null) return -1;
@@ -55,10 +43,8 @@ const sortData = (data, { key, direction }) => {
   });
 };
 
-const SortIcon = ({ active, direction }) => {
-  if (!active) return <span className="sort-icon">↕</span>;
-  return <span className="sort-icon">{direction === "asc" ? "↑" : "↓"}</span>;
-};
+const paginate = (data, page) =>
+  data.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
 /* ================= COMPONENT ================= */
 
@@ -69,7 +55,6 @@ export default function CandidateManagement() {
 
   const [rows, setRows] = useState([]);
 
-  /* ===== FILTER ===== */
   const [filters, setFilters] = useState({
     candidateName: "",
     job: "",
@@ -78,242 +63,160 @@ export default function CandidateManagement() {
     status: "",
   });
 
-  /* ===== SORT ===== */
   const [sortConfig, setSortConfig] = useState({
     key: "",
     direction: "",
   });
 
-  /* ================= LOAD DATA ================= */
+  const [activePage, setActivePage] = useState(1);
+  const [rejectedPage, setRejectedPage] = useState(1);
 
-  const loadData = async () => {
+  /* ================= LOAD ================= */
+
+  useEffect(() => {
     if (!adminId) return;
 
-    const res = await listReferrals({
+    listReferrals({
       id: adminId,
       email,
       isAdmin: true,
       limit: 1000,
-    });
-
-    setRows(res || []);
-  };
-
-  useEffect(() => {
-    loadData();
+    }).then((res) => setRows(res || []));
   }, [adminId, email]);
 
   /* ================= FILTER + SORT ================= */
 
-  const filteredRows = useMemo(() => {
+  const filtered = useMemo(() => {
     return rows.filter((r) =>
-      Object.entries(filters).every(([key, val]) => {
-        if (!val) return true;
-        return String(r[key] || "")
-          .toLowerCase()
-          .includes(val.toLowerCase());
+      Object.entries(filters).every(([k, v]) => {
+        if (!v) return true;
+        return String(r[k] || "").toLowerCase().includes(v.toLowerCase());
       })
     );
   }, [rows, filters]);
 
-  const sortedRows = useMemo(
-    () => sortData(filteredRows, sortConfig),
-    [filteredRows, sortConfig]
+  const sorted = useMemo(
+    () => sortData(filtered, sortConfig),
+    [filtered, sortConfig]
   );
 
-  /* ================= SPLIT BY STATUS ================= */
+  const activeRows = sorted.filter((r) => r.status !== "rejected");
+  const rejectedRows = sorted.filter((r) => r.status === "rejected");
 
-  const activeRows = sortedRows.filter((r) => r.status !== "rejected");
-  const rejectedRows = sortedRows.filter((r) => r.status === "rejected");
+  const activePaged = paginate(activeRows, activePage);
+  const rejectedPaged = paginate(rejectedRows, rejectedPage);
 
-  /* ================= OPTIONS ================= */
-
-  const jobOptions = uniqueValues(rows, "job");
-  const recruiterOptions = uniqueValues(rows, "recruiter");
-
-  /* ================= SORT HANDLER ================= */
+  /* ================= SORT ================= */
 
   const toggleSort = (key) => {
-    setSortConfig((prev) => {
-      if (prev.key !== key) return { key, direction: "asc" };
-      if (prev.direction === "asc") return { key, direction: "desc" };
+    setSortConfig((p) => {
+      if (p.key !== key) return { key, direction: "asc" };
+      if (p.direction === "asc") return { key, direction: "desc" };
       return { key: "", direction: "" };
     });
   };
 
-  /* ================= MOBILE FILTER (CSS CONTROLLED) ================= */
+  const sortIcon = (key) =>
+    sortConfig.key !== key
+      ? "⇅"
+      : sortConfig.direction === "asc"
+      ? "↑"
+      : "↓";
 
-  const MobileFilter = () => (
-    <div className="mobile-filter">
-      <input
-        placeholder="Candidate name"
-        value={filters.candidateName}
-        onChange={(e) =>
-          setFilters({ ...filters, candidateName: e.target.value })
-        }
-      />
+  /* ================= RENDER TABLE ================= */
 
-      <input
-        placeholder="Email"
-        value={filters.candidateEmail}
-        onChange={(e) =>
-          setFilters({ ...filters, candidateEmail: e.target.value })
-        }
-      />
-
-      <select
-        value={filters.job}
-        onChange={(e) => setFilters({ ...filters, job: e.target.value })}
-      >
-        <option value="">All jobs</option>
-        {jobOptions.map((j) => (
-          <option key={j}>{j}</option>
-        ))}
-      </select>
-
-      <select
-        value={filters.recruiter}
-        onChange={(e) =>
-          setFilters({ ...filters, recruiter: e.target.value })
-        }
-      >
-        <option value="">All CTV</option>
-        {recruiterOptions.map((r) => (
-          <option key={r}>{r}</option>
-        ))}
-      </select>
-
-      <select
-        value={filters.status}
-        onChange={(e) =>
-          setFilters({ ...filters, status: e.target.value })
-        }
-      >
-        <option value="">All status</option>
-        {STATUS_OPTIONS.map((s) => (
-          <option key={s}>{s}</option>
-        ))}
-      </select>
-    </div>
-  );
-
-  /* ================= TABLE ================= */
-
-  const renderTable = (title, data, editableStatus) => (
+  const renderTable = (title, data, isActive, page, setPage, total) => (
     <section className="table-section">
       <h3>{title}</h3>
 
-      {/* MOBILE FILTER (ONLY MOBILE) */}
-      <MobileFilter />
+      {/* ===== MOBILE FILTER + SORT ===== */}
+      <div className="mobile-sort">
+        <input
+          placeholder="Candidate"
+          value={filters.candidateName}
+          onChange={(e) =>
+            setFilters({ ...filters, candidateName: e.target.value })
+          }
+        />
+
+        <select
+          value={filters.status}
+          onChange={(e) =>
+            setFilters({ ...filters, status: e.target.value })
+          }
+        >
+          <option value="">All Status</option>
+          {STATUS_OPTIONS.map((s) => (
+            <option key={s}>{s}</option>
+          ))}
+        </select>
+
+        <select
+          value={sortConfig.key}
+          onChange={(e) =>
+            setSortConfig((p) => ({ ...p, key: e.target.value }))
+          }
+        >
+          <option value="">Sort by</option>
+          <option value="candidateName">Name</option>
+          <option value="job">Job</option>
+          <option value="recruiter">CTV</option>
+          <option value="status">Status</option>
+          <option value="bonus">Bonus</option>
+        </select>
+
+        <select
+          value={sortConfig.direction}
+          onChange={(e) =>
+            setSortConfig((p) => ({ ...p, direction: e.target.value }))
+          }
+        >
+          <option value="asc">Ascending</option>
+          <option value="desc">Descending</option>
+        </select>
+      </div>
 
       <div className="table-wrapper">
         <table className="admin-table">
           <thead>
             <tr>
-              {[
-                ["candidateName", "Name"],
-                ["job", "Job"],
-                ["recruiter", "CTV"],
-                ["candidateEmail", "Email"],
-                ["status", "Status"],
-                ["bonus", "Bonus"],
-              ].map(([key, label]) => (
-                <th key={key} onClick={() => toggleSort(key)}>
-                  {label}
-                  <SortIcon
-                    active={sortConfig.key === key}
-                    direction={sortConfig.direction}
-                  />
-                </th>
-              ))}
-              <th>CV</th>
-              <th>LinkedIn</th>
+              <th onClick={() => toggleSort("candidateName")}>
+                Name {sortIcon("candidateName")}
+              </th>
+              <th onClick={() => toggleSort("job")}>
+                Job {sortIcon("job")}
+              </th>
+              <th onClick={() => toggleSort("recruiter")}>
+                CTV {sortIcon("recruiter")}
+              </th>
+              <th>Email</th>
+              <th onClick={() => toggleSort("status")}>
+                Status {sortIcon("status")}
+              </th>
+              <th onClick={() => toggleSort("bonus")}>
+                Bonus {sortIcon("bonus")}
+              </th>
               <th>Action</th>
-            </tr>
-
-            {/* DESKTOP FILTER */}
-            <tr className="filter-row">
-              <th>
-                <input
-                  value={filters.candidateName}
-                  onChange={(e) =>
-                    setFilters({ ...filters, candidateName: e.target.value })
-                  }
-                />
-              </th>
-              <th>
-                <select
-                  value={filters.job}
-                  onChange={(e) =>
-                    setFilters({ ...filters, job: e.target.value })
-                  }
-                >
-                  <option value="">All</option>
-                  {jobOptions.map((j) => (
-                    <option key={j}>{j}</option>
-                  ))}
-                </select>
-              </th>
-              <th>
-                <select
-                  value={filters.recruiter}
-                  onChange={(e) =>
-                    setFilters({ ...filters, recruiter: e.target.value })
-                  }
-                >
-                  <option value="">All</option>
-                  {recruiterOptions.map((r) => (
-                    <option key={r}>{r}</option>
-                  ))}
-                </select>
-              </th>
-              <th>
-                <input
-                  value={filters.candidateEmail}
-                  onChange={(e) =>
-                    setFilters({
-                      ...filters,
-                      candidateEmail: e.target.value,
-                    })
-                  }
-                />
-              </th>
-              <th>
-                <select
-                  value={filters.status}
-                  onChange={(e) =>
-                    setFilters({ ...filters, status: e.target.value })
-                  }
-                >
-                  <option value="">All</option>
-                  {STATUS_OPTIONS.map((s) => (
-                    <option key={s}>{s}</option>
-                  ))}
-                </select>
-              </th>
-              <th />
-              <th />
-              <th />
-              <th />
             </tr>
           </thead>
 
           <tbody>
             {data.map((r) => (
-              <tr key={getRefId(r)}>
-                <td>{r.candidateName}</td>
-                <td>{r.job}</td>
-                <td>{r.recruiter}</td>
-                <td>{r.candidateEmail}</td>
-                <td>
-                  {editableStatus ? (
+              <tr key={r._id}>
+                <td data-label="Name">{r.candidateName}</td>
+                <td data-label="Job">{r.job}</td>
+                <td data-label="CTV">{r.recruiter}</td>
+                <td data-label="Email">{r.candidateEmail}</td>
+
+                <td data-label="Status">
+                  {isActive ? (
                     <select
                       value={r.status}
                       onChange={(e) =>
                         updateSubmissionStatus({
-                          id: getRefId(r),
+                          id: r._id,
                           status: e.target.value,
-                        }).then(loadData)
+                        })
                       }
                     >
                       {STATUS_OPTIONS.map((s) => (
@@ -324,16 +227,16 @@ export default function CandidateManagement() {
                     r.status
                   )}
                 </td>
-                <td>{r.bonus || 0}</td>
-                <td>{r.cvUrl && <a href={r.cvUrl}>Link</a>}</td>
-                <td>{r.linkedin && <a href={r.linkedin}>Link</a>}</td>
-                <td>
+
+                <td data-label="Bonus">{r.bonus || 0}</td>
+
+                <td data-label="Action">
                   <button
                     className="remove-btn"
                     onClick={async () => {
                       if (!window.confirm("Remove candidate?")) return;
-                      await removeCandidateById(getRefId(r));
-                      loadData();
+                      await removeCandidateById(r._id);
+                      setRows((p) => p.filter((x) => x._id !== r._id));
                     }}
                   >
                     Remove
@@ -344,23 +247,56 @@ export default function CandidateManagement() {
 
             {!data.length && (
               <tr>
-                <td colSpan="9" style={{ textAlign: "center" }}>
-                  No data
-                </td>
+                <td colSpan="7">No data</td>
               </tr>
             )}
           </tbody>
         </table>
       </div>
+
+      {/* ===== PAGINATION ===== */}
+      <div className="pagination">
+        <button disabled={page === 1} onClick={() => setPage(page - 1)}>
+          Prev
+        </button>
+        <span>
+          Page {page} / {Math.ceil(total / PAGE_SIZE) || 1}
+        </span>
+        <button
+          disabled={page >= Math.ceil(total / PAGE_SIZE)}
+          onClick={() => setPage(page + 1)}
+        >
+          Next
+        </button>
+      </div>
     </section>
   );
 
+  /* ================= RETURN ================= */
+
   return (
     <div className="candidate-page">
-      <h2>Candidate Management</h2>
+      <div className="page-header">
+        <h2>Candidate Management</h2>
+      </div>
 
-      {renderTable("Active Candidates", activeRows, true)}
-      {renderTable("Rejected Candidates", rejectedRows, false)}
+      {renderTable(
+        "Active Candidates",
+        activePaged,
+        true,
+        activePage,
+        setActivePage,
+        activeRows.length
+      )}
+
+      {renderTable(
+        "Rejected Candidates",
+        rejectedPaged,
+        false,
+        rejectedPage,
+        setRejectedPage,
+        rejectedRows.length
+      )}
     </div>
   );
 }
