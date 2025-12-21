@@ -465,7 +465,7 @@ export default function AdminDashboard() {
   const removeJob = async (job) => {
     if (!window.confirm(`Delete job ${job.title}?`)) return;
     try {
-      await deleteJobL(job.id);
+      await deleteJobL(job._id);
       await refresh();
     } catch (err) {
       console.error("Failed to delete job:", err);
