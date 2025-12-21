@@ -1,8 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import "./CandidateManagement.css";
 import {
-  updateSubmissionStatus,
-  finalizeSubmission,
   removeCandidateById,
   listReferrals,
 } from "../../api";
@@ -37,19 +35,16 @@ const sortData = (data, { key, direction }) => {
     if (av == null) return 1;
     if (bv == null) return -1;
 
-    // number
     if (!isNaN(av) && !isNaN(bv)) {
       return direction === "asc" ? av - bv : bv - av;
     }
 
-    // date
     if (!isNaN(Date.parse(av)) && !isNaN(Date.parse(bv))) {
       return direction === "asc"
         ? new Date(av) - new Date(bv)
         : new Date(bv) - new Date(av);
     }
 
-    // string
     return direction === "asc"
       ? String(av).localeCompare(String(bv))
       : String(bv).localeCompare(String(av));
@@ -65,7 +60,7 @@ export default function CandidateManagement() {
 
   const [rows, setRows] = useState([]);
 
-  /* ===== FILTER STATE (PER COLUMN) ===== */
+  /* ===== FILTER STATE ===== */
   const [filters, setFilters] = useState({
     candidateName: "",
     job: "",
@@ -93,10 +88,10 @@ export default function CandidateManagement() {
     }).then((res) => setRows(res || []));
   }, [adminId, email]);
 
-  /* ================= FILTERED + SORTED ================= */
+  /* ================= FILTER + SORT ================= */
 
-  const filteredRows = useMemo(() => {
-    return rows.filter((r) =>
+  const applyFilterSort = (data) => {
+    const filtered = data.filter((r) =>
       Object.entries(filters).every(([key, val]) => {
         if (!val) return true;
         return String(r[key] || "")
@@ -104,11 +99,18 @@ export default function CandidateManagement() {
           .includes(val.toLowerCase());
       })
     );
-  }, [rows, filters]);
 
-  const sortedRows = useMemo(
-    () => sortData(filteredRows, sortConfig),
-    [filteredRows, sortConfig]
+    return sortData(filtered, sortConfig);
+  };
+
+  const activeRows = useMemo(
+    () => applyFilterSort(rows.filter((r) => r.finalized !== true)),
+    [rows, filters, sortConfig]
+  );
+
+  const archivedRows = useMemo(
+    () => applyFilterSort(rows.filter((r) => r.finalized === true)),
+    [rows, filters, sortConfig]
   );
 
   /* ================= SORT HANDLER ================= */
@@ -121,10 +123,158 @@ export default function CandidateManagement() {
     });
   };
 
-  /* ================= OPTIONS FROM BACKEND ================= */
+  /* ================= OPTIONS ================= */
 
   const jobOptions = uniqueValues(rows, "job");
   const recruiterOptions = uniqueValues(rows, "recruiter");
+
+  /* ================= TABLE RENDER ================= */
+
+  const renderTable = (title, data) => (
+    <div className="table-section">
+      <h3 style={{ marginBottom: 12 }}>{title}</h3>
+
+      <div className="table-wrapper">
+        <table className="admin-table">
+          <thead>
+            <tr>
+              <th onClick={() => toggleSort("candidateName")}>Name</th>
+              <th onClick={() => toggleSort("job")}>Job</th>
+              <th onClick={() => toggleSort("recruiter")}>CTV</th>
+              <th onClick={() => toggleSort("candidateEmail")}>Email</th>
+              <th onClick={() => toggleSort("status")}>Status</th>
+              <th onClick={() => toggleSort("bonus")}>Bonus</th>
+              <th>CV</th>
+              <th>LinkedIn</th>
+              <th>Action</th>
+            </tr>
+
+            {/* ===== FILTER ROW ===== */}
+            <tr className="filter-row">
+              <th>
+                <input
+                  placeholder="Search"
+                  value={filters.candidateName}
+                  onChange={(e) =>
+                    setFilters({ ...filters, candidateName: e.target.value })
+                  }
+                />
+              </th>
+
+              <th>
+                <select
+                  value={filters.job}
+                  onChange={(e) =>
+                    setFilters({ ...filters, job: e.target.value })
+                  }
+                >
+                  <option value="">All</option>
+                  {jobOptions.map((j) => (
+                    <option key={j}>{j}</option>
+                  ))}
+                </select>
+              </th>
+
+              <th>
+                <select
+                  value={filters.recruiter}
+                  onChange={(e) =>
+                    setFilters({ ...filters, recruiter: e.target.value })
+                  }
+                >
+                  <option value="">All</option>
+                  {recruiterOptions.map((r) => (
+                    <option key={r}>{r}</option>
+                  ))}
+                </select>
+              </th>
+
+              <th>
+                <input
+                  placeholder="Email"
+                  value={filters.candidateEmail}
+                  onChange={(e) =>
+                    setFilters({
+                      ...filters,
+                      candidateEmail: e.target.value,
+                    })
+                  }
+                />
+              </th>
+
+              <th>
+                <select
+                  value={filters.status}
+                  onChange={(e) =>
+                    setFilters({ ...filters, status: e.target.value })
+                  }
+                >
+                  <option value="">All</option>
+                  {STATUS_OPTIONS.map((s) => (
+                    <option key={s}>{s}</option>
+                  ))}
+                </select>
+              </th>
+
+              <th />
+              <th />
+              <th />
+              <th />
+            </tr>
+          </thead>
+
+          <tbody>
+            {data.map((r) => (
+              <tr key={getRefId(r)}>
+                <td>{r.candidateName}</td>
+                <td>{r.job}</td>
+                <td>{r.recruiter}</td>
+                <td>{r.candidateEmail}</td>
+                <td>{r.status}</td>
+                <td>{r.bonus || 0}</td>
+                <td>
+                  {r.cvUrl && (
+                    <a href={r.cvUrl} target="_blank" rel="noreferrer">
+                      Link
+                    </a>
+                  )}
+                </td>
+                <td>
+                  {r.linkedin && (
+                    <a href={r.linkedin} target="_blank" rel="noreferrer">
+                      Link
+                    </a>
+                  )}
+                </td>
+                <td>
+                  <button
+                    className="remove-btn"
+                    onClick={async () => {
+                      if (!window.confirm("Remove candidate?")) return;
+                      await removeCandidateById(getRefId(r));
+                      setRows((p) =>
+                        p.filter((x) => getRefId(x) !== getRefId(r))
+                      );
+                    }}
+                  >
+                    Remove
+                  </button>
+                </td>
+              </tr>
+            ))}
+
+            {!data.length && (
+              <tr>
+                <td colSpan="9" style={{ textAlign: "center" }}>
+                  No data
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
 
   /* ================= RENDER ================= */
 
@@ -134,147 +284,8 @@ export default function CandidateManagement() {
         <h2>My Candidates</h2>
       </div>
 
-      <div className="table-section">
-        <div className="table-wrapper">
-          <table className="admin-table">
-            <thead>
-              <tr>
-                <th onClick={() => toggleSort("candidateName")}>Name</th>
-                <th onClick={() => toggleSort("job")}>Job</th>
-                <th onClick={() => toggleSort("recruiter")}>CTV</th>
-                <th onClick={() => toggleSort("candidateEmail")}>Email</th>
-                <th onClick={() => toggleSort("status")}>Status</th>
-                <th onClick={() => toggleSort("bonus")}>Bonus</th>
-                <th>CV</th>
-                <th>LinkedIn</th>
-                <th>Action</th>
-              </tr>
-
-              {/* ===== FILTER ROW ===== */}
-              <tr className="filter-row">
-                <th>
-                  <input
-                    placeholder="Search"
-                    value={filters.candidateName}
-                    onChange={(e) =>
-                      setFilters({ ...filters, candidateName: e.target.value })
-                    }
-                  />
-                </th>
-
-                <th>
-                  <select
-                    value={filters.job}
-                    onChange={(e) =>
-                      setFilters({ ...filters, job: e.target.value })
-                    }
-                  >
-                    <option value="">All</option>
-                    {jobOptions.map((j) => (
-                      <option key={j}>{j}</option>
-                    ))}
-                  </select>
-                </th>
-
-                <th>
-                  <select
-                    value={filters.recruiter}
-                    onChange={(e) =>
-                      setFilters({ ...filters, recruiter: e.target.value })
-                    }
-                  >
-                    <option value="">All</option>
-                    {recruiterOptions.map((r) => (
-                      <option key={r}>{r}</option>
-                    ))}
-                  </select>
-                </th>
-
-                <th>
-                  <input
-                    placeholder="Email"
-                    value={filters.candidateEmail}
-                    onChange={(e) =>
-                      setFilters({
-                        ...filters,
-                        candidateEmail: e.target.value,
-                      })
-                    }
-                  />
-                </th>
-
-                <th>
-                  <select
-                    value={filters.status}
-                    onChange={(e) =>
-                      setFilters({ ...filters, status: e.target.value })
-                    }
-                  >
-                    <option value="">All</option>
-                    {STATUS_OPTIONS.map((s) => (
-                      <option key={s}>{s}</option>
-                    ))}
-                  </select>
-                </th>
-
-                <th />
-                <th />
-                <th />
-                <th />
-              </tr>
-            </thead>
-
-            <tbody>
-              {sortedRows.map((r) => (
-                <tr key={getRefId(r)}>
-                  <td>{r.candidateName}</td>
-                  <td>{r.job}</td>
-                  <td>{r.recruiter}</td>
-                  <td>{r.candidateEmail}</td>
-                  <td>{r.status}</td>
-                  <td>{r.bonus || 0}</td>
-                  <td>
-                    {r.cvUrl && (
-                      <a href={r.cvUrl} target="_blank" rel="noreferrer">
-                        Link
-                      </a>
-                    )}
-                  </td>
-                  <td>
-                    {r.linkedin && (
-                      <a href={r.linkedin} target="_blank" rel="noreferrer">
-                        Link
-                      </a>
-                    )}
-                  </td>
-                  <td>
-                    <button
-                      className="remove-btn"
-                      onClick={async () => {
-                        if (!window.confirm("Remove candidate?")) return;
-                        await removeCandidateById(getRefId(r));
-                        setRows((p) =>
-                          p.filter((x) => getRefId(x) !== getRefId(r))
-                        );
-                      }}
-                    >
-                      Remove
-                    </button>
-                  </td>
-                </tr>
-              ))}
-
-              {!sortedRows.length && (
-                <tr>
-                  <td colSpan="9" style={{ textAlign: "center" }}>
-                    No data
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      {renderTable("Active Candidates", activeRows)}
+      {renderTable("Archived Candidates", archivedRows)}
     </div>
   );
 }
