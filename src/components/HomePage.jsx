@@ -30,7 +30,7 @@ export default function HomePage() {
     fetchAllJobs(12)
       .then(list => {
         console.log("[DEBUG] Jobs fetched:", list);
-        if (mounted) setJobs(Array.isArray(list) ? list.jobs : []);
+        if (mounted) setJobs(Array.isArray(list) ? list : []);
       })
       .catch(err => {
         console.error("[DEBUG] Error fetching jobs:", err);
