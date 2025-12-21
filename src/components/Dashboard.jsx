@@ -248,7 +248,7 @@ export default function Dashboard() {
       <h2>Active Jobs</h2>
 
    
-              <div className="filter-bar">
+        <div className="filter-bar">
           <input
             type="text"
             placeholder="Search jobs, companies, skills..."

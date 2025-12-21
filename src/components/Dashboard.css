@@ -202,3 +202,40 @@ h2 {
     width: 300px;
   }
 }
+/* ================= FILTER BAR ================= */
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 22px;
+  padding: 14px 16px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+  flex-wrap: wrap;
+}
+
+/* ================= SEARCH INPUT ================= */
+.filter-input {
+  flex: 2;
+  min-width: 240px;
+  height: 40px;
+  padding: 0 14px;
+  font-size: 14px;
+  font-family: inherit;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background: #fafafa;
+  transition: all .2s ease;
+}
+
+.filter-input::placeholder {
+  color: #aaa;
+}
+
+.filter-input:focus {
+  outline: none;
+  background: #fff;
+  border-color: #fa615a;
+  box-shadow: 0 0 0 2px rgba(250,97,90,.18);
+}
