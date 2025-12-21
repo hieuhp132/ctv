@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import "./CandidateManagement.css";
 import {
   updateSubmissionStatus,
-  finalizeSubmission,
   removeCandidateById,
   listReferrals,
 } from "../../api";
@@ -64,11 +63,7 @@ const sortData = (data, { key, direction }) => {
 
 const SortIcon = ({ active, direction }) => {
   if (!active) return <span className="sort-icon">↕</span>;
-  return (
-    <span className="sort-icon">
-      {direction === "asc" ? "↑" : "↓"}
-    </span>
-  );
+  return <span className="sort-icon">{direction === "asc" ? "↑" : "↓"}</span>;
 };
 
 /* ================= COMPONENT ================= */
@@ -146,6 +141,14 @@ export default function CandidateManagement() {
     [archivedRows, filters, sortConfig]
   );
 
+  /* ================= OPTIONS ================= */
+
+  const jobOptions = uniqueValues([...activeRows, ...archivedRows], "job");
+  const recruiterOptions = uniqueValues(
+    [...activeRows, ...archivedRows],
+    "recruiter"
+  );
+
   /* ================= SORT HANDLER ================= */
 
   const toggleSort = (key) => {
@@ -156,21 +159,72 @@ export default function CandidateManagement() {
     });
   };
 
-  /* ================= OPTIONS ================= */
+  /* ================= MOBILE FILTER ================= */
 
-  const jobOptions = uniqueValues([...activeRows, ...archivedRows], "job");
-  const recruiterOptions = uniqueValues(
-    [...activeRows, ...archivedRows],
-    "recruiter"
+  const MobileFilter = () => (
+    <div className="mobile-filter">
+      <input
+        placeholder="Candidate name"
+        value={filters.candidateName}
+        onChange={(e) =>
+          setFilters({ ...filters, candidateName: e.target.value })
+        }
+      />
+
+      <input
+        placeholder="Email"
+        value={filters.candidateEmail}
+        onChange={(e) =>
+          setFilters({ ...filters, candidateEmail: e.target.value })
+        }
+      />
+
+      <select
+        value={filters.job}
+        onChange={(e) => setFilters({ ...filters, job: e.target.value })}
+      >
+        <option value="">All jobs</option>
+        {jobOptions.map((j) => (
+          <option key={j}>{j}</option>
+        ))}
+      </select>
+
+      <select
+        value={filters.recruiter}
+        onChange={(e) =>
+          setFilters({ ...filters, recruiter: e.target.value })
+        }
+      >
+        <option value="">All CTV</option>
+        {recruiterOptions.map((r) => (
+          <option key={r}>{r}</option>
+        ))}
+      </select>
+
+      <select
+        value={filters.status}
+        onChange={(e) =>
+          setFilters({ ...filters, status: e.target.value })
+        }
+      >
+        <option value="">All status</option>
+        {STATUS_OPTIONS.map((s) => (
+          <option key={s}>{s}</option>
+        ))}
+      </select>
+    </div>
   );
 
-  /* ================= TABLE RENDER ================= */
+  /* ================= TABLE ================= */
 
   const renderTable = (title, rows, editableStatus) => (
     <section className="table-section">
       <h3>{title}</h3>
 
-      {/* ===== MOBILE SORT ===== */}
+      {/* MOBILE FILTER */}
+      <MobileFilter />
+
+      {/* MOBILE SORT */}
       <div className="mobile-sort">
         <select
           value={sortConfig.key}
@@ -202,65 +256,37 @@ export default function CandidateManagement() {
         <table className="admin-table">
           <thead>
             <tr>
-              <th onClick={() => toggleSort("candidateName")}>
-                Name
-                <SortIcon
-                  active={sortConfig.key === "candidateName"}
-                  direction={sortConfig.direction}
-                />
-              </th>
-              <th onClick={() => toggleSort("job")}>
-                Job
-                <SortIcon
-                  active={sortConfig.key === "job"}
-                  direction={sortConfig.direction}
-                />
-              </th>
-              <th onClick={() => toggleSort("recruiter")}>
-                CTV
-                <SortIcon
-                  active={sortConfig.key === "recruiter"}
-                  direction={sortConfig.direction}
-                />
-              </th>
-              <th onClick={() => toggleSort("candidateEmail")}>
-                Email
-                <SortIcon
-                  active={sortConfig.key === "candidateEmail"}
-                  direction={sortConfig.direction}
-                />
-              </th>
-              <th onClick={() => toggleSort("status")}>
-                Status
-                <SortIcon
-                  active={sortConfig.key === "status"}
-                  direction={sortConfig.direction}
-                />
-              </th>
-              <th onClick={() => toggleSort("bonus")}>
-                Bonus
-                <SortIcon
-                  active={sortConfig.key === "bonus"}
-                  direction={sortConfig.direction}
-                />
-              </th>
+              {[
+                ["candidateName", "Name"],
+                ["job", "Job"],
+                ["recruiter", "CTV"],
+                ["candidateEmail", "Email"],
+                ["status", "Status"],
+                ["bonus", "Bonus"],
+              ].map(([key, label]) => (
+                <th key={key} onClick={() => toggleSort(key)}>
+                  {label}
+                  <SortIcon
+                    active={sortConfig.key === key}
+                    direction={sortConfig.direction}
+                  />
+                </th>
+              ))}
               <th>CV</th>
               <th>LinkedIn</th>
               <th>Action</th>
             </tr>
 
-            {/* ===== FILTER ROW ===== */}
+            {/* DESKTOP FILTER ROW */}
             <tr className="filter-row">
               <th>
                 <input
-                  placeholder="Search"
                   value={filters.candidateName}
                   onChange={(e) =>
                     setFilters({ ...filters, candidateName: e.target.value })
                   }
                 />
               </th>
-
               <th>
                 <select
                   value={filters.job}
@@ -274,7 +300,6 @@ export default function CandidateManagement() {
                   ))}
                 </select>
               </th>
-
               <th>
                 <select
                   value={filters.recruiter}
@@ -288,10 +313,8 @@ export default function CandidateManagement() {
                   ))}
                 </select>
               </th>
-
               <th>
                 <input
-                  placeholder="Email"
                   value={filters.candidateEmail}
                   onChange={(e) =>
                     setFilters({
@@ -301,7 +324,6 @@ export default function CandidateManagement() {
                   }
                 />
               </th>
-
               <th>
                 <select
                   value={filters.status}
@@ -315,7 +337,6 @@ export default function CandidateManagement() {
                   ))}
                 </select>
               </th>
-
               <th />
               <th />
               <th />
@@ -330,7 +351,6 @@ export default function CandidateManagement() {
                 <td data-label="Job">{r.job}</td>
                 <td data-label="CTV">{r.recruiter}</td>
                 <td data-label="Email">{r.candidateEmail}</td>
-
                 <td data-label="Status">
                   {editableStatus ? (
                     <select
@@ -339,7 +359,7 @@ export default function CandidateManagement() {
                         updateSubmissionStatus({
                           id: getRefId(r),
                           status: e.target.value,
-                        }).then(() => loadData())
+                        }).then(loadData)
                       }
                     >
                       {STATUS_OPTIONS.map((s) => (
@@ -350,26 +370,10 @@ export default function CandidateManagement() {
                     r.status
                   )}
                 </td>
-
                 <td data-label="Bonus">{r.bonus || 0}</td>
-
-                <td data-label="CV">
-                  {r.cvUrl && (
-                    <a href={r.cvUrl} target="_blank" rel="noreferrer">
-                      Link
-                    </a>
-                  )}
-                </td>
-
-                <td data-label="LinkedIn">
-                  {r.linkedin && (
-                    <a href={r.linkedin} target="_blank" rel="noreferrer">
-                      Link
-                    </a>
-                  )}
-                </td>
-
-                <td data-label="Action">
+                <td>{r.cvUrl && <a href={r.cvUrl}>Link</a>}</td>
+                <td>{r.linkedin && <a href={r.linkedin}>Link</a>}</td>
+                <td>
                   <button
                     className="remove-btn"
                     onClick={async () => {
@@ -397,14 +401,9 @@ export default function CandidateManagement() {
     </section>
   );
 
-  /* ================= RENDER ================= */
-
   return (
     <div className="candidate-page">
-      <div className="page-header">
-        <h2>Candidate Management</h2>
-      </div>
-
+      <h2>Candidate Management</h2>
       {renderTable("Active Candidates", processedActive, true)}
       {renderTable("Archived Candidates", processedArchived, false)}
     </div>
