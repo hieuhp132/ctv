@@ -540,7 +540,8 @@ export default function AdminDashboard() {
       () => categoriesAvailable.map(cat => ({ value: cat, label: cat })),
       [categoriesAvailable]
     );
-  const activeJobs = filteredJobs.filter((job) => {
+  
+    const activeJobs = filteredJobs.filter((job) => {
     const deadlineDate = job.deadline ? new Date(job.deadline) : null;
     const isPastDeadline = deadlineDate && today > deadlineDate;
     return job.status === "Active" && !isPastDeadline;
