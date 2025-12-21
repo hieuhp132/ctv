@@ -678,7 +678,7 @@ export async function fetchSavedJobs(userId) {
 }
 
 export async function fetchSavedJobsL(userId) {
-  const res = await fetch(`${API_BASE}/local/job?savedBy=${userId}`);
+  const res = await fetch(`${API_BASE}/local/jobs?savedBy=${userId}`);
   if (!res.ok) throw new Error('Failed to fetch saved jobs from local');
   return await res.json();
 }
