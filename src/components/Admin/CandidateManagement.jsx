@@ -67,8 +67,8 @@ export default function CandidateManagement() {
     ]);
     console.log("Active referrals response:", activeRes);
     console.log("Archived referrals response:", archivedRes);
-    setSubmissions(Array.isArray(activeRes?.items) ? activeRes.items : []);
-    setArchived(Array.isArray(archivedRes?.items) ? archivedRes.items : []);
+    setSubmissions(Array.isArray(activeRes) ? activeRes : []);
+    setArchived(Array.isArray(archivedRes) ? archivedRes : []);
     setBalances(bal || { adminCredit: 0 });
   };
 
