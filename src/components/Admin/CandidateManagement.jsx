@@ -77,7 +77,8 @@ export default function CandidateManagement() {
       }),
       // getBalances(),
     ]);
-
+    console.log("Active referrals:", activeRes);
+    console.log("Archived referrals:", archivedRes);
     setSubmissions(activeRes || []);
     setArchived(archivedRes || []);
     setBalances(bal || { adminCredit: 0 });
