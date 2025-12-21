@@ -29,8 +29,8 @@ export default function HomePage() {
     setLoading(true);
     fetchAllJobs(12)
       .then(list => {
-        console.log("[DEBUG] Jobs fetched:", list.jobs);
-        if (mounted) setJobs(Array.isArray(list.jobs) ? list.jobs : []);
+        console.log("[DEBUG] Jobs fetched:", list);
+        if (mounted) setJobs(Array.isArray(list) ? list : []);
       })
       .catch(err => {
         console.error("[DEBUG] Error fetching jobs:", err);

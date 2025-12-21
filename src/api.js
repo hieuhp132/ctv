@@ -207,7 +207,7 @@ export async function fetchAllJobs(limit) {
     if (!res.ok) return [];
 
     let data = await res.json();
-    if (limit) data = data.slice(0, limit); // limit here
+    if (limit) data = data.jobs.slice(0, limit); // limit here
     return data;
   } catch (error) {
     return [];
