@@ -311,6 +311,7 @@ export async function updateJobL(updated) {
     body: JSON.stringify(payload),
   });
   const saved = await res.json();
+  console.log("updateJobL saved:", saved);
   return saved;
 } 
 
@@ -322,6 +323,14 @@ export async function deleteJob(id) {
   if (!res.ok) return false;
   await pushNotification({ role: "CTV", message: `Job deleted: ${id}` });
   await pushNotification({ role: "admin", message: `You deleted job ${id}` });
+  return true;
+}
+
+export async function deleteJobL(id) {
+  const res = await fetch(`${API_BASE}/local/jobs/${id}/remove`, {
+    method: "DELETE",
+  });
+  if (!res.ok) return false;
   return true;
 }
 
@@ -666,7 +675,7 @@ export async function fetchSavedJobs(userId) {
 }
 
 export async function fetchSavedJobsL(userId) {
-  const res = await fetch(`${API_BASE}/local/jobs?savedBy=${userId}`);
+  const res = await fetch(`${API_BASE}/local/job?savedBy=${userId}`);
   if (!res.ok) throw new Error('Failed to fetch saved jobs from local');
   return await res.json();
 }

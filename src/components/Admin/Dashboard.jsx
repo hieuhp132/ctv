@@ -6,8 +6,8 @@ import {
   fetchAllJobs,
   getBalances,
 
-  deleteJob,
-  fetchSavedJobs,
+  deleteJobL,
+  fetchSavedJobsL,
  
   unsaveJobL,
   saveJobL,
@@ -426,7 +426,7 @@ export default function AdminDashboard() {
 
         const userId = user?.id || user?.email;
         if (userId) {
-          const response = await fetchSavedJobs(userId);
+          const response = await fetchSavedJobsL(userId);
 
           if (response?.items && Array.isArray(response.items)) {
             const backendSavedJobs = response.items.map((item) => ({
@@ -454,7 +454,7 @@ export default function AdminDashboard() {
   const removeJob = async (job) => {
     if (!window.confirm(`Delete job ${job.title}?`)) return;
     try {
-      await deleteJob(job.id);
+      await deleteJobL(job.id);
       await refresh();
     } catch (err) {
       console.error("Failed to delete job:", err);
