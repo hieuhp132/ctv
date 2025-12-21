@@ -31,6 +31,7 @@
   border-radius: 14px;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
   padding: 16px 20px;
+  margin-bottom: 24px;
 }
 
 .table-wrapper {
@@ -60,22 +61,22 @@
   background: linear-gradient(90deg, #f59e0b, #f97316);
   color: white;
   font-weight: 600;
-  cursor: pointer;
   text-align: left;
+  cursor: pointer;
+  user-select: none;
 }
 
 .admin-table thead tr:first-child th:hover {
   background: linear-gradient(90deg, #f97316, #ea580c);
 }
 
-/* ================= FILTER ROW ================= */
+/* ================= FILTER ROW (DESKTOP) ================= */
 
 .admin-table thead tr.filter-row th {
   background: #fff7ed;
   padding: 6px 8px;
 }
 
-/* input + select unified */
 .admin-table thead input,
 .admin-table thead select {
   width: 100%;
@@ -138,6 +139,48 @@
   padding: 20px;
   font-weight: 500;
   color: #6b7280;
+  text-align: center;
+}
+
+/* ================= SORT ICON ================= */
+
+.sort-icon {
+  margin-left: 6px;
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
+/* ================= MOBILE FILTER ================= */
+
+.mobile-filter {
+  display: none;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.mobile-filter input,
+.mobile-filter select {
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  font-size: 0.85rem;
+}
+
+/* ================= MOBILE SORT ================= */
+
+.mobile-sort {
+  display: none;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.mobile-sort select {
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  font-size: 0.9rem;
 }
 
 /* ================= RESPONSIVE ================= */
@@ -154,6 +197,18 @@
 
 /* ===== MOBILE CARD VIEW ===== */
 @media (max-width: 768px) {
+  /* show mobile controls */
+  .mobile-filter,
+  .mobile-sort {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* hide desktop filter */
+  .filter-row {
+    display: none;
+  }
+
   .admin-table,
   .admin-table thead,
   .admin-table tbody,
@@ -187,41 +242,6 @@
     content: attr(data-label);
     font-weight: 600;
     color: #374151;
-  }
-}
-
-/* ===== SORT ICON ===== */
-.sort-icon {
-  margin-left: 6px;
-  font-size: 0.75rem;
-  opacity: 0.8;
-}
-
-/* Clickable header */
-.admin-table th {
-  cursor: pointer;
-  user-select: none;
-}
-
-/* ===== MOBILE SORT BAR ===== */
-.mobile-sort {
-  display: none;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.mobile-sort select {
-  width: 100%;
-  padding: 6px 8px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 0.9rem;
-}
-
-/* Show on mobile only */
-@media (max-width: 600px) {
-  .mobile-sort {
-    display: flex;
-    flex-direction: column;
+    margin-right: 8px;
   }
 }
