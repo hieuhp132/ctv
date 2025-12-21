@@ -30,7 +30,7 @@ function getRefId(sub) {
 export default function CandidateManagement() {
   
   const {user} = useAuth();
-  const adminId = user?.id || user?.email;
+  const adminId = user?.id;
   const email = user?.email || "";
   const [submissions, setSubmissions] = useState([]);
   const [archived, setArchived] = useState([]);
@@ -85,6 +85,8 @@ export default function CandidateManagement() {
   };
 
   useEffect(() => {
+    console.log("User", user);
+    console.log("Id:", adminId, "Email:", email);
     refresh();
   }, []);
 
