@@ -98,7 +98,6 @@ try {
 /* ===========================
    Component
    =========================== */
-
 export default function AdminDashboard() {
   const [jobs, setJobs] = useState([]);
   const [savedJobs, setSavedJobs] = useState([]);
@@ -425,6 +424,7 @@ export default function AdminDashboard() {
       console.error("Failed to refresh data:", err);
     }
   };
+  const asArray = (v) => (Array.isArray(v) ? v : []);
 
   useEffect(() => {
     const loadJobs = async () => {
