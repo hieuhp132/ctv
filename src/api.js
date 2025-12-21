@@ -294,12 +294,14 @@ export async function updateJob(updated) {
 }
 
 export async function createJobL(job) {
+  console.log("createJobL called with:", job);
   const res = await fetch(`${API_BASE}/local/jobs`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(job),
   });
   const created = await res.json();
+  console.log("createJobL created:", created);
   return created;
 }
 

@@ -46,8 +46,8 @@ function RootPage() {
   }
 
   // Chưa login → HomePage (SEO)
-  // return <HomePage />;
-  return <Updated />;
+  return <HomePage />;
+  // return <Updated />;
 }
 
 /* ================= MAIN APP ================= */

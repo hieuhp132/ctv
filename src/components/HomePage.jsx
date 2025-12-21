@@ -138,14 +138,14 @@ export default function HomePage() {
                     <div key={job.id} className="job-card">
                       <div className="job-header">
                         <div className="job-title">{job.title}</div>
-                        <div className="job-company"><FaBuilding /> {job.company || "N/A"}</div>
+                        {/* <div className="job-company"><FaBuilding /> {job.company || "N/A"}</div> */}
                       </div>
                       <div className="job-meta">
-                        <span><FaMapMarkerAlt /> {job.location || "Remote/Onsite"}</span>
+                        {/* <span><FaMapMarkerAlt /> {job.location || "Remote/Onsite"}</span> */}
                         <span><FaDollarSign /> {job.salary || "N/A"}</span>
                       </div>
                       <div className="job-actions">
-                        <Link to={user ? `/job/${job.id}` : "/login"} className="btn-view">View details</Link>
+                        <Link to={user ? `/job/${job._id}` : "/login"} className="btn-view">View details</Link>
                       </div>
                     </div>
                   ))}

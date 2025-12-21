@@ -405,13 +405,18 @@ export default function AdminDashboard() {
         getBalances(),
       ]);
 
+      const sortedJobs = [...(js.jobs || [])].sort(
+        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+      );
 
-      setJobs(js.jobs || []);
+      setJobs(sortedJobs);
       setBalancesState(bal);
 
       if (user?.id || user?.email) {
         setSavedJobs(
-          js.filter((j) => Array.isArray(j.savedBy) && j.savedBy.includes(user.id || user.email))
+          (js.jobs || []).filter(
+            (j) => Array.isArray(j.savedBy) && j.savedBy.includes(user.id || user.email)
+          )
         );
       }
     } catch (err) {
@@ -423,7 +428,12 @@ export default function AdminDashboard() {
     const loadJobs = async () => {
       try {
         const jobsData = await fetchAllJobs();
-        setJobs(jobsData.jobs);
+        
+        const sortedJobs = [...(jobsData.jobs || [])].sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
+        
+        setJobs(sortedJobs);
 
         const userId = user?.id || user?.email;
         if (userId) {
@@ -577,7 +587,7 @@ export default function AdminDashboard() {
           pointerEvents: "auto",
         }}
         onClick={() => {
-          navigate(`/job/${job.id}`);
+          navigate(`/job/${job._id}`);
         }}
       >
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
