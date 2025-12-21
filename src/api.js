@@ -289,9 +289,30 @@ export async function updateJob(updated) {
   });
   const saved = await res.json();
   const mapped = mapJobFromServer(saved);
-  await pushNotification({ role: "CTV", message: `Job updated: ${mapped.title}` });
+  // await pushNotification({ role: "CTV", message: `Job updated: ${mapped.title}` });
   return mapped;
 }
+
+export async function createJobL(job) {
+  const res = await fetch(`${API_BASE}/local/jobs`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(job),
+  });
+  const created = await res.json();
+  return created;
+}
+
+export async function updateJobL(updated) {
+  const { id, ...payload } = updated;
+  const res = await fetch(`${API_BASE}/local/jobs/update/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  const saved = await res.json();
+  return saved;
+} 
 
 export async function deleteJob(id) {
   const res = await fetch(`${API_BASE}/api/jobs/${id}`, {
