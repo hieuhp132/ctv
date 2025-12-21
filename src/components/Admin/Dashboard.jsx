@@ -447,7 +447,7 @@ export default function AdminDashboard() {
         }
 
         setSavedJobIds(savedIds);
-        setJobs(jobsArray.map((j) => ({ ...j, isSaved: savedIds.has(j._id) })));
+        setJobs(sortedJobs.map((j) => ({ ...j, isSaved: savedIds.has(j._id) })));
       } catch (error) {
         console.error("Error loading jobs:", error);
       }
