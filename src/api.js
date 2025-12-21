@@ -490,6 +490,7 @@ export async function listSubmissions({ page = 1, limit = 1000, status, jobId, q
 
 export async function listReferrals({
   id,
+  email,
   isAdmin = false,
   page = 1,
   limit = 1000,
@@ -498,14 +499,16 @@ export async function listReferrals({
   q,
   finalized,
 } = {}) {
-  if (!id) return [];
+  if (!id && !email) return [];
 
   const params = new URLSearchParams({
-    id,
     isAdmin: String(isAdmin),
     page,
     limit,
   });
+
+  if (id) params.set("id", id);
+  if (email) params.set("email", email);
 
   if (status) params.set("status", status);
   if (jobId) params.set("jobId", jobId);
@@ -524,6 +527,7 @@ export async function listReferrals({
   console.log("listReferrals data:", data);
   return Array.isArray(data.items) ? data.items : [];
 }
+
 
 
 

@@ -237,7 +237,8 @@ function CandidateTracker({ candidates, name, jobMap }) {
 /* ================= MAIN PAGE ================= */
 export default function MyCandidates() {
   const { user } = useAuth();
-  const ctvId = useMemo(() => user?._id, [user]);
+  const userId = user?._id || user?.id;
+  const userEmail = user?.email;
 
   const [candidates, setCandidates] = useState([]);
   const [archived, setArchived] = useState([]);
@@ -246,21 +247,33 @@ export default function MyCandidates() {
 
   /* ===== LOAD REFERRALS ===== */
   useEffect(() => {
-    if (!ctvId) return;
-
+    if (!userId && !userEmail) return;
+    console.log("Loading referrals for user:", userId);
+    console.log("or email:", userEmail);
     Promise.all([
-      listReferrals({ id: ctvId, isAdmin: false, finalized: false }),
-      listReferrals({ id: ctvId, isAdmin: false, finalized: true }),
+      listReferrals({
+        id: userId,
+        email: userEmail,
+        isAdmin: false,
+        finalized: false,
+      }),
+      listReferrals({
+        id: userId,
+        email: userEmail,
+        isAdmin: false,
+        finalized: true,
+      }),
     ]).then(([active, done]) => {
       setCandidates(active || []);
       setArchived(done || []);
     });
 
     getBalances().then((b) => {
-      const id = user?._id || user?.id || user?.email;
-      setBalance(b?.ctvBonusById?.[id] || 0);
+      const key = userId || userEmail;
+      setBalance(b?.ctvBonusById?.[key] || 0);
     });
-  }, [ctvId, user]);
+  }, [userId, userEmail]);
+
 
   /* ===== LOAD JOB TITLE + SALARY ===== */
   useEffect(() => {
