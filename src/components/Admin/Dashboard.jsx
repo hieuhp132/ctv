@@ -597,20 +597,20 @@ export default function AdminDashboard() {
 
           {/* SAVE BUTTON */}
           <button
-            title={savedJobs.some((j) => j.id === job._id) ? "Saved" : "Save job"}
+            title={savedJobs.some((j) => j.id === job.id) ? "Saved" : "Save job"}
             style={{
               background: "none",
               border: "none",
               cursor: isInactive ? "not-allowed" : "pointer",
               fontSize: "1.5em",
-              color: savedJobs.some((j) => j.id === job._id) || optimisticallySaved.has(job._id) ? "#f60" : "#888",
+              color: savedJobs.some((j) => j.id === job.id) || optimisticallySaved.has(job.id) ? "#f60" : "#888",
               textAlign: "right",
             }}
             onClick={async (e) => {
               e.stopPropagation();
               if (!user?.id && !user?.email) return;
 
-              const isSaved = savedJobs.some((j) => j.id === job._id);
+              const isSaved = savedJobs.some((j) => j.id === job.id);
 
               // Optimistic update: immediately toggle visual state
               if (isSaved) {
@@ -618,14 +618,14 @@ export default function AdminDashboard() {
                 newOptimistic.delete(job.id);
                 setOptimisticallySaved(newOptimistic);
               } else {
-                setOptimisticallySaved(new Set([...optimisticallySaved, job._id]));
+                setOptimisticallySaved(new Set([...optimisticallySaved, job.id]));
               }
 
               try {
                 if (isSaved) {
-                  await unsaveJobL(job._id, user.id || user.email);
+                  await unsaveJobL(job.id, user.id || user.email);
                 } else {
-                  await saveJobL(job._id, user.id || user.email);
+                  await saveJobL(job.id, user.id || user.email);
                 }
                 await refresh();
               } catch (err) {
