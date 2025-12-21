@@ -30,7 +30,7 @@ function getRefId(sub) {
 export default function CandidateManagement() {
   
   const {user} = useAuth();
-  const adminId = user?.id;
+  const adminId = user?._id;
   const email = user?.email || "";
   const [submissions, setSubmissions] = useState([]);
   const [archived, setArchived] = useState([]);
