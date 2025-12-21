@@ -60,7 +60,7 @@ export default function CandidateManagement() {
   const refresh = async () => {
     if (!adminId) return;
 
-    const [activeRes, archivedRes, bal] = await Promise.all([
+    const [activeRes, archivedRes] = await Promise.all([
       listReferrals({
         id: adminId,
         email,
@@ -75,11 +75,11 @@ export default function CandidateManagement() {
         finalized: true,
         limit: 1000,
       }),
-      getBalances(),
+      // getBalances(),
     ]);
 
-    setSubmissions(activeRes?.items || []);
-    setArchived(archivedRes?.items || []);
+    setSubmissions(activeRes || []);
+    setArchived(archivedRes || []);
     setBalances(bal || { adminCredit: 0 });
   };
 
