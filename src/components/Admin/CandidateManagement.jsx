@@ -68,6 +68,8 @@ export default function CandidateManagement() {
 
   const refresh = async () => {
     const [subs, arch, bal] = await Promise.all([
+      console.log("User:", user),
+      console.log("AdminId:", adminId, "Email:", email),
       listReferrals({ id: adminId, email: email, isAdmin: true, finalized: false }),
       listReferrals({ id: adminId, email: email, isAdmin: true, finalized: true }),
       getBalances(),
