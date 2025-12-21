@@ -330,10 +330,12 @@ export async function deleteJob(id) {
 }
 
 export async function deleteJobL(id) {
+  console.log("deleteJobL called with id:", id);
   const res = await fetch(`${API_BASE}/local/jobs/${id}/remove`, {
     method: "DELETE",
   });
   if (!res.ok) return false;
+  console.log("Response ok for deleteJobL", res);
   return true;
 }
 
