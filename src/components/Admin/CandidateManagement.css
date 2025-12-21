@@ -12,9 +12,6 @@
 /* ================= HEADER ================= */
 
 .page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   margin-bottom: 20px;
 }
 
@@ -41,13 +38,11 @@
   color: #1f2937;
 }
 
-/* ================= TABLE WRAPPER ================= */
+/* ================= TABLE ================= */
 
 .table-wrapper {
   overflow-x: auto;
 }
-
-/* ================= TABLE ================= */
 
 .admin-table {
   width: 100%;
@@ -64,83 +59,14 @@
   word-break: break-word;
 }
 
-/* ================= HEADER ROW ================= */
+/* ================= HEADER ================= */
 
-.admin-table thead tr:first-child th {
+.admin-table thead th {
   background: linear-gradient(90deg, #f59e0b, #f97316);
-  color: white;
+  color: #fff;
   font-weight: 600;
-  text-align: left;
   cursor: pointer;
   user-select: none;
-}
-
-.admin-table thead tr:first-child th:hover {
-  background: linear-gradient(90deg, #f97316, #ea580c);
-}
-
-/* ================= BODY ================= */
-
-.admin-table tbody tr {
-  background: white;
-  transition: background 0.15s ease;
-}
-
-.admin-table tbody tr:hover {
-  background: #fffbeb;
-}
-
-.admin-table td a {
-  color: #2563eb;
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.admin-table td a:hover {
-  text-decoration: underline;
-}
-
-/* ================= STATUS SELECT ================= */
-
-.admin-table select {
-  width: 100%;
-  padding: 4px 6px;
-  font-size: 0.85rem;
-  border-radius: 6px;
-  border: 1px solid #d1d5db;
-  background: white;
-}
-
-.admin-table select:focus {
-  outline: none;
-  border-color: #f59e0b;
-  box-shadow: 0 0 0 1px #f59e0b;
-}
-
-/* ================= ACTION BUTTON ================= */
-
-.remove-btn {
-  background: #f97316;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 5px 12px;
-  font-size: 0.8rem;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.remove-btn:hover {
-  background: #ea580c;
-}
-
-/* ================= EMPTY STATE ================= */
-
-.admin-table td[colspan] {
-  padding: 20px;
-  font-weight: 500;
-  color: #6b7280;
-  text-align: center;
 }
 
 /* ================= SORT ICON ================= */
@@ -151,12 +77,49 @@
   opacity: 0.85;
 }
 
+/* ================= BODY ================= */
+
+.admin-table tbody tr:hover {
+  background: #fffbeb;
+}
+
+.admin-table a {
+  color: #2563eb;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+/* ================= STATUS SELECT ================= */
+
+.admin-table select {
+  width: 100%;
+  padding: 4px 6px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  font-size: 0.85rem;
+}
+
+/* ================= ACTION ================= */
+
+.remove-btn {
+  background: #f97316;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.remove-btn:hover {
+  background: #ea580c;
+}
+
 /* ================= PAGINATION ================= */
 
 .pagination {
   display: flex;
   justify-content: center;
-  align-items: center;
   gap: 12px;
   margin-top: 16px;
 }
@@ -166,27 +129,32 @@
   border-radius: 6px;
   border: 1px solid #d1d5db;
   background: white;
-  font-size: 0.85rem;
   cursor: pointer;
-}
-
-.pagination button:hover:not(:disabled) {
-  background: #f59e0b;
-  color: white;
-  border-color: #f59e0b;
 }
 
 .pagination button:disabled {
   opacity: 0.5;
-  cursor: not-allowed;
 }
 
-/* ================= MOBILE FILTER + SORT ================= */
+/* ================================================= */
+/* ================= MOBILE FILTER ================= */
+/* ================================================= */
 
 .mobile-sort {
   display: none;
-  gap: 8px;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
+  padding: 12px;
+  border-radius: 12px;
+  background: #fff7ed;
+  box-shadow: inset 0 0 0 1px #fde68a;
+}
+
+.mobile-sort label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #92400e;
+  margin-bottom: 4px;
+  display: block;
 }
 
 .mobile-sort input,
@@ -196,61 +164,63 @@
   border-radius: 8px;
   border: 1px solid #d1d5db;
   font-size: 0.9rem;
+  margin-bottom: 10px;
 }
 
-/* ================= RESPONSIVE ================= */
+/* ================================================= */
+/* ================= MOBILE CARD ================= */
+/* ================================================= */
 
-@media (max-width: 1024px) {
-  .candidate-page {
-    padding: 16px;
-  }
-
-  .admin-table {
-    font-size: 0.85rem;
-  }
-}
-
-/* ===== MOBILE CARD VIEW ===== */
 @media (max-width: 768px) {
-  .mobile-sort {
-    display: flex;
-    flex-direction: column;
+  .candidate-page {
+    padding: 12px;
   }
 
-  .admin-table,
-  .admin-table thead,
-  .admin-table tbody,
-  .admin-table th,
-  .admin-table td,
-  .admin-table tr {
+  /* show filter */
+  .mobile-sort {
     display: block;
   }
 
+  /* hide table head */
   .admin-table thead {
     display: none;
+  }
+
+  .admin-table,
+  .admin-table tbody,
+  .admin-table tr {
+    display: block;
+    width: 100%;
   }
 
   .admin-table tr {
     background: white;
     border-radius: 14px;
-    margin-bottom: 16px;
     padding: 12px 14px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    margin-bottom: 16px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
   }
 
   .admin-table td {
-    border: none;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border: none;
     padding: 6px 0;
     font-size: 0.85rem;
+    gap: 12px;
   }
 
   .admin-table td::before {
     content: attr(data-label);
     font-weight: 600;
     color: #374151;
+    flex: 0 0 40%;
+  }
+
+  .admin-table td > * {
+    max-width: 60%;
+    text-align: right;
   }
 
   .pagination {
