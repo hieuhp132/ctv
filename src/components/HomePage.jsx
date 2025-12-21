@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { FaArrowRight, FaMapMarkerAlt, FaDollarSign, FaBuilding } from "react-icons/fa";
+import { FaArrowRight, FaMapMarkerAlt, FaDollarSign, FaBuilding, FaGlobe, FaUsers, FaHeadset, FaChartLine, FaStar } from "react-icons/fa";
 import "./HomePage.css";
 import logoImg from "../assets/logo.png";
 import fbIcon from "../assets/fb.jpg";
@@ -29,8 +29,8 @@ export default function HomePage() {
     setLoading(true);
     fetchAllJobs(12)
       .then(list => {
-        console.log("[DEBUG] Jobs fetched:", list);
-        if (mounted) setJobs(Array.isArray(list) ? list : []);
+        console.log("[DEBUG] Jobs fetched:", list.jobs);
+        if (mounted) setJobs(Array.isArray(list.jobs) ? list.jobs : []);
       })
       .catch(err => {
         console.error("[DEBUG] Error fetching jobs:", err);
@@ -177,10 +177,130 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Footer */}
+      {/* Blog and Clients */}
+      <section className="about-section" id="about">
+        <div className="homepage-container">
+          <div className="about-content">
+            <h1 className="hero-title">
+              About the programm
+            </h1>
+            <div className="about-text">
+              The Ant-Tech Collaborator Program is designed for anyone who wants to earn additional income by connecting great talent with the right job opportunities. You don’t need to be a professional recruiter – if you know talented people, you can become a collaborator with us.
+              <div className="why-join"><h3>Why join?</h3></div>
+              <p>Transparent and attractive commission for each successful placement</p>
+              <p>Work flexibly, anytime and anywhere</p>
+              <p>Access to training and continuous support from the Ant-Tech HR team</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Feature Grid / Solutions */}
+      <section className="features-section" id="features">
+        <div className="homepage-container">
+          <h1 className="homepage-section-title">Your Partner to Grow and Expand Anywhere</h1>
+          <div className="features-grid">
+            <div className="feature-item">
+              <FaGlobe className="feature-icon" />
+              <h3>Enter New Markets Fast</h3>
+              <p>Operate without setting up a local entity — skip months of setup time.</p>
+            </div>
+            <div className="feature-item">
+              <FaUsers className="feature-icon" />
+              <h3>Hire Top Talent Anywhere</h3>
+              <p>Leverage our headhunter network and talent database to find the right people.</p>
+            </div>
+            <div className="feature-item">
+              <FaHeadset className="feature-icon" />
+              <h3>All‑in‑One HR & Recruitment</h3>
+              <p>From recruitment to admin and compliance — we handle it so you focus on growth.</p>
+            </div>
+            <div className="feature-item">
+              <FaChartLine className="feature-icon" />
+              <h3>Cost‑Effective & Scalable</h3>
+              <p>Scale quickly with competitive pricing, built for startups and high‑growth teams.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 3-Step Process */}
+      <section className="process-section" id="process">
+        <div className="homepage-container">
+          <div className="process-grid">
+            <div className="process-item">
+              <div className="process-number">1</div>
+              <h3>Consultation & Assessment</h3>
+              <p>We learn your hiring needs, target roles, and markets you want to enter.</p>
+            </div>
+            <div className="process-item">
+              <div className="process-number">2</div>
+              <h3>Get a Customized Plan</h3>
+              <p>We design a tailored solution for your needs and budget, aligned with your goals.</p>
+            </div>
+            <div className="process-item">
+              <div className="process-number">3</div>
+              <h3>Hire & Scale to New Market</h3>
+              <p>Use our services to hire, operate, and ensure your objectives are met.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="faq-section" id="faq">
+        <div className="homepage-container">
+          <h1 className="homepage-section-title">Frequently Asked Questions (FAQ)</h1>
+          <div className="faq-content">
+            <div className="faq-item">
+              <h3>Who can join the collaborator program?</h3>
+              <p>Anyone with a network of professionals looking for job opportunities. No recruitment background is required.</p>
+            </div>
+            <div className="faq-item">
+              <h3>How do I earn commission?</h3>
+              <p>You earn commission for every candidate you refer who is successfully hired.</p>
+            </div>
+            <div className="faq-item">
+              <h3>When will I receive my payout?</h3>
+              <p>Commissions are paid according to Ant-Tech Asia’s payout schedule, which is fully transparent in your dashboard.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+        {/* Footer */}
       <footer className="footer">
         <div className="homepage-container">
-          <p style={{color:'#fff'}}>&copy; 2025 Ant-Tech. All rights reserved.</p>
+          <div className="footer-content grid-3">
+          
+
+            <div className="footer-section links">
+              <h4 className="footer-heading" style={{color: '#ffffff'}}>Legal</h4>
+              <ul>
+                <li> <Link to="/terms" style={{color: '#ffffff'}}>Term & Conditions</Link></li>
+                <li> <Link to="" style={{color: '#ffffff'}}>Privacy policy</Link></li>
+              </ul>
+            </div>
+
+            <div className="footer-section platform">
+              <h4 className="footer-heading" style={{color: '#ffffff'}}>Headhunter Plattform ANT-TECH</h4>
+              <p className="platform-text" style={{color: '#ffffff'}}>Ant-Tech Asia - Candidate Referral Program</p>
+              <p className="platform-text" style={{color: '#ffffff'}}>(Headhunter Referral Program)</p>
+            </div>
+            <div className="testimonial">
+            <p className="quote" style={{color: '#ffffff'}}>
+              “Through Ant-Tech Asia’s program, I was able to earn additional income while helping my network find amazing job opportunities. The process is simple, and the commission is always transparent.”
+            </p>
+            <div className="author">
+              <FaStar className="author-icon" />
+              <span style={{color: '#ffffff'}}>Top Collaborator</span>
+            </div>
+          </div>
+          </div>
+          <div className="footer-divider1"></div>
+          <div className="footer-bottom">
+            <p style={{color: '#ffffff'}}>&copy; 2025 Ant-Tech. All rights reserved.</p>
+          </div>
         </div>
       </footer>
 
