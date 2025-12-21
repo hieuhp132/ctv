@@ -1,5 +1,3 @@
-/* ================= PAGE LAYOUT ================= */
-
 .candidate-page {
   max-width: 1400px;
   margin: 0 auto;
@@ -9,19 +7,11 @@
   font-family: "Inter", sans-serif;
 }
 
-/* ================= HEADER ================= */
-
-.page-header {
-  margin-bottom: 20px;
-}
-
 .page-header h2 {
   font-size: 1.5rem;
   font-weight: 600;
   color: #111827;
 }
-
-/* ================= SECTION ================= */
 
 .table-section {
   background: #ffffff;
@@ -35,7 +25,30 @@
   margin-bottom: 12px;
   font-size: 1.1rem;
   font-weight: 600;
-  color: #1f2937;
+}
+
+/* ================= FILTER ================= */
+
+.desktop-filter {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.desktop-filter input,
+.desktop-filter select {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 0.85rem;
+}
+
+.mobile-sort {
+  display: none;
+  margin-bottom: 16px;
+  padding: 12px;
+  border-radius: 12px;
+  background: #fff7ed;
 }
 
 /* ================= TABLE ================= */
@@ -55,48 +68,21 @@
 .admin-table td {
   border: 1px solid #e5e7eb;
   padding: 8px 10px;
-  vertical-align: middle;
-  word-break: break-word;
 }
-
-/* ================= HEADER ================= */
 
 .admin-table thead th {
   background: linear-gradient(90deg, #f59e0b, #f97316);
-  color: #fff;
-  font-weight: 600;
+  color: white;
   cursor: pointer;
-  user-select: none;
 }
-
-/* ================= SORT ICON ================= */
-
-.sort-icon {
-  margin-left: 6px;
-  font-size: 0.75rem;
-  opacity: 0.85;
-}
-
-/* ================= BODY ================= */
 
 .admin-table tbody tr:hover {
   background: #fffbeb;
 }
 
-.admin-table a {
-  color: #2563eb;
-  font-weight: 500;
-  text-decoration: none;
-}
-
-/* ================= STATUS SELECT ================= */
-
 .admin-table select {
   width: 100%;
-  padding: 4px 6px;
-  border-radius: 6px;
-  border: 1px solid #d1d5db;
-  font-size: 0.85rem;
+  padding: 4px;
 }
 
 /* ================= ACTION ================= */
@@ -107,12 +93,7 @@
   border: none;
   border-radius: 6px;
   padding: 5px 12px;
-  font-size: 0.8rem;
   cursor: pointer;
-}
-
-.remove-btn:hover {
-  background: #ea580c;
 }
 
 /* ================= PAGINATION ================= */
@@ -124,64 +105,17 @@
   margin-top: 16px;
 }
 
-.pagination button {
-  padding: 6px 14px;
-  border-radius: 6px;
-  border: 1px solid #d1d5db;
-  background: white;
-  cursor: pointer;
-}
-
-.pagination button:disabled {
-  opacity: 0.5;
-}
-
-/* ================================================= */
-/* ================= MOBILE FILTER ================= */
-/* ================================================= */
-
-.mobile-sort {
-  display: none;
-  margin-bottom: 16px;
-  padding: 12px;
-  border-radius: 12px;
-  background: #fff7ed;
-  box-shadow: inset 0 0 0 1px #fde68a;
-}
-
-.mobile-sort label {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: #92400e;
-  margin-bottom: 4px;
-  display: block;
-}
-
-.mobile-sort input,
-.mobile-sort select {
-  width: 100%;
-  padding: 8px 10px;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
-  font-size: 0.9rem;
-  margin-bottom: 10px;
-}
-
-/* ================================================= */
-/* ================= MOBILE CARD ================= */
-/* ================================================= */
+/* ================= MOBILE ================= */
 
 @media (max-width: 768px) {
-  .candidate-page {
-    padding: 12px;
+  .desktop-filter {
+    display: none;
   }
 
-  /* show filter */
   .mobile-sort {
     display: block;
   }
 
-  /* hide table head */
   .admin-table thead {
     display: none;
   }
@@ -196,35 +130,18 @@
   .admin-table tr {
     background: white;
     border-radius: 14px;
-    padding: 12px 14px;
+    padding: 12px;
     margin-bottom: 16px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
   }
 
   .admin-table td {
     display: flex;
     justify-content: space-between;
-    align-items: center;
     border: none;
-    padding: 6px 0;
-    font-size: 0.85rem;
-    gap: 12px;
   }
 
   .admin-table td::before {
     content: attr(data-label);
     font-weight: 600;
-    color: #374151;
-    flex: 0 0 40%;
-  }
-
-  .admin-table td > * {
-    max-width: 60%;
-    text-align: right;
-  }
-
-  .pagination {
-    flex-direction: column;
-    gap: 8px;
   }
 }

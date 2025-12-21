@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import "./CandidateManagement.css";
 import {
   updateSubmissionStatus,
-  finalizeSubmission,
   removeCandidateById,
   listReferrals,
 } from "../../api";
@@ -26,6 +25,7 @@ const PAGE_SIZE = 10;
 
 const sortData = (data, { key, direction }) => {
   if (!key || !direction) return data;
+
   return [...data].sort((a, b) => {
     const av = a[key];
     const bv = b[key];
@@ -123,13 +123,50 @@ export default function CandidateManagement() {
       ? "↑"
       : "↓";
 
-  /* ================= RENDER TABLE ================= */
+  /* ================= FILTER UI ================= */
 
-  const renderTable = (title, data, isActive, page, setPage, total) => (
-    <section className="table-section">
-      <h3>{title}</h3>
+  const FilterUI = () => (
+    <>
+      {/* ===== DESKTOP FILTER ===== */}
+      <div className="desktop-filter">
+        <input
+          placeholder="Candidate"
+          value={filters.candidateName}
+          onChange={(e) =>
+            setFilters({ ...filters, candidateName: e.target.value })
+          }
+        />
 
-      {/* ===== MOBILE FILTER + SORT ===== */}
+        <input
+          placeholder="Job"
+          value={filters.job}
+          onChange={(e) =>
+            setFilters({ ...filters, job: e.target.value })
+          }
+        />
+
+        <input
+          placeholder="CTV"
+          value={filters.recruiter}
+          onChange={(e) =>
+            setFilters({ ...filters, recruiter: e.target.value })
+          }
+        />
+
+        <select
+          value={filters.status}
+          onChange={(e) =>
+            setFilters({ ...filters, status: e.target.value })
+          }
+        >
+          <option value="">All Status</option>
+          {STATUS_OPTIONS.map((s) => (
+            <option key={s}>{s}</option>
+          ))}
+        </select>
+      </div>
+
+      {/* ===== MOBILE FILTER ===== */}
       <div className="mobile-sort">
         <input
           placeholder="Candidate"
@@ -150,31 +187,17 @@ export default function CandidateManagement() {
             <option key={s}>{s}</option>
           ))}
         </select>
-
-        <select
-          value={sortConfig.key}
-          onChange={(e) =>
-            setSortConfig((p) => ({ ...p, key: e.target.value }))
-          }
-        >
-          <option value="">Sort by</option>
-          <option value="candidateName">Name</option>
-          <option value="job">Job</option>
-          <option value="recruiter">CTV</option>
-          <option value="status">Status</option>
-          <option value="bonus">Bonus</option>
-        </select>
-
-        <select
-          value={sortConfig.direction}
-          onChange={(e) =>
-            setSortConfig((p) => ({ ...p, direction: e.target.value }))
-          }
-        >
-          <option value="asc">Ascending</option>
-          <option value="desc">Descending</option>
-        </select>
       </div>
+    </>
+  );
+
+  /* ================= TABLE ================= */
+
+  const renderTable = (title, data, isActive, page, setPage, total) => (
+    <section className="table-section">
+      <h3>{title}</h3>
+
+      <FilterUI />
 
       <div className="table-wrapper">
         <table className="admin-table">
@@ -254,7 +277,6 @@ export default function CandidateManagement() {
         </table>
       </div>
 
-      {/* ===== PAGINATION ===== */}
       <div className="pagination">
         <button disabled={page === 1} onClick={() => setPage(page - 1)}>
           Prev
@@ -271,8 +293,6 @@ export default function CandidateManagement() {
       </div>
     </section>
   );
-
-  /* ================= RETURN ================= */
 
   return (
     <div className="candidate-page">
