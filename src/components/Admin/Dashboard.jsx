@@ -5,13 +5,14 @@ import "../Dashboard.css";
 import {
   fetchAllJobs,
   getBalances,
-  createJob,
-  updateJob,
+
   deleteJob,
   fetchSavedJobs,
-  
+ 
   unsaveJobL,
   saveJobL,
+  updateJobL,
+  createJobL,
 } from "../../api";
 import { useAuth } from "../../context/AuthContext";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -384,9 +385,9 @@ export default function AdminDashboard() {
 
     try {
       if (editingJob) {
-        await updateJob({ ...editingJob, ...formattedJobForm });
+        await updateJobL({ ...editingJob, ...formattedJobForm });
       } else {
-        await createJob(formattedJobForm);
+        await createJobL(formattedJobForm);
       }
 
       closeJobModal();
@@ -707,7 +708,7 @@ export default function AdminDashboard() {
             onClick={async (e) => {
               e.stopPropagation();
               try {
-                await updateJob({ ...job, status: job.status === "Active" ? "Inactive" : "Active" });
+                await updateJobL({ ...job, status: job.status === "Active" ? "Inactive" : "Active" });
                 await refresh();
               } catch (err) {
                 console.error("Failed to update status:", err);
