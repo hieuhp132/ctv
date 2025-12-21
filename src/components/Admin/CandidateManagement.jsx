@@ -1,4 +1,4 @@
-// CandidateManagement.js – RAW backend data (no normalize)
+// CandidateManagement.js – RAW backend data + filter + sort
 import React, { useEffect, useState } from "react";
 import "./CandidateManagement.css";
 import {
@@ -43,6 +43,18 @@ export default function CandidateManagement() {
   const [archivedPage, setArchivedPage] = useState(1);
   const rowsPerPage = 15;
 
+  /* ===== FILTER + SORT ===== */
+  const [filters, setFilters] = useState({
+    status: "all",
+    candidate: "",
+    email: "",
+  });
+
+  const [sortConfig, setSortConfig] = useState({
+    key: "",
+    direction: "asc",
+  });
+
   /* ================= DATA LOAD ================= */
 
   const refresh = async () => {
@@ -65,10 +77,9 @@ export default function CandidateManagement() {
       }),
       getBalances(),
     ]);
-    console.log("Active referrals response:", activeRes);
-    console.log("Archived referrals response:", archivedRes);
-    setSubmissions(Array.isArray(activeRes) ? activeRes : []);
-    setArchived(Array.isArray(archivedRes) ? archivedRes : []);
+
+    setSubmissions(activeRes?.items || []);
+    setArchived(archivedRes?.items || []);
     setBalances(bal || { adminCredit: 0 });
   };
 
@@ -117,113 +128,211 @@ export default function CandidateManagement() {
 
   /* ================= HELPERS ================= */
 
+  const applyFilters = (data) =>
+    data.filter((s) => {
+      if (filters.status !== "all" && s.status !== filters.status) return false;
+      if (
+        filters.candidate &&
+        !s.candidateName
+          ?.toLowerCase()
+          .includes(filters.candidate.toLowerCase())
+      )
+        return false;
+      if (
+        filters.email &&
+        !s.candidateEmail
+          ?.toLowerCase()
+          .includes(filters.email.toLowerCase())
+      )
+        return false;
+      return true;
+    });
+
+  const applySort = (data) => {
+    if (!sortConfig.key) return data;
+    return [...data].sort((a, b) => {
+      const av = (a[sortConfig.key] || "").toString().toLowerCase();
+      const bv = (b[sortConfig.key] || "").toString().toLowerCase();
+      return sortConfig.direction === "asc"
+        ? av.localeCompare(bv)
+        : bv.localeCompare(av);
+    });
+  };
+
   const paginate = (data, page) =>
     data.slice((page - 1) * rowsPerPage, page * rowsPerPage);
 
-  const currentSubs = paginate(submissions, currentPage);
-  const currentArchived = paginate(archived, archivedPage);
+  const processedSubs = applySort(applyFilters(submissions));
+  const processedArchived = applySort(applyFilters(archived));
+
+  const currentSubs = paginate(processedSubs, currentPage);
+  const currentArchived = paginate(processedArchived, archivedPage);
 
   /* ================= RENDER ================= */
 
   const renderTable = (title, data) => (
     <section className="table-section">
-      <h3>{title}</h3>
+      <div className="table-header">
+        <h3>{title}</h3>
 
-      <table className="admin-table">
-        <thead>
-          <tr>
-            <th>CANDIDATE</th>
-            <th>JOB</th>
-            <th>CTV</th>
-            <th>EMAIL</th>
-            <th>PHONE</th>
-            <th>CV</th>
-            <th>LINKEDIN</th>
-            <th>STATUS</th>
-            <th>BONUS</th>
-            <th>ACTION</th>
-          </tr>
-        </thead>
+        <div className="filter-row">
+          <div className="filter-wrapper">
+            <label>Status</label>
+            <select
+              className="status-filter"
+              value={filters.status}
+              onChange={(e) =>
+                setFilters((p) => ({ ...p, status: e.target.value }))
+              }
+            >
+              <option value="all">All</option>
+              {STATUS_OPTIONS.map((s) => (
+                <option key={s.value} value={s.value}>
+                  {s.label}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        <tbody>
-          {data.map((sub) => {
-            const rid = getRefId(sub);
-            return (
-              <tr key={rid}>
-                <td>{sub.candidateName}</td>
-                <td>{sub.job}</td>
-                <td>{sub.recruiter}</td>
-                <td>{sub.candidateEmail}</td>
-                <td>{sub.candidatePhone}</td>
+          <div className="filter-wrapper">
+            <label>Candidate</label>
+            <input
+              type="text"
+              value={filters.candidate}
+              onChange={(e) =>
+                setFilters((p) => ({ ...p, candidate: e.target.value }))
+              }
+            />
+          </div>
 
-                <td>
-                  {sub.cvUrl ? (
-                    <a href={sub.cvUrl} target="_blank" rel="noreferrer">
-                      Link
-                    </a>
-                  ) : (
-                    "-"
-                  )}
-                </td>
+          <div className="filter-wrapper">
+            <label>Email</label>
+            <input
+              type="text"
+              value={filters.email}
+              onChange={(e) =>
+                setFilters((p) => ({ ...p, email: e.target.value }))
+              }
+            />
+          </div>
+        </div>
+      </div>
 
-                <td>
-                  {sub.linkedin ? (
-                    <a href={sub.linkedin} target="_blank" rel="noreferrer">
-                      Link
-                    </a>
-                  ) : (
-                    "-"
-                  )}
-                </td>
+      <div className="table-wrapper">
+        <table className="admin-table">
+          <thead>
+            <tr>
+              <th
+                onClick={() =>
+                  setSortConfig({
+                    key: "candidateName",
+                    direction:
+                      sortConfig.direction === "asc" ? "desc" : "asc",
+                  })
+                }
+              >
+                CANDIDATE
+              </th>
+              <th>JOB</th>
+              <th>CTV</th>
+              <th>EMAIL</th>
+              <th>PHONE</th>
+              <th>CV</th>
+              <th>LINKEDIN</th>
+              <th
+                onClick={() =>
+                  setSortConfig({
+                    key: "status",
+                    direction:
+                      sortConfig.direction === "asc" ? "desc" : "asc",
+                  })
+                }
+              >
+                STATUS
+              </th>
+              <th className="short">BONUS</th>
+              <th className="short">ACTION</th>
+            </tr>
+          </thead>
 
-                <td>
-                  <select
-                    value={sub.status}
-                    onChange={(e) =>
-                      setEditedRows((p) => ({
-                        ...p,
-                        [rid]: { ...p[rid], status: e.target.value },
-                      }))
-                    }
-                  >
-                    {STATUS_OPTIONS.map((s) => (
-                      <option key={s.value} value={s.value}>
-                        {s.label}
-                      </option>
-                    ))}
-                  </select>
-                </td>
-
-                <td>
-                  <input
-                    value={sub.bonus || 0}
-                    onChange={(e) =>
-                      setEditedRows((p) => ({
-                        ...p,
-                        [rid]: { ...p[rid], bonus: e.target.value },
-                      }))
-                    }
-                  />
-                </td>
-
-                <td>
-                  <button onClick={() => handleSave(sub)}>Update</button>
-                  <button
-                    className="remove-btn"
-                    onClick={async () => {
-                      if (!window.confirm("Remove candidate?")) return;
-                      await removeCandidateById(rid);
-                      await refresh();
-                    }}
-                  >
-                    Remove
-                  </button>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+          <tbody>
+            {data.map((sub) => {
+              const rid = getRefId(sub);
+              return (
+                <tr key={rid}>
+                  <td data-label="Candidate">{sub.candidateName}</td>
+                  <td data-label="Job" className="wrap">{sub.job}</td>
+                  <td data-label="CTV" className="wrap">{sub.recruiter}</td>
+                  <td data-label="Email">{sub.candidateEmail}</td>
+                  <td data-label="Phone">{sub.candidatePhone}</td>
+                  <td data-label="CV">
+                    {sub.cvUrl ? (
+                      <a href={sub.cvUrl} target="_blank" rel="noreferrer">
+                        Link
+                      </a>
+                    ) : (
+                      "-"
+                    )}
+                  </td>
+                  <td data-label="LinkedIn">
+                    {sub.linkedin ? (
+                      <a href={sub.linkedin} target="_blank" rel="noreferrer">
+                        Link
+                      </a>
+                    ) : (
+                      "-"
+                    )}
+                  </td>
+                  <td data-label="Status">
+                    <select
+                      value={sub.status}
+                      onChange={(e) =>
+                        setEditedRows((p) => ({
+                          ...p,
+                          [rid]: { ...p[rid], status: e.target.value },
+                        }))
+                      }
+                    >
+                      {STATUS_OPTIONS.map((s) => (
+                        <option key={s.value} value={s.value}>
+                          {s.label}
+                        </option>
+                      ))}
+                    </select>
+                  </td>
+                  <td data-label="Bonus">
+                    <input
+                      type="number"
+                      value={sub.bonus || 0}
+                      onChange={(e) =>
+                        setEditedRows((p) => ({
+                          ...p,
+                          [rid]: { ...p[rid], bonus: e.target.value },
+                        }))
+                      }
+                    />
+                  </td>
+                  <td data-label="Action">
+                    <div className="action-buttons">
+                      <button onClick={() => handleSave(sub)}>Update</button>
+                      <button
+                        className="remove-btn"
+                        onClick={async () => {
+                          if (!window.confirm("Remove candidate?")) return;
+                          await removeCandidateById(rid);
+                          await refresh();
+                        }}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </section>
   );
 
@@ -231,8 +340,12 @@ export default function CandidateManagement() {
     <div className="candidate-page">
       {successMessage && <div className="success-banner">{successMessage}</div>}
 
-      <h2>Candidate Management</h2>
-      <div>Admin Credit: ${balances.adminCredit}</div>
+      <div className="page-header">
+        <h2>Candidate Management</h2>
+        <div className="credit-info">
+          Admin Credit: <span>${balances.adminCredit}</span>
+        </div>
+      </div>
 
       {renderTable("Active Candidates", currentSubs)}
       {renderTable("Archived Candidates", currentArchived)}
