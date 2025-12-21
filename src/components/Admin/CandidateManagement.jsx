@@ -67,30 +67,52 @@ export default function CandidateManagement() {
   });
 
   const refresh = async () => {
-    const [subs, arch, bal] = await Promise.all([
-      console.log("User:", user),
-      console.log("AdminId:", adminId, "Email:", email),
-      listReferrals({ id: adminId, email: email, isAdmin: true, finalized: false }),
-      listReferrals({ id: adminId, email: email, isAdmin: true, finalized: true }),
+    if (!adminId) return;
+
+    console.log("User:", user);
+    console.log("AdminId:", adminId, "Email:", email);
+
+    const [activeRes, archivedRes, bal] = await Promise.all([
+      listReferrals({
+        id: adminId,
+        email,
+        isAdmin: true,
+        finalized: false,
+        limit: 1000,
+      }),
+      listReferrals({
+        id: adminId,
+        email,
+        isAdmin: true,
+        finalized: true,
+        limit: 1000,
+      }),
       getBalances(),
     ]);
 
-    const filteredSubs = Array.isArray(subs)
-      ? subs.filter((sub) => !sub.finalized)
+    const activeItems = Array.isArray(activeRes?.items)
+      ? activeRes.items
       : [];
 
-    console.log("Loaded submissions:", filteredSubs);
+    const archivedItems = Array.isArray(archivedRes?.items)
+      ? archivedRes.items
+      : [];
 
-    setSubmissions(filteredSubs);
-    setArchived(arch || []);
+    console.log("Loaded active:", activeItems.length);
+    console.log("Loaded archived:", archivedItems.length);
+
+    setSubmissions(activeItems);
+    setArchived(archivedItems);
     setBalances(bal || { adminCredit: 0, ctvBonusById: {} });
   };
 
+
   useEffect(() => {
-    console.log("User", user);
-    console.log("Id:", adminId, "Email:", email);
-    refresh();
-  }, []);
+    if (adminId) {
+      refresh();
+    }
+  }, [adminId, email]);
+
 
   const handleStatusChange = (rid, newStatus) => {
     setEditedRows((prev) => ({
