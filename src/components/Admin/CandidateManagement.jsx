@@ -84,22 +84,20 @@ export default function CandidateManagement() {
     }).then((res) => setRows(res || []));
   }, [adminId, email]);
 
-  /* ================= FILTER (MAP ĐÚNG DATA BACKEND) ================= */
+  /* ================= RESET PAGE ON FILTER ================= */
 
-  const FILTER_MAP = {
-    candidateName: "candidateName",
-    job: "job",
-    recruiter: "recruiter",
-    candidateEmail: "candidateEmail",
-    status: "status",
-  };
+  useEffect(() => {
+    setActivePage(1);
+    setRejectedPage(1);
+  }, [filters]);
+
+  /* ================= FILTER ================= */
 
   const filtered = useMemo(() => {
     return rows.filter((r) =>
-      Object.entries(filters).every(([filterKey, value]) => {
+      Object.entries(filters).every(([key, value]) => {
         if (!value) return true;
-        const dataKey = FILTER_MAP[filterKey];
-        return String(r[dataKey] || "")
+        return String(r[key] || "")
           .toLowerCase()
           .includes(value.toLowerCase());
       })
@@ -134,7 +132,7 @@ export default function CandidateManagement() {
       ? "↑"
       : "↓";
 
-  /* ================= FILTER UI ================= */
+  /* ================= FILTER UI (RENDER 1 LẦN) ================= */
 
   const FilterUI = () => (
     <>
@@ -238,8 +236,6 @@ export default function CandidateManagement() {
     <section className="table-section">
       <h3>{title}</h3>
 
-      <FilterUI />
-
       <div className="table-wrapper">
         <table className="admin-table">
           <thead>
@@ -271,6 +267,7 @@ export default function CandidateManagement() {
                 <td data-label="Job">{r.job}</td>
                 <td data-label="CTV">{r.recruiter}</td>
                 <td data-label="Email">{r.candidateEmail}</td>
+
                 <td data-label="Status">
                   {isActive ? (
                     <select
@@ -290,7 +287,9 @@ export default function CandidateManagement() {
                     r.status
                   )}
                 </td>
+
                 <td data-label="Bonus">{r.bonus || 0}</td>
+
                 <td data-label="Action">
                   <button
                     className="remove-btn"
@@ -332,11 +331,15 @@ export default function CandidateManagement() {
     </section>
   );
 
+  /* ================= RENDER ================= */
+
   return (
     <div className="candidate-page">
       <div className="page-header">
         <h2>Candidate Management</h2>
       </div>
+
+      <FilterUI />
 
       {renderTable(
         "Active Candidates",
