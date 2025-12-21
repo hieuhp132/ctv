@@ -104,6 +104,8 @@ export default function AdminDashboard() {
   const [savedJobs, setSavedJobs] = useState([]);
   const [optimisticallySaved, setOptimisticallySaved] = useState(new Set());
   const { user } = useAuth();
+  const adminId = user?.id || user?.email;
+  const [savedJobIds, setSavedJobIds] = useState(new Set());
   const navigate = useNavigate();
   const [balances, setBalancesState] = useState({
     adminCredit: 0,
@@ -435,25 +437,17 @@ export default function AdminDashboard() {
         
         setJobs(sortedJobs);
 
-        const userId = user?.id || user?.email;
-        if (userId) {
-          const response = await fetchSavedJobsL(userId);
-
-          if (response?.items && Array.isArray(response.items)) {
-            const backendSavedJobs = response.items.map((item) => ({
-              id: item.jobId || item.id || item._id || item.jobLink || "undefined-id",
-              title: item.title,
-              company: item.company,
-              location: item.location,
-              salary: item.salary,
-              deadline: item.deadline,
-              bonus: item.bonus,
-            }));
-
-            setSavedJobs(backendSavedJobs);
-            localStorage.setItem("savedJobs", JSON.stringify(backendSavedJobs));
-          }
+        let savedIds = new Set();
+        if (user?.email || user?.id) {
+          const savedRes = await fetchSavedJobsL(user.email);
+          asArray(savedRes?.jobs).forEach((j) => {
+            const id = j.jobId || j._id;
+            if (id) savedIds.add(id);
+          });
         }
+
+        setSavedJobIds(savedIds);
+        setJobs(jobsArray.map((j) => ({ ...j, isSaved: savedIds.has(j._id) })));
       } catch (error) {
         console.error("Error loading jobs:", error);
       }
@@ -572,6 +566,27 @@ export default function AdminDashboard() {
   const displayedActiveJobs = activeJobs.slice(activeStart, activeStart + jobsPerPage);
   const displayedInactiveJobs = inactiveJobs.slice(inactiveStart, inactiveStart + jobsPerPage);
 
+
+    const handleSaveUnsaveJob = async (job) => {
+      if (!adminId) return;
+      try {
+        const newSet = new Set(savedJobIds);
+        if (job.isSaved) {
+          await unsaveJobL(job._id, adminId);
+          newSet.delete(job._id);
+        } else {
+          await saveJobL(job._id, adminId);
+          newSet.add(job._id);
+        }
+        setSavedJobIds(newSet);
+        setJobs((prev) =>
+          prev.map((j) => (j._id === job._id ? { ...j, isSaved: !job.isSaved } : j))
+        );
+      } catch {
+        alert("Save job failed");
+      }
+    };
+
   // -----------------------------------------
   // Render helpers
   // -----------------------------------------
@@ -596,55 +611,8 @@ export default function AdminDashboard() {
           </div>
 
           {/* SAVE BUTTON */}
-          <button
-            title={savedJobs.some((j) => j.id === job.id) ? "Saved" : "Save job"}
-            style={{
-              background: "none",
-              border: "none",
-              cursor: isInactive ? "not-allowed" : "pointer",
-              fontSize: "1.5em",
-              color: savedJobs.some((j) => j.id === job.id) || optimisticallySaved.has(job.id) ? "#f60" : "#888",
-              textAlign: "right",
-            }}
-            onClick={async (e) => {
-              e.stopPropagation();
-              if (!user?.id && !user?.email) return;
-
-              const isSaved = savedJobs.some((j) => j.id === job.id);
-
-              // Optimistic update: immediately toggle visual state
-              if (isSaved) {
-                const newOptimistic = new Set(optimisticallySaved);
-                newOptimistic.delete(job.id);
-                setOptimisticallySaved(newOptimistic);
-              } else {
-                setOptimisticallySaved(new Set([...optimisticallySaved, job.id]));
-              }
-
-              try {
-                if (isSaved) {
-                  await unsaveJobL(job._id, user.id || user.email);
-                } else {
-                  await saveJobL(job._id, user.id || user.email);
-                }
-                await refresh();
-              } catch (err) {
-                console.error("save/unsave failed:", err);
-                alert("Failed to save/unsave job");
-                // Revert optimistic update on error
-                setOptimisticallySaved((prev) => {
-                  const newSet = new Set(prev);
-                  if (isSaved) {
-                    newSet.add(job.id);
-                  } else {
-                    newSet.delete(job.id);
-                  }
-                  return newSet;
-                });
-              }
-            }}
-          >
-            {savedJobs.some((j) => j.id === job.id) || optimisticallySaved.has(job.id) ? "★" : "☆"}
+          <button className={`save-btn ${job.isSaved ? "saved" : ""}`} onClick={(e) => { e.stopPropagation(); handleSaveUnsaveJob(job); }}>
+            {job.isSaved ? "★" : "☆"}
           </button>
         </div>
 
