@@ -84,13 +84,24 @@ export default function CandidateManagement() {
     }).then((res) => setRows(res || []));
   }, [adminId, email]);
 
-  /* ================= FILTER + SORT ================= */
+  /* ================= FILTER (MAP ĐÚNG DATA BACKEND) ================= */
+
+  const FILTER_MAP = {
+    candidateName: "candidateName",
+    job: "job",
+    recruiter: "recruiter",
+    candidateEmail: "candidateEmail",
+    status: "status",
+  };
 
   const filtered = useMemo(() => {
     return rows.filter((r) =>
-      Object.entries(filters).every(([k, v]) => {
-        if (!v) return true;
-        return String(r[k] || "").toLowerCase().includes(v.toLowerCase());
+      Object.entries(filters).every(([filterKey, value]) => {
+        if (!value) return true;
+        const dataKey = FILTER_MAP[filterKey];
+        return String(r[dataKey] || "")
+          .toLowerCase()
+          .includes(value.toLowerCase());
       })
     );
   }, [rows, filters]);
@@ -127,7 +138,7 @@ export default function CandidateManagement() {
 
   const FilterUI = () => (
     <>
-      {/* ===== DESKTOP FILTER ===== */}
+      {/* DESKTOP FILTER */}
       <div className="desktop-filter">
         <input
           placeholder="Candidate"
@@ -140,9 +151,7 @@ export default function CandidateManagement() {
         <input
           placeholder="Job"
           value={filters.job}
-          onChange={(e) =>
-            setFilters({ ...filters, job: e.target.value })
-          }
+          onChange={(e) => setFilters({ ...filters, job: e.target.value })}
         />
 
         <input
@@ -150,6 +159,14 @@ export default function CandidateManagement() {
           value={filters.recruiter}
           onChange={(e) =>
             setFilters({ ...filters, recruiter: e.target.value })
+          }
+        />
+
+        <input
+          placeholder="Email"
+          value={filters.candidateEmail}
+          onChange={(e) =>
+            setFilters({ ...filters, candidateEmail: e.target.value })
           }
         />
 
@@ -166,7 +183,7 @@ export default function CandidateManagement() {
         </select>
       </div>
 
-      {/* ===== MOBILE FILTER ===== */}
+      {/* MOBILE FILTER + SORT */}
       <div className="mobile-sort">
         <input
           placeholder="Candidate"
@@ -186,6 +203,30 @@ export default function CandidateManagement() {
           {STATUS_OPTIONS.map((s) => (
             <option key={s}>{s}</option>
           ))}
+        </select>
+
+        <select
+          value={sortConfig.key}
+          onChange={(e) =>
+            setSortConfig((p) => ({ ...p, key: e.target.value }))
+          }
+        >
+          <option value="">Sort by</option>
+          <option value="candidateName">Name</option>
+          <option value="job">Job</option>
+          <option value="recruiter">CTV</option>
+          <option value="status">Status</option>
+          <option value="bonus">Bonus</option>
+        </select>
+
+        <select
+          value={sortConfig.direction}
+          onChange={(e) =>
+            setSortConfig((p) => ({ ...p, direction: e.target.value }))
+          }
+        >
+          <option value="asc">Ascending</option>
+          <option value="desc">Descending</option>
         </select>
       </div>
     </>
@@ -230,7 +271,6 @@ export default function CandidateManagement() {
                 <td data-label="Job">{r.job}</td>
                 <td data-label="CTV">{r.recruiter}</td>
                 <td data-label="Email">{r.candidateEmail}</td>
-
                 <td data-label="Status">
                   {isActive ? (
                     <select
@@ -250,9 +290,7 @@ export default function CandidateManagement() {
                     r.status
                   )}
                 </td>
-
                 <td data-label="Bonus">{r.bonus || 0}</td>
-
                 <td data-label="Action">
                   <button
                     className="remove-btn"

@@ -7,23 +7,16 @@
   font-family: "Inter", sans-serif;
 }
 
-.page-header h2 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #111827;
-}
-
 .table-section {
-  background: #ffffff;
+  background: #fff;
   border-radius: 14px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
   padding: 16px 20px;
   margin-bottom: 28px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
 }
 
 .table-section h3 {
   margin-bottom: 12px;
-  font-size: 1.1rem;
   font-weight: 600;
 }
 
@@ -31,8 +24,9 @@
 
 .desktop-filter {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   margin-bottom: 14px;
+  flex-wrap: wrap;
 }
 
 .desktop-filter input,
@@ -60,14 +54,16 @@
 .admin-table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed;
-  font-size: 0.9rem;
+  table-layout: auto;
 }
 
 .admin-table th,
 .admin-table td {
   border: 1px solid #e5e7eb;
   padding: 8px 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .admin-table thead th {
@@ -82,7 +78,6 @@
 
 .admin-table select {
   width: 100%;
-  padding: 4px;
 }
 
 /* ================= ACTION ================= */
