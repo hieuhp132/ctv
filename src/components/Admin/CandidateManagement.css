@@ -189,3 +189,39 @@
     color: #374151;
   }
 }
+
+/* ===== SORT ICON ===== */
+.sort-icon {
+  margin-left: 6px;
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+/* Clickable header */
+.admin-table th {
+  cursor: pointer;
+  user-select: none;
+}
+
+/* ===== MOBILE SORT BAR ===== */
+.mobile-sort {
+  display: none;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.mobile-sort select {
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+}
+
+/* Show on mobile only */
+@media (max-width: 600px) {
+  .mobile-sort {
+    display: flex;
+    flex-direction: column;
+  }
+}

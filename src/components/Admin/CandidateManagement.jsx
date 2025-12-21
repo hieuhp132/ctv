@@ -1,6 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import "./CandidateManagement.css";
 import {
+  updateSubmissionStatus,
+  finalizeSubmission,
   removeCandidateById,
   listReferrals,
 } from "../../api";
@@ -16,6 +18,15 @@ const STATUS_OPTIONS = [
   "hired",
   "onboard",
   "rejected",
+];
+
+const SORT_FIELDS = [
+  { key: "candidateName", label: "Name" },
+  { key: "job", label: "Job" },
+  { key: "recruiter", label: "CTV" },
+  { key: "candidateEmail", label: "Email" },
+  { key: "status", label: "Status" },
+  { key: "bonus", label: "Bonus" },
 ];
 
 /* ================= HELPERS ================= */
@@ -51,6 +62,15 @@ const sortData = (data, { key, direction }) => {
   });
 };
 
+const SortIcon = ({ active, direction }) => {
+  if (!active) return <span className="sort-icon">↕</span>;
+  return (
+    <span className="sort-icon">
+      {direction === "asc" ? "↑" : "↓"}
+    </span>
+  );
+};
+
 /* ================= COMPONENT ================= */
 
 export default function CandidateManagement() {
@@ -58,9 +78,9 @@ export default function CandidateManagement() {
   const adminId = user?._id;
   const email = user?.email || "";
 
-  const [rows, setRows] = useState([]);
+  const [activeRows, setActiveRows] = useState([]);
+  const [archivedRows, setArchivedRows] = useState([]);
 
-  /* ===== FILTER STATE ===== */
   const [filters, setFilters] = useState({
     candidateName: "",
     job: "",
@@ -69,7 +89,6 @@ export default function CandidateManagement() {
     status: "",
   });
 
-  /* ===== SORT STATE ===== */
   const [sortConfig, setSortConfig] = useState({
     key: "",
     direction: "",
@@ -77,21 +96,38 @@ export default function CandidateManagement() {
 
   /* ================= LOAD DATA ================= */
 
-  useEffect(() => {
+  const loadData = async () => {
     if (!adminId) return;
 
-    listReferrals({
-      id: adminId,
-      email,
-      isAdmin: true,
-      limit: 1000,
-    }).then((res) => setRows(res || []));
+    const [active, archived] = await Promise.all([
+      listReferrals({
+        id: adminId,
+        email,
+        isAdmin: true,
+        finalized: false,
+        limit: 1000,
+      }),
+      listReferrals({
+        id: adminId,
+        email,
+        isAdmin: true,
+        finalized: true,
+        limit: 1000,
+      }),
+    ]);
+
+    setActiveRows(active?.items || active || []);
+    setArchivedRows(archived?.items || archived || []);
+  };
+
+  useEffect(() => {
+    loadData();
   }, [adminId, email]);
 
   /* ================= FILTER + SORT ================= */
 
-  const applyFilterSort = (data) => {
-    const filtered = data.filter((r) =>
+  const applyFilters = (rows) =>
+    rows.filter((r) =>
       Object.entries(filters).every(([key, val]) => {
         if (!val) return true;
         return String(r[key] || "")
@@ -100,17 +136,14 @@ export default function CandidateManagement() {
       })
     );
 
-    return sortData(filtered, sortConfig);
-  };
-
-  const activeRows = useMemo(
-    () => applyFilterSort(rows.filter((r) => r.finalized !== true)),
-    [rows, filters, sortConfig]
+  const processedActive = useMemo(
+    () => sortData(applyFilters(activeRows), sortConfig),
+    [activeRows, filters, sortConfig]
   );
 
-  const archivedRows = useMemo(
-    () => applyFilterSort(rows.filter((r) => r.finalized === true)),
-    [rows, filters, sortConfig]
+  const processedArchived = useMemo(
+    () => sortData(applyFilters(archivedRows), sortConfig),
+    [archivedRows, filters, sortConfig]
   );
 
   /* ================= SORT HANDLER ================= */
@@ -125,25 +158,92 @@ export default function CandidateManagement() {
 
   /* ================= OPTIONS ================= */
 
-  const jobOptions = uniqueValues(rows, "job");
-  const recruiterOptions = uniqueValues(rows, "recruiter");
+  const jobOptions = uniqueValues([...activeRows, ...archivedRows], "job");
+  const recruiterOptions = uniqueValues(
+    [...activeRows, ...archivedRows],
+    "recruiter"
+  );
 
   /* ================= TABLE RENDER ================= */
 
-  const renderTable = (title, data) => (
-    <div className="table-section">
-      <h3 style={{ marginBottom: 12 }}>{title}</h3>
+  const renderTable = (title, rows, editableStatus) => (
+    <section className="table-section">
+      <h3>{title}</h3>
+
+      {/* ===== MOBILE SORT ===== */}
+      <div className="mobile-sort">
+        <select
+          value={sortConfig.key}
+          onChange={(e) =>
+            setSortConfig((p) => ({ ...p, key: e.target.value }))
+          }
+        >
+          <option value="">Sort by</option>
+          {SORT_FIELDS.map((f) => (
+            <option key={f.key} value={f.key}>
+              {f.label}
+            </option>
+          ))}
+        </select>
+
+        <select
+          value={sortConfig.direction}
+          onChange={(e) =>
+            setSortConfig((p) => ({ ...p, direction: e.target.value }))
+          }
+        >
+          <option value="">Direction</option>
+          <option value="asc">Ascending ↑</option>
+          <option value="desc">Descending ↓</option>
+        </select>
+      </div>
 
       <div className="table-wrapper">
         <table className="admin-table">
           <thead>
             <tr>
-              <th onClick={() => toggleSort("candidateName")}>Name</th>
-              <th onClick={() => toggleSort("job")}>Job</th>
-              <th onClick={() => toggleSort("recruiter")}>CTV</th>
-              <th onClick={() => toggleSort("candidateEmail")}>Email</th>
-              <th onClick={() => toggleSort("status")}>Status</th>
-              <th onClick={() => toggleSort("bonus")}>Bonus</th>
+              <th onClick={() => toggleSort("candidateName")}>
+                Name
+                <SortIcon
+                  active={sortConfig.key === "candidateName"}
+                  direction={sortConfig.direction}
+                />
+              </th>
+              <th onClick={() => toggleSort("job")}>
+                Job
+                <SortIcon
+                  active={sortConfig.key === "job"}
+                  direction={sortConfig.direction}
+                />
+              </th>
+              <th onClick={() => toggleSort("recruiter")}>
+                CTV
+                <SortIcon
+                  active={sortConfig.key === "recruiter"}
+                  direction={sortConfig.direction}
+                />
+              </th>
+              <th onClick={() => toggleSort("candidateEmail")}>
+                Email
+                <SortIcon
+                  active={sortConfig.key === "candidateEmail"}
+                  direction={sortConfig.direction}
+                />
+              </th>
+              <th onClick={() => toggleSort("status")}>
+                Status
+                <SortIcon
+                  active={sortConfig.key === "status"}
+                  direction={sortConfig.direction}
+                />
+              </th>
+              <th onClick={() => toggleSort("bonus")}>
+                Bonus
+                <SortIcon
+                  active={sortConfig.key === "bonus"}
+                  direction={sortConfig.direction}
+                />
+              </th>
               <th>CV</th>
               <th>LinkedIn</th>
               <th>Action</th>
@@ -224,37 +324,58 @@ export default function CandidateManagement() {
           </thead>
 
           <tbody>
-            {data.map((r) => (
+            {rows.map((r) => (
               <tr key={getRefId(r)}>
-                <td>{r.candidateName}</td>
-                <td>{r.job}</td>
-                <td>{r.recruiter}</td>
-                <td>{r.candidateEmail}</td>
-                <td>{r.status}</td>
-                <td>{r.bonus || 0}</td>
-                <td>
+                <td data-label="Name">{r.candidateName}</td>
+                <td data-label="Job">{r.job}</td>
+                <td data-label="CTV">{r.recruiter}</td>
+                <td data-label="Email">{r.candidateEmail}</td>
+
+                <td data-label="Status">
+                  {editableStatus ? (
+                    <select
+                      value={r.status}
+                      onChange={(e) =>
+                        updateSubmissionStatus({
+                          id: getRefId(r),
+                          status: e.target.value,
+                        }).then(() => loadData())
+                      }
+                    >
+                      {STATUS_OPTIONS.map((s) => (
+                        <option key={s}>{s}</option>
+                      ))}
+                    </select>
+                  ) : (
+                    r.status
+                  )}
+                </td>
+
+                <td data-label="Bonus">{r.bonus || 0}</td>
+
+                <td data-label="CV">
                   {r.cvUrl && (
                     <a href={r.cvUrl} target="_blank" rel="noreferrer">
                       Link
                     </a>
                   )}
                 </td>
-                <td>
+
+                <td data-label="LinkedIn">
                   {r.linkedin && (
                     <a href={r.linkedin} target="_blank" rel="noreferrer">
                       Link
                     </a>
                   )}
                 </td>
-                <td>
+
+                <td data-label="Action">
                   <button
                     className="remove-btn"
                     onClick={async () => {
                       if (!window.confirm("Remove candidate?")) return;
                       await removeCandidateById(getRefId(r));
-                      setRows((p) =>
-                        p.filter((x) => getRefId(x) !== getRefId(r))
-                      );
+                      loadData();
                     }}
                   >
                     Remove
@@ -263,7 +384,7 @@ export default function CandidateManagement() {
               </tr>
             ))}
 
-            {!data.length && (
+            {!rows.length && (
               <tr>
                 <td colSpan="9" style={{ textAlign: "center" }}>
                   No data
@@ -273,7 +394,7 @@ export default function CandidateManagement() {
           </tbody>
         </table>
       </div>
-    </div>
+    </section>
   );
 
   /* ================= RENDER ================= */
@@ -281,11 +402,11 @@ export default function CandidateManagement() {
   return (
     <div className="candidate-page">
       <div className="page-header">
-        <h2>My Candidates</h2>
+        <h2>Candidate Management</h2>
       </div>
 
-      {renderTable("Active Candidates", activeRows)}
-      {renderTable("Archived Candidates", archivedRows)}
+      {renderTable("Active Candidates", processedActive, true)}
+      {renderTable("Archived Candidates", processedArchived, false)}
     </div>
   );
 }
