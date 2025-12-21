@@ -1,4 +1,4 @@
-// CandidateManagement.js – normalized to match backend listReferrals
+// CandidateManagement.js – RAW backend data (no normalize)
 import React, { useEffect, useState } from "react";
 import "./CandidateManagement.css";
 import {
@@ -24,20 +24,6 @@ const STATUS_OPTIONS = [
 
 const getRefId = (sub) => sub?._id;
 
-/* ===== Normalize backend referral → UI shape ===== */
-const normalizeReferral = (ref) => ({
-  ...ref,
-
-  // fields used by UI
-  candidate: ref.candidateName || "",
-  email: ref.candidateEmail || "",
-  phone: ref.candidatePhone || "",
-  ctv: ref.recruiter || "",
-
-  // keep original id
-  _id: ref._id,
-});
-
 /* ================= COMPONENT ================= */
 
 export default function CandidateManagement() {
@@ -56,22 +42,6 @@ export default function CandidateManagement() {
   const [currentPage, setCurrentPage] = useState(1);
   const [archivedPage, setArchivedPage] = useState(1);
   const rowsPerPage = 15;
-
-  const [sortConfig, setSortConfig] = useState({ key: "", direction: "" });
-  const [archivedSortConfig, setArchivedSortConfig] = useState({
-    key: "",
-    direction: "",
-  });
-
-  const [filters, setFilters] = useState({
-    status: "all",
-    candidate: "all",
-    job: "all",
-    ctv: "all",
-    email: "all",
-  });
-
-  const [archivedFilters, setArchivedFilters] = useState({ ...filters });
 
   /* ================= DATA LOAD ================= */
 
@@ -95,17 +65,10 @@ export default function CandidateManagement() {
       }),
       getBalances(),
     ]);
-
-    const activeItems = Array.isArray(activeRes?.items)
-      ? activeRes.items.map(normalizeReferral)
-      : [];
-
-    const archivedItems = Array.isArray(archivedRes?.items)
-      ? archivedRes.items.map(normalizeReferral)
-      : [];
-
-    setSubmissions(activeItems);
-    setArchived(archivedItems);
+    console.log("Active referrals response:", activeRes.items);
+    console.log("Archived referrals response:", archivedRes.items);
+    setSubmissions(Array.isArray(activeRes?.items) ? activeRes.items : []);
+    setArchived(Array.isArray(archivedRes?.items) ? archivedRes.items : []);
     setBalances(bal || { adminCredit: 0 });
   };
 
@@ -123,7 +86,7 @@ export default function CandidateManagement() {
 
     try {
       const pending = editedRows[rid] || {};
-      const nextStatus = (pending.status ?? sub.status)?.toLowerCase();
+      const nextStatus = pending.status ?? sub.status;
       const nextBonus = pending.bonus ?? sub.bonus;
 
       await updateSubmissionStatus({
@@ -154,67 +117,31 @@ export default function CandidateManagement() {
 
   /* ================= HELPERS ================= */
 
-  const sortData = (data, cfg) => {
-    if (!cfg.key) return data;
-    return [...data].sort((a, b) => {
-      const av = (a[cfg.key] || "").toString().toLowerCase();
-      const bv = (b[cfg.key] || "").toString().toLowerCase();
-      return cfg.direction === "asc"
-        ? av.localeCompare(bv)
-        : bv.localeCompare(av);
-    });
-  };
-
   const paginate = (data, page) =>
     data.slice((page - 1) * rowsPerPage, page * rowsPerPage);
 
-  const applyFilters = (data, f) =>
-    data.filter(
-      (s) =>
-        (f.status === "all" || s.status === f.status) &&
-        (f.candidate === "all" || s.candidate === f.candidate) &&
-        (f.job === "all" || s.job === f.job) &&
-        (f.ctv === "all" || s.ctv === f.ctv) &&
-        (f.email === "all" || s.email === f.email)
-    );
-
-  /* ================= DATA PIPE ================= */
-
-  const filteredSubs = sortData(
-    applyFilters(submissions, filters),
-    sortConfig
-  );
-  const filteredArchived = sortData(
-    applyFilters(archived, archivedFilters),
-    archivedSortConfig
-  );
-
-  const currentSubs = paginate(filteredSubs, currentPage);
-  const currentArchived = paginate(filteredArchived, archivedPage);
+  const currentSubs = paginate(submissions, currentPage);
+  const currentArchived = paginate(archived, archivedPage);
 
   /* ================= RENDER ================= */
 
-  const renderTable = (title, data, archived = false) => (
+  const renderTable = (title, data) => (
     <section className="table-section">
       <h3>{title}</h3>
 
       <table className="admin-table">
         <thead>
           <tr>
-            {[
-              "candidate",
-              "job",
-              "ctv",
-              "email",
-              "phone",
-              "cv",
-              "linkedin",
-              "status",
-              "bonus",
-              "action",
-            ].map((h) => (
-              <th key={h}>{h.toUpperCase()}</th>
-            ))}
+            <th>CANDIDATE</th>
+            <th>JOB</th>
+            <th>CTV</th>
+            <th>EMAIL</th>
+            <th>PHONE</th>
+            <th>CV</th>
+            <th>LINKEDIN</th>
+            <th>STATUS</th>
+            <th>BONUS</th>
+            <th>ACTION</th>
           </tr>
         </thead>
 
@@ -223,11 +150,12 @@ export default function CandidateManagement() {
             const rid = getRefId(sub);
             return (
               <tr key={rid}>
-                <td>{sub.candidate}</td>
+                <td>{sub.candidateName}</td>
                 <td>{sub.job}</td>
-                <td>{sub.ctv}</td>
-                <td>{sub.email}</td>
-                <td>{sub.phone}</td>
+                <td>{sub.recruiter}</td>
+                <td>{sub.candidateEmail}</td>
+                <td>{sub.candidatePhone}</td>
+
                 <td>
                   {sub.cvUrl ? (
                     <a href={sub.cvUrl} target="_blank" rel="noreferrer">
@@ -237,6 +165,7 @@ export default function CandidateManagement() {
                     "-"
                   )}
                 </td>
+
                 <td>
                   {sub.linkedin ? (
                     <a href={sub.linkedin} target="_blank" rel="noreferrer">
@@ -246,6 +175,7 @@ export default function CandidateManagement() {
                     "-"
                   )}
                 </td>
+
                 <td>
                   <select
                     value={sub.status}
@@ -263,6 +193,7 @@ export default function CandidateManagement() {
                     ))}
                   </select>
                 </td>
+
                 <td>
                   <input
                     value={sub.bonus || 0}
@@ -274,6 +205,7 @@ export default function CandidateManagement() {
                     }
                   />
                 </td>
+
                 <td>
                   <button onClick={() => handleSave(sub)}>Update</button>
                   <button
@@ -303,7 +235,7 @@ export default function CandidateManagement() {
       <div>Admin Credit: ${balances.adminCredit}</div>
 
       {renderTable("Active Candidates", currentSubs)}
-      {renderTable("Archived Candidates", currentArchived, true)}
+      {renderTable("Archived Candidates", currentArchived)}
     </div>
   );
 }
