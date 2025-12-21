@@ -49,12 +49,6 @@ const sortData = (data, { key, direction }) => {
       return direction === "asc" ? av - bv : bv - av;
     }
 
-    if (!isNaN(Date.parse(av)) && !isNaN(Date.parse(bv))) {
-      return direction === "asc"
-        ? new Date(av) - new Date(bv)
-        : new Date(bv) - new Date(av);
-    }
-
     return direction === "asc"
       ? String(av).localeCompare(String(bv))
       : String(bv).localeCompare(String(av));
@@ -73,9 +67,9 @@ export default function CandidateManagement() {
   const adminId = user?._id;
   const email = user?.email || "";
 
-  const [activeRows, setActiveRows] = useState([]);
-  const [archivedRows, setArchivedRows] = useState([]);
+  const [rows, setRows] = useState([]);
 
+  /* ===== FILTER ===== */
   const [filters, setFilters] = useState({
     candidateName: "",
     job: "",
@@ -84,6 +78,7 @@ export default function CandidateManagement() {
     status: "",
   });
 
+  /* ===== SORT ===== */
   const [sortConfig, setSortConfig] = useState({
     key: "",
     direction: "",
@@ -94,25 +89,14 @@ export default function CandidateManagement() {
   const loadData = async () => {
     if (!adminId) return;
 
-    const [active, archived] = await Promise.all([
-      listReferrals({
-        id: adminId,
-        email,
-        isAdmin: true,
-        finalized: false,
-        limit: 1000,
-      }),
-      listReferrals({
-        id: adminId,
-        email,
-        isAdmin: true,
-        finalized: true,
-        limit: 1000,
-      }),
-    ]);
+    const res = await listReferrals({
+      id: adminId,
+      email,
+      isAdmin: true,
+      limit: 1000,
+    });
 
-    setActiveRows(active?.items || active || []);
-    setArchivedRows(archived?.items || archived || []);
+    setRows(res || []);
   };
 
   useEffect(() => {
@@ -121,8 +105,8 @@ export default function CandidateManagement() {
 
   /* ================= FILTER + SORT ================= */
 
-  const applyFilters = (rows) =>
-    rows.filter((r) =>
+  const filteredRows = useMemo(() => {
+    return rows.filter((r) =>
       Object.entries(filters).every(([key, val]) => {
         if (!val) return true;
         return String(r[key] || "")
@@ -130,24 +114,22 @@ export default function CandidateManagement() {
           .includes(val.toLowerCase());
       })
     );
+  }, [rows, filters]);
 
-  const processedActive = useMemo(
-    () => sortData(applyFilters(activeRows), sortConfig),
-    [activeRows, filters, sortConfig]
+  const sortedRows = useMemo(
+    () => sortData(filteredRows, sortConfig),
+    [filteredRows, sortConfig]
   );
 
-  const processedArchived = useMemo(
-    () => sortData(applyFilters(archivedRows), sortConfig),
-    [archivedRows, filters, sortConfig]
-  );
+  /* ================= SPLIT BY STATUS ================= */
+
+  const activeRows = sortedRows.filter((r) => r.status !== "rejected");
+  const rejectedRows = sortedRows.filter((r) => r.status === "rejected");
 
   /* ================= OPTIONS ================= */
 
-  const jobOptions = uniqueValues([...activeRows, ...archivedRows], "job");
-  const recruiterOptions = uniqueValues(
-    [...activeRows, ...archivedRows],
-    "recruiter"
-  );
+  const jobOptions = uniqueValues(rows, "job");
+  const recruiterOptions = uniqueValues(rows, "recruiter");
 
   /* ================= SORT HANDLER ================= */
 
@@ -159,7 +141,7 @@ export default function CandidateManagement() {
     });
   };
 
-  /* ================= MOBILE FILTER ================= */
+  /* ================= MOBILE FILTER (CSS CONTROLLED) ================= */
 
   const MobileFilter = () => (
     <div className="mobile-filter">
@@ -217,40 +199,12 @@ export default function CandidateManagement() {
 
   /* ================= TABLE ================= */
 
-  const renderTable = (title, rows, editableStatus) => (
+  const renderTable = (title, data, editableStatus) => (
     <section className="table-section">
       <h3>{title}</h3>
 
-      {/* MOBILE FILTER */}
+      {/* MOBILE FILTER (ONLY MOBILE) */}
       <MobileFilter />
-
-      {/* MOBILE SORT */}
-      <div className="mobile-sort">
-        <select
-          value={sortConfig.key}
-          onChange={(e) =>
-            setSortConfig((p) => ({ ...p, key: e.target.value }))
-          }
-        >
-          <option value="">Sort by</option>
-          {SORT_FIELDS.map((f) => (
-            <option key={f.key} value={f.key}>
-              {f.label}
-            </option>
-          ))}
-        </select>
-
-        <select
-          value={sortConfig.direction}
-          onChange={(e) =>
-            setSortConfig((p) => ({ ...p, direction: e.target.value }))
-          }
-        >
-          <option value="">Direction</option>
-          <option value="asc">Ascending ↑</option>
-          <option value="desc">Descending ↓</option>
-        </select>
-      </div>
 
       <div className="table-wrapper">
         <table className="admin-table">
@@ -277,7 +231,7 @@ export default function CandidateManagement() {
               <th>Action</th>
             </tr>
 
-            {/* DESKTOP FILTER ROW */}
+            {/* DESKTOP FILTER */}
             <tr className="filter-row">
               <th>
                 <input
@@ -345,13 +299,13 @@ export default function CandidateManagement() {
           </thead>
 
           <tbody>
-            {rows.map((r) => (
+            {data.map((r) => (
               <tr key={getRefId(r)}>
-                <td data-label="Name">{r.candidateName}</td>
-                <td data-label="Job">{r.job}</td>
-                <td data-label="CTV">{r.recruiter}</td>
-                <td data-label="Email">{r.candidateEmail}</td>
-                <td data-label="Status">
+                <td>{r.candidateName}</td>
+                <td>{r.job}</td>
+                <td>{r.recruiter}</td>
+                <td>{r.candidateEmail}</td>
+                <td>
                   {editableStatus ? (
                     <select
                       value={r.status}
@@ -370,7 +324,7 @@ export default function CandidateManagement() {
                     r.status
                   )}
                 </td>
-                <td data-label="Bonus">{r.bonus || 0}</td>
+                <td>{r.bonus || 0}</td>
                 <td>{r.cvUrl && <a href={r.cvUrl}>Link</a>}</td>
                 <td>{r.linkedin && <a href={r.linkedin}>Link</a>}</td>
                 <td>
@@ -388,7 +342,7 @@ export default function CandidateManagement() {
               </tr>
             ))}
 
-            {!rows.length && (
+            {!data.length && (
               <tr>
                 <td colSpan="9" style={{ textAlign: "center" }}>
                   No data
@@ -404,8 +358,9 @@ export default function CandidateManagement() {
   return (
     <div className="candidate-page">
       <h2>Candidate Management</h2>
-      {renderTable("Active Candidates", processedActive, true)}
-      {renderTable("Archived Candidates", processedArchived, false)}
+
+      {renderTable("Active Candidates", activeRows, true)}
+      {renderTable("Rejected Candidates", rejectedRows, false)}
     </div>
   );
 }
