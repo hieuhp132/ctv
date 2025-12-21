@@ -405,7 +405,8 @@ export default function AdminDashboard() {
         getBalances(),
       ]);
 
-      setJobs(js);
+
+      setJobs(js.jobs || []);
       setBalancesState(bal);
 
       if (user?.id || user?.email) {
