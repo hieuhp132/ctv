@@ -304,6 +304,7 @@ export async function createJobL(job) {
 }
 
 export async function updateJobL(updated) {
+  console.log("updateJobL called with:", updated);
   const { id, ...payload } = updated;
   const res = await fetch(`${API_BASE}/local/jobs/update/${id}`, {
     method: "PUT",
