@@ -578,7 +578,7 @@ export default function AdminDashboard() {
   const renderJobCard = (job, isInactive) => {
     return (
       <div
-        key={job._id}
+        key={job.id}
         className="job-card"
         style={{
           position: "relative",
@@ -623,9 +623,9 @@ export default function AdminDashboard() {
 
               try {
                 if (isSaved) {
-                  await unsaveJobL(job._id, user.id || user.email);
+                  await unsaveJobL(job.id, user.id || user.email);
                 } else {
-                  await saveJobL(job._id, user.id || user.email);
+                  await saveJobL(job.id, user.id || user.email);
                 }
                 await refresh();
               } catch (err) {
