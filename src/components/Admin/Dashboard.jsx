@@ -623,9 +623,9 @@ export default function AdminDashboard() {
 
               try {
                 if (isSaved) {
-                  await unsaveJobL(job.id, user.id || user.email);
+                  await unsaveJobL(job._id, user.id || user.email);
                 } else {
-                  await saveJobL(job.id, user.id || user.email);
+                  await saveJobL(job._id, user.id || user.email);
                 }
                 await refresh();
               } catch (err) {
