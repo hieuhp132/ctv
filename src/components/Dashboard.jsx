@@ -199,30 +199,36 @@ export default function Dashboard() {
     return Array.from(m.values());
   }, [jobs]);
     const filteredJobs = React.useMemo(() => {
-      const text = searchText.toLowerCase().trim();
-      return jobs.filter((job) => {
-        const searchableText = [
-          job.title || "",
-          job.company || "",
-          job.location || "",
-          Array.isArray(job.keywords) ? job.keywords.join(" ") : job.keywords || "",
-          (job.description || "").replace(/<[^>]*>/g, " "),
-          (job.requirements || "").replace(/<[^>]*>/g, " "),
-        ]
-          .join(" ")
-          .toLowerCase();
-        const matchSearch = text === "" || searchableText.includes(text);
-        const matchLocation = filterLocation === "" || job.location === filterLocation;
-        const matchCompany = filterCompany === "" || job.company === filterCompany;
-        let matchCategory = true;
-        if (filterCategory) {
-          const title = (job.title || "").toLowerCase();
-          const keywords = CATEGORY_KEYWORDS[filterCategory] || [];
-          matchCategory = keywords.some((kw) => title.includes(kw));
-        }
-        return matchSearch && matchLocation && matchCompany && matchCategory;
-      });
-    }, [jobs, searchText, filterLocation, filterCompany, filterCategory]);
+  const text = searchText.toLowerCase().trim();
+  return jobs
+    .filter((job) => {
+      const searchableText = [
+        job.title || "",
+        job.company || "",
+        job.location || "",
+        Array.isArray(job.keywords) ? job.keywords.join(" ") : job.keywords || "",
+        (job.description || "").replace(/<[^>]*>/g, " "),
+        (job.requirements || "").replace(/<[^>]*>/g, " "),
+      ]
+        .join(" ")
+        .toLowerCase();
+      const matchSearch = text === "" || searchableText.includes(text);
+      const matchLocation = filterLocation === "" || job.location === filterLocation;
+      const matchCompany = filterCompany === "" || job.company === filterCompany;
+      let matchCategory = true;
+      if (filterCategory) {
+        const title = (job.title || "").toLowerCase();
+        const keywords = CATEGORY_KEYWORDS[filterCategory] || [];
+        matchCategory = keywords.some((kw) => title.includes(kw));
+      }
+      return matchSearch && matchLocation && matchCompany && matchCategory;
+    })
+    .sort((a, b) => {
+      // Nếu job có createdAt
+      return new Date(b.createdAt || b._id) - new Date(a.createdAt || a._id);
+    });
+}, [jobs, searchText, filterLocation, filterCompany, filterCategory]);
+
   
       const locationOptions = React.useMemo(
         () => uniqueLocations.map(loc => ({ value: loc, label: loc })),
