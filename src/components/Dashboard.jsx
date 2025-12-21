@@ -166,7 +166,38 @@ export default function Dashboard() {
       zIndex: 9999,
     }),
   };
-
+  const categoriesAvailable = React.useMemo(() => {
+    const cats = new Set();
+    jobs.forEach((job) => {
+      const title = (job.title || "").toLowerCase();
+      Object.keys(CATEGORY_KEYWORDS).forEach((cat) => {
+        const kws = CATEGORY_KEYWORDS[cat] || [];
+        if (kws.some((kw) => title.includes(kw))) cats.add(cat);
+      });
+    });
+    if (cats.size === 0) cats.add("Developer");
+    return Array.from(cats);
+  }, [jobs]);
+  const uniqueLocations = React.useMemo(() => {
+    const m = new Map();
+    jobs.forEach((j) => {
+      const raw = j.location;
+      const k = String(raw || "").trim().replace(/\s+/g, " ").toLowerCase();
+      if (!k) return;
+      if (!m.has(k)) m.set(k, raw);
+    });
+    return Array.from(m.values());
+  }, [jobs]);
+  const uniqueCompanies = React.useMemo(() => {
+    const m = new Map();
+    jobs.forEach((j) => {
+      const raw = j.company;
+      const k = String(raw || "").trim().replace(/\s+/g, " ").toLowerCase();
+      if (!k) return;
+      if (!m.has(k)) m.set(k, raw);
+    });
+    return Array.from(m.values());
+  }, [jobs]);
     const filteredJobs = React.useMemo(() => {
       const text = searchText.toLowerCase().trim();
       return jobs.filter((job) => {
