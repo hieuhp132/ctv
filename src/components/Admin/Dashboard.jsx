@@ -434,7 +434,7 @@ export default function AdminDashboard() {
         const sortedJobs = [...(jobsData.jobs || [])].sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
-        
+        console.log("Loaded jobs:", sortedJobs);        
         setJobs(sortedJobs);
 
         let savedIds = new Set();
