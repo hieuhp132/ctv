@@ -34,7 +34,7 @@
 }
 
 /* ========== Filter Bar Styling ========== */
-.filter-bar {
+.filter-row {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
