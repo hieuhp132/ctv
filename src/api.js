@@ -944,3 +944,20 @@ export async function removeUserById({ id }) {
     throw e;
   }
 }
+
+export async function removeUserByIdL({ id }) {
+  try {
+    const res = await fetch(`${API_BASE}/local/users/${id}/remove`, {
+      method: "DELETE",
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || "Failed to delete user locally");
+    
+    return data;
+  }
+  catch (e) {
+    console.error("removeUserByIdL error:", e.message);
+    throw e;
+  }
+}
