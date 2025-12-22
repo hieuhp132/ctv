@@ -1,9 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import "./CandidateManagement.css";
 import {
-  updateSubmissionStatus,
+  updateReferralFieldsById,
   listReferrals,
-  updateReferralFieldsById, 
   removeReferralFieldsById,
 } from "../../api";
 import { useAuth } from "../../context/AuthContext";
@@ -52,76 +51,39 @@ const FilterUI = React.memo(({ filters, onChange, sortConfig, setSortConfig }) =
   const handleChange = (key, value) => onChange(key, value);
 
   return (
-    <>
-      <div className="desktop-filter">
-        <input
-          placeholder="Candidate"
-          value={filters.candidateName}
-          onChange={(e) => handleChange("candidateName", e.target.value)}
-        />
-        <input
-          placeholder="Job"
-          value={filters.job}
-          onChange={(e) => handleChange("job", e.target.value)}
-        />
-        <input
-          placeholder="CTV"
-          value={filters.recruiter}
-          onChange={(e) => handleChange("recruiter", e.target.value)}
-        />
-        <input
-          placeholder="Email"
-          value={filters.candidateEmail}
-          onChange={(e) => handleChange("candidateEmail", e.target.value)}
-        />
-        <select
-          value={filters.status}
-          onChange={(e) => handleChange("status", e.target.value)}
-        >
-          <option value="">All Status</option>
-          {STATUS_OPTIONS.map((s) => (
-            <option key={s} value={s}>{s}</option>
-          ))}
-        </select>
-      </div>
-
-      <div className="mobile-sort">
-        <input
-          placeholder="Candidate"
-          value={filters.candidateName}
-          onChange={(e) => handleChange("candidateName", e.target.value)}
-        />
-        <select
-          value={filters.status}
-          onChange={(e) => handleChange("status", e.target.value)}
-        >
-          <option value="">All Status</option>
-          {STATUS_OPTIONS.map((s) => (
-            <option key={s} value={s}>{s}</option>
-          ))}
-        </select>
-
-        <select
-          value={sortConfig.key}
-          onChange={(e) => setSortConfig((p) => ({ ...p, key: e.target.value }))}
-        >
-          <option value="">Sort by</option>
-          <option value="candidateName">Name</option>
-          <option value="job">Job</option>
-          <option value="recruiter">CTV</option>
-          <option value="status">Status</option>
-          <option value="bonus">Bonus</option>
-        </select>
-
-        <select
-          value={sortConfig.direction}
-          onChange={(e) => setSortConfig((p) => ({ ...p, direction: e.target.value }))}
-        >
-          <option value="asc">Ascending</option>
-          <option value="desc">Descending</option>
-        </select>
-      </div>
-    </>
+    <div className="filter-container">
+      <input
+        placeholder="Candidate"
+        value={filters.candidateName}
+        onChange={(e) => handleChange("candidateName", e.target.value)}
+      />
+      <input
+        placeholder="Job"
+        value={filters.job}
+        onChange={(e) => handleChange("job", e.target.value)}
+      />
+      <input
+        placeholder="CTV"
+        value={filters.recruiter}
+        onChange={(e) => handleChange("recruiter", e.target.value)}
+      />
+      <input
+        placeholder="Email"
+        value={filters.candidateEmail}
+        onChange={(e) => handleChange("candidateEmail", e.target.value)}
+      />
+      <select
+        value={filters.status}
+        onChange={(e) => handleChange("status", e.target.value)}
+      >
+        <option value="">All Status</option>
+        {STATUS_OPTIONS.map((s) => (
+          <option key={s} value={s}>
+            {s}
+          </option>
+        ))}
+      </select>
+    </div>
   );
 });
 
@@ -143,12 +105,21 @@ export default function CandidateManagement() {
   const [activePage, setActivePage] = useState(1);
   const [rejectedPage, setRejectedPage] = useState(1);
 
+  // trạng thái tạm thời cho status mỗi referral
+  const [localStatuses, setLocalStatuses] = useState({});
+
   /* ================= LOAD DATA ================= */
   useEffect(() => {
     if (!adminId) return;
-    listReferrals({ id: adminId, email, isAdmin: true, limit: 1000 }).then((res) =>
-      setRows(res || [])
-    );
+    listReferrals({ id: adminId, email, isAdmin: true, limit: 1000 }).then((res) => {
+      setRows(res || []);
+      // khởi tạo localStatuses
+      const statusMap = {};
+      (res || []).forEach((r) => {
+        statusMap[r._id] = r.status;
+      });
+      setLocalStatuses(statusMap);
+    });
   }, [adminId, email]);
 
   /* ================= RESET PAGE ON FILTER ================= */
@@ -163,7 +134,7 @@ export default function CandidateManagement() {
     job: useDebounce(filters.job),
     recruiter: useDebounce(filters.recruiter),
     candidateEmail: useDebounce(filters.candidateEmail),
-    status: filters.status, // select filter không debounce
+    status: filters.status,
   };
 
   /* ================= FILTER & SORT ================= */
@@ -195,6 +166,23 @@ export default function CandidateManagement() {
   const sortIcon = (key) =>
     sortConfig.key !== key ? "⇅" : sortConfig.direction === "asc" ? "↑" : "↓";
 
+  /* ================= STATUS HANDLERS ================= */
+  const handleStatusChange = (id, value) => {
+    setLocalStatuses((p) => ({ ...p, [id]: value }));
+  };
+
+  const handleUpdate = async (id) => {
+    const newStatus = localStatuses[id];
+    await updateReferralFieldsById(id, { status: newStatus });
+    setRows((p) => p.map((r) => (r._id === id ? { ...r, status: newStatus } : r)));
+  };
+
+  const handleRemove = async (id) => {
+    if (!window.confirm("Remove candidate?")) return;
+    await removeReferralFieldsById(id);
+    setRows((p) => p.filter((r) => r._id !== id));
+  };
+
   /* ================= TABLE RENDER ================= */
   const renderTable = (title, data, isActive, page, setPage, total) => (
     <section className="table-section">
@@ -213,71 +201,57 @@ export default function CandidateManagement() {
             </tr>
           </thead>
           <tbody>
-            {data.map((r) => {
-              // local state cho status tạm thời
-              const [localStatus, setLocalStatus] = useState(r.status);
-
-              return (
-                <tr key={r._id}>
-                  <td data-label="Name">{r.candidateName}</td>
-                  <td data-label="Job">{r.job}</td>
-                  <td data-label="CTV">{r.recruiter}</td>
-                  <td data-label="Email">{r.candidateEmail}</td>
-                  <td data-label="Status">
-                    {isActive ? (
-                      <select
-                        value={localStatus}
-                        onChange={(e) => setLocalStatus(e.target.value)}
-                      >
-                        {STATUS_OPTIONS.map((s) => (
-                          <option key={s} value={s}>{s}</option>
-                        ))}
-                      </select>
-                    ) : (
-                      r.status
-                    )}
-                  </td>
-                  <td data-label="Bonus">{r.bonus || 0}</td>
-                  <td data-label="Action">
-                    <div className="buttons">
-                      <button
-                        className="remove-btn"
-                        onClick={async () => {
-                          if (!window.confirm("Remove candidate?")) return;
-                          await removeReferralFieldsById(r._id);
-                          setRows((p) => p.filter((x) => x._id !== r._id));
-                        }}
-                      >
-                        Remove
-                      </button>
-
-                      <button
-                        className="update-btn"
-                        onClick={async () => {
-                          if (!window.confirm("Update candidate status?")) return;
-                          // Gửi lên server
-                          await updateReferralFieldsById(r._id, { status: localStatus });
-                          // Update state table
-                          setRows((p) =>
-                            p.map((x) => (x._id === r._id ? { ...x, status: localStatus } : x))
-                          );
-                        }}
-                      >
-                        Update
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
+            {data.map((r) => (
+              <tr key={r._id}>
+                <td>{r.candidateName}</td>
+                <td>{r.job}</td>
+                <td>{r.recruiter}</td>
+                <td>{r.candidateEmail}</td>
+                <td>
+                  {isActive ? (
+                    <select
+                      value={localStatuses[r._id] || r.status}
+                      onChange={(e) => handleStatusChange(r._id, e.target.value)}
+                    >
+                      {STATUS_OPTIONS.map((s) => (
+                        <option key={s} value={s}>
+                          {s}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    r.status
+                  )}
+                </td>
+                <td>{r.bonus || 0}</td>
+                <td>
+                  {isActive && (
+                    <>
+                      <button onClick={() => handleUpdate(r._id)}>Update</button>
+                      <button onClick={() => handleRemove(r._id)}>Remove</button>
+                    </>
+                  )}
+                </td>
+              </tr>
+            ))}
+            {!data.length && (
+              <tr>
+                <td colSpan="7">No data</td>
+              </tr>
+            )}
           </tbody>
-
         </table>
       </div>
       <div className="pagination">
-        <button disabled={page === 1} onClick={() => setPage(page - 1)}>Prev</button>
-        <span>Page {page} / {Math.ceil(total / PAGE_SIZE) || 1}</span>
-        <button disabled={page >= Math.ceil(total / PAGE_SIZE)} onClick={() => setPage(page + 1)}>Next</button>
+        <button disabled={page === 1} onClick={() => setPage(page - 1)}>
+          Prev
+        </button>
+        <span>
+          Page {page} / {Math.ceil(total / PAGE_SIZE) || 1}
+        </span>
+        <button disabled={page >= Math.ceil(total / PAGE_SIZE)} onClick={() => setPage(page + 1)}>
+          Next
+        </button>
       </div>
     </section>
   );
@@ -285,7 +259,9 @@ export default function CandidateManagement() {
   /* ================= RENDER ================= */
   return (
     <div className="candidate-page">
-      <div className="page-header"><h2>Candidate Management</h2></div>
+      <div className="page-header">
+        <h2>Candidate Management</h2>
+      </div>
 
       <FilterUI
         filters={filters}
