@@ -268,6 +268,10 @@ export default function MyCandidates() {
       setArchived(done || []);
     });
 
+    console.log("Active: ", active);
+    console.log("Archived: ", done);
+  
+
     getBalances().then((b) => {
       const key = userId || userEmail;
       setBalance(b?.ctvBonusById?.[key] || 0);

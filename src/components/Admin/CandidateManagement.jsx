@@ -2,11 +2,8 @@ import React, { useEffect, useMemo, useState } from "react";
 import "./CandidateManagement.css";
 import {
   updateSubmissionStatus,
-  removeCandidateById,
   listReferrals,
-  updateReferralFields,
-  removeReferralFields,
-  updateReferralFieldsById,
+  updateReferralFieldsById, 
   removeReferralFieldsById,
 } from "../../api";
 import { useAuth } from "../../context/AuthContext";
