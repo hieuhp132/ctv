@@ -92,7 +92,7 @@ export default function Navbar() {
                   Login
                 </button>
                 <button
-                  className="nav-btn primary"
+                  className="nav-btn"
                   onClick={() => navigate("/signup")}
                 >
                   Sign up
