@@ -264,12 +264,12 @@ export default function MyCandidates() {
         finalized: true,
       }),
     ]).then(([active, done]) => {
-      setCandidates(active || []);
-      setArchived(done || []);
+      console.log("Active: ", active);setCandidates(active || []);
+      console.log("Archived: ", done);setArchived(done || []);
     });
 
-    console.log("Active: ", active);
-    console.log("Archived: ", done);
+    
+    
   
 
     getBalances().then((b) => {
