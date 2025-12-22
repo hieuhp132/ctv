@@ -136,7 +136,7 @@ export default function CandidateManagement() {
         if (r.recruiter) recruiterIds.add(r.recruiter);
       });
       setLocalStatuses(statusMap);
-
+      console.log("Job IDs to load:", jobIds);
       // Load Job names an toàn
       jobIds.forEach(async (jobId) => {
         if (!jobMap[jobId]) {
