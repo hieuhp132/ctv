@@ -213,64 +213,65 @@ export default function CandidateManagement() {
             </tr>
           </thead>
           <tbody>
-            {data.map((r) => (
-              <tr key={r._id}>
-                <td data-label="Name">{r.candidateName}</td>
-                <td data-label="Job">{r.job}</td>
-                <td data-label="CTV">{r.recruiter}</td>
-                <td data-label="Email">{r.candidateEmail}</td>
-                <td data-label="Status">
-                  {isActive ? (
-                    <select
-                      value={r.status}
-                      onChange={(e) =>
-                        updateSubmissionStatus({ id: r._id, status: e.target.value })
-                      }
-                    >
-                      {STATUS_OPTIONS.map((s) => (
-                        <option key={s}>{s}</option>
-                      ))}
-                    </select>
-                  ) : (
-                    r.status
-                  )}
-                </td>
-                <td data-label="Bonus">{r.bonus || 0}</td>
-                <td data-label="Action">
-                  
-                  <div className="buttons">
+            {data.map((r) => {
+              // local state cho status tạm thời
+              const [localStatus, setLocalStatus] = useState(r.status);
 
-                    <button
-                      className="remove-btn"
-                      onClick={async () => {
-                        if (!window.confirm("Remove candidate?")) return;
-                        await removeReferralFieldsById(r._id);
-                      }}
-                    >
-                      Remove
-                    </button>
+              return (
+                <tr key={r._id}>
+                  <td data-label="Name">{r.candidateName}</td>
+                  <td data-label="Job">{r.job}</td>
+                  <td data-label="CTV">{r.recruiter}</td>
+                  <td data-label="Email">{r.candidateEmail}</td>
+                  <td data-label="Status">
+                    {isActive ? (
+                      <select
+                        value={localStatus}
+                        onChange={(e) => setLocalStatus(e.target.value)}
+                      >
+                        {STATUS_OPTIONS.map((s) => (
+                          <option key={s} value={s}>{s}</option>
+                        ))}
+                      </select>
+                    ) : (
+                      r.status
+                    )}
+                  </td>
+                  <td data-label="Bonus">{r.bonus || 0}</td>
+                  <td data-label="Action">
+                    <div className="buttons">
+                      <button
+                        className="remove-btn"
+                        onClick={async () => {
+                          if (!window.confirm("Remove candidate?")) return;
+                          await removeReferralFieldsById(r._id);
+                          setRows((p) => p.filter((x) => x._id !== r._id));
+                        }}
+                      >
+                        Remove
+                      </button>
 
-                    <button
-                      className="remove-btn"
-                      onClick={async () => {
-                        if (!window.confirm("Update candidate?")) return;
-                        await updateReferralFieldsById(r._id, { status: "interviewing" }); // ví dụ cập nhật
-                        
-                      }}
-                    >
-                      Update
-                    </button>
-
-                  </div>
-                </td>
-              </tr>
-            ))}
-            {!data.length && (
-              <tr>
-                <td colSpan="7">No data</td>
-              </tr>
-            )}
+                      <button
+                        className="update-btn"
+                        onClick={async () => {
+                          if (!window.confirm("Update candidate status?")) return;
+                          // Gửi lên server
+                          await updateReferralFieldsById(r._id, { status: localStatus });
+                          // Update state table
+                          setRows((p) =>
+                            p.map((x) => (x._id === r._id ? { ...x, status: localStatus } : x))
+                          );
+                        }}
+                      >
+                        Update
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
+
         </table>
       </div>
       <div className="pagination">
