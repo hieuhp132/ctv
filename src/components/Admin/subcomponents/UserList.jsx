@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getUsersListL, resetPassword, removeUserById } from "../../../api";
+import { getUsersListL, resetPasswordL, removeUserByIdL } from "../../../api";
 import "./UserList.css";
 
 export default function UserList() {
@@ -24,7 +24,7 @@ export default function UserList() {
     if (!window.confirm("Areee you sure you want to delete this user?")) return;
 
     try {
-      await removeUserById({ id: userId });
+      await removeUserByIdL({ id: userId });
       setUserList((prev) => prev.filter((user) => user.id !== userId));
       alert("User deleted successfully");
     } catch (err) {
@@ -42,7 +42,7 @@ export default function UserList() {
     }
 
     try {
-      await resetPassword({ email: user.email, password: newPassword });
+      await resetPasswordL({ email: user.email, password: newPassword });
       alert(`Password for ${user.email} reset successfully`);
       setPasswordInputs((prev) => ({ ...prev, [user.id]: "" })); // clear input
     } catch (err) {

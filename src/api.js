@@ -929,6 +929,24 @@ export async function resetPassword({email, password}) {
   }
 }
 
+export async function resetPasswordL({ email, password }) {
+  try {
+    const res = await fetch(`${API_BASE}/local/users/reset`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || "Reset failed");
+
+    return data;
+  } catch (e) {
+    console.error("resetPasswordL error:", e.message);
+    throw e;
+  }
+}
+
 export async function removeUserById({ id }) {
   try {
     const res = await fetch(`${API_BASE}/db/user/${id}/remove`, {
