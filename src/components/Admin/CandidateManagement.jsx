@@ -4,6 +4,7 @@ import {
   updateSubmissionStatus,
   removeCandidateById,
   listReferrals,
+  updateReferralFields,
 } from "../../api";
 import { useAuth } from "../../context/AuthContext";
 
@@ -236,6 +237,18 @@ export default function CandidateManagement() {
                 </td>
                 <td data-label="Bonus">{r.bonus || 0}</td>
                 <td data-label="Action">
+                  
+                  <button
+                    className="remove-btn"
+                    onClick={async () => {
+                      if (!window.confirm("Update candidate?")) return;
+                      await updateReferralFields(r._id);
+                      setRows((p) => p.filter((x) => x._id !== r._id));
+                    }}
+                  >
+                    Update
+                  </button>
+                  
                   <button
                     className="remove-btn"
                     onClick={async () => {

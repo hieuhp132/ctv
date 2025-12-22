@@ -167,10 +167,10 @@ function CandidateTracker({ candidates, name, jobMap }) {
           <tbody>
             {filteredCandidates.map((c) => (
               <tr key={c._id}>
-                <td>{c.candidateName}</td>
-                <td>{jobMap?.[c.job]?.title || "-"}</td>
-                <td>{jobMap?.[c.job]?.salary || "-"}</td>
-                <td>
+                <td data-label="Name">{c.candidateName}</td>
+                <td data-label="Job">{jobMap?.[c.job]?.title || "-"}</td>
+                <td data-label="Salary">{jobMap?.[c.job]?.salary || "-"}</td>
+                <td data-label="Status">
                   {c.status
                     ? c.status
                         .split("_")
@@ -180,11 +180,11 @@ function CandidateTracker({ candidates, name, jobMap }) {
                         .join(" ")
                     : "-"}
                 </td>
-                <td>{c.bonus ?? "-"}</td>
-                <td>{c.candidateEmail || "-"}</td>
-                <td>{c.candidatePhone || "-"}</td>
+                <td data-label="Bonus">{c.bonus ?? "-"}</td>
+                <td data-label="Email">{c.candidateEmail || "-"}</td>
+                <td data-label="Phone">{c.candidatePhone || "-"}</td>
 
-                <td>
+                <td data-label="CV">
                   {c.cvUrl ? (
                     <a href={c.cvUrl} target="_blank" rel="noreferrer">
                       Link

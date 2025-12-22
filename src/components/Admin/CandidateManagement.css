@@ -93,11 +93,10 @@
 }
 
 .admin-table select {
-  width: 100%;
+  width: fit-content;
 }
 
 /* ================= ACTION ================= */
-
 .remove-btn {
   background: #f97316;
   color: white;
