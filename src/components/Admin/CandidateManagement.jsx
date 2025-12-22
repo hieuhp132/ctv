@@ -28,8 +28,11 @@ const sortData = (data, { key, direction }) => {
     let av = a[key];
     let bv = b[key];
 
-    // sort thời gian nếu key là time/date/updatedAt
-    if (key.toLowerCase().includes("time") || key.toLowerCase().includes("date") || key === "updatedAt") {
+    if (
+      key.toLowerCase().includes("time") ||
+      key.toLowerCase().includes("date") ||
+      key === "updatedAt"
+    ) {
       av = av ? new Date(av).getTime() : 0;
       bv = bv ? new Date(bv).getTime() : 0;
     }
@@ -37,7 +40,8 @@ const sortData = (data, { key, direction }) => {
     if (av == null) return 1;
     if (bv == null) return -1;
 
-    if (!isNaN(av) && !isNaN(bv)) return direction === "asc" ? av - bv : bv - av;
+    if (!isNaN(av) && !isNaN(bv))
+      return direction === "asc" ? av - bv : bv - av;
 
     return direction === "asc"
       ? String(av).localeCompare(String(bv))
@@ -45,60 +49,57 @@ const sortData = (data, { key, direction }) => {
   });
 };
 
-const paginate = (data, page) => data.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+const paginate = (data, page) =>
+  data.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
-/* ================= DEBOUNCE HOOK ================= */
+/* ================= DEBOUNCE ================= */
 function useDebounce(value, delay = 200) {
   const [debounced, setDebounced] = useState(value);
   useEffect(() => {
-    const handler = setTimeout(() => setDebounced(value), delay);
-    return () => clearTimeout(handler);
+    const t = setTimeout(() => setDebounced(value), delay);
+    return () => clearTimeout(t);
   }, [value, delay]);
   return debounced;
 }
 
-/* ================= FILTER UI COMPONENT ================= */
-const FilterUI = React.memo(({ filters, onChange }) => {
-  const handleChange = (key, value) => onChange(key, value);
+/* ================= FILTER UI ================= */
+const FilterUI = React.memo(({ filters, onChange }) => (
+  <div className="filter-container">
+    <input
+      placeholder="Candidate"
+      value={filters.candidateName}
+      onChange={(e) => onChange("candidateName", e.target.value)}
+    />
+    <input
+      placeholder="Job"
+      value={filters.job}
+      onChange={(e) => onChange("job", e.target.value)}
+    />
+    <input
+      placeholder="CTV"
+      value={filters.recruiter}
+      onChange={(e) => onChange("recruiter", e.target.value)}
+    />
+    <input
+      placeholder="Email"
+      value={filters.candidateEmail}
+      onChange={(e) => onChange("candidateEmail", e.target.value)}
+    />
+    <select
+      value={filters.status}
+      onChange={(e) => onChange("status", e.target.value)}
+    >
+      <option value="">All Status</option>
+      {STATUS_OPTIONS.map((s) => (
+        <option key={s} value={s}>
+          {s}
+        </option>
+      ))}
+    </select>
+  </div>
+));
 
-  return (
-    <div className="filter-container">
-      <input
-        placeholder="Candidate"
-        value={filters.candidateName}
-        onChange={(e) => handleChange("candidateName", e.target.value)}
-      />
-      <input
-        placeholder="Job"
-        value={filters.job}
-        onChange={(e) => handleChange("job", e.target.value)}
-      />
-      <input
-        placeholder="CTV"
-        value={filters.recruiter}
-        onChange={(e) => handleChange("recruiter", e.target.value)}
-      />
-      <input
-        placeholder="Email"
-        value={filters.candidateEmail}
-        onChange={(e) => handleChange("candidateEmail", e.target.value)}
-      />
-      <select
-        value={filters.status}
-        onChange={(e) => handleChange("status", e.target.value)}
-      >
-        <option value="">All Status</option>
-        {STATUS_OPTIONS.map((s) => (
-          <option key={s} value={s}>
-            {s}
-          </option>
-        ))}
-      </select>
-    </div>
-  );
-});
-
-/* ================= MAIN COMPONENT ================= */
+/* ================= MAIN ================= */
 export default function CandidateManagement() {
   const { user } = useAuth();
   const adminId = user?._id;
@@ -123,51 +124,61 @@ export default function CandidateManagement() {
   /* ================= LOAD DATA ================= */
   useEffect(() => {
     if (!adminId) return;
-    listReferrals({ id: adminId, email, isAdmin: true, limit: 1000 }).then((res) => {
-      setRows(res || []);
 
-      const statusMap = {};
-      const jobIds = new Set();
-      const recruiterIds = new Set();
+    listReferrals({ id: adminId, email, isAdmin: true, limit: 1000 }).then(
+      async (res = []) => {
+        setRows(res);
 
-      (res || []).forEach((r) => {
-        statusMap[r._id] = r.status;
-        if (r.job) jobIds.add(r.job);
-        if (r.recruiter) recruiterIds.add(r.recruiter);
-      });
-      setLocalStatuses(statusMap);
-      console.log("Job IDs to load:", jobIds);
-      // Load Job names an toàn
-      jobIds.forEach(async (jobId) => {
-        console.log("Loading job for ID:", jobId);
-        if (!jobMap[jobId]) {
+        const statusMap = {};
+        const jobIds = new Set();
+        const recruiterIds = new Set();
+
+        res.forEach((r) => {
+          statusMap[r._id] = r.status;
+          if (r.job) jobIds.add(r.job);
+          if (r.recruiter) recruiterIds.add(r.recruiter);
+        });
+
+        setLocalStatuses(statusMap);
+
+        /* ===== LOAD JOBS (FIX UNWRAP) ===== */
+        jobIds.forEach(async (jobId) => {
+          if (jobMap[jobId]) return;
           try {
-            const job = await getJobByIdL(jobId);
-            console.log("Loaded job:", job);
-            setJobMap((prev) => ({ ...prev, [jobId]: job }));
-          } catch (err) {
-            console.warn("Job not found:", jobId);
-            setJobMap((prev) => ({ ...prev, [jobId]: { title: "Unknown Job" } }));
+            const res = await getJobByIdL(jobId);
+            setJobMap((prev) => ({
+              ...prev,
+              [jobId]: res?.job || null, // ✅ FIX
+            }));
+          } catch {
+            setJobMap((prev) => ({
+              ...prev,
+              [jobId]: null,
+            }));
           }
-        }
-      });
+        });
 
-      // Load Recruiter names an toàn
-      recruiterIds.forEach(async (uid) => {
-        if (!recruiterMap[uid]) {
+        /* ===== LOAD RECRUITERS (FIX UNWRAP) ===== */
+        recruiterIds.forEach(async (uid) => {
+          if (recruiterMap[uid]) return;
           try {
-            const user = await fetchProfileFromServerL(uid);
-            setRecruiterMap((prev) => ({ ...prev, [uid]: user }));
-          } catch (err) {
-            console.warn("Recruiter not found:", uid);
-            setRecruiterMap((prev) => ({ ...prev, [uid]: { name: "Unknown User" } }));
+            const res = await fetchProfileFromServerL(uid);
+            setRecruiterMap((prev) => ({
+              ...prev,
+              [uid]: res?.user || null, // ✅ FIX
+            }));
+          } catch {
+            setRecruiterMap((prev) => ({
+              ...prev,
+              [uid]: null,
+            }));
           }
-        }
-      });
-    });
-  }, [adminId, email]);
+        });
+      }
+    );
+  }, [adminId, email]); // ❗ không phụ thuộc jobMap/recruiterMap
 
-  /* ================= RESET PAGE ON FILTER ================= */
+  /* ================= RESET PAGE ================= */
   useEffect(() => {
     setActivePage(1);
     setRejectedPage(1);
@@ -183,16 +194,24 @@ export default function CandidateManagement() {
   };
 
   /* ================= FILTER & SORT ================= */
-  const filtered = useMemo(() => {
-    return rows.filter((r) =>
-      Object.entries(debouncedFilters).every(([key, value]) => {
-        if (!value) return true;
-        return String(r[key] || "").toLowerCase().includes(String(value).toLowerCase());
-      })
-    );
-  }, [rows, debouncedFilters]);
+  const filtered = useMemo(
+    () =>
+      rows.filter((r) =>
+        Object.entries(debouncedFilters).every(([k, v]) =>
+          v
+            ? String(r[k] || "")
+                .toLowerCase()
+                .includes(String(v).toLowerCase())
+            : true
+        )
+      ),
+    [rows, debouncedFilters]
+  );
 
-  const sorted = useMemo(() => sortData(filtered, sortConfig), [filtered, sortConfig]);
+  const sorted = useMemo(
+    () => sortData(filtered, sortConfig),
+    [filtered, sortConfig]
+  );
 
   const activeRows = sorted.filter((r) => r.status !== "rejected");
   const rejectedRows = sorted.filter((r) => r.status === "rejected");
@@ -200,27 +219,32 @@ export default function CandidateManagement() {
   const activePaged = paginate(activeRows, activePage);
   const rejectedPaged = paginate(rejectedRows, rejectedPage);
 
-  /* ================= SORT HANDLER ================= */
+  /* ================= SORT ================= */
   const toggleSort = (key) => {
-    setSortConfig((prev) => {
-      if (prev.key !== key) return { key, direction: "asc" };
-      if (prev.direction === "asc") return { key, direction: "desc" };
+    setSortConfig((p) => {
+      if (p.key !== key) return { key, direction: "asc" };
+      if (p.direction === "asc") return { key, direction: "desc" };
       return { key: "", direction: "" };
     });
   };
   const sortIcon = (key) =>
-    sortConfig.key !== key ? "⇅" : sortConfig.direction === "asc" ? "↑" : "↓";
+    sortConfig.key !== key
+      ? "⇅"
+      : sortConfig.direction === "asc"
+      ? "↑"
+      : "↓";
 
-  /* ================= STATUS HANDLERS ================= */
-  const handleStatusChange = (id, value) => {
+  /* ================= STATUS ================= */
+  const handleStatusChange = (id, value) =>
     setLocalStatuses((p) => ({ ...p, [id]: value }));
-  };
 
   const handleUpdate = async (id) => {
-    const newStatus = localStatuses[id];
     if (!window.confirm("Update candidate status?")) return;
+    const newStatus = localStatuses[id];
     await updateReferralFieldsById(id, { status: newStatus });
-    setRows((p) => p.map((r) => (r._id === id ? { ...r, status: newStatus } : r)));
+    setRows((p) =>
+      p.map((r) => (r._id === id ? { ...r, status: newStatus } : r))
+    );
   };
 
   const handleRemove = async (id) => {
@@ -229,7 +253,7 @@ export default function CandidateManagement() {
     setRows((p) => p.filter((r) => r._id !== id));
   };
 
-  /* ================= TABLE RENDER ================= */
+  /* ================= TABLE ================= */
   const renderTable = (title, data, isActive, page, setPage, total) => (
     <section className="table-section">
       <h3>{title}</h3>
@@ -237,39 +261,77 @@ export default function CandidateManagement() {
         <table className="admin-table">
           <thead>
             <tr>
-              <th onClick={() => toggleSort("candidateName")}>Name {sortIcon("candidateName")}</th>
-              <th onClick={() => toggleSort("job")}>Job {sortIcon("job")}</th>
-              <th onClick={() => toggleSort("recruiter")}>CTV {sortIcon("recruiter")}</th>
+              <th onClick={() => toggleSort("candidateName")}>
+                Name {sortIcon("candidateName")}
+              </th>
+              <th onClick={() => toggleSort("job")}>
+                Job {sortIcon("job")}
+              </th>
+              <th onClick={() => toggleSort("recruiter")}>
+                CTV {sortIcon("recruiter")}
+              </th>
               <th>Email</th>
               <th>Phone</th>
               <th>CV</th>
               <th>LinkedIn</th>
               <th>Portfolio</th>
-              <th onClick={() => toggleSort("status")}>Status {sortIcon("status")}</th>
+              <th onClick={() => toggleSort("status")}>
+                Status {sortIcon("status")}
+              </th>
               <th>Bonus</th>
               {isActive && <th>Actions</th>}
-              <th onClick={() => toggleSort("updatedAt")}>Time {sortIcon("updatedAt")}</th>
+              <th onClick={() => toggleSort("updatedAt")}>
+                Time {sortIcon("updatedAt")}
+              </th>
             </tr>
           </thead>
           <tbody>
             {data.map((r) => (
               <tr key={r._id}>
                 <td>{r.candidateName}</td>
-                <td>{jobMap[r.job]?.title || "Unknown Job"}</td>
-                <td>{recruiterMap[r.recruiter]?.name || "Unknown User"}</td>
+                <td>{jobMap[r.job]?.title ?? "Unknown Job"}</td>
+                <td>{recruiterMap[r.recruiter]?.name ?? "Unknown User"}</td>
                 <td>{r.candidateEmail}</td>
                 <td>{r.candidatePhone}</td>
-                <td>{r.cvUrl ? <a href={r.cvUrl} target="_blank" rel="noreferrer">Link</a> : "-"}</td>
-                <td>{r.linkedin ? <a href={r.linkedin} target="_blank" rel="noreferrer">Link</a> : "-"}</td>
-                <td>{r.portfolio ? <a href={r.portfolio} target="_blank" rel="noreferrer">Link</a> : "-"}</td>
+                <td>
+                  {r.cvUrl ? (
+                    <a href={r.cvUrl} target="_blank" rel="noreferrer">
+                      Link
+                    </a>
+                  ) : (
+                    "-"
+                  )}
+                </td>
+                <td>
+                  {r.linkedin ? (
+                    <a href={r.linkedin} target="_blank" rel="noreferrer">
+                      Link
+                    </a>
+                  ) : (
+                    "-"
+                  )}
+                </td>
+                <td>
+                  {r.portfolio ? (
+                    <a href={r.portfolio} target="_blank" rel="noreferrer">
+                      Link
+                    </a>
+                  ) : (
+                    "-"
+                  )}
+                </td>
                 <td>
                   {isActive ? (
                     <select
                       value={localStatuses[r._id] || r.status}
-                      onChange={(e) => handleStatusChange(r._id, e.target.value)}
+                      onChange={(e) =>
+                        handleStatusChange(r._id, e.target.value)
+                      }
                     >
                       {STATUS_OPTIONS.map((s) => (
-                        <option key={s} value={s}>{s}</option>
+                        <option key={s} value={s}>
+                          {s}
+                        </option>
                       ))}
                     </select>
                   ) : (
@@ -279,10 +341,8 @@ export default function CandidateManagement() {
                 <td>{r.bonus || 0}</td>
                 {isActive && (
                   <td>
-                    <div className="buttons">
-                      <button onClick={() => handleUpdate(r._id)}>Update</button>
-                      <button onClick={() => handleRemove(r._id)}>Remove</button>
-                    </div>
+                    <button onClick={() => handleUpdate(r._id)}>Update</button>
+                    <button onClick={() => handleRemove(r._id)}>Remove</button>
                   </td>
                 )}
                 <td>{new Date(r.updatedAt).toLocaleString()}</td>
@@ -296,10 +356,20 @@ export default function CandidateManagement() {
           </tbody>
         </table>
       </div>
+
       <div className="pagination">
-        <button disabled={page === 1} onClick={() => setPage(page - 1)}>Prev</button>
-        <span>Page {page} / {Math.ceil(total / PAGE_SIZE) || 1}</span>
-        <button disabled={page >= Math.ceil(total / PAGE_SIZE)} onClick={() => setPage(page + 1)}>Next</button>
+        <button disabled={page === 1} onClick={() => setPage(page - 1)}>
+          Prev
+        </button>
+        <span>
+          Page {page} / {Math.ceil(total / PAGE_SIZE) || 1}
+        </span>
+        <button
+          disabled={page >= Math.ceil(total / PAGE_SIZE)}
+          onClick={() => setPage(page + 1)}
+        >
+          Next
+        </button>
       </div>
     </section>
   );
@@ -307,14 +377,29 @@ export default function CandidateManagement() {
   /* ================= RENDER ================= */
   return (
     <div className="candidate-page">
-      <div className="page-header">
-        <h2>Candidate Management</h2>
-      </div>
+      <h2>Candidate Management</h2>
 
-      <FilterUI filters={filters} onChange={(key, value) => setFilters((p) => ({ ...p, [key]: value }))} />
+      <FilterUI
+        filters={filters}
+        onChange={(k, v) => setFilters((p) => ({ ...p, [k]: v }))}
+      />
 
-      {renderTable("Active Candidates", activePaged, true, activePage, setActivePage, activeRows.length)}
-      {renderTable("Rejected Candidates", rejectedPaged, false, rejectedPage, setRejectedPage, rejectedRows.length)}
+      {renderTable(
+        "Active Candidates",
+        activePaged,
+        true,
+        activePage,
+        setActivePage,
+        activeRows.length
+      )}
+      {renderTable(
+        "Rejected Candidates",
+        rejectedPaged,
+        false,
+        rejectedPage,
+        setRejectedPage,
+        rejectedRows.length
+      )}
     </div>
   );
 }
