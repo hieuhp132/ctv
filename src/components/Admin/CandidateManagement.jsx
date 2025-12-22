@@ -46,6 +46,17 @@ const sortData = (data, { key, direction }) => {
 const paginate = (data, page) =>
   data.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
+/* ================= DEBOUNCE HOOK ================= */
+
+function useDebounce(value, delay = 300) {
+  const [debounced, setDebounced] = useState(value);
+  useEffect(() => {
+    const handler = setTimeout(() => setDebounced(value), delay);
+    return () => clearTimeout(handler);
+  }, [value, delay]);
+  return debounced;
+}
+
 /* ================= COMPONENT ================= */
 
 export default function CandidateManagement() {
@@ -71,7 +82,7 @@ export default function CandidateManagement() {
   const [activePage, setActivePage] = useState(1);
   const [rejectedPage, setRejectedPage] = useState(1);
 
-  /* ================= LOAD ================= */
+  /* ================= LOAD DATA ================= */
 
   useEffect(() => {
     if (!adminId) return;
@@ -91,23 +102,30 @@ export default function CandidateManagement() {
     setRejectedPage(1);
   }, [filters]);
 
+  /* ================= DEBOUNCE FILTERS ================= */
+
+  const debouncedFilters = {
+    candidateName: useDebounce(filters.candidateName, 200),
+    job: useDebounce(filters.job, 200),
+    recruiter: useDebounce(filters.recruiter, 200),
+    candidateEmail: useDebounce(filters.candidateEmail, 200),
+    status: filters.status, // select filter không cần debounce
+  };
+
   /* ================= FILTER ================= */
 
   const filtered = useMemo(() => {
     return rows.filter((r) =>
-      Object.entries(filters).every(([key, value]) => {
+      Object.entries(debouncedFilters).every(([key, value]) => {
         if (!value) return true;
         return String(r[key] || "")
           .toLowerCase()
-          .includes(value.toLowerCase());
+          .includes(String(value).toLowerCase());
       })
     );
-  }, [rows, filters]);
+  }, [rows, debouncedFilters]);
 
-  const sorted = useMemo(
-    () => sortData(filtered, sortConfig),
-    [filtered, sortConfig]
-  );
+  const sorted = useMemo(() => sortData(filtered, sortConfig), [filtered, sortConfig]);
 
   const activeRows = sorted.filter((r) => r.status !== "rejected");
   const rejectedRows = sorted.filter((r) => r.status === "rejected");
@@ -126,116 +144,102 @@ export default function CandidateManagement() {
   };
 
   const sortIcon = (key) =>
-    sortConfig.key !== key
-      ? "⇅"
-      : sortConfig.direction === "asc"
-      ? "↑"
-      : "↓";
+    sortConfig.key !== key ? "⇅" : sortConfig.direction === "asc" ? "↑" : "↓";
 
-  /* ================= FILTER UI (RENDER 1 LẦN) ================= */
+  /* ================= FILTER UI ================= */
 
-  const FilterUI = () => (
-    <>
-      {/* DESKTOP FILTER */}
-      <div className="desktop-filter">
-        <input
-          placeholder="Candidate"
-          value={filters.candidateName}
-          onChange={(e) =>
-            setFilters({ ...filters, candidateName: e.target.value })
-          }
-        />
+  const FilterUI = React.memo(() => {
+    const handleChange = (key, value) => {
+      setFilters((prev) => ({ ...prev, [key]: value }));
+    };
 
-        <input
-          placeholder="Job"
-          value={filters.job}
-          onChange={(e) => setFilters({ ...filters, job: e.target.value })}
-        />
+    return (
+      <>
+        <div className="desktop-filter">
+          <input
+            placeholder="Candidate"
+            value={filters.candidateName}
+            onChange={(e) => handleChange("candidateName", e.target.value)}
+          />
+          <input
+            placeholder="Job"
+            value={filters.job}
+            onChange={(e) => handleChange("job", e.target.value)}
+          />
+          <input
+            placeholder="CTV"
+            value={filters.recruiter}
+            onChange={(e) => handleChange("recruiter", e.target.value)}
+          />
+          <input
+            placeholder="Email"
+            value={filters.candidateEmail}
+            onChange={(e) => handleChange("candidateEmail", e.target.value)}
+          />
+          <select
+            value={filters.status}
+            onChange={(e) => handleChange("status", e.target.value)}
+          >
+            <option value="">All Status</option>
+            {STATUS_OPTIONS.map((s) => (
+              <option key={s} value={s}>
+                {s}
+              </option>
+            ))}
+          </select>
+        </div>
 
-        <input
-          placeholder="CTV"
-          value={filters.recruiter}
-          onChange={(e) =>
-            setFilters({ ...filters, recruiter: e.target.value })
-          }
-        />
+        <div className="mobile-sort">
+          <input
+            placeholder="Candidate"
+            value={filters.candidateName}
+            onChange={(e) => handleChange("candidateName", e.target.value)}
+          />
+          <select
+            value={filters.status}
+            onChange={(e) => handleChange("status", e.target.value)}
+          >
+            <option value="">All Status</option>
+            {STATUS_OPTIONS.map((s) => (
+              <option key={s} value={s}>
+                {s}
+              </option>
+            ))}
+          </select>
 
-        <input
-          placeholder="Email"
-          value={filters.candidateEmail}
-          onChange={(e) =>
-            setFilters({ ...filters, candidateEmail: e.target.value })
-          }
-        />
+          <select
+            value={sortConfig.key}
+            onChange={(e) =>
+              setSortConfig((p) => ({ ...p, key: e.target.value }))
+            }
+          >
+            <option value="">Sort by</option>
+            <option value="candidateName">Name</option>
+            <option value="job">Job</option>
+            <option value="recruiter">CTV</option>
+            <option value="status">Status</option>
+            <option value="bonus">Bonus</option>
+          </select>
 
-        <select
-          value={filters.status}
-          onChange={(e) =>
-            setFilters({ ...filters, status: e.target.value })
-          }
-        >
-          <option value="">All Status</option>
-          {STATUS_OPTIONS.map((s) => (
-            <option key={s}>{s}</option>
-          ))}
-        </select>
-      </div>
-
-      {/* MOBILE FILTER + SORT */}
-      <div className="mobile-sort">
-        <input
-          placeholder="Candidate"
-          value={filters.candidateName}
-          onChange={(e) =>
-            setFilters({ ...filters, candidateName: e.target.value })
-          }
-        />
-
-        <select
-          value={filters.status}
-          onChange={(e) =>
-            setFilters({ ...filters, status: e.target.value })
-          }
-        >
-          <option value="">All Status</option>
-          {STATUS_OPTIONS.map((s) => (
-            <option key={s}>{s}</option>
-          ))}
-        </select>
-
-        <select
-          value={sortConfig.key}
-          onChange={(e) =>
-            setSortConfig((p) => ({ ...p, key: e.target.value }))
-          }
-        >
-          <option value="">Sort by</option>
-          <option value="candidateName">Name</option>
-          <option value="job">Job</option>
-          <option value="recruiter">CTV</option>
-          <option value="status">Status</option>
-          <option value="bonus">Bonus</option>
-        </select>
-
-        <select
-          value={sortConfig.direction}
-          onChange={(e) =>
-            setSortConfig((p) => ({ ...p, direction: e.target.value }))
-          }
-        >
-          <option value="asc">Ascending</option>
-          <option value="desc">Descending</option>
-        </select>
-      </div>
-    </>
-  );
+          <select
+            value={sortConfig.direction}
+            onChange={(e) =>
+              setSortConfig((p) => ({ ...p, direction: e.target.value }))
+            }
+          >
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+          </select>
+        </div>
+      </>
+    );
+  });
 
   /* ================= TABLE ================= */
 
   const renderTable = (title, data, isActive, page, setPage, total) => (
     <section className="table-section">
       <h3>{title}</h3>
-
       <div className="table-wrapper">
         <table className="admin-table">
           <thead>
@@ -267,7 +271,6 @@ export default function CandidateManagement() {
                 <td data-label="Job">{r.job}</td>
                 <td data-label="CTV">{r.recruiter}</td>
                 <td data-label="Email">{r.candidateEmail}</td>
-
                 <td data-label="Status">
                   {isActive ? (
                     <select
@@ -287,9 +290,7 @@ export default function CandidateManagement() {
                     r.status
                   )}
                 </td>
-
                 <td data-label="Bonus">{r.bonus || 0}</td>
-
                 <td data-label="Action">
                   <button
                     className="remove-btn"
@@ -304,7 +305,6 @@ export default function CandidateManagement() {
                 </td>
               </tr>
             ))}
-
             {!data.length && (
               <tr>
                 <td colSpan="7">No data</td>
