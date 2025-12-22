@@ -163,7 +163,8 @@ export default function CandidateManagement() {
        recruiterIds.forEach(async (uid) => { 
        if (!recruiterMap[uid]) { 
         try { 
-          const user = await fetchProfileFromServerL(uid); 
+          const user = await fetchProfileFromServerL(uid);
+          console.log("Loaded recruiter:", user); 
           setRecruiterMap((prev) => ({ ...prev, [uid]: user })); 
         } catch (err) { 
           console.warn("Recruiter not found:", uid); 
