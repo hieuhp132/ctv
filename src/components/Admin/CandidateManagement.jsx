@@ -4,6 +4,8 @@ import {
   updateReferralFieldsById,
   listReferrals,
   removeReferralFieldsById,
+  getJobByIdL,
+  getUserByIdL,
 } from "../../api";
 import { useAuth } from "../../context/AuthContext";
 
@@ -26,20 +28,17 @@ const sortData = (data, { key, direction }) => {
     let av = a[key];
     let bv = b[key];
 
-    // Convert thời gian sang Date nếu có thể
+    // sort thời gian nếu key là time/date/updatedAt
     if (key.toLowerCase().includes("time") || key.toLowerCase().includes("date") || key === "updatedAt") {
       av = av ? new Date(av).getTime() : 0;
       bv = bv ? new Date(bv).getTime() : 0;
     }
 
-    // null/undefined luôn xuống cuối
     if (av == null) return 1;
     if (bv == null) return -1;
 
-    // Nếu là số, sort số
     if (!isNaN(av) && !isNaN(bv)) return direction === "asc" ? av - bv : bv - av;
 
-    // Mặc định sort string
     return direction === "asc"
       ? String(av).localeCompare(String(bv))
       : String(bv).localeCompare(String(av));
@@ -59,7 +58,7 @@ function useDebounce(value, delay = 200) {
 }
 
 /* ================= FILTER UI COMPONENT ================= */
-const FilterUI = React.memo(({ filters, onChange, sortConfig, setSortConfig }) => {
+const FilterUI = React.memo(({ filters, onChange }) => {
   const handleChange = (key, value) => onChange(key, value);
 
   return (
@@ -116,9 +115,9 @@ export default function CandidateManagement() {
   const [sortConfig, setSortConfig] = useState({ key: "", direction: "" });
   const [activePage, setActivePage] = useState(1);
   const [rejectedPage, setRejectedPage] = useState(1);
+
   const [jobMap, setJobMap] = useState({});
   const [recruiterMap, setRecruiterMap] = useState({});
-  // trạng thái tạm thời cho status mỗi referral
   const [localStatuses, setLocalStatuses] = useState({});
 
   /* ================= LOAD DATA ================= */
@@ -126,12 +125,33 @@ export default function CandidateManagement() {
     if (!adminId) return;
     listReferrals({ id: adminId, email, isAdmin: true, limit: 1000 }).then((res) => {
       setRows(res || []);
-      // khởi tạo localStatuses
+
       const statusMap = {};
+      const jobIds = new Set();
+      const recruiterIds = new Set();
+
       (res || []).forEach((r) => {
         statusMap[r._id] = r.status;
+        if (r.job) jobIds.add(r.job);
+        if (r.recruiter) recruiterIds.add(r.recruiter);
       });
       setLocalStatuses(statusMap);
+
+      // Load Job names
+      jobIds.forEach(async (jobId) => {
+        if (!jobMap[jobId]) {
+          const job = await getJobByIdL(jobId);
+          setJobMap((prev) => ({ ...prev, [jobId]: job }));
+        }
+      });
+
+      // Load Recruiter names
+      recruiterIds.forEach(async (uid) => {
+        if (!recruiterMap[uid]) {
+          const user = await getUserByIdL(uid);
+          setRecruiterMap((prev) => ({ ...prev, [uid]: user }));
+        }
+      });
     });
   }, [adminId, email]);
 
@@ -173,7 +193,7 @@ export default function CandidateManagement() {
     setSortConfig((prev) => {
       if (prev.key !== key) return { key, direction: "asc" };
       if (prev.direction === "asc") return { key, direction: "desc" };
-      return { key: "", direction: "" }; // reset sort
+      return { key: "", direction: "" };
     });
   };
   const sortIcon = (key) =>
@@ -186,7 +206,7 @@ export default function CandidateManagement() {
 
   const handleUpdate = async (id) => {
     const newStatus = localStatuses[id];
-    if(!window.confirm("Update candidate status?")) return;
+    if (!window.confirm("Update candidate status?")) return;
     await updateReferralFieldsById(id, { status: newStatus });
     setRows((p) => p.map((r) => (r._id === id ? { ...r, status: newStatus } : r)));
   };
@@ -196,18 +216,6 @@ export default function CandidateManagement() {
     await removeReferralFieldsById(id);
     setRows((p) => p.filter((r) => r._id !== id));
   };
-
-  const getJobById = async (id) => {
-    const o = await getJobByIdL(id);
-    console.log("Job: ", o);
-    setJobMap((p) => ({ ...p, [id]: o }));
-  }
-
-  const getRecruiterById = async (id) => {
-    const o =  await getUserByIdL(id);
-    console.log("Recruiter: ", o);
-    setRecruiterMap((p) => ({ ...p, [id]: o }));
-  }
 
   /* ================= TABLE RENDER ================= */
   const renderTable = (title, data, isActive, page, setPage, total) => (
@@ -223,51 +231,25 @@ export default function CandidateManagement() {
               <th>Email</th>
               <th>Phone</th>
               <th>CV</th>
-              <th>LinkedIn</th> 
+              <th>LinkedIn</th>
               <th>Portfolio</th>
               <th onClick={() => toggleSort("status")}>Status {sortIcon("status")}</th>
               <th>Bonus</th>
               {isActive && <th>Actions</th>}
-              <th onClick={() => toggleSort("time")}>Time {sortIcon("time")}</th>
+              <th onClick={() => toggleSort("updatedAt")}>Time {sortIcon("updatedAt")}</th>
             </tr>
           </thead>
           <tbody>
             {data.map((r) => (
               <tr key={r._id}>
                 <td>{r.candidateName}</td>
-                {/* <td>{r.job}</td> */}
                 <td>{jobMap[r.job]?.title || r.job}</td>
                 <td>{recruiterMap[r.recruiter]?.name || r.recruiter}</td>
                 <td>{r.candidateEmail}</td>
                 <td>{r.candidatePhone}</td>
-
-                <td>
-                  {r.cvUrl ? (
-                    <a href={r.cvUrl} target="_blank" rel="noreferrer">
-                      Link
-                    </a>
-                  ) : (
-                    "-" 
-                  )}
-                </td>
-                <td>
-                  {r.linkedin ? (
-                    <a href={r.linkedin} target="_blank" rel="noreferrer">
-                      Link
-                    </a>
-                  ) : (
-                    "-" 
-                  )}
-                </td>
-                <td>
-                  {r.portfolio ? (
-                    <a href={r.portfolio} target="_blank" rel="noreferrer">
-                      Link
-                    </a>
-                  ) : (
-                    "-" 
-                  )}
-                </td>
+                <td>{r.cvUrl ? <a href={r.cvUrl} target="_blank" rel="noreferrer">Link</a> : "-"}</td>
+                <td>{r.linkedin ? <a href={r.linkedin} target="_blank" rel="noreferrer">Link</a> : "-"}</td>
+                <td>{r.portfolio ? <a href={r.portfolio} target="_blank" rel="noreferrer">Link</a> : "-"}</td>
                 <td>
                   {isActive ? (
                     <select
@@ -275,9 +257,7 @@ export default function CandidateManagement() {
                       onChange={(e) => handleStatusChange(r._id, e.target.value)}
                     >
                       {STATUS_OPTIONS.map((s) => (
-                        <option key={s} value={s}>
-                          {s}
-                        </option>
+                        <option key={s} value={s}>{s}</option>
                       ))}
                     </select>
                   ) : (
@@ -285,37 +265,29 @@ export default function CandidateManagement() {
                   )}
                 </td>
                 <td>{r.bonus || 0}</td>
-                {isActive && <td>                  
-                    
-                      <div className="buttons">
-                        <button onClick={() => handleUpdate(r._id)}>Update</button>
-                        <button onClick={() => handleRemove(r._id)}>Remove</button>
-                      </div>
-                                      
-                </td>}
-                <td>
-                  {new Date(r.updatedAt).toLocaleString()}
-                </td>
+                {isActive && (
+                  <td>
+                    <div className="buttons">
+                      <button onClick={() => handleUpdate(r._id)}>Update</button>
+                      <button onClick={() => handleRemove(r._id)}>Remove</button>
+                    </div>
+                  </td>
+                )}
+                <td>{new Date(r.updatedAt).toLocaleString()}</td>
               </tr>
             ))}
             {!data.length && (
               <tr>
-                <td colSpan="7">No data</td>
+                <td colSpan="12">No data</td>
               </tr>
             )}
           </tbody>
         </table>
       </div>
       <div className="pagination">
-        <button disabled={page === 1} onClick={() => setPage(page - 1)}>
-          Prev
-        </button>
-        <span>
-          Page {page} / {Math.ceil(total / PAGE_SIZE) || 1}
-        </span>
-        <button disabled={page >= Math.ceil(total / PAGE_SIZE)} onClick={() => setPage(page + 1)}>
-          Next
-        </button>
+        <button disabled={page === 1} onClick={() => setPage(page - 1)}>Prev</button>
+        <span>Page {page} / {Math.ceil(total / PAGE_SIZE) || 1}</span>
+        <button disabled={page >= Math.ceil(total / PAGE_SIZE)} onClick={() => setPage(page + 1)}>Next</button>
       </div>
     </section>
   );
@@ -327,12 +299,7 @@ export default function CandidateManagement() {
         <h2>Candidate Management</h2>
       </div>
 
-      <FilterUI
-        filters={filters}
-        onChange={(key, value) => setFilters((p) => ({ ...p, [key]: value }))}
-        sortConfig={sortConfig}
-        setSortConfig={setSortConfig}
-      />
+      <FilterUI filters={filters} onChange={(key, value) => setFilters((p) => ({ ...p, [key]: value }))} />
 
       {renderTable("Active Candidates", activePaged, true, activePage, setActivePage, activeRows.length)}
       {renderTable("Rejected Candidates", rejectedPaged, false, rejectedPage, setRejectedPage, rejectedRows.length)}
