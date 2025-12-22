@@ -116,7 +116,8 @@ export default function CandidateManagement() {
   const [sortConfig, setSortConfig] = useState({ key: "", direction: "" });
   const [activePage, setActivePage] = useState(1);
   const [rejectedPage, setRejectedPage] = useState(1);
-
+  const [jobMap, setJobMap] = useState({});
+  const [recruiterMap, setRecruiterMap] = useState({});
   // trạng thái tạm thời cho status mỗi referral
   const [localStatuses, setLocalStatuses] = useState({});
 
@@ -196,6 +197,18 @@ export default function CandidateManagement() {
     setRows((p) => p.filter((r) => r._id !== id));
   };
 
+  const getJobById = async (id) => {
+    const o = await getJobByIdL(id);
+    console.log("Job: ", o);
+    setJobMap((p) => ({ ...p, [id]: o }));
+  }
+
+  const getRecruiterById = async (id) => {
+    const o =  await getUserByIdL(id);
+    console.log("Recruiter: ", o);
+    setRecruiterMap((p) => ({ ...p, [id]: o }));
+  }
+
   /* ================= TABLE RENDER ================= */
   const renderTable = (title, data, isActive, page, setPage, total) => (
     <section className="table-section">
@@ -222,8 +235,9 @@ export default function CandidateManagement() {
             {data.map((r) => (
               <tr key={r._id}>
                 <td>{r.candidateName}</td>
-                <td>{r.job}</td>
-                <td>{r.recruiter}</td>
+                {/* <td>{r.job}</td> */}
+                <td>{jobMap[r.job]?.title || r.job}</td>
+                <td>{recruiterMap[r.recruiter]?.name || r.recruiter}</td>
                 <td>{r.candidateEmail}</td>
                 <td>{r.candidatePhone}</td>
 
