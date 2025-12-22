@@ -97,6 +97,11 @@ export default function Navbar() {
                 >
                   Sign up
                 </button>
+                <button 
+                  className="nav-btn"
+                  onClick={() => navigate("/home")}>
+                  Home
+                </button>
               </div>
             ) : (
             <div className="profile-dropdown" ref={dropdownRef}>
