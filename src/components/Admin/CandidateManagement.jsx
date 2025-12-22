@@ -214,22 +214,7 @@ export default function CandidateManagement() {
                 <td>{r.recruiter}</td>
                 <td>{r.candidateEmail}</td>
                 <td>{r.candidatePhone}</td>
-                <td>
-                  {isActive ? (
-                    <select
-                      value={localStatuses[r._id] || r.status}
-                      onChange={(e) => handleStatusChange(r._id, e.target.value)}
-                    >
-                      {STATUS_OPTIONS.map((s) => (
-                        <option key={s} value={s}>
-                          {s}
-                        </option>
-                      ))}
-                    </select>
-                  ) : (
-                    r.status
-                  )}
-                </td>
+
                 <td>
                   {r.cvUrl ? (
                     <a href={r.cvUrl} target="_blank" rel="noreferrer">
@@ -257,7 +242,22 @@ export default function CandidateManagement() {
                     "-" 
                   )}
                 </td>
-
+                <td>
+                  {isActive ? (
+                    <select
+                      value={localStatuses[r._id] || r.status}
+                      onChange={(e) => handleStatusChange(r._id, e.target.value)}
+                    >
+                      {STATUS_OPTIONS.map((s) => (
+                        <option key={s} value={s}>
+                          {s}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    r.status
+                  )}
+                </td>
                 <td>{r.bonus || 0}</td>
                 {isActive && <td>                  
                     
