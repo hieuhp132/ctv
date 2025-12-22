@@ -20,10 +20,10 @@ export default function Dashboard() {
   const [savedJobIds, setSavedJobIds] = useState(new Set());
   const [loading, setLoading] = useState(true);
 
-    const [searchText, setSearchText] = useState("");
-    const [filterLocation, setFilterLocation] = useState("");
-    const [filterCompany, setFilterCompany] = useState("");
-    const [filterCategory, setFilterCategory] = useState("");
+  const [searchText, setSearchText] = useState("");
+  const [filterLocation, setFilterLocation] = useState("");
+  const [filterCompany, setFilterCompany] = useState("");
+  const [filterCategory, setFilterCategory] = useState("");
   const [page, setPage] = useState(1);
   const pageSize = 9;
 
@@ -81,17 +81,13 @@ export default function Dashboard() {
     Manager: ["manager", "lead"],
   };
 
+  // Chỉ lấy job Active
   const activeJobs = useMemo(() => {
     const today = new Date();
     return jobs.filter(
-      (j) => j.status === "Active" && (!j.deadline || new Date(j.deadline) >= today)
+      (j) => j.status?.toLowerCase() === "active" && (!j.deadline || new Date(j.deadline) >= today)
     );
   }, [jobs]);
-
-
-
-
-
 
   const handleSaveUnsaveJob = async (job) => {
     if (!recruiterId) return;
@@ -154,11 +150,11 @@ export default function Dashboard() {
     }),
     option: (base, state) => ({
       ...base,
-      padding: "10px 12px",   // 👈 chiều cao option
+      padding: "10px 12px",
       fontSize: 14,
       backgroundColor: state.isFocused ? "#f3f4f6" : "#fff",
       color: "#111",
-      whiteSpace: "normal",   // 👈 text dài tự xuống dòng
+      whiteSpace: "normal",
       cursor: "pointer",
     }),
     menu: (base) => ({
@@ -166,9 +162,10 @@ export default function Dashboard() {
       zIndex: 9999,
     }),
   };
-  const categoriesAvailable = React.useMemo(() => {
+
+  const categoriesAvailable = useMemo(() => {
     const cats = new Set();
-    jobs.forEach((job) => {
+    activeJobs.forEach((job) => {
       const title = (job.title || "").toLowerCase();
       Object.keys(CATEGORY_KEYWORDS).forEach((cat) => {
         const kws = CATEGORY_KEYWORDS[cat] || [];
@@ -177,75 +174,63 @@ export default function Dashboard() {
     });
     if (cats.size === 0) cats.add("Developer");
     return Array.from(cats);
-  }, [jobs]);
-  const uniqueLocations = React.useMemo(() => {
+  }, [activeJobs]);
+
+  const uniqueLocations = useMemo(() => {
     const m = new Map();
-    jobs.forEach((j) => {
+    activeJobs.forEach((j) => {
       const raw = j.location;
       const k = String(raw || "").trim().replace(/\s+/g, " ").toLowerCase();
       if (!k) return;
       if (!m.has(k)) m.set(k, raw);
     });
     return Array.from(m.values());
-  }, [jobs]);
-  const uniqueCompanies = React.useMemo(() => {
+  }, [activeJobs]);
+
+  const uniqueCompanies = useMemo(() => {
     const m = new Map();
-    jobs.forEach((j) => {
+    activeJobs.forEach((j) => {
       const raw = j.company;
       const k = String(raw || "").trim().replace(/\s+/g, " ").toLowerCase();
       if (!k) return;
       if (!m.has(k)) m.set(k, raw);
     });
     return Array.from(m.values());
-  }, [jobs]);
-    const filteredJobs = React.useMemo(() => {
-  const text = searchText.toLowerCase().trim();
-  return jobs
-    .filter((job) => {
-      const searchableText = [
-        job.title || "",
-        job.company || "",
-        job.location || "",
-        Array.isArray(job.keywords) ? job.keywords.join(" ") : job.keywords || "",
-        (job.description || "").replace(/<[^>]*>/g, " "),
-        (job.requirements || "").replace(/<[^>]*>/g, " "),
-      ]
-        .join(" ")
-        .toLowerCase();
-      const matchSearch = text === "" || searchableText.includes(text);
-      const matchLocation = filterLocation === "" || job.location === filterLocation;
-      const matchCompany = filterCompany === "" || job.company === filterCompany;
-      let matchCategory = true;
-      if (filterCategory) {
-        const title = (job.title || "").toLowerCase();
-        const keywords = CATEGORY_KEYWORDS[filterCategory] || [];
-        matchCategory = keywords.some((kw) => title.includes(kw));
-      }
-      return matchSearch && matchLocation && matchCompany && matchCategory;
-    })
-    .sort((a, b) => {
-      // Nếu job có createdAt
-      return new Date(b.createdAt || b._id) - new Date(a.createdAt || a._id);
-    });
-}, [jobs, searchText, filterLocation, filterCompany, filterCategory]);
+  }, [activeJobs]);
 
-  
-      const locationOptions = React.useMemo(
-        () => uniqueLocations.map(loc => ({ value: loc, label: loc })),
-        [uniqueLocations]
-      );
-  
-      const companyOptions = React.useMemo(
-        () => uniqueCompanies.map(c => ({ value: c, label: c })),
-        [uniqueCompanies]
-      );
-  
-      const categoryOptions = React.useMemo(
-        () => categoriesAvailable.map(cat => ({ value: cat, label: cat })),
-        [categoriesAvailable]
-      );
+  const filteredJobs = useMemo(() => {
+    const text = searchText.toLowerCase().trim();
+    return activeJobs
+      .filter((job) => {
+        const searchableText = [
+          job.title || "",
+          job.company || "",
+          job.location || "",
+          Array.isArray(job.keywords) ? job.keywords.join(" ") : job.keywords || "",
+          (job.description || "").replace(/<[^>]*>/g, " "),
+          (job.requirements || "").replace(/<[^>]*>/g, " "),
+        ].join(" ").toLowerCase();
 
-  
+        const matchSearch = text === "" || searchableText.includes(text);
+        const matchLocation = filterLocation === "" || job.location === filterLocation;
+        const matchCompany = filterCompany === "" || job.company === filterCompany;
+
+        let matchCategory = true;
+        if (filterCategory) {
+          const title = (job.title || "").toLowerCase();
+          const keywords = CATEGORY_KEYWORDS[filterCategory] || [];
+          matchCategory = keywords.some((kw) => title.includes(kw));
+        }
+
+        return matchSearch && matchLocation && matchCompany && matchCategory;
+      })
+      .sort((a, b) => new Date(b.createdAt || b._id) - new Date(a.createdAt || a._id));
+  }, [activeJobs, searchText, filterLocation, filterCompany, filterCategory]);
+
+  const locationOptions = useMemo(() => uniqueLocations.map(loc => ({ value: loc, label: loc })), [uniqueLocations]);
+  const companyOptions = useMemo(() => uniqueCompanies.map(c => ({ value: c, label: c })), [uniqueCompanies]);
+  const categoryOptions = useMemo(() => categoriesAvailable.map(cat => ({ value: cat, label: cat })), [categoriesAvailable]);
+
   const totalPages = Math.max(1, Math.ceil(filteredJobs.length / pageSize));
   const displayedJobs = filteredJobs.slice((page - 1) * pageSize, page * pageSize);
 
@@ -253,65 +238,48 @@ export default function Dashboard() {
     <div className="dashboard-container">
       <h2>Active Jobs</h2>
 
-   
-        <div className="filter-bar">
-          <input
-            type="text"
-            placeholder="Search jobs, companies, skills..."
-            className="filter-input"
-            value={searchText}
-            onChange={(e) => setSearchText(e.target.value)}
+      <div className="filter-bar">
+        <input
+          type="text"
+          placeholder="Search jobs, companies, skills..."
+          className="filter-input"
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+        />
+
+        <div style={{ minWidth: 200, flex: 1 }}>
+          <Select
+            placeholder="All Locations"
+            options={locationOptions}
+            isClearable
+            styles={selectStyles}
+            value={filterLocation ? { value: filterLocation, label: filterLocation } : null}
+            onChange={(opt) => setFilterLocation(opt?.value || "")}
           />
-
-          {/* LOCATION */}
-          <div style={{ minWidth: 200, flex: 1 }}>
-            <Select
-              placeholder="All Locations"
-              options={locationOptions}
-              isClearable
-              styles={selectStyles}
-              value={
-                filterLocation
-                  ? { value: filterLocation, label: filterLocation }
-                  : null
-              }
-              onChange={(opt) => setFilterLocation(opt?.value || "")}
-            />
-          </div>
-
-          {/* COMPANY */}
-          <div style={{ minWidth: 200, flex: 1 }}>
-            <Select
-              placeholder="All Companies"
-              options={companyOptions}
-              isClearable
-              styles={selectStyles}
-              value={
-                filterCompany
-                  ? { value: filterCompany, label: filterCompany }
-                  : null
-              }
-              onChange={(opt) => setFilterCompany(opt?.value || "")}
-            />
-          </div>
-
-          {/* CATEGORY */}
-          <div style={{ minWidth: 180 }}>
-            <Select
-              placeholder="All Categories"
-              options={categoryOptions}
-              isClearable
-              styles={selectStyles}
-              value={
-                filterCategory
-                  ? { value: filterCategory, label: filterCategory }
-                  : null
-              }
-              onChange={(opt) => setFilterCategory(opt?.value || "")}
-            />
-          </div>
         </div>
 
+        <div style={{ minWidth: 200, flex: 1 }}>
+          <Select
+            placeholder="All Companies"
+            options={companyOptions}
+            isClearable
+            styles={selectStyles}
+            value={filterCompany ? { value: filterCompany, label: filterCompany } : null}
+            onChange={(opt) => setFilterCompany(opt?.value || "")}
+          />
+        </div>
+
+        <div style={{ minWidth: 180 }}>
+          <Select
+            placeholder="All Categories"
+            options={categoryOptions}
+            isClearable
+            styles={selectStyles}
+            value={filterCategory ? { value: filterCategory, label: filterCategory } : null}
+            onChange={(opt) => setFilterCategory(opt?.value || "")}
+          />
+        </div>
+      </div>
 
       {loading ? <p>Loading...</p> : (
         <div className="job-list">
@@ -355,7 +323,6 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Pagination */}
       {totalPages > 1 && (
         <div className="pagination">
           {Array.from({ length: totalPages }).map((_, i) => (
@@ -364,7 +331,6 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Submit Modal */}
       {showSubmit && selectedJob && (
         <div className="modal-overlay">
           <div className="modal">
