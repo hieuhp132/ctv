@@ -10,22 +10,23 @@ export default function SavedJobs() {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const localSavedJobs =
-      JSON.parse(localStorage.getItem("savedJobs")) || [];
-    setSavedJobs(localSavedJobs);
+useEffect(() => {
+  if (!user) return;
 
-    if (user?.id || user?.email) {
-      fetchSavedJobs(user.id || user.email).then((data) => {
-        const backendJobs = data.items || [];
-        setSavedJobs(backendJobs);
-        localStorage.setItem(
-          "savedJobs",
-          JSON.stringify(backendJobs)
-        );
-      });
+  (async () => {
+    try {
+      const savedRes = await fetchSavedJobsL(user.email);
+
+      const jobs = (savedRes?.jobs || [])
+        .map(j => j.job || j) // phòng khi backend bọc job
+        .filter(Boolean);
+
+      setSavedJobs(jobs);
+    } catch (err) {
+      console.error(err);
     }
-  }, [user]);
+  })();
+}, [user]);
 
   return (
     <div className="dashboard-container">
@@ -61,21 +62,21 @@ export default function SavedJobs() {
                 <div className="job-meta">
                   <div>
                     <label>Company</label>
-                    <span>{job.company}</span>
+                    : {job.company}
                   </div>
                   <div>
                     <label>Location</label>
-                    <span>{job.location}</span>
+                    : {job.location}
                   </div>
                   {job.deadline && (
                     <div>
                       <label>Deadline</label>
-                      <span>{job.deadline}</span>
+                      : {job.deadline}
                     </div>
                   )}
                   <div>
                     <label>Bonus</label>
-                    <span className="bonus">{job.bonus}</span>
+                    : {job.bonus}
                   </div>
                 </div>
 
