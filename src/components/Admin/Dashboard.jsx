@@ -200,6 +200,7 @@ export default function AdminDashboard() {
   };
 
   const openEditJob = (job) => {
+    console.log("Editing job:", job);
     setEditingJob(job);
     setJobForm({
       title: job.title || "",
