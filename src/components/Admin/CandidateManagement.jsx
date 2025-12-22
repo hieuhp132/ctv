@@ -198,7 +198,7 @@ export default function CandidateManagement() {
               <th>Email</th>
               <th onClick={() => toggleSort("status")}>Status {sortIcon("status")}</th>
               <th onClick={() => toggleSort("bonus")}>Bonus {sortIcon("bonus")}</th>
-              <th>Action</th>
+              {isActive && <th>Actions</th>}
             </tr>
           </thead>
           <tbody>
@@ -227,10 +227,12 @@ export default function CandidateManagement() {
                 <td>{r.bonus || 0}</td>
                 <td>
                   
-                    <div className="buttons">
-                      <button onClick={() => handleUpdate(r._id)}>Update</button>
-                      <button onClick={() => handleRemove(r._id)}>Remove</button>
-                    </div>
+                    {isActive && (
+                      <div className="buttons">
+                        <button onClick={() => handleUpdate(r._id)}>Update</button>
+                        <button onClick={() => handleRemove(r._id)}>Remove</button>
+                      </div>
+                    )}
                   
                 </td>
               </tr>
