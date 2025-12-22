@@ -226,10 +226,10 @@ export default function CandidateManagement() {
                 <td>{r.bonus || 0}</td>
                 <td>
                   {isActive && (
-                    <>
+                    <div className="buttons">
                       <button onClick={() => handleUpdate(r._id)}>Update</button>
                       <button onClick={() => handleRemove(r._id)}>Remove</button>
-                    </>
+                    </div>
                   )}
                 </td>
               </tr>
