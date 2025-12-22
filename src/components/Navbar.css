@@ -40,6 +40,10 @@
   border-radius: 8px;
 }
 
+.nav-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
 .logo-btn {
   display: flex;
   align-items: center;
