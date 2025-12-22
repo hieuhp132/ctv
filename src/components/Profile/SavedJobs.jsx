@@ -64,21 +64,21 @@ useEffect(() => {
                 <div className="job-meta">
                   <div>
                     <label>Company</label>
-                    <span>{job.company}</span>
+                    : {job.company}
                   </div>
                   <div>
                     <label>Location</label>
-                    <span>{job.location}</span>
+                    : {job.location}
                   </div>
                   {job.deadline && (
                     <div>
                       <label>Deadline</label>
-                      <span>{job.deadline}</span>
+                      : {job.deadline}
                     </div>
                   )}
                   <div>
                     <label>Bonus</label>
-                    <span className="bonus">{job.bonus}</span>
+                    : {job.bonus}
                   </div>
                 </div>
 
