@@ -173,6 +173,7 @@ export default function CandidateManagement() {
 
   const handleUpdate = async (id) => {
     const newStatus = localStatuses[id];
+    if(!window.confirm("Update candidate status?")) return;
     await updateReferralFieldsById(id, { status: newStatus });
     setRows((p) => p.map((r) => (r._id === id ? { ...r, status: newStatus } : r)));
   };
@@ -225,12 +226,12 @@ export default function CandidateManagement() {
                 </td>
                 <td>{r.bonus || 0}</td>
                 <td>
-                  {isActive && (
+                  
                     <div className="buttons">
                       <button onClick={() => handleUpdate(r._id)}>Update</button>
                       <button onClick={() => handleRemove(r._id)}>Remove</button>
                     </div>
-                  )}
+                  
                 </td>
               </tr>
             ))}
