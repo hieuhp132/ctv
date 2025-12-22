@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getUsersList, resetPassword, removeUserById } from "../../../api";
+import { getUsersListL, resetPassword, removeUserById } from "../../../api";
 import "./UserList.css";
 
 export default function UserList() {
