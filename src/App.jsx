@@ -59,7 +59,7 @@ export default function App() {
 
           {/* ✅ ROOT = HOME PAGE */}
           <Route path="/" element={<RootPage />} />
-
+          <Route path="/home" element={<HomePage />} />
           <Route path="/login" element={<><Navbar /><Login /></>} />
           <Route path="/signup" element={<><Navbar /><SignUp /></>} />
           <Route path="/terms" element={<TermsPage />} />
