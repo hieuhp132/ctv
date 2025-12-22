@@ -164,7 +164,7 @@ export default function CandidateManagement() {
        if (!recruiterMap[uid]) { 
         try { 
           const user = await fetchProfileFromServerL(uid);
-          console.log("Loaded recruiter:", user); 
+          // console.log("Loaded recruiter:", user); 
           setRecruiterMap((prev) => ({ ...prev, [uid]: user })); 
         } catch (err) { 
           console.warn("Recruiter not found:", uid); 
@@ -286,7 +286,7 @@ export default function CandidateManagement() {
               <tr key={r._id}>
                 <td>{r.candidateName}</td>
                 <td>{jobMap[r.job]?.title ?? "Unknown Job"}</td>
-                <td>{recruiterMap[r.recruiter]?.name || "Unknown User"}</td>
+                <td>{recruiterMap[r.recruiter]?.email || "Unknown User"}</td>
                 <td>{r.candidateEmail}</td>
                 <td>{r.candidatePhone}</td>
                 <td>
