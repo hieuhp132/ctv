@@ -159,23 +159,18 @@ export default function CandidateManagement() {
         });
 
         /* ===== LOAD RECRUITERS (FIX UNWRAP) ===== */
-        recruiterIds.forEach(async (uid) => {
-          if (recruiterMap[uid]) return;
-          try {
-            const res = await fetchProfileFromServerL(uid);
-            setRecruiterMap((prev) => ({
-              ...prev,
-              [uid]: res?.user || null, // ✅ FIX
-            }));
-          } catch {
-            setRecruiterMap((prev) => ({
-              ...prev,
-              [uid]: null,
-            }));
-          }
-        });
-      }
-    );
+       // Load Recruiter names an toàn 
+       recruiterIds.forEach(async (uid) => { 
+       if (!recruiterMap[uid]) { 
+        try { 
+          const user = await fetchProfileFromServerL(uid); 
+          setRecruiterMap((prev) => ({ ...prev, [uid]: user })); 
+        } catch (err) { 
+          console.warn("Recruiter not found:", uid); 
+          setRecruiterMap((prev) => ({ ...prev, [uid]: { name: "Unknown User" } })); 
+        } 
+      } 
+    }); });
   }, [adminId, email]); // ❗ không phụ thuộc jobMap/recruiterMap
 
   /* ================= RESET PAGE ================= */
@@ -290,7 +285,7 @@ export default function CandidateManagement() {
               <tr key={r._id}>
                 <td>{r.candidateName}</td>
                 <td>{jobMap[r.job]?.title ?? "Unknown Job"}</td>
-                <td>{recruiterMap[r.recruiter]?.name ?? "Unknown User"}</td>
+                <td>{recruiterMap[r.recruiter]?.name || "Unknown User"}</td>
                 <td>{r.candidateEmail}</td>
                 <td>{r.candidatePhone}</td>
                 <td>
