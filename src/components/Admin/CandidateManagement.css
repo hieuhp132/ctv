@@ -97,6 +97,12 @@
 }
 
 /* ================= ACTION ================= */
+.buttons {
+  display: flex;
+  gap: 8px;
+  flex-direction: column;
+}
+
 .remove-btn {
   background: #f97316;
   color: white;
