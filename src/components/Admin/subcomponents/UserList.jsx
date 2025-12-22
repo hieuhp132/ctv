@@ -30,9 +30,7 @@ export default function UserList() {
     }
   };
 
-  const handleEdit = async (user) => {
-    const newPassword = passwordInputs[user._id];
-
+  const handleEdit = async (user, newPassword) => {
     if (!newPassword || newPassword.trim().length < 6) {
       alert("Password must be at least 6 characters");
       return;
@@ -87,7 +85,7 @@ export default function UserList() {
             </div>
 
             <div className="user-actions">
-              <button onClick={() => handleEdit(u)}>
+              <button onClick={() => handleEdit(u, passwordInputs[u._id])}>
                 Reset Password
               </button>
               <button
