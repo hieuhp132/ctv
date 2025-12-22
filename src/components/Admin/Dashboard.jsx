@@ -406,11 +406,9 @@ export default function AdminDashboard() {
         fetchAllJobs(),
         getBalances(),
       ]);
-      console.log("REFRESHED JOBS RAW:", js.jobs);
       const sortedJobs = [...(js.jobs || [])].sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
       );
-      console.log("REFRESHED JOBS:", sortedJobs);
       setJobs(sortedJobs);
       setBalancesState(bal);
 
@@ -435,7 +433,6 @@ export default function AdminDashboard() {
         const sortedJobs = [...(jobsData.jobs || [])].sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
-        console.log("Loaded jobs:", sortedJobs);        
         setJobs(sortedJobs);
 
         let savedIds = new Set();
