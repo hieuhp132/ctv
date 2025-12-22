@@ -218,10 +218,10 @@ export default function AdminDashboard() {
       // convert list markup to <ul> and convert data-size into inline style so
       // the Quill editor (which uses style-based size attributor) displays sizes
       // correctly and shows bullets rather than numeric markers.
-      description: convertDataSizeToStyle(normalizeQuillSavedHtml(job.description || "")),
-      requirements: convertDataSizeToStyle(normalizeQuillSavedHtml(job.requirements || "")),
-      benefits: convertDataSizeToStyle(normalizeQuillSavedHtml(job.benefits || "")),
-      other: convertDataSizeToStyle(normalizeQuillSavedHtml(job.other || "")),
+      description: convertDataSizeToStyle(normalizeQuillSavedHtml(job.jobsdetail.description || "")),
+      requirements: convertDataSizeToStyle(normalizeQuillSavedHtml(job.jobsdetail.requirements || "")),
+      benefits: convertDataSizeToStyle(normalizeQuillSavedHtml(job.jobsdetail.benefits || "")),
+      other: convertDataSizeToStyle(normalizeQuillSavedHtml(job.jobsdetail.other || "")),
       keywords: Array.isArray(job.keywords) ? job.keywords.join(", ") : "",
     });
     setShowJobModal(true);
