@@ -89,7 +89,7 @@ export default function Navbar() {
               {/* ADMIN CREDIT */}
               {user.role === "admin" && (
                 <span className="stat-pill">
-                  Credit: {balances.adminCredit}$
+                  Credit: 0$
                 </span>
               )}
 
