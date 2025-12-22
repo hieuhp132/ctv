@@ -137,19 +137,29 @@ export default function CandidateManagement() {
       });
       setLocalStatuses(statusMap);
 
-      // Load Job names
+      // Load Job names an toàn
       jobIds.forEach(async (jobId) => {
         if (!jobMap[jobId]) {
-          const job = await getJobByIdL(jobId);
-          setJobMap((prev) => ({ ...prev, [jobId]: job }));
+          try {
+            const job = await getJobByIdL(jobId);
+            setJobMap((prev) => ({ ...prev, [jobId]: job }));
+          } catch (err) {
+            console.warn("Job not found:", jobId);
+            setJobMap((prev) => ({ ...prev, [jobId]: { title: "Unknown Job" } }));
+          }
         }
       });
 
-      // Load Recruiter names
+      // Load Recruiter names an toàn
       recruiterIds.forEach(async (uid) => {
         if (!recruiterMap[uid]) {
-          const user = await fetchProfileFromServerL(uid);
-          setRecruiterMap((prev) => ({ ...prev, [uid]: user }));
+          try {
+            const user = await fetchProfileFromServerL(uid);
+            setRecruiterMap((prev) => ({ ...prev, [uid]: user }));
+          } catch (err) {
+            console.warn("Recruiter not found:", uid);
+            setRecruiterMap((prev) => ({ ...prev, [uid]: { name: "Unknown User" } }));
+          }
         }
       });
     });
@@ -243,8 +253,8 @@ export default function CandidateManagement() {
             {data.map((r) => (
               <tr key={r._id}>
                 <td>{r.candidateName}</td>
-                <td>{jobMap[r.job]?.title || r.job}</td>
-                <td>{recruiterMap[r.recruiter]?.name || r.recruiter}</td>
+                <td>{jobMap[r.job]?.title || "Unknown Job"}</td>
+                <td>{recruiterMap[r.recruiter]?.name || "Unknown User"}</td>
                 <td>{r.candidateEmail}</td>
                 <td>{r.candidatePhone}</td>
                 <td>{r.cvUrl ? <a href={r.cvUrl} target="_blank" rel="noreferrer">Link</a> : "-"}</td>
