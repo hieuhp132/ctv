@@ -139,9 +139,11 @@ export default function CandidateManagement() {
       console.log("Job IDs to load:", jobIds);
       // Load Job names an toàn
       jobIds.forEach(async (jobId) => {
+        console.log("Loading job for ID:", jobId);
         if (!jobMap[jobId]) {
           try {
             const job = await getJobByIdL(jobId);
+            console.log("Loaded job:", job);
             setJobMap((prev) => ({ ...prev, [jobId]: job }));
           } catch (err) {
             console.warn("Job not found:", jobId);
