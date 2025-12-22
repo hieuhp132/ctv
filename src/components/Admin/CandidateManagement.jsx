@@ -5,7 +5,7 @@ import {
   listReferrals,
   removeReferralFieldsById,
   getJobByIdL,
-  getUserByIdL,
+  fetchProfileFromServerL,
 } from "../../api";
 import { useAuth } from "../../context/AuthContext";
 
@@ -148,7 +148,7 @@ export default function CandidateManagement() {
       // Load Recruiter names
       recruiterIds.forEach(async (uid) => {
         if (!recruiterMap[uid]) {
-          const user = await getUserByIdL(uid);
+          const user = await fetchProfileFromServerL(uid);
           setRecruiterMap((prev) => ({ ...prev, [uid]: user }));
         }
       });
