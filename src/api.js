@@ -528,7 +528,7 @@ export async function listReferrals({
   return Array.isArray(data.items) ? data.items : [];
 }
 
-export async function updateReferralFields(id, updates) {
+export async function updateReferralFieldsById(id, updates) {
   const res = await fetch(`${API_BASE}/local/referrals/update/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
@@ -543,7 +543,7 @@ export async function updateReferralFields(id, updates) {
   return res.json();
 }
 
-export async function removeReferralFields(id) {
+export async function removeReferralFieldsById(id) {
   const res = await fetch(`${API_BASE}/local/referrals/${id}/remove`, {
     method: "DELETE",
     headers: { "Content-Type": "application/json" },

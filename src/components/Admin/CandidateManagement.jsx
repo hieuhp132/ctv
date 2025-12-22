@@ -6,6 +6,8 @@ import {
   listReferrals,
   updateReferralFields,
   removeReferralFields,
+  updateReferralFieldsById,
+  removeReferralFieldsById,
 } from "../../api";
 import { useAuth } from "../../context/AuthContext";
 
@@ -245,7 +247,7 @@ export default function CandidateManagement() {
                       className="remove-btn"
                       onClick={async () => {
                         if (!window.confirm("Remove candidate?")) return;
-                        await removeReferralFields(r._id);
+                        await removeReferralFieldsById(r._id);
                         setRows((p) => p.filter((x) => x._id !== r._id));
                       }}
                     >
@@ -256,7 +258,7 @@ export default function CandidateManagement() {
                       className="remove-btn"
                       onClick={async () => {
                         if (!window.confirm("Update candidate?")) return;
-                        await updateReferralFields(r._id, { status: "interviewing" }); // ví dụ cập nhật
+                        await updateReferralFieldsById(r._id, { status: "interviewing" }); // ví dụ cập nhật
                         setRows((p) =>
                           p.map((x) => (x._id === r._id ? { ...x, status: "interviewing" } : x))
                         );
