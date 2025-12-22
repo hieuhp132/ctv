@@ -25,11 +25,9 @@ export default function HomePage() {
   // Fetch initial jobs (limit 12)
   useEffect(() => {
     let mounted = true;
-    console.log("[DEBUG] Fetching initial jobs...");
     setLoading(true);
     fetchAllJobs(12)
       .then(list => {
-        console.log("[DEBUG] Jobs fetched:", list);
         if (mounted) setJobs(Array.isArray(list) ? list : []);
       })
       .catch(err => {

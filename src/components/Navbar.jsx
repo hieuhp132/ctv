@@ -84,7 +84,21 @@ export default function Navbar() {
 
         {/* RIGHT */}
         <div className="navbar-right">
-          {!user ? null : (
+          {!user ? (
+                /* ===== NOT LOGGED IN ===== */
+              <div className="auth-actions">
+                {/* Desktop buttons */}
+                <button className="nav-btn" onClick={() => navigate("/login")}>
+                  Login
+                </button>
+                <button
+                  className="nav-btn primary"
+                  onClick={() => navigate("/signup")}
+                >
+                  Sign up
+                </button>
+              </div>
+            ) : (
             <div className="profile-dropdown" ref={dropdownRef}>
               {/* ADMIN CREDIT */}
               {user.role === "admin" && (
