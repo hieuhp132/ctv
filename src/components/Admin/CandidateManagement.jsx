@@ -245,7 +245,6 @@ export default function CandidateManagement() {
                       onClick={async () => {
                         if (!window.confirm("Remove candidate?")) return;
                         await removeReferralFieldsById(r._id);
-                        setRows((p) => p.filter((x) => x._id !== r._id));
                       }}
                     >
                       Remove
@@ -256,9 +255,7 @@ export default function CandidateManagement() {
                       onClick={async () => {
                         if (!window.confirm("Update candidate?")) return;
                         await updateReferralFieldsById(r._id, { status: "interviewing" }); // ví dụ cập nhật
-                        setRows((p) =>
-                          p.map((x) => (x._id === r._id ? { ...x, status: "interviewing" } : x))
-                        );
+                        
                       }}
                     >
                       Update
