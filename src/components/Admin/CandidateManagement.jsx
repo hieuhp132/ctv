@@ -196,11 +196,12 @@ export default function CandidateManagement() {
               <th onClick={() => toggleSort("job")}>Job {sortIcon("job")}</th>
               <th onClick={() => toggleSort("recruiter")}>CTV {sortIcon("recruiter")}</th>
               <th>Email</th>
-              <th onClick={() => toggleSort("status")}>Status {sortIcon("status")}</th>
               <th>Phone</th>
               <th>CV</th>
               <th>LinkedIn</th> 
-              <th onClick={() => toggleSort("bonus")}>Bonus {sortIcon("bonus")}</th>
+              <th>Portfolio</th>
+              <th onClick={() => toggleSort("status")}>Status {sortIcon("status")}</th>
+              <th>Bonus</th>
               {isActive && <th>Actions</th>}
               <th onClick={() => toggleSort("time")}>Time {sortIcon("time")}</th>
             </tr>
@@ -212,6 +213,7 @@ export default function CandidateManagement() {
                 <td>{r.job}</td>
                 <td>{r.recruiter}</td>
                 <td>{r.candidateEmail}</td>
+                <td>{r.candidatePhone}</td>
                 <td>
                   {isActive ? (
                     <select
@@ -228,8 +230,6 @@ export default function CandidateManagement() {
                     r.status
                   )}
                 </td>
-                <td>{r.bonus || 0}</td>
-                <td>{r.candidatePhone}</td>
                 <td>
                   {r.cvUrl ? (
                     <a href={r.cvUrl} target="_blank" rel="noreferrer">
@@ -257,18 +257,19 @@ export default function CandidateManagement() {
                     "-" 
                   )}
                 </td>
-                <td>
-                  {new Date(r.updatedAt).toLocaleString()}
-                </td>
+
                 <td>{r.bonus || 0}</td>
                 {isActive && <td>                  
-                    (
+                    
                       <div className="buttons">
                         <button onClick={() => handleUpdate(r._id)}>Update</button>
                         <button onClick={() => handleRemove(r._id)}>Remove</button>
                       </div>
-                    )                  
+                                      
                 </td>}
+                <td>
+                  {new Date(r.updatedAt).toLocaleString()}
+                </td>
               </tr>
             ))}
             {!data.length && (
