@@ -934,7 +934,10 @@ export async function resetPasswordL({ email, password }) {
     const res = await fetch(`${API_BASE}/local/users/reset`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({
+        email,
+        newPassword: password
+      }),
     });
 
     const data = await res.json();
@@ -946,6 +949,7 @@ export async function resetPasswordL({ email, password }) {
     throw e;
   }
 }
+
 
 export async function removeUserById({ id }) {
   try {
