@@ -19,7 +19,23 @@
   margin-bottom: 12px;
   font-weight: 600;
 }
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding: 8px;
+  background: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
 
+.filter-wrapper {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  width: "fit-content";
+}
 /* ================= FILTER ================= */
 
 .desktop-filter {
