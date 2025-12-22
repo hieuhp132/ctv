@@ -5,6 +5,7 @@ import {
   removeCandidateById,
   listReferrals,
   updateReferralFields,
+  removeReferralFields,
 } from "../../api";
 import { useAuth } from "../../context/AuthContext";
 
@@ -243,24 +244,27 @@ export default function CandidateManagement() {
                     <button
                       className="remove-btn"
                       onClick={async () => {
-                        if (!window.confirm("Update candidate?")) return;
-                        await updateReferralFields(r._id);
-                        setRows((p) => p.filter((x) => x._id !== r._id));
-                      }}
-                    >
-                      Update
-                    </button>
-                    
-                    <button
-                      className="remove-btn"
-                      onClick={async () => {
                         if (!window.confirm("Remove candidate?")) return;
-                        await removeCandidateById(r._id);
+                        await removeReferralFields(r._id);
                         setRows((p) => p.filter((x) => x._id !== r._id));
                       }}
                     >
                       Remove
                     </button>
+
+                    <button
+                      className="remove-btn"
+                      onClick={async () => {
+                        if (!window.confirm("Update candidate?")) return;
+                        await updateReferralFields(r._id, { status: "interviewing" }); // ví dụ cập nhật
+                        setRows((p) =>
+                          p.map((x) => (x._id === r._id ? { ...x, status: "interviewing" } : x))
+                        );
+                      }}
+                    >
+                      Update
+                    </button>
+
                   </div>
                 </td>
               </tr>

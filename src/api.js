@@ -528,8 +528,33 @@ export async function listReferrals({
   return Array.isArray(data.items) ? data.items : [];
 }
 
+export async function updateReferralFields(id, updates) {
+  const res = await fetch(`${API_BASE}/local/referrals/update/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(updates),
+  });
 
+  if (!res.ok) {
+    const txt = await res.text();
+    throw new Error(`Failed to update referral: ${txt}`);
+  }
 
+  return res.json();
+}
+
+export async function removeReferralFields(id) {
+  const res = await fetch(`${API_BASE}/local/referrals/${id}/remove`, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+  });
+
+  if (!res.ok) {
+    const txt = await res.text();
+    throw new Error(`Failed to remove referral: ${txt}`);
+  }
+  return true;
+}
 
 export async function listArchivedSubmissions(opts = {}) {
   const user = getCurrentUser();
