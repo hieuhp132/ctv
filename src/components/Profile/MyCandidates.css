@@ -45,6 +45,13 @@
   border: 1px solid #e5e7eb;
 }
 
+.filter-wrapper {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  width: "fit-content";
+}
+
 .filter-item {
   display: flex;
   align-items: center;
