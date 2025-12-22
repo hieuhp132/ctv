@@ -371,3 +371,17 @@ h3 {
     -webkit-appearance: none;
   }
 }
+
+.ql-editor ul {
+  list-style-type: disc !important;
+  padding-left: 1.5em;
+}
+
+.ql-editor ol {
+  list-style-type: decimal !important;
+  padding-left: 1.5em;
+}
+
+.ql-editor li {
+  margin-bottom: 0.4em;
+}
