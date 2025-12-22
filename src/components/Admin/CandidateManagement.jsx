@@ -23,11 +23,23 @@ const PAGE_SIZE = 10;
 const sortData = (data, { key, direction }) => {
   if (!key || !direction) return data;
   return [...data].sort((a, b) => {
-    const av = a[key];
-    const bv = b[key];
+    let av = a[key];
+    let bv = b[key];
+
+    // Convert thời gian sang Date nếu có thể
+    if (key.toLowerCase().includes("time") || key.toLowerCase().includes("date") || key === "updatedAt") {
+      av = av ? new Date(av).getTime() : 0;
+      bv = bv ? new Date(bv).getTime() : 0;
+    }
+
+    // null/undefined luôn xuống cuối
     if (av == null) return 1;
     if (bv == null) return -1;
+
+    // Nếu là số, sort số
     if (!isNaN(av) && !isNaN(bv)) return direction === "asc" ? av - bv : bv - av;
+
+    // Mặc định sort string
     return direction === "asc"
       ? String(av).localeCompare(String(bv))
       : String(bv).localeCompare(String(av));
@@ -157,10 +169,10 @@ export default function CandidateManagement() {
 
   /* ================= SORT HANDLER ================= */
   const toggleSort = (key) => {
-    setSortConfig((p) => {
-      if (p.key !== key) return { key, direction: "asc" };
-      if (p.direction === "asc") return { key, direction: "desc" };
-      return { key: "", direction: "" };
+    setSortConfig((prev) => {
+      if (prev.key !== key) return { key, direction: "asc" };
+      if (prev.direction === "asc") return { key, direction: "desc" };
+      return { key: "", direction: "" }; // reset sort
     });
   };
   const sortIcon = (key) =>
