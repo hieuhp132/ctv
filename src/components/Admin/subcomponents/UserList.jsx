@@ -11,7 +11,7 @@ export default function UserList() {
       try {
         const res = await getUsersListL();
         console.log(res);
-        setUserList(Array.isArray(res?.data) ? res.data : []);
+        setUserList(Array.isArray(res) ? res : []);
       } catch (error) {
         setUserList([]);
       }
