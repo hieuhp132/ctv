@@ -309,6 +309,50 @@ export default function HomePage() {
         <a href="https://m.me/anttechasia"><img src={fbIcon} alt="FB" className="logo-img"/></a>
         <a href="https://t.me/anttechasia"><img src={teleIcon} alt="Telegram" className="logo-img"/></a>
       </div>
+      {/* ================= MOBILE MENU ================= */}
+      {menuOpen && (
+        <div className="mobile-menu" onClick={() => setMenuOpen(false)}>
+          <div
+            className="mobile-menu-panel"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="mobile-close"
+              onClick={() => setMenuOpen(false)}
+            >
+              ×
+            </button>
+
+            <a href="#about" onClick={() => setMenuOpen(false)}>About</a>
+            <a href="#features" onClick={() => setMenuOpen(false)}>Solutions</a>
+            <a href="#process" onClick={() => setMenuOpen(false)}>Process</a>
+            <a href="#jobs" onClick={() => setMenuOpen(false)}>Jobs</a>
+            <a href="#faq" onClick={() => setMenuOpen(false)}>FAQ</a>
+
+            {/* AUTH SECTION */}
+            <div className="mobile-auth">
+              {!user ? (
+                <>
+                  <Link to="/login" onClick={() => setMenuOpen(false)}>
+                    Login
+                  </Link>
+                  <Link to="/signup" onClick={() => setMenuOpen(false)}>
+                    Register
+                  </Link>
+                </>
+              ) : (
+                <Link
+                  to={user.role === "admin" ? "/admin" : "/dashboard"}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Go to Dashboard
+                </Link>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
