@@ -197,8 +197,12 @@ export default function CandidateManagement() {
               <th onClick={() => toggleSort("recruiter")}>CTV {sortIcon("recruiter")}</th>
               <th>Email</th>
               <th onClick={() => toggleSort("status")}>Status {sortIcon("status")}</th>
+              <th>Phone</th>
+              <th>CV</th>
+              <th>LinkedIn</th> 
               <th onClick={() => toggleSort("bonus")}>Bonus {sortIcon("bonus")}</th>
               {isActive && <th>Actions</th>}
+              <th onClick={() => toggleSort("time")}>Time {sortIcon("time")}</th>
             </tr>
           </thead>
           <tbody>
@@ -225,16 +229,46 @@ export default function CandidateManagement() {
                   )}
                 </td>
                 <td>{r.bonus || 0}</td>
+                <td>{r.candidatePhone}</td>
                 <td>
-                  
-                    {isActive && (
+                  {r.cvUrl ? (
+                    <a href={r.cvUrl} target="_blank" rel="noreferrer">
+                      Link
+                    </a>
+                  ) : (
+                    "-" 
+                  )}
+                </td>
+                <td>
+                  {r.linkedin ? (
+                    <a href={r.linkedin} target="_blank" rel="noreferrer">
+                      Link
+                    </a>
+                  ) : (
+                    "-" 
+                  )}
+                </td>
+                <td>
+                  {r.portfolio ? (
+                    <a href={r.portfolio} target="_blank" rel="noreferrer">
+                      Link
+                    </a>
+                  ) : (
+                    "-" 
+                  )}
+                </td>
+                <td>
+                  {new Date(r.updatedAt).toLocaleString()}
+                </td>
+                <td>{r.bonus || 0}</td>
+                {isActive && <td>                  
+                    (
                       <div className="buttons">
                         <button onClick={() => handleUpdate(r._id)}>Update</button>
                         <button onClick={() => handleRemove(r._id)}>Remove</button>
                       </div>
-                    )}
-                  
-                </td>
+                    )                  
+                </td>}
               </tr>
             ))}
             {!data.length && (
