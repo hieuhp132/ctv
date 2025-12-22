@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchSavedJobs } from "../../api";
+import { fetchSavedJobsL } from "../../api";
 import { useAuth } from "../../context/AuthContext";
 import Icons from "../Icons";
 // import "./SavedJobs.css";
