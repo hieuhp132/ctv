@@ -154,7 +154,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Top Jobs */}
+      {/* Top Jobs
       <section className="topjobs-section">
         <div className="homepage-container">
           <h1 className="homepage-section-title">Top Jobs</h1>
@@ -175,7 +175,7 @@ export default function HomePage() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Blog and Clients */}
       <section className="about-section" id="about">
