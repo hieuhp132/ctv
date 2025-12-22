@@ -18,6 +18,15 @@ export async function getUsersList() {
   return await res.json(); 
 }
 
+export async function getUsersListL() {
+  const res = await fetch(`${API_BASE}/local/users`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  });
+  if (!res.ok) throw new Error('[Client]: Failed get local userlist');
+  return await res.json();
+}
+
 // Save job for user
 // Unsave job for user
 export async function unsaveJob(jobId, userId) {

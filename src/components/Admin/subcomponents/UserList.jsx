@@ -9,7 +9,8 @@ export default function UserList() {
   useEffect(() => {
     const fetchUserList = async () => {
       try {
-        const res = await getUsersList();
+        const res = await getUsersListL();
+        console.log(res);
         setUserList(Array.isArray(res?.data) ? res.data : []);
       } catch (error) {
         setUserList([]);
