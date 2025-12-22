@@ -1,65 +1,70 @@
-import { useEffect, useState } from "react";
-import { getUsersListL, resetPasswordL, removeUserByIdL } from "../../../api";
-import "./UserList.css";
-
 export default function UserList() {
   const [userList, setUserList] = useState([]);
-  const [passwordInputs, setPasswordInputs] = useState({}); // Lưu mật khẩu nhập cho từng user
+  const [passwordInputs, setPasswordInputs] = useState({});
 
   useEffect(() => {
     const fetchUserList = async () => {
       try {
         const res = await getUsersListL();
-        console.log(res);
         setUserList(Array.isArray(res) ? res : []);
-      } catch (error) {
+      } catch {
         setUserList([]);
       }
     };
-
     fetchUserList();
   }, []);
 
   const handleDelete = async (userId) => {
-    if (!window.confirm("Areee you sure you want to delete this user?")) return;
+    if (!window.confirm("Are you sure you want to delete this user?")) return;
 
     try {
       await removeUserByIdL({ id: userId });
-      setUserList((prev) => prev.filter((user) => user.id !== userId));
+      setUserList(prev => prev.filter(u => u._id !== userId));
       alert("User deleted successfully");
-    } catch (err) {
-      console.error("Delete error:", err);
+    } catch {
       alert("Failed to delete user");
     }
-    
   };
 
   const handleEdit = async (user) => {
-    const newPassword = passwordInputs[user.id];
+    const newPassword = passwordInputs[user._id];
+
     if (!newPassword || newPassword.trim().length < 6) {
-      alert("Please enter a valid new password (min 6 characters)");
+      alert("Password must be at least 6 characters");
       return;
     }
 
     try {
-      await resetPasswordL({ email: user.email, password: newPassword });
+      await resetPasswordL({
+        email: user.email,
+        newPassword
+      });
+
       alert(`Password for ${user.email} reset successfully`);
-      setPasswordInputs((prev) => ({ ...prev, [user.id]: "" })); // clear input
+
+      setPasswordInputs(prev => ({
+        ...prev,
+        [user._id]: ""
+      }));
     } catch (err) {
-      alert("Error: " + err.message);
+      alert("Reset failed");
     }
   };
 
   const handlePasswordChange = (userId, value) => {
-    setPasswordInputs((prev) => ({ ...prev, [userId]: value }));
+    setPasswordInputs(prev => ({
+      ...prev,
+      [userId]: value
+    }));
   };
 
   return (
     <>
       <h2 style={{ marginTop: 50 }}>Users List:</h2>
+
       <div className="user-list">
-        {userList.map((u, index) => (
-          <div key={u.id || index} className="user-card">
+        {userList.map(u => (
+          <div key={u._id} className="user-card">
             <div><strong>Name:</strong> {u.name || "-"}</div>
             <div><strong>Email:</strong> {u.email || "-"}</div>
             <div><strong>Role:</strong> {u.role || "-"}</div>
@@ -69,15 +74,24 @@ export default function UserList() {
               <input
                 type="password"
                 placeholder="Enter new password"
-                value={passwordInputs[u.id] || ""}
-                onChange={(e) => handlePasswordChange(u.id, e.target.value)}
+                value={passwordInputs[u._id] || ""}
+                onChange={(e) =>
+                  handlePasswordChange(u._id, e.target.value)
+                }
                 className="password-input"
               />
             </div>
 
             <div className="user-actions">
-              <button onClick={() => handleEdit(u)}>Reset Password</button>
-              <button onClick={() => handleDelete(u.id)} className="danger">Delete</button>
+              <button onClick={() => handleEdit(u)}>
+                Reset Password
+              </button>
+              <button
+                onClick={() => handleDelete(u._id)}
+                className="danger"
+              >
+                Delete
+              </button>
             </div>
           </div>
         ))}
