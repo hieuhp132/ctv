@@ -394,9 +394,9 @@ export default function AdminDashboard() {
         : [],
       jobsdetail: {
         description: jobForm.description,
-        requirements: jobForm.requirements,
+        requirements: jobForm.requirements || jobForm.requirement,
         benefits: jobForm.benefits,
-        other: jobForm.other,
+        other: jobForm.other || other,
       },
     };
 
