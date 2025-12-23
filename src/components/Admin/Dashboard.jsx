@@ -285,11 +285,12 @@ export default function AdminDashboard() {
         ? jobForm.keywords.split(",").map(k => k.trim()).filter(Boolean)
         : [],
       jobsdetail: {
-        description: jobForm.description,
-        requirements: jobForm.requirements || jobForm.requirement,
-        benefits: jobForm.benefits,
-        other: jobForm.other || other,
+        description: jobForm.description || "",
+        requirement: jobForm.requirements || "",
+        benefits: jobForm.benefits || "",
+        other: jobForm.other || "",
       },
+
     };
     console.log("Form data prepared for submission:", jobForm);
     console.log("Submitting job form with payload:", payload);
@@ -479,6 +480,22 @@ const updateJobAndUI = async (jobId, patch) => {
   const displayedInactiveJobs = inactiveJobs.slice(inactiveStart, inactiveStart + jobsPerPage);
 
 
+  const normalizeJobsDetail = (job = {}) => {
+  const jd = job.jobsdetail || {};
+  return {
+      description: jd.description || job.description || "",
+      benefits: jd.benefits || job.benefits || "",
+      requirements:
+        jd.requirement ||
+        jd.requirements ||
+        job.requirement ||
+        job.requirements ||
+        "",
+      other: jd.other || job.other || "",
+    };
+  };
+
+
 const handleSaveUnsaveJob = async (job) => {
   if (!adminId) return;
 
@@ -577,15 +594,36 @@ const handleSaveUnsaveJob = async (job) => {
           <button
             onClick={(e) => {
               e.stopPropagation();
-              console.log(  "Editing job:", job);
+
+              console.log("Editing job:", job);
+
+              const jd = normalizeJobsDetail(job);
+
               setEditingJob(job);
               setJobForm({
-                ...job,
+                title: job.title || "",
+                company: job.company || "",
+                location: job.location || "",
+                salary: job.salary || "",
+                bonus: job.bonus || "",
+                rewardCandidateUSD: job.rewardCandidateUSD,
+                rewardInterviewUSD: job.rewardInterviewUSD,
+                vacancies: job.vacancies,
+                applicants: job.applicants,
+                deadline: job.deadline || "",
+                status: job.status || "Active",
                 keywords: job.keywords?.join(", ") || "",
-                ...job.jobsdetail,
+
+                // 👇 QUAN TRỌNG
+                description: jd.description,
+                requirements: jd.requirements,
+                benefits: jd.benefits,
+                other: jd.other,
               });
+
               setShowJobModal(true);
             }}
+
           >
             Edit
           </button>
