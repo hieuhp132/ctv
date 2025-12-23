@@ -147,13 +147,13 @@ export default function JobDetail() {
           )}
           {section(
             "Required Skills and Experience",
-            job.jobsdetail?.requirements || "<p>No requirements listed</p>" || job.jobsdetail?.requirement
+            job.jobsdetail?.requirements || job.jobsdetail?.requirement || "<p>No requirements listed</p>" 
           )}
           {section(
             "Why Candidate should apply this position",
             job.jobsdetail?.benefits || "<p>No benefits listed</p>"
           )}
-          {section("Other", job.jobsdetail?.other || "<p>No specific notice</p>" || job.other)}
+          {section("Other", job.jobsdetail?.other || job.other || "<p>No specific notice</p>")}
         </div>
 
         {/* RIGHT SIDEBAR */}
