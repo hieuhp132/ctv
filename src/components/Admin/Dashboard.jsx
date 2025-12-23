@@ -199,46 +199,7 @@ export default function AdminDashboard() {
     setShowJobModal(true);
   };
 
- const openEditJob = (job) => {
-  console.log("Editing job:", job);
 
-  const jd = job.jobsdetail || {};
-
-  setEditingJob(job);
-  setJobForm({
-    title: job.title || "",
-    company: job.company || "",
-    location: job.location || "",
-    salary: job.salary || "",
-    bonus: job.bonus || "",
-    rewardCandidateUSD: job.rewardCandidateUSD || 0,
-    rewardInterviewUSD: job.rewardInterviewUSD || 0,
-    vacancies: job.vacancies || 1,
-    applicants: job.applicants || 0,
-    deadline: job.deadline || "",
-    status: job.status || "Active",
-
-    // ✅ LẤY TỪ jobsdetail
-    description: convertDataSizeToStyle(
-      normalizeQuillSavedHtml(jd.description || "")
-    ),
-    requirements: convertDataSizeToStyle(
-      normalizeQuillSavedHtml(jd.requirements || "")
-    ),
-    benefits: convertDataSizeToStyle(
-      normalizeQuillSavedHtml(jd.benefits || "")
-    ),
-    other: convertDataSizeToStyle(
-      normalizeQuillSavedHtml(jd.other || "")
-    ),
-
-    keywords: Array.isArray(job.keywords)
-      ? job.keywords.join(", ")
-      : "",
-  });
-
-  setShowJobModal(true);
-};
 
 
   const closeJobModal = () => setShowJobModal(false);
@@ -263,61 +224,6 @@ export default function AdminDashboard() {
     return html;
   }
 
-  // Convert inline style font-size (e.g. <span style="font-size:18px">) into
-  // <span class="ql-size" data-size="18px"> so your backend sees data-size markup.
-  // This preserves the text and other attributes.
-  function convertStyleSizeToDataSize(html) {
-    if (!html || typeof html !== "string") return html;
-
-    // Replace style="font-size: 18px;" or style="font-size:18px" etc.
-    // Keeps other style rules intact (we only extract font-size and remove it from style).
-    return html.replace(/<span\b([^>]*)style\s*=\s*"(.*?)"([^>]*)>/gi, (match, preAttrs1, styleContent, postAttrs1) => {
-      // find font-size in styleContent
-      const fontSizeMatch = styleContent.match(/font-size\s*:\s*([^;]+)\s*;?/i);
-      if (!fontSizeMatch) {
-        // no font-size -> return original span
-        return match;
-      }
-      const fontSizeValue = fontSizeMatch[1].trim();
-
-      // remove font-size declaration from styleContent
-      const newStyle = styleContent.replace(/font-size\s*:\s*([^;]+)\s*;?/i, "").trim();
-
-      // Build new attributes: keep existing attributes but remove the original style attr and add remaining style if any.
-      // We need to reconstruct attributes carefully.
-      // Merge preAttrs1 and postAttrs1 and drop style attr...
-      const otherAttrs = (preAttrs1 + " " + postAttrs1).trim();
-
-      // Build remaining style attribute if any
-      const styleAttr = newStyle ? ` style="${newStyle}"` : "";
-
-      // Add class "ql-size" and data-size attribute
-      // Keep otherAttrs as-is (they may already include class or other attributes).
-      // If otherAttrs already contains class attribute, we append ql-size to it; otherwise, add class="ql-size".
-      let attrs = otherAttrs;
-
-      // normalize spacing
-      attrs = attrs.replace(/\s+/g, " ").trim();
-
-      // Check for existing class=""
-      const classMatch = attrs.match(/class\s*=\s*"(.*?)"/i);
-      if (classMatch) {
-        // append ql-size to existing classes
-        const classes = classMatch[1] ? classMatch[1].trim() : "";
-        const newClasses = (classes + " ql-size").trim();
-        attrs = attrs.replace(/class\s*=\s*"(.*?)"/i, `class="${newClasses}"`);
-      } else {
-        // add class attribute
-        attrs = (attrs ? attrs + ' ' : '') + `class="ql-size"`;
-      }
-
-      // Remove any stray style attr from attrs (we already handled it)
-      attrs = attrs.replace(/\s*style\s*=\s*"(.*?)"/i, "").trim();
-
-      // Reconstruct the span tag
-      return `<span ${attrs}${styleAttr} data-size="${fontSizeValue}">`;
-    });
-  }
 
   // Convert stored data-size markup back into inline style font-size so Quill's
   // style-based size attributor (registered above) recognizes and displays it
@@ -357,21 +263,7 @@ export default function AdminDashboard() {
     });
   }
 
-  // Ensure lists are safe for Quill editor: convert any <ol> to <ul>
-  // and remove data-list attributes from <li> so Quill renders bullets
-  // based on the parent tag instead of any stray attributes.
-  function sanitizeListsForEditor(html) {
-    if (!html || typeof html !== "string") return html;
 
-    // Convert <ol ...> to <ul ...>
-    let out = html.replace(/<ol(.*?)>/gi, "<ul$1>").replace(/<\/ol>/gi, "</ul>");
-
-    // Remove data-list attributes from li (e.g. data-list="bullet")
-    out = out.replace(/<li\b([^>]*)\sdata-list\s*=\s*"[^"]*"([^>]*)>/gi, "<li$1$2>");
-    out = out.replace(/<li\b([^>]*)\sdata-list\s*=\s*'[^']*'([^>]*)>/gi, "<li$1$2>");
-
-    return out;
-  }
 
   /* ================= CREATE / UPDATE ================= */
   const submitJobForm = async (e) => {
@@ -415,29 +307,7 @@ export default function AdminDashboard() {
     }
   };
 
-  const refresh = async () => {
-    try {
-      const [js, bal] = await Promise.all([
-        fetchAllJobs(),
-        getBalances(),
-      ]);
-      const sortedJobs = [...(js.jobs || [])].sort(
-        (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-      );
-      setJobs(sortedJobs);
-      setBalancesState(bal);
 
-      if (user?.id || user?.email) {
-        setSavedJobs(
-          (js.jobs || []).filter(
-            (j) => Array.isArray(j.savedBy) && j.savedBy.includes(user.id || user.email)
-          )
-        );
-      }
-    } catch (err) {
-      console.error("Failed to refresh data:", err);
-    }
-  };
   const asArray = (v) => (Array.isArray(v) ? v : []);
 
   useEffect(() => {
@@ -707,6 +577,7 @@ const handleSaveUnsaveJob = async (job) => {
           <button
             onClick={(e) => {
               e.stopPropagation();
+              console.log(  "Editing job:", job);
               setEditingJob(job);
               setJobForm({
                 ...job,

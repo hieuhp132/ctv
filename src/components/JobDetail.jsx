@@ -147,7 +147,7 @@ export default function JobDetail() {
           )}
           {section(
             "Required Skills and Experience",
-            job.jobsdetail?.requirements || job.jobsdetail?.requirement || "<p>No requirements listed</p>" 
+            job.jobsdetail?.requirements || job.jobsdetail?.requirement || job.requirement || "<p>No requirements listed</p>" 
           )}
           {section(
             "Why Candidate should apply this position",
