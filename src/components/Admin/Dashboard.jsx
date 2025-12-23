@@ -399,6 +399,8 @@ export default function AdminDashboard() {
         other: jobForm.other || other,
       },
     };
+    console.log("Form data prepared for submission:", jobForm);
+    console.log("Submitting job form with payload:", payload);
 
     try {
       if (editingJob) {
