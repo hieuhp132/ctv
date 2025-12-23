@@ -199,33 +199,47 @@ export default function AdminDashboard() {
     setShowJobModal(true);
   };
 
-  const openEditJob = (job) => {
-    console.log("Editing job:", job);
-    setEditingJob(job);
-    setJobForm({
-      title: job.title || "",
-      company: job.company || "",
-      location: job.location || "",
-      salary: job.salary || "",
-      bonus: job.bonus || "",
-      rewardCandidateUSD: job.rewardCandidateUSD,
-      rewardInterviewUSD: job.rewardInterviewUSD,
-      vacancies: job.vacancies,
-      applicants: job.applicants,
-      deadline: job.deadline || "",
-      status: job.status || "Active",
-      // If backend stores data-size markup or legacy <ol> with data-list="bullet",
-      // convert list markup to <ul> and convert data-size into inline style so
-      // the Quill editor (which uses style-based size attributor) displays sizes
-      // correctly and shows bullets rather than numeric markers.
-      description: convertDataSizeToStyle(normalizeQuillSavedHtml(job.jobsdetail.description || "")),
-      requirements: convertDataSizeToStyle(normalizeQuillSavedHtml(job.jobsdetail.requirements || "")),
-      benefits: convertDataSizeToStyle(normalizeQuillSavedHtml(job.jobsdetail.benefits || "")),
-      other: convertDataSizeToStyle(normalizeQuillSavedHtml(job.jobsdetail.other || "")),
-      keywords: Array.isArray(job.keywords) ? job.keywords.join(", ") : "",
-    });
-    setShowJobModal(true);
-  };
+ const openEditJob = (job) => {
+  console.log("Editing job:", job);
+
+  const jd = job.jobsdetail || {};
+
+  setEditingJob(job);
+  setJobForm({
+    title: job.title || "",
+    company: job.company || "",
+    location: job.location || "",
+    salary: job.salary || "",
+    bonus: job.bonus || "",
+    rewardCandidateUSD: job.rewardCandidateUSD || 0,
+    rewardInterviewUSD: job.rewardInterviewUSD || 0,
+    vacancies: job.vacancies || 1,
+    applicants: job.applicants || 0,
+    deadline: job.deadline || "",
+    status: job.status || "Active",
+
+    // ✅ LẤY TỪ jobsdetail
+    description: convertDataSizeToStyle(
+      normalizeQuillSavedHtml(jd.description || "")
+    ),
+    requirements: convertDataSizeToStyle(
+      normalizeQuillSavedHtml(jd.requirements || "")
+    ),
+    benefits: convertDataSizeToStyle(
+      normalizeQuillSavedHtml(jd.benefits || "")
+    ),
+    other: convertDataSizeToStyle(
+      normalizeQuillSavedHtml(jd.other || "")
+    ),
+
+    keywords: Array.isArray(job.keywords)
+      ? job.keywords.join(", ")
+      : "",
+  });
+
+  setShowJobModal(true);
+};
+
 
   const closeJobModal = () => setShowJobModal(false);
 
@@ -359,46 +373,64 @@ export default function AdminDashboard() {
     return out;
   }
 
-  const submitJobForm = async (e) => {
-    e.preventDefault();
+const submitJobForm = async (e) => {
+  e.preventDefault();
 
-    const formattedJobForm = {
-      ...jobForm,
-      salary: jobForm.salary?.trim() || "N/A",
-      keywords:
-        typeof jobForm.keywords === "string"
-          ? jobForm.keywords
-              .split(",")
-              .map((k) => k.trim())
-              .filter(Boolean)
-          : [],
-    };
-
-    formattedJobForm.description = normalizeQuillSavedHtml(formattedJobForm.description);
-    formattedJobForm.requirements = normalizeQuillSavedHtml(formattedJobForm.requirements);
-    formattedJobForm.benefits = normalizeQuillSavedHtml(formattedJobForm.benefits);
-    formattedJobForm.other = normalizeQuillSavedHtml(formattedJobForm.other);
-
-    // Convert style-based font-size into data-size markup for storage consistency
-    formattedJobForm.description = convertStyleSizeToDataSize(formattedJobForm.description);
-    formattedJobForm.requirements = convertStyleSizeToDataSize(formattedJobForm.requirements);
-    formattedJobForm.benefits = convertStyleSizeToDataSize(formattedJobForm.benefits);
-    formattedJobForm.other = convertStyleSizeToDataSize(formattedJobForm.other);
-
-    try {
-      if (editingJob) {
-        await updateJobL({ ...editingJob, ...formattedJobForm });
-      } else {
-        await createJobL(formattedJobForm);
-      }
-
-      closeJobModal();
-      await refresh();
-    } catch (err) {
-      console.error("Failed to save job:", err);
-      alert("Failed to save job. Check console for details.");
-    }
+  const jobsdetail = {
+    description: convertStyleSizeToDataSize(
+      normalizeQuillSavedHtml(jobForm.description)
+    ),
+    requirements: convertStyleSizeToDataSize(
+      normalizeQuillSavedHtml(jobForm.requirements)
+    ),
+    benefits: convertStyleSizeToDataSize(
+      normalizeQuillSavedHtml(jobForm.benefits)
+    ),
+    other: convertStyleSizeToDataSize(
+      normalizeQuillSavedHtml(jobForm.other)
+    ),
   };
+
+  const payload = {
+    ...(editingJob || {}),
+    title: jobForm.title,
+    company: jobForm.company,
+    location: jobForm.location,
+    salary: jobForm.salary?.trim() || "N/A",
+    bonus: jobForm.bonus,
+    rewardCandidateUSD: jobForm.rewardCandidateUSD,
+    rewardInterviewUSD: jobForm.rewardInterviewUSD,
+    vacancies: jobForm.vacancies,
+    applicants: jobForm.applicants,
+    deadline: jobForm.deadline,
+    status: jobForm.status,
+    keywords:
+      typeof jobForm.keywords === "string"
+        ? jobForm.keywords.split(",").map(k => k.trim()).filter(Boolean)
+        : [],
+
+    // 🔥 CHUẨN
+    jobsdetail,
+  };
+
+  // ❌ ĐẢM BẢO KHÔNG GỬI FIELD PHẲNG
+  delete payload.description;
+  delete payload.requirements;
+  delete payload.benefits;
+  delete payload.other;
+
+  try {
+    editingJob
+      ? await updateJobL(payload)
+      : await createJobL(payload);
+
+    closeJobModal();
+    await refresh();
+  } catch (err) {
+    console.error("Failed to save job:", err);
+    alert("Failed to save job");
+  }
+};
 
   const refresh = async () => {
     try {
@@ -504,31 +536,37 @@ export default function AdminDashboard() {
     });
     return Array.from(m.values());
   }, [jobs]);
+
   const filteredJobs = React.useMemo(() => {
-    const text = searchText.toLowerCase().trim();
-    return jobs.filter((job) => {
-      const searchableText = [
-        job.title || "",
-        job.company || "",
-        job.location || "",
-        Array.isArray(job.keywords) ? job.keywords.join(" ") : job.keywords || "",
-        (job.description || "").replace(/<[^>]*>/g, " "),
-        (job.requirements || "").replace(/<[^>]*>/g, " "),
-      ]
-        .join(" ")
-        .toLowerCase();
-      const matchSearch = text === "" || searchableText.includes(text);
-      const matchLocation = filterLocation === "" || job.location === filterLocation;
-      const matchCompany = filterCompany === "" || job.company === filterCompany;
-      let matchCategory = true;
-      if (filterCategory) {
-        const title = (job.title || "").toLowerCase();
-        const keywords = CATEGORY_KEYWORDS[filterCategory] || [];
-        matchCategory = keywords.some((kw) => title.includes(kw));
-      }
-      return matchSearch && matchLocation && matchCompany && matchCategory;
-    });
-  }, [jobs, searchText, filterLocation, filterCompany, filterCategory]);
+  const text = searchText.toLowerCase().trim();
+
+  return jobs.filter((job) => {
+    const searchableText = [
+      job.title || "",
+      job.company || "",
+      job.location || "",
+      Array.isArray(job.keywords) ? job.keywords.join(" ") : "",
+      (job.jobsdetail?.description || "").replace(/<[^>]*>/g, " "),
+      (job.jobsdetail?.requirements || "").replace(/<[^>]*>/g, " "),
+    ]
+      .join(" ")
+      .toLowerCase();
+
+    const matchSearch = !text || searchableText.includes(text);
+    const matchLocation = !filterLocation || job.location === filterLocation;
+    const matchCompany = !filterCompany || job.company === filterCompany;
+
+    let matchCategory = true;
+    if (filterCategory) {
+      const title = (job.title || "").toLowerCase();
+      const kws = CATEGORY_KEYWORDS[filterCategory] || [];
+      matchCategory = kws.some((kw) => title.includes(kw));
+    }
+
+    return matchSearch && matchLocation && matchCompany && matchCategory;
+  });
+}, [jobs, searchText, filterLocation, filterCompany, filterCategory]);
+
 
     const locationOptions = React.useMemo(
       () => uniqueLocations.map(loc => ({ value: loc, label: loc })),
