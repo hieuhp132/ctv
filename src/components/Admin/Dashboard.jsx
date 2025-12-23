@@ -643,7 +643,7 @@ export default function AdminDashboard() {
 
         <div className="reward-line">
           <span className="reward-badge">USD {job.rewardCandidateUSD} / Headhunter</span>
-          <span className="reward-badge secondary">+USD {job.rewardInterviewUSD} / Interview</span>
+          <span className="reward-badge secondary"> {job.rewardInterviewUSD} / Interview</span>
           <span className="job-bonus">+USD {job.bonus}</span>
         </div>
 
@@ -652,6 +652,7 @@ export default function AdminDashboard() {
           <button
             onClick={(e) => {
               e.stopPropagation();
+              console.log("Editing job:", job);
               openEditJob(job);
             }}
             disabled={isInactive}
