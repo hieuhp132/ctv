@@ -373,65 +373,45 @@ export default function AdminDashboard() {
     return out;
   }
 
-const submitJobForm = async (e) => {
-  e.preventDefault();
-  if(!window.confirm(`${editingJob ? "Save changes to" : "Create new"} job "${jobForm.title}"?`)) return;
+  /* ================= CREATE / UPDATE ================= */
+  const submitJobForm = async (e) => {
+    e.preventDefault();
 
-  const jobsdetail = {
-    description: convertStyleSizeToDataSize(
-      normalizeQuillSavedHtml(jobForm.description)
-    ),
-    requirements: convertStyleSizeToDataSize(
-      normalizeQuillSavedHtml(jobForm.requirements)
-    ),
-    benefits: convertStyleSizeToDataSize(
-      normalizeQuillSavedHtml(jobForm.benefits)
-    ),
-    other: convertStyleSizeToDataSize(
-      normalizeQuillSavedHtml(jobForm.other)
-    ),
-  };
-
-  const payload = {
-    ...(editingJob || {}),
-    title: jobForm.title,
-    company: jobForm.company,
-    location: jobForm.location,
-    salary: jobForm.salary?.trim() || "N/A",
-    bonus: jobForm.bonus,
-    rewardCandidateUSD: jobForm.rewardCandidateUSD,
-    rewardInterviewUSD: jobForm.rewardInterviewUSD,
-    vacancies: jobForm.vacancies,
-    applicants: jobForm.applicants,
-    deadline: jobForm.deadline,
-    status: jobForm.status,
-    keywords:
-      typeof jobForm.keywords === "string"
+    const payload = {
+      title: jobForm.title,
+      company: jobForm.company,
+      location: jobForm.location,
+      salary: jobForm.salary || "N/A",
+      bonus: jobForm.bonus,
+      rewardCandidateUSD: jobForm.rewardCandidateUSD,
+      rewardInterviewUSD: jobForm.rewardInterviewUSD,
+      vacancies: jobForm.vacancies,
+      applicants: jobForm.applicants,
+      deadline: jobForm.deadline,
+      status: jobForm.status,
+      keywords: jobForm.keywords
         ? jobForm.keywords.split(",").map(k => k.trim()).filter(Boolean)
         : [],
+      jobsdetail: {
+        description: jobForm.description,
+        requirements: jobForm.requirements,
+        benefits: jobForm.benefits,
+        other: jobForm.other,
+      },
+    };
 
-    // 🔥 CHUẨN
-    jobsdetail,
+    try {
+      if (editingJob) {
+        await updateJobAndUI(editingJob._id, payload);
+      } else {
+        const created = await createJobL(payload);
+        setJobs(prev => [created, ...prev]);
+      }
+      setShowJobModal(false);
+    } catch {
+      alert("Save job failed");
+    }
   };
-
-  // ❌ ĐẢM BẢO KHÔNG GỬI FIELD PHẲNG
-  delete payload.description;
-  delete payload.requirements;
-  delete payload.benefits;
-  delete payload.other;
-
-  try {
-    editingJob
-      ? await updateJobL(payload)
-      : await createJobL(payload);
-
-    closeJobModal();
-    await refresh();
-  } catch (err) {
-    console.error("Failed to save job:", err);
-    alert("Failed to save job");
-  }
-};
 
   const refresh = async () => {
     try {
@@ -489,14 +469,37 @@ const submitJobForm = async (e) => {
 
   const removeJob = async (job) => {
     if (!window.confirm(`Delete job ${job.title}?`)) return;
+
     try {
       await deleteJobL(job._id);
-      await refresh();
-    } catch (err) {
-      console.error("Failed to delete job:", err);
+
+      // ✅ REMOVE NGAY
+      setJobs(prev => prev.filter(j => j._id !== job._id));
+
+    } catch {
       alert("Failed to delete job");
     }
   };
+
+const updateJobAndUI = async (jobId, patch) => {
+  try {
+    const updatedJob = await updateJobL({ _id: jobId, ...patch });
+
+    // ✅ UPDATE UI NGAY LẬP TỨC
+    setJobs(prev =>
+      prev.map(j =>
+        j._id === jobId
+          ? { ...j, ...patch }
+          : j
+      )
+    );
+
+    return updatedJob;
+  } catch (err) {
+    console.error("Update job failed:", err);
+    throw err;
+  }
+};
 
 
 
@@ -604,26 +607,36 @@ const submitJobForm = async (e) => {
   const displayedInactiveJobs = inactiveJobs.slice(inactiveStart, inactiveStart + jobsPerPage);
 
 
-    const handleSaveUnsaveJob = async (job) => {
-      if (!adminId) return;
-      if(!window.confirm(`${job.isSaved ? "Unsave" : "Save"} job "${job.title}"?`)) return;
-      try {
-        const newSet = new Set(savedJobIds);
-        if (job.isSaved) {
-          await unsaveJobL(job._id, adminId);
-          newSet.delete(job._id);
-        } else {
-          await saveJobL(job._id, adminId);
-          newSet.add(job._id);
-        }
-        setSavedJobIds(newSet);
-        setJobs((prev) =>
-          prev.map((j) => (j._id === job._id ? { ...j, isSaved: !job.isSaved } : j))
-        );
-      } catch {
-        alert("Save job failed");
-      }
-    };
+const handleSaveUnsaveJob = async (job) => {
+  if (!adminId) return;
+
+  try {
+    if (job.isSaved) {
+      await unsaveJobL(job._id, adminId);
+    } else {
+      await saveJobL(job._id, adminId);
+    }
+
+    // ✅ UPDATE UI NGAY
+    setJobs(prev =>
+      prev.map(j =>
+        j._id === job._id
+          ? { ...j, isSaved: !job.isSaved }
+          : j
+      )
+    );
+
+    setSavedJobIds(prev => {
+      const next = new Set(prev);
+      job.isSaved ? next.delete(job._id) : next.add(job._id);
+      return next;
+    });
+
+  } catch (err) {
+    alert("Save job failed");
+  }
+};
+
 
   // -----------------------------------------
   // Render helpers
@@ -683,8 +696,8 @@ const submitJobForm = async (e) => {
 
         <div className="reward-line">
           <span className="reward-badge">USD {job.rewardCandidateUSD} / Headhunter</span>
-          <span className="reward-badge secondary"> {job.rewardInterviewUSD} / Interview</span>
-          <span className="job-bonus">+USD {job.bonus}</span>
+          <span className="reward-badge secondary">USD {job.rewardInterviewUSD} / Interview</span>
+          <span className="job-bonus"> {job.bonus}</span>
         </div>
 
         {/* ACTION BUTTONS */}
@@ -692,12 +705,13 @@ const submitJobForm = async (e) => {
           <button
             onClick={(e) => {
               e.stopPropagation();
-              console.log("Editing job:", job);
-              openEditJob(job);
-            }}
-            disabled={isInactive}
-            style={{
-              opacity: isInactive ? 0.5 : 1,
+              setEditingJob(job);
+              setJobForm({
+                ...job,
+                keywords: job.keywords?.join(", ") || "",
+                ...job.jobsdetail,
+              });
+              setShowJobModal(true);
             }}
           >
             Edit
@@ -714,24 +728,10 @@ const submitJobForm = async (e) => {
           </button>
 
           <button
-            style={{
-              marginLeft: 8,
-              background: job.status === "Active" ? "#ffc107" : "#28a745",
-              color: "#fff",
-              border: "none",
-              borderRadius: 4,
-              padding: "4px 10px",
-              cursor: "pointer",
-            }}
-            onClick={async (e) => {
+            onClick={(e) => {
               e.stopPropagation();
-              try {
-                await updateJobL({ ...job, status: job.status === "Active" ? "Inactive" : "Active" });
-                await refresh();
-              } catch (err) {
-                console.error("Failed to update status:", err);
-                alert("Failed to update job status");
-              }
+              const newStatus = job.status === "Active" ? "Inactive" : "Active";
+              updateJobAndUI(job._id, { status: newStatus });
             }}
           >
             {job.status === "Active" ? "Pause" : "Resume"}
