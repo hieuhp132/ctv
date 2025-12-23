@@ -375,6 +375,7 @@ export default function AdminDashboard() {
 
 const submitJobForm = async (e) => {
   e.preventDefault();
+  if(!window.confirm(`${editingJob ? "Save changes to" : "Create new"} job "${jobForm.title}"?`)) return;
 
   const jobsdetail = {
     description: convertStyleSizeToDataSize(
@@ -605,6 +606,7 @@ const submitJobForm = async (e) => {
 
     const handleSaveUnsaveJob = async (job) => {
       if (!adminId) return;
+      if(!window.confirm(`${job.isSaved ? "Unsave" : "Save"} job "${job.title}"?`)) return;
       try {
         const newSet = new Set(savedJobIds);
         if (job.isSaved) {
