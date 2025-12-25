@@ -342,7 +342,7 @@ export default function CandidateManagement() {
                     <button onClick={() => handleRemove(r._id)}>Remove</button>
                   </td>
                 )}
-                <td>{new Date(r.updatedAt).toLocaleString()}</td>
+                <td>{new Date(r.updatedAt).toLocaleString() || new Date(r.createdAt).toLocaleString() || "-"}</td>
               </tr>
             ))}
             {!data.length && (
