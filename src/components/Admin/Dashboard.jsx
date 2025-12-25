@@ -269,6 +269,9 @@ export default function AdminDashboard() {
   const submitJobForm = async (e) => {
     e.preventDefault();
 
+    console.log("Form data prepared for submission:", jobForm);
+    console.log("Submitting job form with payload:", payload);
+
     const payload = {
       title: jobForm.title,
       company: jobForm.company,
@@ -292,8 +295,7 @@ export default function AdminDashboard() {
       },
 
     };
-    console.log("Form data prepared for submission:", jobForm);
-    console.log("Submitting job form with payload:", payload);
+
 
     try {
       if (editingJob) {
