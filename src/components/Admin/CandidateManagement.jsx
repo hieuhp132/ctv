@@ -127,7 +127,6 @@ export default function CandidateManagement() {
 
     listReferrals({ id: adminId, email, isAdmin: true, limit: 1000 }).then(
       async (res = []) => {
-        console.log("Loaded referrals:", res);
         setRows(res);
 
         const statusMap = {};
@@ -342,7 +341,7 @@ export default function CandidateManagement() {
                     <button onClick={() => handleRemove(r._id)}>Remove</button>
                   </td>
                 )}
-                <td>{new Date(r.updatedAt).toLocaleString() || new Date(r.createdAt).toLocaleString() || "-"}</td>
+                <td>{new Date(r.updatedAt || r.createdAt).toLocaleString("vi-VN")}</td>
               </tr>
             ))}
             {!data.length && (
