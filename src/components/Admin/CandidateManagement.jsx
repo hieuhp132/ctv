@@ -288,7 +288,7 @@ export default function CandidateManagement() {
                 <td>{r.candidateName}</td>
                 <td>{jobMap[r.job]?.title ?? "Unknown Job"}</td>
                 <td>{recruiterMap[r.recruiter]?.email || r.recruiter || "Unknown User"}</td>
-                <td>{r.candidateEmail}</td>
+                <td>{r?.candidateEmail || "-"}</td>
                 <td>{r.candidatePhone}</td>
                 <td>
                   {r.cvUrl ? (
