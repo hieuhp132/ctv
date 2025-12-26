@@ -53,6 +53,8 @@ export default function JobDetail() {
 
   // Handle JD file upload (Admin)
   const handleFileUploadSuccess = (fileData) => {
+    console.log("id:", id);
+    console.log("fileData:", fileData);
     updateJobL(id, { jdLink: fileData.publicUrl }).then(setJob);
     setJdPublicUrl(fileData.publicUrl);
   };
