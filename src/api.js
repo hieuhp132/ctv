@@ -914,6 +914,7 @@ export async function updateJobJD(id, { jdLink, jdFileName, clearFile } = {}) {
   }
 }
 
+
 export async function resetPassword({email, password}) {
   try {
     const res = await fetch(`${API_BASE}/db/users/resetPassword`, {

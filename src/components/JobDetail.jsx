@@ -5,7 +5,7 @@ import {
   createSubmission,
   listSubmissions,
   listArchivedSubmissions,
-  updateJobJD,
+  updateJobL,
   getListFiles,
 } from "../api";
 import { useParams } from "react-router-dom";
@@ -53,7 +53,7 @@ export default function JobDetail() {
 
   // Handle JD file upload (Admin)
   const handleFileUploadSuccess = (fileData) => {
-    updateJobJD(id, { jdLink: fileData.publicUrl }).then(setJob);
+    updateJobL(id, { jdLink: fileData.publicUrl }).then(setJob);
     setJdPublicUrl(fileData.publicUrl);
   };
 
