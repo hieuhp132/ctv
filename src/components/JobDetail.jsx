@@ -2,7 +2,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import {
   getJobByIdL,
-  createSubmission,
+  createSubmissionL,
   listSubmissions,
   listArchivedSubmissions,
   updateJobL,
@@ -88,17 +88,20 @@ export default function JobDetail() {
     e.preventDefault();
     const f = e.target;
 
-    await createSubmission({
+    await createSubmissionL({
       candidateName: f[0].value,
       email: f[1].value,
       phone: f[2].value,
-      cvFile: f[3].files[0],
+
+      // backend local KHÔNG nhận file binary
+      cvUrl: "",
+
       linkedin: f[4].value,
       portfolio: f[5].value,
       suitability: f[6].value,
+
       jobId: id,
-      jobTitle: job.title,
-      ctvId,
+      recruiterId: ctvId,
       bonus: job.bonus,
     });
 
@@ -106,6 +109,7 @@ export default function JobDetail() {
     setOpen(false);
     f.reset();
   };
+
 
   // Section helper
   const section = (title, html) => (
