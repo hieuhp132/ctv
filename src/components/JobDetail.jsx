@@ -52,12 +52,21 @@ export default function JobDetail() {
   }, [job?.jdLink]);
 
   // Handle JD file upload (Admin)
-  const handleFileUploadSuccess = (fileData) => {
-    console.log("id:", id);
-    console.log("fileData:", fileData);
-    updateJobL(id, { jdLink: fileData.publicUrl }).then(setJob);
+  // Handle JD file upload (Admin)
+  const handleFileUploadSuccess = async (fileData) => {
+    const data = {
+      _id: id,                 // dùng để build URL
+      jdLink: fileData.publicUrl, // field backend cần
+    };
+
+    console.log("Updating job with:", data);
+
+    const updatedJob = await updateJobL(data);
+    setJob(updatedJob);
     setJdPublicUrl(fileData.publicUrl);
   };
+
+
 
   // Fetch submissions (Admin)
   useEffect(() => {
