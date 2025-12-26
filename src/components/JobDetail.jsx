@@ -48,7 +48,7 @@ export default function JobDetail() {
         (f) =>
           decodeURIComponent(f.publicUrl.split("/").pop()) ===
           decodeURIComponent(job.jdLink?.split("/").pop() || "")
-      );
+      ); console.log("Matched JD File:", matched);
       setJdPublicUrl(matched?.publicUrl || null);
       setFile(matched?.name || null);
     });
