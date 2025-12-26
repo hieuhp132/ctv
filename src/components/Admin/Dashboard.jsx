@@ -301,7 +301,9 @@ export default function AdminDashboard() {
       if (editingJob) {
         await updateJobAndUI(editingJob._id, payload);
       } else {
+
         const created = await createJobL(payload);
+        console.log("Created job:", created);
         setJobs(prev => [created, ...prev]);
       }
       setShowJobModal(false);
