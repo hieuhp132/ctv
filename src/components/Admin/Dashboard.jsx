@@ -270,7 +270,7 @@ export default function AdminDashboard() {
     e.preventDefault();
 
     console.log("Form data prepared for submission:", jobForm);
-    console.log("Submitting job form with payload:", payload);
+
 
     const payload = {
       title: jobForm.title,
@@ -295,7 +295,7 @@ export default function AdminDashboard() {
       },
 
     };
-
+    console.log("Submitting job form with payload:", payload);
 
     try {
       if (editingJob) {
