@@ -7,6 +7,7 @@ import {
   listArchivedSubmissions,
   updateJobL,
   getListFiles,
+  uploadFile
 } from "../api";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -27,6 +28,8 @@ export default function JobDetail() {
   const [groupedOffers, setGroupedOffers] = useState([]);
   const [jdPublicUrl, setJdPublicUrl] = useState(null);
   const [file, setFile] = useState(null);
+  const [cvFile, setCvFile] = useState(null);
+  const [uploading, setUploading] = useState(false);
 
   // Fetch job by ID
   useEffect(() => {
@@ -83,32 +86,60 @@ export default function JobDetail() {
 
   if (!job) return <p className="loading">Loading...</p>;
 
+  const uploadCV = async () => {
+    setUploading(true);
+    try {
+      const res = await uploadFile(cvFile);
+      return res?.publicUrl;
+    } finally {
+      setUploading(false);
+    }
+  };
+
+
   // Candidate submission form
   const submit = async (e) => {
     e.preventDefault();
     const f = e.target;
 
-    await createSubmissionL({
-      candidateName: f[0].value,
-      email: f[1].value,
-      phone: f[2].value,
+    if (!cvFile) {
+      alert("Please upload CV");
+      return;
+    }
 
-      // backend local KHÔNG nhận file binary
-      cvUrl: "",
+    try {
+      const cvUrl = await uploadCV();
+      if (!cvUrl) {
+        alert("Upload CV failed");
+        return;
+      }
 
-      linkedin: f[4].value,
-      portfolio: f[5].value,
-      suitability: f[6].value,
+      await createSubmissionL({
+        candidateName: f[0].value,
+        email: f[1].value,
+        phone: f[2].value,
 
-      jobId: id,
-      recruiterId: ctvId,
-      bonus: job.bonus,
-    });
+        cvUrl, // 👈 STRING URL
 
-    alert("Profile submitted successfully!");
-    setOpen(false);
-    f.reset();
+        linkedin: f[4].value,
+        portfolio: f[5].value,
+        suitability: f[6].value,
+
+        jobId: id,
+        recruiterId: ctvId,
+        bonus: job.bonus,
+      });
+
+      alert("Profile submitted successfully!");
+      setOpen(false);
+      setCvFile(null);
+      f.reset();
+    } catch (err) {
+      alert("Submit failed");
+      console.error(err);
+    }
   };
+
 
 
   // Section helper
@@ -205,7 +236,7 @@ export default function JobDetail() {
             <input required placeholder="Candidate Name" />
             <input required type="email" placeholder="Email" />
             <input required placeholder="Phone" />
-            <input required type="file" />
+            <input required type="file" accept=".pdf,.doc,.docx" onChange={(e) => setCvFile(e.target.files[0])}/>
             <input placeholder="LinkedIn URL" />
             <input placeholder="Portfolio URL" />
             <textarea rows={3} placeholder="Why suitable?" required />
