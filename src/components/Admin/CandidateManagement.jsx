@@ -275,7 +275,7 @@ export default function CandidateManagement() {
                 Status {sortIcon("status")}
               </th>
               <th>Bonus</th>
-              {isActive && <th>Actions</th>}
+              <th>Actions</th>
               <th onClick={() => toggleSort("updatedAt")}>
                 Time {sortIcon("updatedAt")}
               </th>
