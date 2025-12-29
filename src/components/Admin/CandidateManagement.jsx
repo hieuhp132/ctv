@@ -317,7 +317,7 @@ export default function CandidateManagement() {
                   )}
                 </td>
                 <td>
-                  {isActive ? (
+                  
                     <select
                       value={localStatuses[r._id] || r.status}
                       onChange={(e) =>
@@ -330,9 +330,7 @@ export default function CandidateManagement() {
                         </option>
                       ))}
                     </select>
-                  ) : (
-                    r.status
-                  )}
+                  
                 </td>
                 <td>{r.bonus || 0}</td>
                   <td>
