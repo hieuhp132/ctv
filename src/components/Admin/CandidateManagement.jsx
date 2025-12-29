@@ -335,12 +335,10 @@ export default function CandidateManagement() {
                   )}
                 </td>
                 <td>{r.bonus || 0}</td>
-                {isActive && (
                   <td>
                     <button onClick={() => handleUpdate(r._id)}>Update</button>
                     <button onClick={() => handleRemove(r._id)}>Remove</button>
                   </td>
-                )}
                 <td>{new Date(r.updatedAt || r.createdAt).toLocaleString("vi-VN")}</td>
               </tr>
             ))}
