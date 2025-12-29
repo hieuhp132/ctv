@@ -22,33 +22,6 @@ const STATUS_OPTIONS = [
 const PAGE_SIZE = 10;
 
 /* ================= HELPERS ================= */
-const sortData = (data, { key, direction }) => {
-  if (!key || !direction) return data;
-  return [...data].sort((a, b) => {
-    let av = a[key];
-    let bv = b[key];
-
-    if (
-      key.toLowerCase().includes("time") ||
-      key.toLowerCase().includes("date") ||
-      key === "updatedAt"
-    ) {
-      av = av ? new Date(av).getTime() : 0;
-      bv = bv ? new Date(bv).getTime() : 0;
-    }
-
-    if (av == null) return 1;
-    if (bv == null) return -1;
-
-    if (!isNaN(av) && !isNaN(bv))
-      return direction === "asc" ? av - bv : bv - av;
-
-    return direction === "asc"
-      ? String(av).localeCompare(String(bv))
-      : String(bv).localeCompare(String(av));
-  });
-};
-
 const paginate = (data, page) =>
   data.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
@@ -113,7 +86,10 @@ export default function CandidateManagement() {
     candidateEmail: "",
     status: "",
   });
-  const [sortConfig, setSortConfig] = useState({ key: "", direction: "" });
+  const [sortConfig, setSortConfig] = useState({
+    key: "updatedAt",
+    direction: "desc",
+  });
   const [activePage, setActivePage] = useState(1);
   const [rejectedPage, setRejectedPage] = useState(1);
 
@@ -141,38 +117,31 @@ export default function CandidateManagement() {
 
         setLocalStatuses(statusMap);
 
-        /* ===== LOAD JOBS (FIX UNWRAP) ===== */
         jobIds.forEach(async (jobId) => {
           if (jobMap[jobId]) return;
           try {
             const res = await getJobByIdL(jobId);
-            setJobMap((prev) => ({
-              ...prev,
-              [jobId]: res?.job || null, // ✅ FIX
-            }));
+            setJobMap((p) => ({ ...p, [jobId]: res?.job || null }));
           } catch {
-            setJobMap((prev) => ({
-              ...prev,
-              [jobId]: null,
-            }));
+            setJobMap((p) => ({ ...p, [jobId]: null }));
           }
         });
 
-        /* ===== LOAD RECRUITERS (FIX UNWRAP) ===== */
-       // Load Recruiter names an toàn 
-       recruiterIds.forEach(async (uid) => { 
-       if (!recruiterMap[uid]) { 
-        try { 
-          const user = await fetchProfileFromServerL(uid);
-          // console.log("Loaded recruiter:", user); 
-          setRecruiterMap((prev) => ({ ...prev, [uid]: user })); 
-        } catch (err) { 
-          console.warn("Recruiter not found:", uid); 
-          setRecruiterMap((prev) => ({ ...prev, [uid]: { name: "Unknown User" } })); 
-        } 
-      } 
-    }); });
-  }, [adminId, email]); // ❗ không phụ thuộc jobMap/recruiterMap
+        recruiterIds.forEach(async (uid) => {
+          if (recruiterMap[uid]) return;
+          try {
+            const user = await fetchProfileFromServerL(uid);
+            setRecruiterMap((p) => ({ ...p, [uid]: user }));
+          } catch {
+            setRecruiterMap((p) => ({
+              ...p,
+              [uid]: { email: "Unknown User" },
+            }));
+          }
+        });
+      }
+    );
+  }, [adminId, email]);
 
   /* ================= RESET PAGE ================= */
   useEffect(() => {
@@ -189,7 +158,7 @@ export default function CandidateManagement() {
     status: filters.status,
   };
 
-  /* ================= FILTER & SORT ================= */
+  /* ================= FILTER ================= */
   const filtered = useMemo(
     () =>
       rows.filter((r) =>
@@ -204,10 +173,38 @@ export default function CandidateManagement() {
     [rows, debouncedFilters]
   );
 
-  const sorted = useMemo(
-    () => sortData(filtered, sortConfig),
-    [filtered, sortConfig]
-  );
+  /* ================= SORT (FIXED) ================= */
+  const sorted = useMemo(() => {
+    const { key, direction } = sortConfig;
+    if (!key) return filtered;
+
+    return [...filtered].sort((a, b) => {
+      let av = "";
+      let bv = "";
+
+      if (key === "updatedAt") {
+        av = new Date(a.updatedAt || a.createdAt).getTime();
+        bv = new Date(b.updatedAt || b.createdAt).getTime();
+      } else if (key === "recruiter") {
+        av = recruiterMap[a.recruiter]?.email || "";
+        bv = recruiterMap[b.recruiter]?.email || "";
+      } else if (key === "job") {
+        av = jobMap[a.job]?.title || "";
+        bv = jobMap[b.job]?.title || "";
+      } else {
+        av = a[key] ?? "";
+        bv = b[key] ?? "";
+      }
+
+      if (!isNaN(av) && !isNaN(bv)) {
+        return direction === "asc" ? av - bv : bv - av;
+      }
+
+      return direction === "asc"
+        ? String(av).localeCompare(String(bv))
+        : String(bv).localeCompare(String(av));
+    });
+  }, [filtered, sortConfig, recruiterMap, jobMap]);
 
   const activeRows = sorted.filter((r) => r.status !== "rejected");
   const rejectedRows = sorted.filter((r) => r.status === "rejected");
@@ -215,20 +212,17 @@ export default function CandidateManagement() {
   const activePaged = paginate(activeRows, activePage);
   const rejectedPaged = paginate(rejectedRows, rejectedPage);
 
-  /* ================= SORT ================= */
+  /* ================= SORT UI ================= */
   const toggleSort = (key) => {
     setSortConfig((p) => {
       if (p.key !== key) return { key, direction: "asc" };
       if (p.direction === "asc") return { key, direction: "desc" };
-      return { key: "", direction: "" };
+      return { key: "updatedAt", direction: "desc" };
     });
   };
+
   const sortIcon = (key) =>
-    sortConfig.key !== key
-      ? "⇅"
-      : sortConfig.direction === "asc"
-      ? "↑"
-      : "↓";
+    sortConfig.key !== key ? "⇅" : sortConfig.direction === "asc" ? "↑" : "↓";
 
   /* ================= STATUS ================= */
   const handleStatusChange = (id, value) =>
@@ -236,10 +230,18 @@ export default function CandidateManagement() {
 
   const handleUpdate = async (id) => {
     if (!window.confirm("Update candidate status?")) return;
+
     const newStatus = localStatuses[id];
+    const now = new Date().toISOString();
+
     await updateReferralFieldsById(id, { status: newStatus });
+
     setRows((p) =>
-      p.map((r) => (r._id === id ? { ...r, status: newStatus } : r))
+      p.map((r) =>
+        r._id === id
+          ? { ...r, status: newStatus, updatedAt: now }
+          : r
+      )
     );
   };
 
@@ -250,7 +252,7 @@ export default function CandidateManagement() {
   };
 
   /* ================= TABLE ================= */
-  const renderTable = (title, data, isActive, page, setPage, total) => (
+  const renderTable = (title, data, page, setPage, total) => (
     <section className="table-section">
       <h3>{title}</h3>
       <div className="table-wrapper">
@@ -267,82 +269,48 @@ export default function CandidateManagement() {
                 CTV {sortIcon("recruiter")}
               </th>
               <th>Email</th>
-              <th>Phone</th>
-              <th>CV</th>
-              <th>LinkedIn</th>
-              <th>Portfolio</th>
-              <th onClick={() => toggleSort("status")}>
-                Status {sortIcon("status")}
-              </th>
-              <th>Bonus</th>
-              <th>Actions</th>
+              <th>Status</th>
               <th onClick={() => toggleSort("updatedAt")}>
                 Time {sortIcon("updatedAt")}
               </th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {data.map((r) => (
               <tr key={r._id}>
                 <td>{r.candidateName}</td>
-                <td>{jobMap[r.job]?.title ?? "Unknown Job"}</td>
-                <td>{recruiterMap[r.recruiter]?.email || r.recruiter || "Unknown User"}</td>
-                <td>{r?.candidateEmail || "-"}</td>
-                <td>{r.candidatePhone}</td>
+                <td>{jobMap[r.job]?.title || "Unknown Job"}</td>
+                <td>{recruiterMap[r.recruiter]?.email || "Unknown User"}</td>
+                <td>{r.candidateEmail || "-"}</td>
                 <td>
-                  {r.cvUrl ? (
-                    <a href={r.cvUrl} target="_blank" rel="noreferrer">
-                      Link
-                    </a>
-                  ) : (
-                    "-"
-                  )}
+                  <select
+                    value={localStatuses[r._id] || r.status}
+                    onChange={(e) =>
+                      handleStatusChange(r._id, e.target.value)
+                    }
+                  >
+                    {STATUS_OPTIONS.map((s) => (
+                      <option key={s} value={s}>
+                        {s}
+                      </option>
+                    ))}
+                  </select>
                 </td>
                 <td>
-                  {r.linkedin ? (
-                    <a href={r.linkedin} target="_blank" rel="noreferrer">
-                      Link
-                    </a>
-                  ) : (
-                    "-"
-                  )}
+                  {new Date(
+                    r.updatedAt || r.createdAt
+                  ).toLocaleString("vi-VN")}
                 </td>
                 <td>
-                  {r.portfolio ? (
-                    <a href={r.portfolio} target="_blank" rel="noreferrer">
-                      Link
-                    </a>
-                  ) : (
-                    "-"
-                  )}
+                  <button onClick={() => handleUpdate(r._id)}>Update</button>
+                  <button onClick={() => handleRemove(r._id)}>Remove</button>
                 </td>
-                <td>
-                  
-                    <select
-                      value={localStatuses[r._id] || r.status}
-                      onChange={(e) =>
-                        handleStatusChange(r._id, e.target.value)
-                      }
-                    >
-                      {STATUS_OPTIONS.map((s) => (
-                        <option key={s} value={s}>
-                          {s}
-                        </option>
-                      ))}
-                    </select>
-                  
-                </td>
-                <td>{r.bonus || 0}</td>
-                  <td>
-                    <button onClick={() => handleUpdate(r._id)}>Update</button>
-                    <button onClick={() => handleRemove(r._id)}>Remove</button>
-                  </td>
-                <td>{new Date(r.updatedAt || r.createdAt).toLocaleString("vi-VN")}</td>
               </tr>
             ))}
             {!data.length && (
               <tr>
-                <td colSpan="12">No data</td>
+                <td colSpan="7">No data</td>
               </tr>
             )}
           </tbody>
@@ -379,15 +347,14 @@ export default function CandidateManagement() {
       {renderTable(
         "Active Candidates",
         activePaged,
-        true,
         activePage,
         setActivePage,
         activeRows.length
       )}
+
       {renderTable(
         "Rejected Candidates",
         rejectedPaged,
-        false,
         rejectedPage,
         setRejectedPage,
         rejectedRows.length
