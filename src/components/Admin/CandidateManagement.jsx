@@ -269,6 +269,8 @@ export default function CandidateManagement() {
                 CTV {sortIcon("recruiter")}
               </th>
               <th>Email</th>
+              <th>Linkedln</th>
+              <th>Portfolio</th>
               <th>Status</th>
               <th onClick={() => toggleSort("updatedAt")}>
                 Time {sortIcon("updatedAt")}
@@ -281,8 +283,14 @@ export default function CandidateManagement() {
               <tr key={r._id}>
                 <td>{r.candidateName}</td>
                 <td>{jobMap[r.job]?.title || "Unknown Job"}</td>
-                <td>{recruiterMap[r.recruiter]?.email || "Unknown User"}</td>
+                <td>{recruiterMap[r.recruiter]?.email || r.recruiter || "Unknown User"}</td>
                 <td>{r.candidateEmail || "-"}</td>
+                <td>
+                  <a href={r.linkedin}>Link</a>
+                </td>
+                <td>
+                  <a href={r.portfolio}>Link</a>
+                </td>
                 <td>
                   <select
                     value={localStatuses[r._id] || r.status}
