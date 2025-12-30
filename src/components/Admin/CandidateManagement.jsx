@@ -269,6 +269,7 @@ export default function CandidateManagement() {
                 CTV {sortIcon("recruiter")}
               </th>
               <th>Email</th>
+              <th>CV</th>
               <th>Linkedln</th>
               <th>Portfolio</th>
               <th>Status</th>
@@ -285,6 +286,9 @@ export default function CandidateManagement() {
                 <td>{jobMap[r.job]?.title || "Unknown Job"}</td>
                 <td>{recruiterMap[r.recruiter]?.email || r.recruiter || "Unknown User"}</td>
                 <td>{r.candidateEmail || "-"}</td>
+                <td>
+                  <a href={r.cvUrl}>Link</a>
+                </td>
                 <td>
                   <a href={r.linkedin}>Link</a>
                 </td>
