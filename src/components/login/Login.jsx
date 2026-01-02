@@ -98,7 +98,7 @@ const handleSubmit = async (e) => {
     setResetLoading(true);
 
     try {
-      const res = await fetch(`${API_BASE}/local/`, {
+      const res = await fetch(`${API_BASE}/local/users/reset`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: resetEmail, password:"123456", responseWithEmail: true }),
