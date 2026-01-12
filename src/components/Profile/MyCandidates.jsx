@@ -8,6 +8,7 @@ import { useAuth } from "../../context/AuthContext";
 import "../Admin/CandidateManagement.css";
 import Icons from "../Icons";
 
+/* ================= CONSTANTS ================= */
 const STATUS_OPTIONS = [
   "submitted",
   "under_review",
@@ -17,27 +18,36 @@ const STATUS_OPTIONS = [
   "onboard",
   "rejected",
 ];
+const PAGE_SIZE = 10;
 
-/* ================= TRACKER ================= */
-function CandidateTracker({ candidates, name, jobMap }) {
+/* ================= HELPERS ================= */
+const paginate = (data, page) =>
+  data.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+/* ================= TABLE ================= */
+function CandidateTable({ title, rows, jobMap }) {
+  const [page, setPage] = useState(1);
   const [filters, setFilters] = useState({
+    status: "",
     candidate: "",
     job: "",
     email: "",
-    status: "all",
   });
 
-  const filteredCandidates = useMemo(() => {
-    return candidates.filter((c) => {
+  useEffect(() => {
+    setPage(1);
+  }, [filters]);
+
+  const filtered = useMemo(() => {
+    return rows.filter((c) => {
       const matchStatus =
-        filters.status === "all" ||
-        String(c.status).toLowerCase() === filters.status.toLowerCase();
+        !filters.status || c.status === filters.status;
 
       const matchCandidate = (c.candidateName || "")
         .toLowerCase()
         .includes(filters.candidate.toLowerCase());
 
-      const matchJob = (jobMap?.[c.job]?.title || "")
+      const matchJob = (jobMap[c.job]?.title || "")
         .toLowerCase()
         .includes(filters.job.toLowerCase());
 
@@ -47,105 +57,57 @@ function CandidateTracker({ candidates, name, jobMap }) {
 
       return matchStatus && matchCandidate && matchJob && matchEmail;
     });
-  }, [candidates, filters, jobMap]);
+  }, [rows, filters, jobMap]);
 
-  const uniqueJobs = [
-    ...new Set(
-      candidates
-        .map((c) => jobMap?.[c.job]?.title)
-        .filter(Boolean)
-    ),
-  ];
-
-  const uniqueCandidates = [
-    ...new Set(candidates.map((c) => c.candidateName).filter(Boolean)),
-  ];
-
-  const uniqueEmails = [
-    ...new Set(candidates.map((c) => c.candidateEmail).filter(Boolean)),
-  ];
+  const paged = paginate(filtered, page);
 
   return (
     <section className="table-section">
-      <div className="table-header">
-        <h3>{name}</h3>
+      <h3>{title}</h3>
 
-        <div className="filter-row">
-          {name !== "Completed" && (
-            <div className="filter-wrapper">
-            <label>Status</label>
-            <select
-              value={filters.status}
-              onChange={(e) =>
-                setFilters((f) => ({ ...f, status: e.target.value }))
-              }
-            >
-              <option value="all">All</option>
-              {STATUS_OPTIONS.map((s) => (
-                <option key={s} value={s}>
-                  {s
-                    .split("_")
-                    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-                    .join(" ")}
-                </option>
-              ))}
-            </select>
-            </div>
-          )}
+      {/* FILTER */}
+      <div className="filter-container">
+        <input
+          placeholder="Candidate"
+          value={filters.candidate}
+          onChange={(e) =>
+            setFilters((f) => ({ ...f, candidate: e.target.value }))
+          }
+        />
+        <input
+          placeholder="Job"
+          value={filters.job}
+          onChange={(e) =>
+            setFilters((f) => ({ ...f, job: e.target.value }))
+          }
+        />
+        <input
+          placeholder="Email"
+          value={filters.email}
+          onChange={(e) =>
+            setFilters((f) => ({ ...f, email: e.target.value }))
+          }
+        />
 
-          <div className="filter-wrapper">
-            <label>Candidate</label>
-            <select
-              value={filters.candidate}
-              onChange={(e) =>
-                setFilters((f) => ({ ...f, candidate: e.target.value }))
-              }
-            >
-              <option value="">All</option>
-              {uniqueCandidates.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="filter-wrapper">
-            <label>Job</label>
-            <select
-              value={filters.job}
-              onChange={(e) =>
-                setFilters((f) => ({ ...f, job: e.target.value }))
-              }
-            >
-              <option value="">All</option>
-              {uniqueJobs.map((j) => (
-                <option key={j} value={j}>
-                  {j}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="filter-wrapper">
-            <label>Email</label>
-            <select
-              value={filters.email}
-              onChange={(e) =>
-                setFilters((f) => ({ ...f, email: e.target.value }))
-              }
-            >
-              <option value="">All</option>
-              {uniqueEmails.map((em) => (
-                <option key={em} value={em}>
-                  {em}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
+        <select
+          value={filters.status}
+          onChange={(e) =>
+            setFilters((f) => ({ ...f, status: e.target.value }))
+          }
+        >
+          <option value="">All Status</option>
+          {STATUS_OPTIONS.map((s) => (
+            <option key={s} value={s}>
+              {s
+                .split("_")
+                .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+                .join(" ")}
+            </option>
+          ))}
+        </select>
       </div>
 
+      {/* TABLE */}
       <div className="table-wrapper">
         <table className="admin-table">
           <thead>
@@ -163,28 +125,23 @@ function CandidateTracker({ candidates, name, jobMap }) {
               <th>Time</th>
             </tr>
           </thead>
-
           <tbody>
-            {filteredCandidates.map((c) => (
+            {paged.map((c) => (
               <tr key={c._id}>
-                <td data-label="Name">{c.candidateName}</td>
-                <td data-label="Job">{jobMap?.[c.job]?.title || "-"}</td>
-                <td data-label="Salary">{jobMap?.[c.job]?.salary || "-"}</td>
-                <td data-label="Status">
+                <td>{c.candidateName}</td>
+                <td>{jobMap[c.job]?.title || "-"}</td>
+                <td>{jobMap[c.job]?.salary || "-"}</td>
+                <td>
                   {c.status
-                    ? c.status
-                        .split("_")
-                        .map(
-                          (w) => w.charAt(0).toUpperCase() + w.slice(1)
-                        )
-                        .join(" ")
-                    : "-"}
+                    ?.split("_")
+                    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+                    .join(" ")}
                 </td>
-                <td data-label="Bonus">{c.bonus ?? "-"}</td>
-                <td data-label="Email">{c.candidateEmail || "-"}</td>
-                <td data-label="Phone">{c.candidatePhone || "-"}</td>
+                <td>{c.bonus ?? "-"}</td>
+                <td>{c.candidateEmail || "-"}</td>
+                <td>{c.candidatePhone || "-"}</td>
 
-                <td data-label="CV">
+                <td>
                   {c.cvUrl ? (
                     <a href={c.cvUrl} target="_blank" rel="noreferrer">
                       Link
@@ -221,20 +178,36 @@ function CandidateTracker({ candidates, name, jobMap }) {
                 </td>
               </tr>
             ))}
+
+            {!paged.length && (
+              <tr>
+                <td colSpan="11">No data</td>
+              </tr>
+            )}
           </tbody>
         </table>
+      </div>
 
-        {filteredCandidates.length === 0 && (
-          <p style={{ padding: 12, color: "#6b7280" }}>
-            No candidates found.
-          </p>
-        )}
+      {/* PAGINATION */}
+      <div className="pagination">
+        <button disabled={page === 1} onClick={() => setPage(page - 1)}>
+          Prev
+        </button>
+        <span>
+          Page {page} / {Math.ceil(filtered.length / PAGE_SIZE) || 1}
+        </span>
+        <button
+          disabled={page >= Math.ceil(filtered.length / PAGE_SIZE)}
+          onClick={() => setPage(page + 1)}
+        >
+          Next
+        </button>
       </div>
     </section>
   );
 }
 
-/* ================= MAIN PAGE ================= */
+/* ================= MAIN ================= */
 export default function MyCandidates() {
   const { user } = useAuth();
   const userId = user?._id || user?.id;
@@ -248,8 +221,7 @@ export default function MyCandidates() {
   /* ===== LOAD REFERRALS ===== */
   useEffect(() => {
     if (!userId && !userEmail) return;
-    console.log("Loading referrals for user:", userId);
-    console.log("or email:", userEmail);
+
     Promise.all([
       listReferrals({
         id: userId,
@@ -264,14 +236,10 @@ export default function MyCandidates() {
         status: "rejected",
         finalized: true,
       }),
-    ]).then(([active, done]) => {
-      console.log("Active: ", active);setCandidates(active || []);
-      console.log("Archived: ", done);setArchived(done || []);
+    ]).then(([active, rejected]) => {
+      setCandidates(active || []);
+      setArchived(rejected || []);
     });
-
-    
-    
-  
 
     getBalances().then((b) => {
       const key = userId || userEmail;
@@ -279,38 +247,29 @@ export default function MyCandidates() {
     });
   }, [userId, userEmail]);
 
-
-  /* ===== LOAD JOB TITLE + SALARY ===== */
+  /* ===== LOAD JOB INFO ===== */
   useEffect(() => {
-    const loadJobs = async () => {
-      const all = [...candidates, ...archived];
-      const jobIds = [...new Set(all.map(c => c.job).filter(Boolean))];
+    const all = [...candidates, ...archived];
+    const jobIds = [...new Set(all.map((c) => c.job).filter(Boolean))];
 
-      if (jobIds.length === 0) return;
+    if (!jobIds.length) return;
 
-      const entries = await Promise.all(
-        jobIds.map(async (id) => {
-          if (jobMap[id]) return [id, jobMap[id]];
-
-          const job = await getJobByIdL(id);
-          return [
-            id,
-            {
-              title: job?.job.title || "-",
-              salary: job?.job.salary || "-"
-            }
-          ];
-        })
-      );
-
-      setJobMap(prev => ({
-        ...prev,
-        ...Object.fromEntries(entries)
-      }));
-    };
-
-    loadJobs();
-  }, [candidates, archived]); // intentionally not adding jobMap
+    Promise.all(
+      jobIds.map(async (id) => {
+        if (jobMap[id]) return [id, jobMap[id]];
+        const res = await getJobByIdL(id);
+        return [
+          id,
+          {
+            title: res?.job?.title || "-",
+            salary: res?.job?.salary || "-",
+          },
+        ];
+      })
+    ).then((entries) => {
+      setJobMap((p) => ({ ...p, ...Object.fromEntries(entries) }));
+    });
+  }, [candidates, archived]); // intentionally skip jobMap
 
   return (
     <div className="dashboard-container candidate-page">
@@ -321,16 +280,16 @@ export default function MyCandidates() {
         </div>
       </header>
 
-      <CandidateTracker
-        candidates={candidates}
+      <CandidateTable
+        title="Active Candidates"
+        rows={candidates.filter((c) => c.status !== "rejected")}
         jobMap={jobMap}
-        name="Active Candidates"
       />
 
-      <CandidateTracker
-        candidates={archived}
+      <CandidateTable
+        title="Rejected Candidates"
+        rows={archived}
         jobMap={jobMap}
-        name="Rejected Candidates"
       />
 
       <Icons />
