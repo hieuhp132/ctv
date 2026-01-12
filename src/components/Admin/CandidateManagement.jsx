@@ -162,72 +162,111 @@ export default function CandidateManagement() {
       });
   }, [adminId, email]);
 
-  /* ================= EXPORT (FIXED POSITION) ================= */
+  /* ================= FILTER / SORT ================= */
+  const debouncedFilters = {
+    candidateName: useDebounce(filters.candidateName),
+    job: useDebounce(filters.job),
+    recruiter: useDebounce(filters.recruiter),
+    candidateEmail: useDebounce(filters.candidateEmail),
+    status: filters.status,
+  };
+
+  const filtered = useMemo(
+    () =>
+      rows.filter((r) =>
+        Object.entries(debouncedFilters).every(([k, v]) =>
+          v ? String(r[k] || "").toLowerCase().includes(v.toLowerCase()) : true
+        )
+      ),
+    [rows, debouncedFilters]
+  );
+
+  const sorted = useMemo(() => {
+    const { key, direction } = sortConfig;
+    return [...filtered].sort((a, b) => {
+      const av = a[key] ?? "";
+      const bv = b[key] ?? "";
+      return direction === "asc"
+        ? String(av).localeCompare(String(bv))
+        : String(bv).localeCompare(String(av));
+    });
+  }, [filtered, sortConfig]);
+
+  const activeRows = sorted.filter((r) => r.status !== "rejected");
+  const rejectedRows = sorted.filter((r) => r.status === "rejected");
+
+  const activePaged = paginate(activeRows, activePage);
+  const rejectedPaged = paginate(rejectedRows, rejectedPage);
+
+  /* ================= EXPORT ================= */
   const handleExportExcel = () => {
     if (!rows.length) return alert("No data to export");
 
-    const exportData = rows.map((r) => ({
-      "Candidate Name": r.candidateName || "",
-      "Candidate Email": r.candidateEmail || "",
-      "Candidate Phone": r.candidatePhone || "",
-      "Job Title": jobMap[r.job]?.title || "",
-      "Job Salary": jobMap[r.job]?.salary || "",
-      "CTV Email": recruiterMap[r.recruiter]?.email || "",
+    const data = rows.map((r) => ({
+      "Candidate Name": r.candidateName,
+      Email: r.candidateEmail,
+      Job: jobMap[r.job]?.title || "",
+      CTV: recruiterMap[r.recruiter]?.email || "",
       Status: r.status,
-      Bonus: r.bonus ?? "",
-      "CV Link": r.cvUrl || "",
-      LinkedIn: r.linkedin || "",
-      Portfolio: r.portfolio || "",
-      "Created At": r.createdAt
-        ? new Date(r.createdAt).toLocaleString("vi-VN")
-        : "",
-      "Updated At": r.updatedAt
-        ? new Date(r.updatedAt).toLocaleString("vi-VN")
-        : "",
     }));
 
-    const ws = XLSX.utils.json_to_sheet(exportData);
+    const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Candidates");
 
-    const buffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-    saveAs(
-      new Blob([buffer]),
-      `candidate-management-${new Date().toISOString().slice(0, 10)}.xlsx`
-    );
+    const buf = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    saveAs(new Blob([buf]), "candidate-management.xlsx");
   };
 
   /* ================= CHART DATA ================= */
   const allStatusChartData = useMemo(() => {
     const total = rows.length || 1;
-    const count = {};
-    rows.forEach((r) => (count[r.status] = (count[r.status] || 0) + 1));
+    const c = {};
+    rows.forEach((r) => (c[r.status] = (c[r.status] || 0) + 1));
     return STATUS_OPTIONS.map((s) => ({
       name: s,
-      value: Math.round(((count[s] || 0) / total) * 100),
+      value: Math.round(((c[s] || 0) / total) * 100),
     })).filter((d) => d.value > 0);
   }, [rows]);
 
   const focusStatusChartData = useMemo(() => {
     const total = rows.length || 1;
     const focus = ["submitted", "offer"];
-    const count = {};
+    const c = {};
     rows.forEach((r) => {
       if (focus.includes(r.status))
-        count[r.status] = (count[r.status] || 0) + 1;
+        c[r.status] = (c[r.status] || 0) + 1;
     });
     return focus.map((s) => ({
       name: s,
-      value: Math.round(((count[s] || 0) / total) * 100),
+      value: Math.round(((c[s] || 0) / total) * 100),
     }));
   }, [rows]);
+
+  /* ================= TABLE ================= */
+  const renderTable = (title, data, page, setPage, total) => (
+    <section className="table-section">
+      <h3>{title}</h3>
+      <table className="admin-table">
+        <tbody>
+          {data.map((r) => (
+            <tr key={r._id}>
+              <td>{r.candidateName}</td>
+              <td>{jobMap[r.job]?.title}</td>
+              <td>{recruiterMap[r.recruiter]?.email}</td>
+              <td>{r.status}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </section>
+  );
 
   /* ================= RENDER ================= */
   return (
     <div className="candidate-page">
       <h2>Candidate Management</h2>
 
-      {/* ===== CHART ===== */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
         <StatusPieChart title="All Status (%)" data={allStatusChartData} />
         <StatusPieChart title="Submitted vs Offer (%)" data={focusStatusChartData} />
@@ -241,8 +280,8 @@ export default function CandidateManagement() {
         <button onClick={handleExportExcel}>Export Excel</button>
       </div>
 
-      {/* ===== TABLES GIỮ NGUYÊN ===== */}
-      {/* Active + Rejected tables của bạn giữ nguyên */}
+      {renderTable("Active Candidates", activePaged, activePage, setActivePage, activeRows.length)}
+      {renderTable("Rejected Candidates", rejectedPaged, rejectedPage, setRejectedPage, rejectedRows.length)}
     </div>
   );
 }
