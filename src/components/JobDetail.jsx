@@ -1,4 +1,3 @@
-// src/components/JobDetail.jsx
 import React, { useEffect, useMemo, useState } from "react";
 import {
   getJobByIdL,
@@ -7,7 +6,7 @@ import {
   listArchivedSubmissions,
   updateJobL,
   getListFiles,
-  uploadFile
+  uploadFile,
 } from "../api";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -28,18 +27,29 @@ export default function JobDetail() {
   const [groupedOffers, setGroupedOffers] = useState([]);
   const [jdPublicUrl, setJdPublicUrl] = useState(null);
   const [file, setFile] = useState(null);
-  const [cvFile, setCvFile] = useState(null);
-  const [uploading, setUploading] = useState(false);
 
-  // Fetch job by ID
+  // ===== Submit candidate states (GIỐNG DASHBOARD) =====
+  const [cvFile, setCvFile] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [uploadingCV, setUploadingCV] = useState(false);
+
+  const [candidateForm, setCandidateForm] = useState({
+    candidateName: "",
+    candidateEmail: "",
+    candidatePhone: "",
+    linkedin: "",
+    portfolio: "",
+    suitability: "",
+  });
+
+  // ===== Fetch job =====
   useEffect(() => {
     getJobByIdL(id).then((data) => {
       setJob(data.job);
-      console.log("Fetched Job Detail:", data.job);
     });
   }, [id]);
 
-  // Fetch job JD file
+  // ===== Fetch JD file =====
   useEffect(() => {
     if (!job) return;
 
@@ -48,30 +58,23 @@ export default function JobDetail() {
         (f) =>
           decodeURIComponent(f.publicUrl.split("/").pop()) ===
           decodeURIComponent(job.jdLink?.split("/").pop() || "")
-      ); console.log("Matched JD File:", matched);
+      );
       setJdPublicUrl(matched?.publicUrl || null);
       setFile(matched?.name || null);
     });
   }, [job?.jdLink]);
 
-  // Handle JD file upload (Admin)
-  // Handle JD file upload (Admin)
+  // ===== Admin upload JD =====
   const handleFileUploadSuccess = async (fileData) => {
-    const data = {
-      _id: id,                 // dùng để build URL
-      jdLink: fileData.publicUrl, // field backend cần
-    };
-
-    console.log("Updating job with:", data);
-
-    const updatedJob = await updateJobL(data);
+    const updatedJob = await updateJobL({
+      _id: id,
+      jdLink: fileData.publicUrl,
+    });
     setJob(updatedJob);
     setJdPublicUrl(fileData.publicUrl);
   };
 
-
-
-  // Fetch submissions (Admin)
+  // ===== Admin fetch submissions =====
   useEffect(() => {
     if (!isAdmin) return;
     Promise.all([listSubmissions(), listArchivedSubmissions()]).then(
@@ -84,30 +87,27 @@ export default function JobDetail() {
     );
   }, [id, isAdmin]);
 
-  if (!job) return <p className="loading">Loading...</p>;
-
+  // ===== Upload CV (GIỐNG DASHBOARD) =====
   const uploadCV = async () => {
-    setUploading(true);
+    setUploadingCV(true);
     try {
       const res = await uploadFile(cvFile);
       return res?.publicUrl;
     } finally {
-      setUploading(false);
+      setUploadingCV(false);
     }
   };
 
-
-  // Candidate submission form
-  const submit = async (e) => {
-    e.preventDefault();
-    const f = e.target;
-
+  // ===== Submit Candidate (GIỐNG DASHBOARD) =====
+  const handleSubmitCandidate = async () => {
     if (!cvFile) {
       alert("Please upload CV");
       return;
     }
 
     try {
+      setIsSubmitting(true);
+
       const cvUrl = await uploadCV();
       if (!cvUrl) {
         alert("Upload CV failed");
@@ -115,34 +115,35 @@ export default function JobDetail() {
       }
 
       await createSubmissionL({
-        candidateName: f[0].value,
-        email: f[1].value,
-        phone: f[2].value,
-
-        cvUrl, // 👈 STRING URL
-
-        linkedin: f[4].value,
-        portfolio: f[5].value,
-        suitability: f[6].value,
-
         jobId: id,
         recruiterId: ctvId,
+        ...candidateForm,
+        cvUrl,
         bonus: job.bonus,
       });
 
-      alert("Profile submitted successfully!");
-      setOpen(false);
+      alert("Candidate submitted successfully!");
+
+      setCandidateForm({
+        candidateName: "",
+        candidateEmail: "",
+        candidatePhone: "",
+        linkedin: "",
+        portfolio: "",
+        suitability: "",
+      });
       setCvFile(null);
-      f.reset();
+      setOpen(false);
     } catch (err) {
-      alert("Submit failed");
       console.error(err);
+      alert("Submit failed");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
+  if (!job) return <p className="loading">Loading...</p>;
 
-
-  // Section helper
   const section = (title, html) => (
     <section className="job-section">
       <h4>{title}</h4>
@@ -159,7 +160,6 @@ export default function JobDetail() {
         <h2>{job.title || "Untitled Job"}</h2>
       </header>
 
-      {/* Keywords / Tags */}
       {job.keywords?.length > 0 && (
         <div className="job-tags">
           {job.keywords.map((k) => (
@@ -169,7 +169,7 @@ export default function JobDetail() {
       )}
 
       <div className="job-layout">
-        {/* LEFT COLUMN */}
+        {/* LEFT */}
         <div>
           <div className="job-info-grid">
             <div className="info-box">
@@ -186,23 +186,28 @@ export default function JobDetail() {
             </div>
           </div>
 
-          {/* Job Sections */}
           {section(
             "Job Overview And Responsibility",
             job.jobsdetail?.description || "<p>No description provided</p>"
           )}
           {section(
             "Required Skills and Experience",
-            job.jobsdetail?.requirements || job.jobsdetail?.requirement || job.requirement || "<p>No requirements listed</p>" 
+            job.jobsdetail?.requirements ||
+              job.jobsdetail?.requirement ||
+              job.requirement ||
+              "<p>No requirements listed</p>"
           )}
           {section(
             "Why Candidate should apply this position",
             job.jobsdetail?.benefits || "<p>No benefits listed</p>"
           )}
-          {section("Other", job.jobsdetail?.other || job.other || "<p>No specific notice</p>")}
+          {section(
+            "Other",
+            job.jobsdetail?.other || job.other || "<p>No specific notice</p>"
+          )}
         </div>
 
-        {/* RIGHT SIDEBAR */}
+        {/* RIGHT */}
         <aside className="job-sidebar">
           {isCTV && (
             <div className="card">
@@ -224,29 +229,70 @@ export default function JobDetail() {
         </aside>
       </div>
 
-      {/* Modal for candidate submission */}
+      {/* ===== Submit Candidate Modal (GIỐNG DASHBOARD) ===== */}
       {open && (
         <div className="modal-overlay" onClick={() => setOpen(false)}>
-          <form
-            className="modal-form"
-            onSubmit={submit}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h3>Submit Candidate</h3>
-            <input required placeholder="Candidate Name" />
-            <input required type="email" placeholder="Email" />
-            <input required placeholder="Phone" />
-            <input required type="file" accept=".pdf,.doc,.docx" onChange={(e) => setCvFile(e.target.files[0])}/>
-            <input placeholder="LinkedIn URL" />
-            <input placeholder="Portfolio URL" />
-            <textarea rows={3} placeholder="Why suitable?" required />
-            <div className="modal-actions">
-              <button type="submit">Submit</button>
-              <button type="button" onClick={() => setOpen(false)}>
-                Cancel
-              </button>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <h3>Submit Candidate – {job.title}</h3>
+
+            {[
+              "candidateName",
+              "candidateEmail",
+              "candidatePhone",
+              "linkedin",
+              "portfolio",
+            ].map((key) => (
+              <div key={key} className="form-group">
+                <label>
+                  {key
+                    .replace(/([A-Z])/g, " $1")
+                    .replace(/^./, (s) => s.toUpperCase())}
+                </label>
+                <input
+                  value={candidateForm[key]}
+                  onChange={(e) =>
+                    setCandidateForm((f) => ({
+                      ...f,
+                      [key]: e.target.value,
+                    }))
+                  }
+                />
+              </div>
+            ))}
+
+            <div className="form-group">
+              <label>Suitability</label>
+              <textarea
+                rows={3}
+                value={candidateForm.suitability}
+                onChange={(e) =>
+                  setCandidateForm((f) => ({
+                    ...f,
+                    suitability: e.target.value,
+                  }))
+                }
+              />
             </div>
-          </form>
+
+            <div className="form-group">
+              <label>CV (PDF/DOC)</label>
+              <input
+                type="file"
+                accept=".pdf,.doc,.docx"
+                onChange={(e) => setCvFile(e.target.files[0])}
+              />
+            </div>
+
+            <div className="modal-actions">
+              <button
+                onClick={handleSubmitCandidate}
+                disabled={isSubmitting || uploadingCV}
+              >
+                {uploadingCV ? "Uploading..." : "Submit"}
+              </button>
+              <button onClick={() => setOpen(false)}>Cancel</button>
+            </div>
+          </div>
         </div>
       )}
     </div>
