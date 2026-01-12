@@ -8,6 +8,8 @@ import {
   fetchProfileFromServerL,
 } from "../../api";
 import { useAuth } from "../../context/AuthContext";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 /* ================= CONSTANTS ================= */
 const STATUS_OPTIONS = [
@@ -346,10 +348,76 @@ export default function CandidateManagement() {
     </section>
   );
 
+  const handleExportExcel = () => {
+  if (!rows.length) {
+    alert("No data to export");
+    return;
+  }
+
+  const exportData = rows.map((r) => ({
+    "Candidate Name": r.candidateName || "",
+    "Candidate Email": r.candidateEmail || "",
+    "Candidate Phone": r.candidatePhone || "",
+    "Job Title": jobMap[r.job]?.title || "",
+    "Job Salary": jobMap[r.job]?.salary || "",
+    "CTV Email":
+      recruiterMap[r.recruiter]?.email || r.recruiter || "",
+    Status: r.status,
+    Bonus: r.bonus ?? "",
+    "CV Link": r.cvUrl || "",
+    "LinkedIn": r.linkedin || "",
+    "Portfolio": r.portfolio || "",
+    "Created At": r.createdAt
+      ? new Date(r.createdAt).toLocaleString("vi-VN")
+      : "",
+    "Updated At": r.updatedAt
+      ? new Date(r.updatedAt).toLocaleString("vi-VN")
+      : "",
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+    const workbook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(
+      workbook,
+      worksheet,
+      "Candidates"
+    );
+
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+
+    const blob = new Blob([excelBuffer], {
+      type:
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+
+    saveAs(
+      blob,
+      `candidate-management-${new Date()
+        .toISOString()
+        .slice(0, 10)}.xlsx`
+    );
+  };
+
+
   /* ================= RENDER ================= */
   return (
     <div className="candidate-page">
       <h2>Candidate Management</h2>
+      
+      <button
+        onClick={handleExportExcel}
+        style={{
+          padding: "6px 12px",
+          fontWeight: 600,
+          cursor: "pointer",
+        }}
+      >
+        Export Excel
+      </button>
 
       <FilterUI
         filters={filters}

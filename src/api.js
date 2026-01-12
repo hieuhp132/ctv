@@ -533,7 +533,7 @@ export async function listReferrals({
   if (!res.ok) return [];
 
   const data = await res.json();
-  console.log("listReferrals data:", data);
+  // console.log("listReferrals data:", data);
   return Array.isArray(data.items) ? data.items : [];
 }
 
