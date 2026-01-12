@@ -11,15 +11,6 @@ import { useAuth } from "../../context/AuthContext";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 
-/* ===== CHART ===== */
-import {
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
-
 /* ================= CONSTANTS ================= */
 const STATUS_OPTIONS = [
   "submitted",
@@ -30,17 +21,6 @@ const STATUS_OPTIONS = [
   "onboard",
   "rejected",
 ];
-
-const STATUS_COLORS = {
-  submitted: "#4f46e5",
-  under_review: "#0ea5e9",
-  interviewing: "#6366f1",
-  offer: "#16a34a",
-  hired: "#22c55e",
-  onboard: "#84cc16",
-  rejected: "#ef4444",
-};
-
 const PAGE_SIZE = 10;
 
 /* ================= HELPERS ================= */
@@ -60,46 +40,39 @@ function useDebounce(value, delay = 200) {
 /* ================= FILTER UI ================= */
 const FilterUI = React.memo(({ filters, onChange }) => (
   <div className="filter-container">
-    <input placeholder="Candidate" value={filters.candidateName}
-      onChange={(e) => onChange("candidateName", e.target.value)} />
-    <input placeholder="Job" value={filters.job}
-      onChange={(e) => onChange("job", e.target.value)} />
-    <input placeholder="CTV" value={filters.recruiter}
-      onChange={(e) => onChange("recruiter", e.target.value)} />
-    <input placeholder="Email" value={filters.candidateEmail}
-      onChange={(e) => onChange("candidateEmail", e.target.value)} />
-    <select value={filters.status}
-      onChange={(e) => onChange("status", e.target.value)}>
+    <input
+      placeholder="Candidate"
+      value={filters.candidateName}
+      onChange={(e) => onChange("candidateName", e.target.value)}
+    />
+    <input
+      placeholder="Job"
+      value={filters.job}
+      onChange={(e) => onChange("job", e.target.value)}
+    />
+    <input
+      placeholder="CTV"
+      value={filters.recruiter}
+      onChange={(e) => onChange("recruiter", e.target.value)}
+    />
+    <input
+      placeholder="Email"
+      value={filters.candidateEmail}
+      onChange={(e) => onChange("candidateEmail", e.target.value)}
+    />
+    <select
+      value={filters.status}
+      onChange={(e) => onChange("status", e.target.value)}
+    >
       <option value="">All Status</option>
       {STATUS_OPTIONS.map((s) => (
-        <option key={s} value={s}>{s}</option>
+        <option key={s} value={s}>
+          {s}
+        </option>
       ))}
     </select>
   </div>
 ));
-
-/* ================= PIE ================= */
-const StatusPieChart = ({ title, data }) => (
-  <div style={{ width: "100%", height: 300 }}>
-    <h3 style={{ textAlign: "center", marginBottom: 8 }}>{title}</h3>
-    <ResponsiveContainer>
-      <PieChart>
-        <Pie
-          data={data}
-          dataKey="value"
-          nameKey="name"
-          outerRadius={90}
-          label={({ name, value }) => `${name}: ${value}%`}
-        >
-          {data.map((d) => (
-            <Cell key={d.name} fill={STATUS_COLORS[d.name]} />
-          ))}
-        </Pie>
-        <Tooltip formatter={(v) => `${v}%`} />
-      </PieChart>
-    </ResponsiveContainer>
-  </div>
-);
 
 /* ================= MAIN ================= */
 export default function CandidateManagement() {
@@ -130,8 +103,8 @@ export default function CandidateManagement() {
   useEffect(() => {
     if (!adminId) return;
 
-    listReferrals({ id: adminId, email, isAdmin: true, limit: 1000 })
-      .then(async (res = []) => {
+    listReferrals({ id: adminId, email, isAdmin: true, limit: 1000 }).then(
+      async (res = []) => {
         setRows(res);
 
         const statusMap = {};
@@ -146,23 +119,39 @@ export default function CandidateManagement() {
 
         setLocalStatuses(statusMap);
 
-        jobIds.forEach(async (id) => {
-          if (!jobMap[id]) {
-            const j = await getJobByIdL(id);
-            setJobMap((p) => ({ ...p, [id]: j?.job }));
+        jobIds.forEach(async (jobId) => {
+          if (jobMap[jobId]) return;
+          try {
+            const res = await getJobByIdL(jobId);
+            setJobMap((p) => ({ ...p, [jobId]: res?.job || null }));
+          } catch {
+            setJobMap((p) => ({ ...p, [jobId]: null }));
           }
         });
 
-        recruiterIds.forEach(async (id) => {
-          if (!recruiterMap[id]) {
-            const u = await fetchProfileFromServerL(id);
-            setRecruiterMap((p) => ({ ...p, [id]: u }));
+        recruiterIds.forEach(async (uid) => {
+          if (recruiterMap[uid]) return;
+          try {
+            const user = await fetchProfileFromServerL(uid);
+            setRecruiterMap((p) => ({ ...p, [uid]: user }));
+          } catch {
+            setRecruiterMap((p) => ({
+              ...p,
+              [uid]: { email: "Unknown User" },
+            }));
           }
         });
-      });
+      }
+    );
   }, [adminId, email]);
 
-  /* ================= FILTER / SORT ================= */
+  /* ================= RESET PAGE ================= */
+  useEffect(() => {
+    setActivePage(1);
+    setRejectedPage(1);
+  }, [filters]);
+
+  /* ================= DEBOUNCE FILTERS ================= */
   const debouncedFilters = {
     candidateName: useDebounce(filters.candidateName),
     job: useDebounce(filters.job),
@@ -171,26 +160,53 @@ export default function CandidateManagement() {
     status: filters.status,
   };
 
+  /* ================= FILTER ================= */
   const filtered = useMemo(
     () =>
       rows.filter((r) =>
         Object.entries(debouncedFilters).every(([k, v]) =>
-          v ? String(r[k] || "").toLowerCase().includes(v.toLowerCase()) : true
+          v
+            ? String(r[k] || "")
+                .toLowerCase()
+                .includes(String(v).toLowerCase())
+            : true
         )
       ),
     [rows, debouncedFilters]
   );
 
+  /* ================= SORT (FIXED) ================= */
   const sorted = useMemo(() => {
     const { key, direction } = sortConfig;
+    if (!key) return filtered;
+
     return [...filtered].sort((a, b) => {
-      const av = a[key] ?? "";
-      const bv = b[key] ?? "";
+      let av = "";
+      let bv = "";
+
+      if (key === "updatedAt") {
+        av = new Date(a.updatedAt || a.createdAt).getTime();
+        bv = new Date(b.updatedAt || b.createdAt).getTime();
+      } else if (key === "recruiter") {
+        av = recruiterMap[a.recruiter]?.email || "";
+        bv = recruiterMap[b.recruiter]?.email || "";
+      } else if (key === "job") {
+        av = jobMap[a.job]?.title || "";
+        bv = jobMap[b.job]?.title || "";
+      } else {
+        av = a[key] ?? "";
+        bv = b[key] ?? "";
+      }
+
+      if (!isNaN(av) && !isNaN(bv)) {
+        return direction === "asc" ? av - bv : bv - av;
+      }
+
       return direction === "asc"
         ? String(av).localeCompare(String(bv))
         : String(bv).localeCompare(String(av));
     });
-  }, [filtered, sortConfig]);
+  }, [filtered, sortConfig, recruiterMap, jobMap]);
 
   const activeRows = sorted.filter((r) => r.status !== "rejected");
   const rejectedRows = sorted.filter((r) => r.status === "rejected");
@@ -198,90 +214,235 @@ export default function CandidateManagement() {
   const activePaged = paginate(activeRows, activePage);
   const rejectedPaged = paginate(rejectedRows, rejectedPage);
 
-  /* ================= EXPORT ================= */
-  const handleExportExcel = () => {
-    if (!rows.length) return alert("No data to export");
-
-    const data = rows.map((r) => ({
-      "Candidate Name": r.candidateName,
-      Email: r.candidateEmail,
-      Job: jobMap[r.job]?.title || "",
-      CTV: recruiterMap[r.recruiter]?.email || "",
-      Status: r.status,
-    }));
-
-    const ws = XLSX.utils.json_to_sheet(data);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Candidates");
-
-    const buf = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-    saveAs(new Blob([buf]), "candidate-management.xlsx");
+  /* ================= SORT UI ================= */
+  const toggleSort = (key) => {
+    setSortConfig((p) => {
+      if (p.key !== key) return { key, direction: "asc" };
+      if (p.direction === "asc") return { key, direction: "desc" };
+      return { key: "updatedAt", direction: "desc" };
+    });
   };
 
-  /* ================= CHART DATA ================= */
-  const allStatusChartData = useMemo(() => {
-    const total = rows.length || 1;
-    const c = {};
-    rows.forEach((r) => (c[r.status] = (c[r.status] || 0) + 1));
-    return STATUS_OPTIONS.map((s) => ({
-      name: s,
-      value: Math.round(((c[s] || 0) / total) * 100),
-    })).filter((d) => d.value > 0);
-  }, [rows]);
+  const sortIcon = (key) =>
+    sortConfig.key !== key ? "⇅" : sortConfig.direction === "asc" ? "↑" : "↓";
 
-  const focusStatusChartData = useMemo(() => {
-    const total = rows.length || 1;
-    const focus = ["submitted", "offer"];
-    const c = {};
-    rows.forEach((r) => {
-      if (focus.includes(r.status))
-        c[r.status] = (c[r.status] || 0) + 1;
-    });
-    return focus.map((s) => ({
-      name: s,
-      value: Math.round(((c[s] || 0) / total) * 100),
-    }));
-  }, [rows]);
+  /* ================= STATUS ================= */
+  const handleStatusChange = (id, value) =>
+    setLocalStatuses((p) => ({ ...p, [id]: value }));
+
+  const handleUpdate = async (id) => {
+    if (!window.confirm("Update candidate status?")) return;
+
+    const newStatus = localStatuses[id];
+    const now = new Date().toISOString();
+
+    await updateReferralFieldsById(id, { status: newStatus });
+
+    setRows((p) =>
+      p.map((r) =>
+        r._id === id
+          ? { ...r, status: newStatus, updatedAt: now }
+          : r
+      )
+    );
+  };
+
+  const handleRemove = async (id) => {
+    if (!window.confirm("Remove candidate?")) return;
+    await removeReferralFieldsById(id);
+    setRows((p) => p.filter((r) => r._id !== id));
+  };
 
   /* ================= TABLE ================= */
   const renderTable = (title, data, page, setPage, total) => (
     <section className="table-section">
       <h3>{title}</h3>
-      <table className="admin-table">
-        <tbody>
-          {data.map((r) => (
-            <tr key={r._id}>
-              <td>{r.candidateName}</td>
-              <td>{jobMap[r.job]?.title}</td>
-              <td>{recruiterMap[r.recruiter]?.email}</td>
-              <td>{r.status}</td>
+      <div className="table-wrapper">
+        <table className="admin-table">
+          <thead>
+            <tr>
+              <th onClick={() => toggleSort("candidateName")}>
+                Name {sortIcon("candidateName")}
+              </th>
+              <th onClick={() => toggleSort("job")}>
+                Job {sortIcon("job")}
+              </th>
+              <th onClick={() => toggleSort("recruiter")}>
+                CTV {sortIcon("recruiter")}
+              </th>
+              <th>Email</th>
+              <th>CV</th>
+              <th>Linkedln</th>
+              <th>Portfolio</th>
+              <th>Status</th>
+              <th onClick={() => toggleSort("updatedAt")}>
+                Time {sortIcon("updatedAt")}
+              </th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {data.map((r) => (
+              <tr key={r._id}>
+                <td>{r.candidateName}</td>
+                <td>{jobMap[r.job]?.title || "Unknown Job"}</td>
+                <td>{recruiterMap[r.recruiter]?.email || r.recruiter || "Unknown User"}</td>
+                <td>{r.candidateEmail || "-"}</td>
+                <td>
+                  <a href={r.cvUrl}>Link</a>
+                </td>
+                <td>
+                  <a href={r.linkedin}>Link</a>
+                </td>
+                <td>
+                  <a href={r.portfolio}>Link</a>
+                </td>
+                <td>
+                  <select
+                    value={localStatuses[r._id] || r.status}
+                    onChange={(e) =>
+                      handleStatusChange(r._id, e.target.value)
+                    }
+                  >
+                    {STATUS_OPTIONS.map((s) => (
+                      <option key={s} value={s}>
+                        {s}
+                      </option>
+                    ))}
+                  </select>
+                </td>
+                <td>
+                  {new Date(
+                    r.updatedAt || r.createdAt
+                  ).toLocaleString("vi-VN")}
+                </td>
+                <td>
+                  <button onClick={() => handleUpdate(r._id)}>Update</button>
+                  <button onClick={() => handleRemove(r._id)}>Remove</button>
+                </td>
+              </tr>
+            ))}
+            {!data.length && (
+              <tr>
+                <td colSpan="7">No data</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="pagination">
+        <button disabled={page === 1} onClick={() => setPage(page - 1)}>
+          Prev
+        </button>
+        <span>
+          Page {page} / {Math.ceil(total / PAGE_SIZE) || 1}
+        </span>
+        <button
+          disabled={page >= Math.ceil(total / PAGE_SIZE)}
+          onClick={() => setPage(page + 1)}
+        >
+          Next
+        </button>
+      </div>
     </section>
   );
+
+  const handleExportExcel = () => {
+  if (!rows.length) {
+    alert("No data to export");
+    return;
+  }
+
+  const exportData = rows.map((r) => ({
+    "Candidate Name": r.candidateName || "",
+    "Candidate Email": r.candidateEmail || "",
+    "Candidate Phone": r.candidatePhone || "",
+    "Job Title": jobMap[r.job]?.title || "",
+    "Job Salary": jobMap[r.job]?.salary || "",
+    "CTV Email":
+      recruiterMap[r.recruiter]?.email || r.recruiter || "",
+    Status: r.status,
+    Bonus: r.bonus ?? "",
+    "CV Link": r.cvUrl || "",
+    "LinkedIn": r.linkedin || "",
+    "Portfolio": r.portfolio || "",
+    "Created At": r.createdAt
+      ? new Date(r.createdAt).toLocaleString("vi-VN")
+      : "",
+    "Updated At": r.updatedAt
+      ? new Date(r.updatedAt).toLocaleString("vi-VN")
+      : "",
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+    const workbook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(
+      workbook,
+      worksheet,
+      "Candidates"
+    );
+
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+
+    const blob = new Blob([excelBuffer], {
+      type:
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+
+    saveAs(
+      blob,
+      `candidate-management-${new Date()
+        .toISOString()
+        .slice(0, 10)}.xlsx`
+    );
+  };
+
 
   /* ================= RENDER ================= */
   return (
     <div className="candidate-page">
       <h2>Candidate Management</h2>
-
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
-        <StatusPieChart title="All Status (%)" data={allStatusChartData} />
-        <StatusPieChart title="Submitted vs Offer (%)" data={focusStatusChartData} />
-      </div>
-
+      
       <div className="head">
+
         <FilterUI
           filters={filters}
           onChange={(k, v) => setFilters((p) => ({ ...p, [k]: v }))}
         />
-        <button onClick={handleExportExcel}>Export Excel</button>
+
+        <button
+          onClick={handleExportExcel}
+          style={{
+            padding: "6px 12px",
+            fontWeight: 600,
+            cursor: "pointer",
+          }}
+        >
+          Export Excel
+        </button>
+
       </div>
 
-      {renderTable("Active Candidates", activePaged, activePage, setActivePage, activeRows.length)}
-      {renderTable("Rejected Candidates", rejectedPaged, rejectedPage, setRejectedPage, rejectedRows.length)}
+      {renderTable(
+        "Active Candidates",
+        activePaged,
+        activePage,
+        setActivePage,
+        activeRows.length
+      )}
+
+      {renderTable(
+        "Rejected Candidates",
+        rejectedPaged,
+        rejectedPage,
+        setRejectedPage,
+        rejectedRows.length
+      )}
     </div>
   );
 }
