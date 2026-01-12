@@ -409,21 +409,23 @@ export default function CandidateManagement() {
       <h2>Candidate Management</h2>
       
       <div className="head">
-        <button
-        onClick={handleExportExcel}
-        style={{
-          padding: "6px 12px",
-          fontWeight: 600,
-          cursor: "pointer",
-        }}
-      >
-        Export Excel
-      </button>
 
-      <FilterUI
-        filters={filters}
-        onChange={(k, v) => setFilters((p) => ({ ...p, [k]: v }))}
-      />
+        <FilterUI
+          filters={filters}
+          onChange={(k, v) => setFilters((p) => ({ ...p, [k]: v }))}
+        />
+
+        <button
+          onClick={handleExportExcel}
+          style={{
+            padding: "6px 12px",
+            fontWeight: 600,
+            cursor: "pointer",
+          }}
+        >
+          Export Excel
+        </button>
+
       </div>
 
       {renderTable(
