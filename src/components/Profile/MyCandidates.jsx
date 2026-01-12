@@ -261,6 +261,7 @@ export default function MyCandidates() {
         id: userId,
         email: userEmail,
         isAdmin: false,
+        status: "rejected",
         finalized: true,
       }),
     ]).then(([active, done]) => {
@@ -323,13 +324,13 @@ export default function MyCandidates() {
       <CandidateTracker
         candidates={candidates}
         jobMap={jobMap}
-        name="Candidate Tracking"
+        name="Active Candidates"
       />
 
       <CandidateTracker
         candidates={archived}
         jobMap={jobMap}
-        name="Completed"
+        name="Rejected Candidates"
       />
 
       <Icons />
