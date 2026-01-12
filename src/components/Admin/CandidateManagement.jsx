@@ -408,7 +408,8 @@ export default function CandidateManagement() {
     <div className="candidate-page">
       <h2>Candidate Management</h2>
       
-      <button
+      <div className="head">
+        <button
         onClick={handleExportExcel}
         style={{
           padding: "6px 12px",
@@ -423,6 +424,7 @@ export default function CandidateManagement() {
         filters={filters}
         onChange={(k, v) => setFilters((p) => ({ ...p, [k]: v }))}
       />
+      </div>
 
       {renderTable(
         "Active Candidates",
