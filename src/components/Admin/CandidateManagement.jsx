@@ -11,6 +11,15 @@ import { useAuth } from "../../context/AuthContext";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 
+/* ===== ADD CHART ===== */
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+
 /* ================= CONSTANTS ================= */
 const STATUS_OPTIONS = [
   "submitted",
@@ -21,6 +30,17 @@ const STATUS_OPTIONS = [
   "onboard",
   "rejected",
 ];
+
+const STATUS_COLORS = {
+  submitted: "#4f46e5",
+  under_review: "#0ea5e9",
+  interviewing: "#6366f1",
+  offer: "#16a34a",
+  hired: "#22c55e",
+  onboard: "#84cc16",
+  rejected: "#ef4444",
+};
+
 const PAGE_SIZE = 10;
 
 /* ================= HELPERS ================= */
@@ -73,6 +93,29 @@ const FilterUI = React.memo(({ filters, onChange }) => (
     </select>
   </div>
 ));
+
+/* ===== ADD CHART COMPONENT ===== */
+const StatusPieChart = ({ title, data }) => (
+  <div style={{ width: "100%", height: 280 }}>
+    <h3 style={{ textAlign: "center", marginBottom: 8 }}>{title}</h3>
+    <ResponsiveContainer>
+      <PieChart>
+        <Pie
+          data={data}
+          dataKey="value"
+          nameKey="name"
+          outerRadius={90}
+          label={({ name, value }) => `${name}: ${value}%`}
+        >
+          {data.map((d) => (
+            <Cell key={d.name} fill={STATUS_COLORS[d.name]} />
+          ))}
+        </Pie>
+        <Tooltip formatter={(v) => `${v}%`} />
+      </PieChart>
+    </ResponsiveContainer>
+  </div>
+);
 
 /* ================= MAIN ================= */
 export default function CandidateManagement() {
@@ -175,7 +218,7 @@ export default function CandidateManagement() {
     [rows, debouncedFilters]
   );
 
-  /* ================= SORT (FIXED) ================= */
+  /* ================= SORT ================= */
   const sorted = useMemo(() => {
     const { key, direction } = sortConfig;
     if (!key) return filtered;
@@ -214,202 +257,58 @@ export default function CandidateManagement() {
   const activePaged = paginate(activeRows, activePage);
   const rejectedPaged = paginate(rejectedRows, rejectedPage);
 
-  /* ================= SORT UI ================= */
-  const toggleSort = (key) => {
-    setSortConfig((p) => {
-      if (p.key !== key) return { key, direction: "asc" };
-      if (p.direction === "asc") return { key, direction: "desc" };
-      return { key: "updatedAt", direction: "desc" };
-    });
-  };
+  /* ===== ADD CHART DATA ===== */
+  const allStatusChartData = useMemo(() => {
+    const total = rows.length || 1;
+    const c = rows.reduce((a, r) => {
+      a[r.status] = (a[r.status] || 0) + 1;
+      return a;
+    }, {});
+    return STATUS_OPTIONS.map((s) => ({
+      name: s,
+      value: Math.round(((c[s] || 0) / total) * 100),
+    })).filter((d) => d.value > 0);
+  }, [rows]);
 
-  const sortIcon = (key) =>
-    sortConfig.key !== key ? "⇅" : sortConfig.direction === "asc" ? "↑" : "↓";
-
-  /* ================= STATUS ================= */
-  const handleStatusChange = (id, value) =>
-    setLocalStatuses((p) => ({ ...p, [id]: value }));
-
-  const handleUpdate = async (id) => {
-    if (!window.confirm("Update candidate status?")) return;
-
-    const newStatus = localStatuses[id];
-    const now = new Date().toISOString();
-
-    await updateReferralFieldsById(id, { status: newStatus });
-
-    setRows((p) =>
-      p.map((r) =>
-        r._id === id
-          ? { ...r, status: newStatus, updatedAt: now }
-          : r
-      )
-    );
-  };
-
-  const handleRemove = async (id) => {
-    if (!window.confirm("Remove candidate?")) return;
-    await removeReferralFieldsById(id);
-    setRows((p) => p.filter((r) => r._id !== id));
-  };
-
-  /* ================= TABLE ================= */
-  const renderTable = (title, data, page, setPage, total) => (
-    <section className="table-section">
-      <h3>{title}</h3>
-      <div className="table-wrapper">
-        <table className="admin-table">
-          <thead>
-            <tr>
-              <th onClick={() => toggleSort("candidateName")}>
-                Name {sortIcon("candidateName")}
-              </th>
-              <th onClick={() => toggleSort("job")}>
-                Job {sortIcon("job")}
-              </th>
-              <th onClick={() => toggleSort("recruiter")}>
-                CTV {sortIcon("recruiter")}
-              </th>
-              <th>Email</th>
-              <th>CV</th>
-              <th>Linkedln</th>
-              <th>Portfolio</th>
-              <th>Status</th>
-              <th onClick={() => toggleSort("updatedAt")}>
-                Time {sortIcon("updatedAt")}
-              </th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((r) => (
-              <tr key={r._id}>
-                <td>{r.candidateName}</td>
-                <td>{jobMap[r.job]?.title || "Unknown Job"}</td>
-                <td>{recruiterMap[r.recruiter]?.email || r.recruiter || "Unknown User"}</td>
-                <td>{r.candidateEmail || "-"}</td>
-                <td>
-                  <a href={r.cvUrl}>Link</a>
-                </td>
-                <td>
-                  <a href={r.linkedin}>Link</a>
-                </td>
-                <td>
-                  <a href={r.portfolio}>Link</a>
-                </td>
-                <td>
-                  <select
-                    value={localStatuses[r._id] || r.status}
-                    onChange={(e) =>
-                      handleStatusChange(r._id, e.target.value)
-                    }
-                  >
-                    {STATUS_OPTIONS.map((s) => (
-                      <option key={s} value={s}>
-                        {s}
-                      </option>
-                    ))}
-                  </select>
-                </td>
-                <td>
-                  {new Date(
-                    r.updatedAt || r.createdAt
-                  ).toLocaleString("vi-VN")}
-                </td>
-                <td>
-                  <button onClick={() => handleUpdate(r._id)}>Update</button>
-                  <button onClick={() => handleRemove(r._id)}>Remove</button>
-                </td>
-              </tr>
-            ))}
-            {!data.length && (
-              <tr>
-                <td colSpan="7">No data</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-
-      <div className="pagination">
-        <button disabled={page === 1} onClick={() => setPage(page - 1)}>
-          Prev
-        </button>
-        <span>
-          Page {page} / {Math.ceil(total / PAGE_SIZE) || 1}
-        </span>
-        <button
-          disabled={page >= Math.ceil(total / PAGE_SIZE)}
-          onClick={() => setPage(page + 1)}
-        >
-          Next
-        </button>
-      </div>
-    </section>
-  );
-
-  const handleExportExcel = () => {
-  if (!rows.length) {
-    alert("No data to export");
-    return;
-  }
-
-  const exportData = rows.map((r) => ({
-    "Candidate Name": r.candidateName || "",
-    "Candidate Email": r.candidateEmail || "",
-    "Candidate Phone": r.candidatePhone || "",
-    "Job Title": jobMap[r.job]?.title || "",
-    "Job Salary": jobMap[r.job]?.salary || "",
-    "CTV Email":
-      recruiterMap[r.recruiter]?.email || r.recruiter || "",
-    Status: r.status,
-    Bonus: r.bonus ?? "",
-    "CV Link": r.cvUrl || "",
-    "LinkedIn": r.linkedin || "",
-    "Portfolio": r.portfolio || "",
-    "Created At": r.createdAt
-      ? new Date(r.createdAt).toLocaleString("vi-VN")
-      : "",
-    "Updated At": r.updatedAt
-      ? new Date(r.updatedAt).toLocaleString("vi-VN")
-      : "",
+  const focusStatusChartData = useMemo(() => {
+    const total = rows.length || 1;
+    const focus = ["submitted", "offer"];
+    const c = rows.reduce((a, r) => {
+      if (focus.includes(r.status))
+        a[r.status] = (a[r.status] || 0) + 1;
+      return a;
+    }, {});
+    return focus.map((s) => ({
+      name: s,
+      value: Math.round(((c[s] || 0) / total) * 100),
     }));
-
-    const worksheet = XLSX.utils.json_to_sheet(exportData);
-    const workbook = XLSX.utils.book_new();
-
-    XLSX.utils.book_append_sheet(
-      workbook,
-      worksheet,
-      "Candidates"
-    );
-
-    const excelBuffer = XLSX.write(workbook, {
-      bookType: "xlsx",
-      type: "array",
-    });
-
-    const blob = new Blob([excelBuffer], {
-      type:
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    });
-
-    saveAs(
-      blob,
-      `candidate-management-${new Date()
-        .toISOString()
-        .slice(0, 10)}.xlsx`
-    );
-  };
-
+  }, [rows]);
 
   /* ================= RENDER ================= */
   return (
     <div className="candidate-page">
       <h2>Candidate Management</h2>
-      
-      <div className="head">
 
+      {/* ===== ADD CHART UI ===== */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: 24,
+          marginBottom: 24,
+        }}
+      >
+        <StatusPieChart
+          title="All Candidate Status (%)"
+          data={allStatusChartData}
+        />
+        <StatusPieChart
+          title="Focus: Submitted vs Offer (%)"
+          data={focusStatusChartData}
+        />
+      </div>
+
+      <div className="head">
         <FilterUI
           filters={filters}
           onChange={(k, v) => setFilters((p) => ({ ...p, [k]: v }))}
@@ -425,7 +324,6 @@ export default function CandidateManagement() {
         >
           Export Excel
         </button>
-
       </div>
 
       {renderTable(
