@@ -237,6 +237,8 @@ export default function MyCandidates() {
         finalized: true,
       }),
     ]).then(([active, rejected]) => {
+          console.log("[MyCandidates] Active referrals from server:", active);
+    console.log("[MyCandidates] Rejected referrals from server:", rejected);
       setCandidates(active || []);
       setArchived(rejected || []);
     });
