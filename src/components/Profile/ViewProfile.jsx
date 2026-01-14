@@ -42,7 +42,6 @@ export default function ViewProfile() {
 
     const loadProfile = async () => {
       const data = await fetchProfileFromServerL(user._id);
-      console.log("Loaded profile data:", data);
       if (!data) return;
 
       setUser(data);

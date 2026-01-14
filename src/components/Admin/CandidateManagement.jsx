@@ -184,7 +184,6 @@ export default function CandidateManagement() {
     listReferrals({ id: adminId, email, isAdmin: true, limit: 1000 }).then(
       async (res = []) => {
         
-        console.log(res);
         setRows(res);
 
         const statusMap = {};

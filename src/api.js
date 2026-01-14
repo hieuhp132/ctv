@@ -5,7 +5,7 @@ export const API_BASE = (typeof import.meta !== 'undefined' && import.meta.env &
 import axios from 'axios';  
 
 
-console.log(API_BASE);
+// console.log(API_BASE);
 
 export async function getUsersList() {
 
@@ -303,19 +303,16 @@ export async function updateJob(updated) {
 }
 
 export async function createJobL(job) {
-  console.log("createJobL called with:", job);
   const res = await fetch(`${API_BASE}/local/jobs`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(job),
   });
   const created = await res.json();
-  console.log("createJobL created:", created);
   return created;
 }
 
 export async function updateJobL(updated) {
-  console.log("updateJobL called with:", updated);
   const { _id, ...payload } = updated;
   const res = await fetch(`${API_BASE}/local/jobs/update/${_id}`, {
     method: "PUT",
@@ -323,7 +320,6 @@ export async function updateJobL(updated) {
     body: JSON.stringify(payload),
   });
   const saved = await res.json();
-  console.log("updateJobL saved:", saved);
   return saved;
 } 
 
@@ -339,12 +335,12 @@ export async function deleteJob(id) {
 }
 
 export async function deleteJobL(id) {
-  console.log("deleteJobL called with id:", id);
+  // console.log("deleteJobL called with id:", id);
   const res = await fetch(`${API_BASE}/local/jobs/${id}/remove`, {
     method: "DELETE",
   });
   if (!res.ok) return false;
-  console.log("Response ok for deleteJobL", res);
+  // console.log("Response ok for deleteJobL", res);
   return true;
 }
 
