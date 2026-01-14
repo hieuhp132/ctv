@@ -1,12 +1,21 @@
 import React, { useEffect, useState } from "react";
-// Giả định bạn đã thêm updateUserStatusL vào file api.js
-import { getUsersListL, removeUserByIdL, resetPasswordL, updateUserStatusL } from "../../../api"; 
+import {
+  getUsersListL,
+  removeUserByIdL,
+  resetPasswordL,
+  updateUserStatusL,
+} from "../../../api";
 import "./UserList.css";
 
 export default function UserList() {
   const [userList, setUserList] = useState([]);
   const [passwordInputs, setPasswordInputs] = useState({});
+  const [searchText, setSearchText] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize] = useState(12);
 
+
+  /* ================= FETCH USERS ================= */
   const fetchUserList = async () => {
     try {
       const res = await getUsersListL();
@@ -20,17 +29,17 @@ export default function UserList() {
     fetchUserList();
   }, []);
 
-  // --- HÀM XỬ LÝ DUYỆT / TỪ CHỐI ---
+  /* ================= ACTION HANDLERS ================= */
   const handleStatusUpdate = async (userId, newStatus) => {
     try {
       await updateUserStatusL({ userId, newStatus });
-      alert(`User status updated to ${newStatus}`);
-      
-      // Cập nhật lại UI tại chỗ
-      setUserList(prev => prev.map(u => 
-        u._id === userId ? { ...u, status: newStatus } : u
-      ));
-    } catch (err) {
+      setUserList((prev) =>
+        prev.map((u) =>
+          u._id === userId ? { ...u, status: newStatus } : u
+        )
+      );
+      setOpenDropdown(null);
+    } catch {
       alert("Failed to update status");
     }
   };
@@ -39,8 +48,8 @@ export default function UserList() {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
     try {
       await removeUserByIdL({ id: userId });
-      setUserList(prev => prev.filter(u => u._id !== userId));
-      alert("User deleted successfully");
+      setUserList((prev) => prev.filter((u) => u._id !== userId));
+    
     } catch {
       alert("Failed to delete user");
     }
@@ -54,79 +63,195 @@ export default function UserList() {
     try {
       await resetPasswordL({ email: user.email, newPassword });
       alert(`Password for ${user.email} reset successfully`);
-      setPasswordInputs(prev => ({ ...prev, [user._id]: "" }));
-    } catch (err) {
+      setPasswordInputs((prev) => ({ ...prev, [user._id]: "" }));
+    } catch {
       alert("Reset failed");
     }
   };
 
   const handlePasswordChange = (userId, value) => {
-    setPasswordInputs(prev => ({ ...prev, [userId]: value }));
+    setPasswordInputs((prev) => ({ ...prev, [userId]: value }));
   };
 
-  // Hàm trả về màu sắc cho nhãn trạng thái
   const getStatusClass = (status) => {
-    if (!status || !String(status).trim()) return "status-unknown";
-    const s = String(status).trim().toLowerCase();
-    switch (s) {
-      case "active": return "status-active";
-      case "pending": return "status-pending";
-      case "rejected": return "status-rejected";
-      default: return "status-unknown";
-    }
+    const s = String(status || "").toLowerCase().trim();
+    if (s === "active") return "status-active";
+    if (s === "pending") return "status-pending";
+    if (s === "rejected") return "status-rejected";
+    return "status-unknown";
   };
 
+  /* ================= FILTER & PAGINATION ================= */
+  const filtered = userList.filter((u) => {
+    const q = String(searchText || "").toLowerCase();
+    if (!q) return true;
+    return (
+      (u.name || "").toLowerCase().includes(q) ||
+      (u.email || "").toLowerCase().includes(q) ||
+      (u.role || "").toLowerCase().includes(q)
+    );
+  });
+
+  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const startIdx = (currentPage - 1) * pageSize;
+  const pageItems = filtered.slice(startIdx, startIdx + pageSize);
+
+  /* ================= RENDER ================= */
   return (
-    <>
-      <h2 style={{ marginTop: 50 }}>Users Management:</h2>
+    <div className="management-container">
+      <h2 className="table-title">User Management</h2>
 
-      <div className="user-list">
-        {userList.map(u => (
-          <div key={u._id} className="user-card">
-            <div><strong>Name:</strong> {u.name || "-"}</div>
-            <div><strong>Email:</strong> {u.email || "-"}</div>
-            <div><strong>Role:</strong> {u.role || "-"}</div>
-            
-            {/* HIỂN THỊ TRẠNG THÁI - always render a badge; fallback to 'Unknown' if missing */}
-            <div>
-              <strong>Status: </strong>
-              <span className={`status-badge ${getStatusClass(u.status)}`}>
-                {u.status && String(u.status).trim() ? u.status : "Unknown"}
-              </span>
-            </div>
-
-            <div>
-              <strong>New Password:</strong>
-              <input
-                type="password"
-                placeholder="Enter new password"
-                value={passwordInputs[u._id] || ""}
-                onChange={(e) => handlePasswordChange(u._id, e.target.value)}
-                className="password-input"
-              />
-            </div>
-
-            <div className="user-actions">
-              {/* NÚT DUYỆT (Chỉ hiện nếu chưa Active) */}
-                <button className="approve-btn" onClick={() => handleStatusUpdate(u._id, "Active")}>
-                  Approve
-                </button>
-              
-                <button className="reject-btn" onClick={() => handleStatusUpdate(u._id, "Rejected")}>
-                  Reject
-                </button>
-
-              <button onClick={() => handleEdit(u, passwordInputs[u._id])}>
-                Reset Pass
-              </button>
-              
-              <button onClick={() => handleDelete(u._id)} className="danger">
-                Delete
-              </button>
-            </div>
-          </div>
-        ))}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: 12,
+        }}
+      >
+        <input
+          type="search"
+          placeholder="Search name, email or role..."
+          value={searchText}
+          onChange={(e) => {
+            setSearchText(e.target.value);
+            setCurrentPage(1);
+          }}
+          style={{
+            padding: 8,
+            borderRadius: 6,
+            border: "1px solid #ddd",
+            width: 320,
+          }}
+        />
+        <div style={{ fontSize: 14, color: "#666" }}>
+          Showing {filtered.length} users
+        </div>
       </div>
-    </>
+
+      <div className="table-responsive">
+        <table className="user-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th>Reset Password</th>
+              <th className="text-center">Actions</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {pageItems.map((u) => (
+              <tr key={u._id}>
+                <td className="font-bold">{u.name || "-"}</td>
+                <td>{u.email}</td>
+                <td>
+                  <span className={`role-tag ${u.role === "admin" ? "admin" : ""}`}>{u.role}</span>
+                </td>
+                <td>
+                  <span
+                    className={`status-badge ${getStatusClass(u.status)}`}
+                  >
+                    {u.status || "Unknown"}
+                  </span>
+                </td>
+
+                <td>
+                  <div className="password-box">
+                    <input
+                      type="password"
+                      placeholder="New pass"
+                      value={passwordInputs[u._id] || ""}
+                      onChange={(e) =>
+                        handlePasswordChange(u._id, e.target.value)
+                      }
+                    />
+                    <button
+                      className="btn-save"
+                      onClick={() =>
+                        handleEdit(u, passwordInputs[u._id])
+                      }
+                    >
+                      Save
+                    </button>
+                  </div>
+                </td>
+
+                <td className="action-buttons">
+
+                        <button
+                          onClick={() =>
+                            handleStatusUpdate(u._id, "Active")
+                          }
+                        >
+                          Approve
+                        </button>
+
+                        <button
+                          onClick={() =>
+                            handleStatusUpdate(u._id, "Rejected")
+                          }
+                        >
+                          Reject
+                        </button>
+
+                        <hr />
+
+                        <button
+                          className="delete-item"
+                          onClick={() => handleDelete(u._id)}
+                        >
+                          Delete
+                        </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {userList.length === 0 && (
+          <p className="empty-msg">No users found.</p>
+        )}
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginTop: 12,
+        }}
+      >
+        <div>
+          <button
+            onClick={() =>
+              setCurrentPage((p) => Math.max(1, p - 1))
+            }
+            disabled={currentPage <= 1}
+            style={{ padding: "6px 10px", marginRight: 8 }}
+          >
+            Previous
+          </button>
+
+          <button
+            onClick={() =>
+              setCurrentPage((p) =>
+                Math.min(totalPages, p + 1)
+              )
+            }
+            disabled={currentPage >= totalPages}
+            style={{ padding: "6px 10px" }}
+          >
+            Next
+          </button>
+        </div>
+
+        <div style={{ fontSize: 13, color: "#555" }}>
+          Page {currentPage} / {totalPages}
+        </div>
+      </div>
+    </div>
   );
 }
