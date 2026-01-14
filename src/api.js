@@ -985,3 +985,44 @@ export async function removeUserByIdL({ id }) {
     throw e;
   }
 }
+
+export async function updateUserStatusL({ userId, newStatus }) {
+  try {
+    const res = await fetch(`${API_BASE}/local/users/update-status`, {
+      method: "POST",
+      headers: { 
+        "Content-Type": "application/json",
+        // Nếu bạn có dùng JWT để bảo mật route admin, hãy thêm dòng dưới:
+        // "Authorization": `Bearer ${localStorage.getItem("token")}`
+      },
+      body: JSON.stringify({ userId, newStatus }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok || !data.success) {
+      throw new Error(data.message || "Failed to update status");
+    }
+
+    return data; // Trả về kết quả thành công { success: true, message: ..., user: ... }
+  } catch (err) {
+    console.error("API updateUserStatusL() error:", err);
+    throw err;
+  }
+}
+
+export async function getUserStatusL(email) {
+  try {
+    const res = await fetch(`${API_BASE}/local/user-status?email=${encodeURIComponent(email)}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" }
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message);
+    
+    return data; // Trả về { success: true, status: "..." }
+  } catch (err) {
+    throw err;
+  }
+}

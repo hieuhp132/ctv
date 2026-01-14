@@ -19,6 +19,7 @@ import AdminSavedJobs from "./components/Admin/SavedJobs";
 import UsersManagement from "./components/Admin/UsersManagement";
 import AuthCallback from "./components/auth/AuthPage";
 import Updated from "./components/Updated";
+import Pending from "./components/Pending";
 
 /* ================= PRIVATE ROUTE ================= */
 function PrivateRoute({ children, roles }) {
@@ -64,6 +65,7 @@ export default function App() {
           <Route path="/signup" element={<><Navbar /><SignUp /></>} />
           <Route path="/terms" element={<TermsPage />} />
           <Route path="/auth/callback" element={<AuthCallback />} />
+          <Route path="/pending" element={<Pending/>} />
 
           {/* ---------------- PRIVATE ROUTES ---------------- */}
           <Route

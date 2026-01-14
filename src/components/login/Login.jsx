@@ -12,9 +12,11 @@ import { API_BASE, apiLogin, llogin } from "../../api";
 import { supabase } from "../../supabaseClient";
 
 import "./Login.css";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const { login, user } = useAuth();
+  const navigate = useNavigate();
 
   // UI states
   const [showPassword, setShowPassword] = useState(false);
@@ -83,10 +85,17 @@ const handleSubmit = async (e) => {
 
     // Gọi AuthProvider login → tự lưu session + redirect
     login(user, token);
-
+    console.log("Pass");
   } catch (err) {
-    setServerMessage(err.message || "Login failed");
+    const msg = err.message || "Login failed"; 
+    setServerMessage(msg);
     triggerShake();
+    console.log("Not Pass");
+    // Kiểm tra lỗi Chờ duyệt HOẶC lỗi Bị từ chối
+    if (msg.includes("chờ Admin phê duyệt") || msg.includes("bị từ chối truy cập")) {
+      localStorage.setItem("pendingEmail", email); 
+      navigate("/pending");
+    }
   }
 
   setLoading(false);

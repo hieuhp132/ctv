@@ -79,14 +79,16 @@ export default function SignUp() {
     setIsSubmitting(true);
   
     try {
-      await lregister({
+      const response = await lregister({
         name: username,
         email,
         password,
         promoCode: promodeCode || null,
       });
-  
-      setServerMessage("Đăng ký thành công!");
+      console.log(response);
+      // setServerMessage("Đăng ký thành công!");
+      localStorage.setItem("pendingEmail", email); // Lưu email vào máy người dùng
+      navigate("/pending");
       e.target.reset();
   
     } catch (err) {

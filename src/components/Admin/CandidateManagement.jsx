@@ -23,6 +23,84 @@ const STATUS_OPTIONS = [
 ];
 const PAGE_SIZE = 10;
 
+/* ================= CHART HELPERS & COMPONENTS ================= */
+const STATUS_COLORS = {
+  submitted: "#2563eb",
+  under_review: "#fb923c",
+  interviewing: "#f97316",
+  offer: "#10b981",
+  hired: "#059669",
+  onboard: "#059669",
+  rejected: "#ef4444",
+  other: "#6b7280",
+};
+
+function polarToCartesian(cx, cy, r, angleDeg) {
+  const angleRad = ((angleDeg - 90) * Math.PI) / 180.0;
+  return {
+    x: cx + r * Math.cos(angleRad),
+    y: cy + r * Math.sin(angleRad),
+  };
+}
+
+function describeArcSector(cx, cy, rOuter, rInner, startAngle, endAngle) {
+  const startOuter = polarToCartesian(cx, cy, rOuter, endAngle);
+  const endOuter = polarToCartesian(cx, cy, rOuter, startAngle);
+  const startInner = polarToCartesian(cx, cy, rInner, endAngle);
+  const endInner = polarToCartesian(cx, cy, rInner, startAngle);
+
+  const largeArcFlag = endAngle - startAngle <= 180 ? "0" : "1";
+
+  const d = [
+    `M ${startOuter.x} ${startOuter.y}`,
+    `A ${rOuter} ${rOuter} 0 ${largeArcFlag} 0 ${endOuter.x} ${endOuter.y}`,
+    `L ${endInner.x} ${endInner.y}`,
+    `A ${rInner} ${rInner} 0 ${largeArcFlag} 1 ${startInner.x} ${startInner.y}`,
+    "Z",
+  ].join(" ");
+
+  return d;
+}
+
+function PieChart({ data, size = 160, thickness = 36, showLegend = true }) {
+  const total = data.reduce((s, d) => s + Math.max(0, d.value), 0) || 1;
+  let angle = 0;
+  const cx = size / 2;
+  const cy = size / 2;
+  const rOuter = size / 2 - 6;
+  const rInner = Math.max(6, rOuter - thickness);
+
+  return (
+    <div className="chart-card">
+      <svg width={size} height={size} className="pie-svg" role="img" aria-label="Status chart">
+        {data.map((d, i) => {
+          const value = Math.max(0, d.value);
+          const start = angle;
+          const sweep = (value / total) * 360;
+          const end = start + sweep;
+          const path = describeArcSector(cx, cy, rOuter, rInner, start, end);
+          angle = end;
+          return <path key={i} d={path} fill={d.color || STATUS_COLORS[d.label] || STATUS_COLORS.other} />;
+        })}
+        <circle cx={cx} cy={cy} r={rInner - 6} fill="#fff" />
+        <text x={cx} y={cy} textAnchor="middle" dominantBaseline="central" style={{fontSize:12,fill:'#374151'}}>Total {data.reduce((s,d)=>s+d.value,0)}</text>
+      </svg>
+
+      {showLegend && (
+        <div className="legend">
+          {data.map((d, i) => (
+            <div key={i} className="legend-item">
+              <span className="legend-color" style={{ background: d.color || STATUS_COLORS[d.label] || STATUS_COLORS.other }} />
+              <span className="legend-label">{d.label} — {d.value} ({Math.round((d.value / total) * 100)}%)</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+
 /* ================= HELPERS ================= */
 const paginate = (data, page) =>
   data.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
@@ -404,31 +482,67 @@ export default function CandidateManagement() {
     );
   };
 
+  /* ================= CHART DATA PREP ================= */
+  const statusCounts = useMemo(() => {
+    const map = {};
+    rows.forEach((r) => {
+      const s = r.status || "other";
+      map[s] = (map[s] || 0) + 1;
+    });
+    // ensure all known statuses present
+    STATUS_OPTIONS.forEach((s) => {
+      map[s] = map[s] || 0;
+    });
+    return map;
+  }, [rows]);
+
+  const overallChartData = useMemo(() => {
+    return Object.keys(statusCounts).map((k) => ({ label: k, value: statusCounts[k] || 0, color: STATUS_COLORS[k] }));
+  }, [statusCounts]);
+
+  const focusChartData = useMemo(() => {
+    const sub = statusCounts.submitted || 0;
+    const off = statusCounts.offer || 0;
+    const rest = Object.keys(statusCounts).reduce((s, k) => {
+      if (k === "submitted" || k === "offer") return s;
+      return s + (statusCounts[k] || 0);
+    }, 0);
+    return [
+      { label: "submitted", value: sub, color: STATUS_COLORS.submitted },
+      { label: "offer", value: off, color: STATUS_COLORS.offer },
+      { label: "others", value: rest, color: STATUS_COLORS.other },
+    ];
+  }, [statusCounts]);
+
 
   /* ================= RENDER ================= */
   return (
     <div className="candidate-page">
       <h2>Candidate Management</h2>
       
-      <div className="head">
 
         <FilterUI
           filters={filters}
           onChange={(k, v) => setFilters((p) => ({ ...p, [k]: v }))}
         />
+      <div style={{display:'flex',flexDirection:'column',gap:12,alignItems:'flex-end'}}>
+          <div className="charts-row">
+            <PieChart data={overallChartData} size={180} thickness={40} />
+            <PieChart data={focusChartData} size={180} thickness={44} />
+          </div>
 
-        <button
-          onClick={handleExportExcel}
-          style={{
-            padding: "6px 12px",
-            fontWeight: 600,
-            cursor: "pointer",
-          }}
-        >
-          Export Excel
-        </button>
-
-      </div>
+          <button
+            onClick={handleExportExcel}
+            style={{
+              padding: "6px 12px",
+              fontWeight: 600,
+              cursor: "pointer",
+              marginBottom: "1rem"
+            }}
+          >
+            Export Excel
+          </button>
+        </div>
 
       {renderTable(
         "Active Candidates",

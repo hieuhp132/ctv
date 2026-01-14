@@ -72,7 +72,31 @@
     border-radius: 6px;
     box-sizing: border-box;
   }
+  button.danger {
+    background-color: #ff4d4f;
+    color: white;
+    border: none;
+  }
+  .status-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.85em;
+  font-weight: bold;
+}
 
+.status-active { background-color: #d4edda; color: #155724; }
+.status-pending { background-color: #fff3cd; color: #856404; }
+.status-rejected { background-color: #f8d7da; color: #721c24; }
+
+.approve-btn { background-color: #28a745; color: white; border: none; }
+.reject-btn { background-color: #ffc107; color: black; border: none; }
+
+.user-actions button {
+  margin-right: 5px;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+}
   @media (max-width: 600px) {
     .user-list {
       grid-template-columns: 1fr;

@@ -49,12 +49,18 @@ export default function AuthCallback() {
           name,
           email,
           password: defaultPassword,
+
           promodeCode: null,
           fromSupabase: true, // ✔ phải gửi đúng lên backend
         });
 
         // console.log("Signup backend result:", reg);
 
+        if(reg.user && reg.user.status === "Pending") {
+          localStorage.setItem("pendingEmail", email); // Lưu email vào máy người dùng
+          // navigate("/pending");
+          return navigate("/pending");
+        }
         // backend có 3 trạng thái:
         // - user mới → success
         // - user cũ + có password → vẫn success vì fromSupabase:true

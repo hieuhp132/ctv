@@ -13,7 +13,7 @@ import Icons from "./Icons";
 import Select from "react-select";
 
 export default function Dashboard() {
-  const { user } = useAuth();
+  const { user, authReady } = useAuth();
   const recruiterId = user?.id || user?.email;
 
   const [jobs, setJobs] = useState([]);
@@ -42,11 +42,26 @@ export default function Dashboard() {
     suitability: "",
   });
 
+  const CATEGORY_KEYWORDS = {
+    Developer: ["dev", "developer", "engineer", "react", "node"],
+    Data: ["data", "ml", "machine learning"],
+    Designer: ["design", "ux", "ui"],
+    Sales: ["sales", "business"],
+    Marketing: ["marketing", "seo"],
+    Manager: ["manager", "lead"],
+  };
+
   const asArray = (v) => (Array.isArray(v) ? v : []);
   const getJobId = (job) => job?._id || job?.id;
 
+  // ⚡ Dashboard chỉ render khi user Active
+  if (!authReady) return <p>Loading...</p>;
+  if (!user || user.status !== "Active") return null; // AuthProvider sẽ redirect nếu Pending/Rejected
+
+  // ================= Load Jobs & Saved Jobs =================
   useEffect(() => {
     if (!user) return;
+
     (async () => {
       setLoading(true);
       try {
@@ -54,7 +69,7 @@ export default function Dashboard() {
         const jobsArray = asArray(jobsRes?.jobs).map((j) => ({ ...j, _id: getJobId(j) }));
 
         let savedIds = new Set();
-        if (user?.email || user?.id) {
+        if (recruiterId) {
           const savedRes = await fetchSavedJobsL(user.email);
           asArray(savedRes?.jobs).forEach((j) => {
             const id = j.jobId || j._id;
@@ -70,25 +85,9 @@ export default function Dashboard() {
         setLoading(false);
       }
     })();
-  }, [user]);
+  }, [user, recruiterId]);
 
-  const CATEGORY_KEYWORDS = {
-    Developer: ["dev", "developer", "engineer", "react", "node"],
-    Data: ["data", "ml", "machine learning"],
-    Designer: ["design", "ux", "ui"],
-    Sales: ["sales", "business"],
-    Marketing: ["marketing", "seo"],
-    Manager: ["manager", "lead"],
-  };
-
-  // Chỉ lấy job Active
-  const activeJobs = useMemo(() => {
-    const today = new Date();
-    return jobs.filter(
-      (j) => j.status?.toLowerCase() === "active" && (!j.deadline || new Date(j.deadline) >= today)
-    );
-  }, [jobs]);
-
+  // ================= Save / Unsave Job =================
   const handleSaveUnsaveJob = async (job) => {
     if (!recruiterId) return;
     try {
@@ -109,6 +108,7 @@ export default function Dashboard() {
     }
   };
 
+  // ================= Upload CV & Submit Candidate =================
   const uploadCV = async () => {
     setUploadingCV(true);
     try {
@@ -127,7 +127,14 @@ export default function Dashboard() {
       if (!cvUrl) return alert("Upload failed");
       await createSubmissionL({ jobId: selectedJob._id, recruiterId, ...candidateForm, cvUrl });
       alert("Candidate submitted");
-      setCandidateForm({ candidateName: "", candidateEmail: "", candidatePhone: "", linkedin: "", portfolio: "", suitability: "" });
+      setCandidateForm({
+        candidateName: "",
+        candidateEmail: "",
+        candidatePhone: "",
+        linkedin: "",
+        portfolio: "",
+        suitability: "",
+      });
       setCvFile(null);
       setShowSubmit(false);
     } catch {
@@ -137,52 +144,47 @@ export default function Dashboard() {
     }
   };
 
-  const selectStyles = {
-    control: (base) => ({
-      ...base,
-      minHeight: 40,
-      borderRadius: 8,
-      fontSize: 14,
-    }),
-    valueContainer: (base) => ({
-      ...base,
-      padding: "2px 10px",
-    }),
-    option: (base, state) => ({
-      ...base,
-      padding: "10px 12px",
-      fontSize: 14,
-      backgroundColor: state.isFocused ? "#f3f4f6" : "#fff",
-      color: "#111",
-      whiteSpace: "normal",
-      cursor: "pointer",
-    }),
-    menu: (base) => ({
-      ...base,
-      zIndex: 9999,
-    }),
-  };
+  // ================= Filters & Memoization =================
+  const activeJobs = useMemo(() => {
+    const today = new Date();
+    return jobs.filter(
+      (j) => j.status?.toLowerCase() === "active" && (!j.deadline || new Date(j.deadline) >= today)
+    );
+  }, [jobs]);
 
-  const categoriesAvailable = useMemo(() => {
-    const cats = new Set();
-    activeJobs.forEach((job) => {
-      const title = (job.title || "").toLowerCase();
-      Object.keys(CATEGORY_KEYWORDS).forEach((cat) => {
-        const kws = CATEGORY_KEYWORDS[cat] || [];
-        if (kws.some((kw) => title.includes(kw))) cats.add(cat);
-      });
-    });
-    if (cats.size === 0) cats.add("Developer");
-    return Array.from(cats);
-  }, [activeJobs]);
+  const filteredJobs = useMemo(() => {
+    const text = searchText.toLowerCase().trim();
+    return activeJobs.filter((job) => {
+      const searchableText = [
+        job.title || "",
+        job.company || "",
+        job.location || "",
+        Array.isArray(job.keywords) ? job.keywords.join(" ") : job.keywords || "",
+        (job.description || "").replace(/<[^>]*>/g, " "),
+        (job.requirements || "").replace(/<[^>]*>/g, " "),
+      ].join(" ").toLowerCase();
+
+      const matchSearch = text === "" || searchableText.includes(text);
+      const matchLocation = filterLocation === "" || job.location === filterLocation;
+      const matchCompany = filterCompany === "" || job.company === filterCompany;
+
+      let matchCategory = true;
+      if (filterCategory) {
+        const title = (job.title || "").toLowerCase();
+        const keywords = CATEGORY_KEYWORDS[filterCategory] || [];
+        matchCategory = keywords.some((kw) => title.includes(kw));
+      }
+
+      return matchSearch && matchLocation && matchCompany && matchCategory;
+    }).sort((a, b) => new Date(b.createdAt || b._id) - new Date(a.createdAt || a._id));
+  }, [activeJobs, searchText, filterLocation, filterCompany, filterCategory]);
 
   const uniqueLocations = useMemo(() => {
     const m = new Map();
     activeJobs.forEach((j) => {
-      const raw = j.location;
-      const k = String(raw || "").trim().replace(/\s+/g, " ").toLowerCase();
+      const k = String(j.location || "").trim().toLowerCase();
       if (!k) return;
-      if (!m.has(k)) m.set(k, raw);
+      if (!m.has(k)) m.set(k, j.location);
     });
     return Array.from(m.values());
   }, [activeJobs]);
@@ -190,54 +192,48 @@ export default function Dashboard() {
   const uniqueCompanies = useMemo(() => {
     const m = new Map();
     activeJobs.forEach((j) => {
-      const raw = j.company;
-      const k = String(raw || "").trim().replace(/\s+/g, " ").toLowerCase();
+      const k = String(j.company || "").trim().toLowerCase();
       if (!k) return;
-      if (!m.has(k)) m.set(k, raw);
+      if (!m.has(k)) m.set(k, j.company);
     });
     return Array.from(m.values());
   }, [activeJobs]);
 
-  const filteredJobs = useMemo(() => {
-    const text = searchText.toLowerCase().trim();
-    return activeJobs
-      .filter((job) => {
-        const searchableText = [
-          job.title || "",
-          job.company || "",
-          job.location || "",
-          Array.isArray(job.keywords) ? job.keywords.join(" ") : job.keywords || "",
-          (job.description || "").replace(/<[^>]*>/g, " "),
-          (job.requirements || "").replace(/<[^>]*>/g, " "),
-        ].join(" ").toLowerCase();
-
-        const matchSearch = text === "" || searchableText.includes(text);
-        const matchLocation = filterLocation === "" || job.location === filterLocation;
-        const matchCompany = filterCompany === "" || job.company === filterCompany;
-
-        let matchCategory = true;
-        if (filterCategory) {
-          const title = (job.title || "").toLowerCase();
-          const keywords = CATEGORY_KEYWORDS[filterCategory] || [];
-          matchCategory = keywords.some((kw) => title.includes(kw));
-        }
-
-        return matchSearch && matchLocation && matchCompany && matchCategory;
-      })
-      .sort((a, b) => new Date(b.createdAt || b._id) - new Date(a.createdAt || a._id));
-  }, [activeJobs, searchText, filterLocation, filterCompany, filterCategory]);
-
-  const locationOptions = useMemo(() => uniqueLocations.map(loc => ({ value: loc, label: loc })), [uniqueLocations]);
-  const companyOptions = useMemo(() => uniqueCompanies.map(c => ({ value: c, label: c })), [uniqueCompanies]);
-  const categoryOptions = useMemo(() => categoriesAvailable.map(cat => ({ value: cat, label: cat })), [categoriesAvailable]);
+  const categoriesAvailable = useMemo(() => {
+    const cats = new Set();
+    activeJobs.forEach((job) => {
+      const title = (job.title || "").toLowerCase();
+      Object.keys(CATEGORY_KEYWORDS).forEach((cat) => {
+        if (CATEGORY_KEYWORDS[cat].some((kw) => title.includes(kw))) cats.add(cat);
+      });
+    });
+    if (cats.size === 0) cats.add("Developer");
+    return Array.from(cats);
+  }, [activeJobs]);
 
   const totalPages = Math.max(1, Math.ceil(filteredJobs.length / pageSize));
   const displayedJobs = filteredJobs.slice((page - 1) * pageSize, page * pageSize);
 
+  const selectStyles = {
+    control: (base) => ({ ...base, minHeight: 40, borderRadius: 8, fontSize: 14 }),
+    valueContainer: (base) => ({ ...base, padding: "2px 10px" }),
+    option: (base, state) => ({
+      ...base,
+      padding: "10px 12px",
+      fontSize: 14,
+      backgroundColor: state.isFocused ? "#f3f4f6" : "#fff",
+      color: "#111",
+      cursor: "pointer",
+    }),
+    menu: (base) => ({ ...base, zIndex: 9999 }),
+  };
+
+  // ================= Render =================
   return (
     <div className="dashboard-container">
       <h2>Active Jobs</h2>
 
+      {/* Filter bar */}
       <div className="filter-bar">
         <input
           type="text"
@@ -246,41 +242,33 @@ export default function Dashboard() {
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
         />
-
-        <div style={{ minWidth: 200, flex: 1 }}>
-          <Select
-            placeholder="All Locations"
-            options={locationOptions}
-            isClearable
-            styles={selectStyles}
-            value={filterLocation ? { value: filterLocation, label: filterLocation } : null}
-            onChange={(opt) => setFilterLocation(opt?.value || "")}
-          />
-        </div>
-
-        <div style={{ minWidth: 200, flex: 1 }}>
-          <Select
-            placeholder="All Companies"
-            options={companyOptions}
-            isClearable
-            styles={selectStyles}
-            value={filterCompany ? { value: filterCompany, label: filterCompany } : null}
-            onChange={(opt) => setFilterCompany(opt?.value || "")}
-          />
-        </div>
-
-        <div style={{ minWidth: 180 }}>
-          <Select
-            placeholder="All Categories"
-            options={categoryOptions}
-            isClearable
-            styles={selectStyles}
-            value={filterCategory ? { value: filterCategory, label: filterCategory } : null}
-            onChange={(opt) => setFilterCategory(opt?.value || "")}
-          />
-        </div>
+        <Select
+          placeholder="All Locations"
+          options={uniqueLocations.map((loc) => ({ value: loc, label: loc }))}
+          isClearable
+          styles={selectStyles}
+          value={filterLocation ? { value: filterLocation, label: filterLocation } : null}
+          onChange={(opt) => setFilterLocation(opt?.value || "")}
+        />
+        <Select
+          placeholder="All Companies"
+          options={uniqueCompanies.map((c) => ({ value: c, label: c }))}
+          isClearable
+          styles={selectStyles}
+          value={filterCompany ? { value: filterCompany, label: filterCompany } : null}
+          onChange={(opt) => setFilterCompany(opt?.value || "")}
+        />
+        <Select
+          placeholder="All Categories"
+          options={categoriesAvailable.map((cat) => ({ value: cat, label: cat }))}
+          isClearable
+          styles={selectStyles}
+          value={filterCategory ? { value: filterCategory, label: filterCategory } : null}
+          onChange={(opt) => setFilterCategory(opt?.value || "")}
+        />
       </div>
 
+      {/* Job list */}
       {loading ? <p>Loading...</p> : (
         <div className="job-list">
           {displayedJobs.map((job) => (
@@ -290,7 +278,10 @@ export default function Dashboard() {
                   <h3>{job.title}</h3>
                   <p>{job.company}</p>
                 </div>
-                <button className={`save-btn ${job.isSaved ? "saved" : ""}`} onClick={(e) => { e.stopPropagation(); handleSaveUnsaveJob(job); }}>
+                <button
+                  className={`save-btn ${job.isSaved ? "saved" : ""}`}
+                  onClick={(e) => { e.stopPropagation(); handleSaveUnsaveJob(job); }}
+                >
                   {job.isSaved ? "★" : "☆"}
                 </button>
               </div>
@@ -315,7 +306,10 @@ export default function Dashboard() {
                 <span className="job-bonus">+USD {job.bonus}</span>
               </div>
 
-              <button className="submit-btn" onClick={(e) => { e.stopPropagation(); setSelectedJob(job); setShowSubmit(true); }}>
+              <button
+                className="submit-btn"
+                onClick={(e) => { e.stopPropagation(); setSelectedJob(job); setShowSubmit(true); }}
+              >
                 Submit Candidate
               </button>
             </div>
@@ -323,14 +317,18 @@ export default function Dashboard() {
         </div>
       )}
 
+      {/* Pagination */}
       {totalPages > 1 && (
         <div className="pagination">
           {Array.from({ length: totalPages }).map((_, i) => (
-            <button key={i} onClick={() => setPage(i + 1)} className={i + 1 === page ? "active" : ""}>{i + 1}</button>
+            <button key={i} onClick={() => setPage(i + 1)} className={i + 1 === page ? "active" : ""}>
+              {i + 1}
+            </button>
           ))}
         </div>
       )}
 
+      {/* Submit modal */}
       {showSubmit && selectedJob && (
         <div className="modal-overlay">
           <div className="modal">
