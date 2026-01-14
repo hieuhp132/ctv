@@ -66,11 +66,13 @@ export default function UserList() {
 
   // Hàm trả về màu sắc cho nhãn trạng thái
   const getStatusClass = (status) => {
-    switch (status) {
-      case "Active": return "status-active";
-      case "Pending": return "status-pending";
-      case "Rejected": return "status-rejected";
-      default: return "";
+    if (!status || !String(status).trim()) return "status-unknown";
+    const s = String(status).trim().toLowerCase();
+    switch (s) {
+      case "active": return "status-active";
+      case "pending": return "status-pending";
+      case "rejected": return "status-rejected";
+      default: return "status-unknown";
     }
   };
 
@@ -85,17 +87,12 @@ export default function UserList() {
             <div><strong>Email:</strong> {u.email || "-"}</div>
             <div><strong>Role:</strong> {u.role || "-"}</div>
             
-            {/* HIỂN THỊ TRẠNG THÁI */}
+            {/* HIỂN THỊ TRẠNG THÁI - always render a badge; fallback to 'Unknown' if missing */}
             <div>
-              
-              {u.status && (
-                <>
-                  <strong>Status: </strong>
-                  <span className={`status-badge ${getStatusClass(u.status)}`}>
-                    {u.status}
-                  </span>
-                </>
-              )}
+              <strong>Status: </strong>
+              <span className={`status-badge ${getStatusClass(u.status)}`}>
+                {u.status && String(u.status).trim() ? u.status : "Unknown"}
+              </span>
             </div>
 
             <div>

@@ -87,6 +87,8 @@
 .status-active { background-color: #d4edda; color: #155724; }
 .status-pending { background-color: #fff3cd; color: #856404; }
 .status-rejected { background-color: #f8d7da; color: #721c24; }
+/* Unknown or missing status */
+.status-unknown { background-color: #eeeeee; color: #333333; }
 
 .approve-btn { background-color: #28a745; color: white; border: none; }
 .reject-btn { background-color: #ffc107; color: black; border: none; }
