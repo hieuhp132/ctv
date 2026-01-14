@@ -483,36 +483,36 @@ export default function CandidateManagement() {
   };
 
   /* ================= CHART DATA PREP ================= */
-  const statusCounts = useMemo(() => {
-    const map = {};
-    rows.forEach((r) => {
-      const s = r.status || "other";
-      map[s] = (map[s] || 0) + 1;
-    });
-    // ensure all known statuses present
-    STATUS_OPTIONS.forEach((s) => {
-      map[s] = map[s] || 0;
-    });
-    return map;
-  }, [rows]);
+  // const statusCounts = useMemo(() => {
+  //   const map = {};
+  //   rows.forEach((r) => {
+  //     const s = r.status || "other";
+  //     map[s] = (map[s] || 0) + 1;
+  //   });
+  //   // ensure all known statuses present
+  //   STATUS_OPTIONS.forEach((s) => {
+  //     map[s] = map[s] || 0;
+  //   });
+  //   return map;
+  // }, [rows]);
 
-  const overallChartData = useMemo(() => {
-    return Object.keys(statusCounts).map((k) => ({ label: k, value: statusCounts[k] || 0, color: STATUS_COLORS[k] }));
-  }, [statusCounts]);
+  // const overallChartData = useMemo(() => {
+  //   return Object.keys(statusCounts).map((k) => ({ label: k, value: statusCounts[k] || 0, color: STATUS_COLORS[k] }));
+  // }, [statusCounts]);
 
-  const focusChartData = useMemo(() => {
-    const sub = statusCounts.submitted || 0;
-    const off = statusCounts.offer || 0;
-    const rest = Object.keys(statusCounts).reduce((s, k) => {
-      if (k === "submitted" || k === "offer") return s;
-      return s + (statusCounts[k] || 0);
-    }, 0);
-    return [
-      { label: "submitted", value: sub, color: STATUS_COLORS.submitted },
-      { label: "offer", value: off, color: STATUS_COLORS.offer },
-      { label: "others", value: rest, color: STATUS_COLORS.other },
-    ];
-  }, [statusCounts]);
+  // const focusChartData = useMemo(() => {
+  //   const sub = statusCounts.submitted || 0;
+  //   const off = statusCounts.offer || 0;
+  //   const rest = Object.keys(statusCounts).reduce((s, k) => {
+  //     if (k === "submitted" || k === "offer") return s;
+  //     return s + (statusCounts[k] || 0);
+  //   }, 0);
+  //   return [
+  //     { label: "submitted", value: sub, color: STATUS_COLORS.submitted },
+  //     { label: "offer", value: off, color: STATUS_COLORS.offer },
+  //     { label: "others", value: rest, color: STATUS_COLORS.other },
+  //   ];
+  // }, [statusCounts]);
 
 
   /* ================= RENDER ================= */
@@ -526,10 +526,10 @@ export default function CandidateManagement() {
           onChange={(k, v) => setFilters((p) => ({ ...p, [k]: v }))}
         />
       <div style={{display:'flex',flexDirection:'column',gap:12,alignItems:'flex-end'}}>
-          <div className="charts-row">
+          {/* <div className="charts-row">
             <PieChart data={overallChartData} size={180} thickness={40} />
             <PieChart data={focusChartData} size={180} thickness={44} />
-          </div>
+          </div> */}
 
           <button
             onClick={handleExportExcel}

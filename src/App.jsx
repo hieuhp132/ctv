@@ -6,6 +6,7 @@ import Login from "./components/login/Login";
 import Dashboard from "./components/Dashboard";
 import AdminDashboard from "./components/Admin/Dashboard";
 import AdminDashboardBeta from "./components/Admin/AdminDashboard";
+import AdminStatistics from "./components/Admin/Statistics";
 import SignUp from "./components/signup/SignUp";
 import Navbar from "./components/Navbar";
 import ViewProfile from "./components/Profile/ViewProfile";
@@ -96,7 +97,17 @@ export default function App() {
                 <AdminDashboardBeta />
               </PrivateRoute>
             }
-          />
+          />  
+
+          <Route
+            path="/admin-statistics"
+            element={
+              <PrivateRoute roles={["admin"]}>
+                <Navbar />
+                <AdminStatistics />
+              </PrivateRoute>
+            }
+          />  
 
           <Route
             path="/user-management"

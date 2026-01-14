@@ -55,6 +55,9 @@ export default function Navbar() {
       { label: "Dashboard", path: "/admin" },
       // { label: "Admin Dashboard Beta", path: "/admin-dashboard" },
       // { label: "User Management", path: "/user-management" },
+      
+
+      { label: "Statistics", path: "/admin-statistics" },
       { label: "Candidate Management", path: "/candidate-management" },
       { label: "Saved Jobs", path: "/admin/saved-jobs" },
     ],
