@@ -42,24 +42,26 @@ export default function ViewProfile() {
 
     const loadProfile = async () => {
       const data = await fetchProfileFromServerL(user._id);
-      if (data) {
-        setUser(data);
-        setBasicInfo({
-          name: data.name || "",
-          email: data.email || "",
-          role: data.role || "",
-          newPassword: "",
-        });
+      if (!data) return;
 
-        if (data.bankInfo) {
-          setBankInfo((prev) => ({ ...prev, ...data.bankInfo }));
-        }
+      setUser(data);
+
+      setBasicInfo({
+        name: data.name || "",
+        email: data.email || "",
+        role: data.role || "",
+        newPassword: "",
+      });
+
+      if (data.bankInfo) {
+        setBankInfo((p) => ({ ...p, ...data.bankInfo }));
       }
     };
 
     loadProfile();
-  }, [user?._id]);
+  }, [user?._id, setUser]);
 
+  /* ===== HANDLERS ===== */
   const handleBasicChange = (e) => {
     const { name, value } = e.target;
     setBasicInfo((p) => ({ ...p, [name]: value }));
@@ -70,15 +72,30 @@ export default function ViewProfile() {
     setBankInfo((p) => ({ ...p, [name]: value }));
   };
 
+  /* ===== SAVE ALL DATA ===== */
   const handleSave = async () => {
     try {
-      const res = await updateBasicInfoOnServerL(user._id, basicInfo);
+      const payload = {
+        ...basicInfo,
+        bankInfo: { ...bankInfo },
+      };
+
+      // nếu không đổi password thì không gửi
+      if (!payload.newPassword) {
+        delete payload.newPassword;
+      }
+
+      const res = await updateBasicInfoOnServerL(user._id, payload);
+
       if (res?.success) {
         const updated = await fetchProfileFromServerL(user._id);
         setUser(updated);
         setIsEditing(false);
+      } else {
+        alert("Update failed");
       }
-    } catch {
+    } catch (err) {
+      console.error(err);
       alert("Update failed");
     }
   };
@@ -171,34 +188,32 @@ export default function ViewProfile() {
       </section>
 
       {/* BANK INFO */}
-      {user.role === "recruiter" && (
-        <section className="card">
-          <h3>
-            <FaCreditCard /> Bank Information
-          </h3>
+      <section className="card">
+        <h3>
+          <FaCreditCard /> Bank Information
+        </h3>
 
-          <div className="grid">
-            {Object.entries(bankInfo).map(([key, value]) => (
-              <div className="grid-item" key={key}>
-                <label>{key.replace(/([A-Z])/g, " $1")}</label>
-                {isEditing ? (
-                  <input
-                    name={key}
-                    value={value}
-                    onChange={handleBankChange}
-                  />
-                ) : (
-                  <span>{value || "—"}</span>
-                )}
-              </div>
-            ))}
-          </div>
+        <div className="grid">
+          {Object.entries(bankInfo).map(([key, value]) => (
+            <div className="grid-item" key={key}>
+              <label>{key.replace(/([A-Z])/g, " $1")}</label>
+              {isEditing ? (
+                <input
+                  name={key}
+                  value={value}
+                  onChange={handleBankChange}
+                />
+              ) : (
+                <span>{value || "—"}</span>
+              )}
+            </div>
+          ))}
+        </div>
 
-          <div className="note">
-            By saving, you confirm the information is accurate and valid.
-          </div>
-        </section>
-      )}
+        <div className="note">
+          By saving, you confirm the information is accurate and valid.
+        </div>
+      </section>
 
       <Icons />
     </div>
