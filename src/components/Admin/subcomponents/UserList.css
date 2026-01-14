@@ -100,7 +100,7 @@
 
 /* Buttons */
 .btn-save {
-  background: #4a90e2;
+  background: var(--header-gradient);
   color: white;
   border: none;
   padding: 6px 12px;
@@ -147,79 +147,11 @@ button:hover {
 .user-name { font-weight: 600; color: #333; }
 .user-email { font-size: 12px; color: #777; }
 
-/* Dropdown Container */
-.dropdown {
-  position: relative;
-  display: inline-block;
-}
 
-.dropdown-toggle {
-  background: none;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  padding: 5px 10px;
-  border-radius: 50%;
-  color: #666;
-  transition: 0.2s;
-}
 
-.dropdown-toggle:hover {
-  background-color: #f0f0f0;
-  color: #000;
-}
 
-/* Dropdown Menu Nội dung */
-.dropdown-menu {
-  position: absolute;
-  right: 0;
-  top: 100%;
-  background-color: white;
-  min-width: 160px;
-  box-shadow: 0px 8px 16px rgba(0,0,0,0.15);
-  border-radius: 6px;
-  z-index: 100;
-  padding: 8px 0;
-  border: 1px solid #eee;
-  animation: fadeIn 0.2s ease;
-}
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
 
-.dropdown-menu button {
-  display: block;
-  width: 100%;
-  padding: 10px 15px;
-  text-align: left;
-  border: none;
-  background: none;
-  font-size: 14px;
-  color: #444;
-  cursor: pointer;
-}
-
-.dropdown-menu button:hover {
-  background-color: #f8f9fa;
-  color: #4a90e2;
-}
-
-.dropdown-menu hr {
-  margin: 4px 0;
-  border: none;
-  border-top: 1px solid #eee;
-}
-
-.dropdown-menu .delete-item {
-  color: #dc3545;
-}
-
-.dropdown-menu .delete-item:hover {
-  background-color: #fff5f5;
-  color: #dc3545;
-}
 
 /* Text center helper */
 .text-center { text-align: center; }

@@ -35,7 +35,7 @@
   cursor: pointer;
 }
 
-.primary { background: #ff6b00; color: #fff; width: fit-content;}
+.primary { background: #ff6b00; color: #fff; width: fit-content !important;}
 .success { background: #2e7d32; color: #fff; }
 /* .danger  { background: #c62828; color: #fff; } */
 

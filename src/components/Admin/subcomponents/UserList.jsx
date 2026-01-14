@@ -19,6 +19,7 @@ export default function UserList() {
   const fetchUserList = async () => {
     try {
       const res = await getUsersListL();
+      console.log("Fetched users:", res);
       setUserList(Array.isArray(res) ? res : []);
     } catch {
       setUserList([]);
