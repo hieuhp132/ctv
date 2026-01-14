@@ -13,6 +13,8 @@ export default function UserList() {
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(12);
+  const [selectedUser, setSelectedUser] = useState(null);
+
 
 
   /* ================= FETCH USERS ================= */
@@ -138,6 +140,7 @@ export default function UserList() {
               <th>Email</th>
               <th>Role</th>
               <th>Status</th>
+              <th>Bank Info</th>
               <th>Reset Password</th>
               <th className="text-center">Actions</th>
             </tr>
@@ -152,11 +155,20 @@ export default function UserList() {
                   <span className={`role-tag ${u.role === "admin" ? "admin" : ""}`}>{u.role}</span>
                 </td>
                 <td>
+    
                   <span
                     className={`status-badge ${getStatusClass(u.status)}`}
                   >
                     {u.status || "Unknown"}
                   </span>
+                </td>
+                <td>
+                  <div
+                    onClick={() => setSelectedUser(u)}
+                    style={{ cursor: "pointer", color: "#1d4ed8", textDecoration: "underline" }}
+                  >
+                    View
+                  </div>
                 </td>
 
                 <td>
@@ -212,9 +224,42 @@ export default function UserList() {
           </tbody>
         </table>
 
+        {selectedUser && (
+          <div className="bank-info-overlay" onClick={() => setSelectedUser(null)}>
+            <div
+              className="bank-info-modal"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h3>Bank Information</h3>
+
+              {selectedUser.bankInfo ? (
+                <div className="bank-info-list">
+                  <p><strong>Account Holder:</strong> {selectedUser.bankInfo.accountHolderName}</p>
+                  <p><strong>Bank Name:</strong> {selectedUser.bankInfo.bankName}</p>
+                  <p><strong>Branch:</strong> {selectedUser.bankInfo.branchName}</p>
+                  <p><strong>Account Number:</strong> {selectedUser.bankInfo.accountNumber}</p>
+                  <p><strong>IBAN / Swift:</strong> {selectedUser.bankInfo.ibanSwiftCode}</p>
+                  <p><strong>Currency:</strong> {selectedUser.bankInfo.currency}</p>
+                  <p><strong>Registered Email:</strong> {selectedUser.bankInfo.registeredEmail}</p>
+                  <p><strong>Registered Phone:</strong> {selectedUser.bankInfo.registeredPhone}</p>
+                </div>
+              ) : (
+                <p>No bank information</p>
+              )}
+
+              <button className="btn-close" onClick={() => setSelectedUser(null)}>
+                Close
+              </button>
+            </div>
+          </div>
+        )}
+
+
         {userList.length === 0 && (
           <p className="empty-msg">No users found.</p>
         )}
+
+
       </div>
 
       <div
