@@ -6,6 +6,8 @@ import {
   updateUserStatusL,
 } from "../../../api";
 import "./UserList.css";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 export default function UserList() {
   const [userList, setUserList] = useState([]);
@@ -15,13 +17,10 @@ export default function UserList() {
   const [pageSize] = useState(12);
   const [selectedUser, setSelectedUser] = useState(null);
 
-
-
   /* ================= FETCH USERS ================= */
   const fetchUserList = async () => {
     try {
       const res = await getUsersListL();
-      console.log("Fetched users:", res);
       setUserList(Array.isArray(res) ? res : []);
     } catch {
       setUserList([]);
@@ -41,7 +40,6 @@ export default function UserList() {
           u._id === userId ? { ...u, status: newStatus } : u
         )
       );
-      setOpenDropdown(null);
     } catch {
       alert("Failed to update status");
     }
@@ -52,7 +50,6 @@ export default function UserList() {
     try {
       await removeUserByIdL({ id: userId });
       setUserList((prev) => prev.filter((u) => u._id !== userId));
-    
     } catch {
       alert("Failed to delete user");
     }
@@ -99,10 +96,55 @@ export default function UserList() {
   const startIdx = (currentPage - 1) * pageSize;
   const pageItems = filtered.slice(startIdx, startIdx + pageSize);
 
+  /* ================= EXPORT TO EXCEL ================= */
+  const handleExportExcel = () => {
+    if (!userList.length) {
+      alert("No data to export");
+      return;
+    }
+
+    const exportData = userList.map((u) => ({
+      "Name": u.name || "",
+      "Email": u.email || "",
+      "Role": u.role || "",
+      "Status": u.status || "",
+      "Bank Account Holder": u.bankInfo?.accountHolderName || "",
+      "Bank Name": u.bankInfo?.bankName || "",
+      "Branch Name": u.bankInfo?.branchName || "",
+      "Account Number": u.bankInfo?.accountNumber || "",
+      "IBAN / SWIFT": u.bankInfo?.ibanSwiftCode || "",
+      "Currency": u.bankInfo?.currency || "",
+      "Registered Email": u.bankInfo?.registeredEmail || "",
+      "Registered Phone": u.bankInfo?.registeredPhone || "",
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Users");
+
+    const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
+    const blob = new Blob([excelBuffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+    saveAs(blob, `user-management-${new Date().toISOString().slice(0,10)}.xlsx`);
+  };
+
   /* ================= RENDER ================= */
   return (
     <div className="management-container">
       <h2 className="table-title">User Management</h2>
+
+      <button
+        onClick={handleExportExcel}
+        style={{
+          padding: "6px 12px",
+          fontWeight: 600,
+          cursor: "pointer",
+          marginBottom: "1rem"
+        }}
+      >
+        Export Excel
+      </button>
 
       <div
         style={{
@@ -145,7 +187,6 @@ export default function UserList() {
               <th className="text-center">Actions</th>
             </tr>
           </thead>
-
           <tbody>
             {pageItems.map((u) => (
               <tr key={u._id}>
@@ -155,10 +196,7 @@ export default function UserList() {
                   <span className={`role-tag ${u.role === "admin" ? "admin" : ""}`}>{u.role}</span>
                 </td>
                 <td>
-    
-                  <span
-                    className={`status-badge ${getStatusClass(u.status)}`}
-                  >
+                  <span className={`status-badge ${getStatusClass(u.status)}`}>
                     {u.status || "Unknown"}
                   </span>
                 </td>
@@ -170,54 +208,27 @@ export default function UserList() {
                     View
                   </div>
                 </td>
-
                 <td>
                   <div className="password-box">
                     <input
                       type="password"
                       placeholder="New pass"
                       value={passwordInputs[u._id] || ""}
-                      onChange={(e) =>
-                        handlePasswordChange(u._id, e.target.value)
-                      }
+                      onChange={(e) => handlePasswordChange(u._id, e.target.value)}
                     />
                     <button
                       className="btn-save"
-                      onClick={() =>
-                        handleEdit(u, passwordInputs[u._id])
-                      }
+                      onClick={() => handleEdit(u, passwordInputs[u._id])}
                     >
                       Save
                     </button>
                   </div>
                 </td>
-
                 <td className="action-buttons">
-
-                        <button
-                          onClick={() =>
-                            handleStatusUpdate(u._id, "Active")
-                          }
-                        >
-                          Approve
-                        </button>
-
-                        <button
-                          onClick={() =>
-                            handleStatusUpdate(u._id, "Rejected")
-                          }
-                        >
-                          Reject
-                        </button>
-
-                        <hr />
-
-                        <button
-                          className="delete-item"
-                          onClick={() => handleDelete(u._id)}
-                        >
-                          Delete
-                        </button>
+                  <button onClick={() => handleStatusUpdate(u._id, "Active")}>Approve</button>
+                  <button onClick={() => handleStatusUpdate(u._id, "Rejected")}>Reject</button>
+                  <hr />
+                  <button className="delete-item" onClick={() => handleDelete(u._id)}>Delete</button>
                 </td>
               </tr>
             ))}
@@ -226,12 +237,8 @@ export default function UserList() {
 
         {selectedUser && (
           <div className="bank-info-overlay" onClick={() => setSelectedUser(null)}>
-            <div
-              className="bank-info-modal"
-              onClick={(e) => e.stopPropagation()}
-            >
+            <div className="bank-info-modal" onClick={(e) => e.stopPropagation()}>
               <h3>Bank Information</h3>
-
               {selectedUser.bankInfo ? (
                 <div className="bank-info-list">
                   <p><strong>Account Holder:</strong> {selectedUser.bankInfo.accountHolderName}</p>
@@ -246,57 +253,20 @@ export default function UserList() {
               ) : (
                 <p>No bank information</p>
               )}
-
-              <button className="btn-close" onClick={() => setSelectedUser(null)}>
-                Close
-              </button>
+              <button className="btn-close" onClick={() => setSelectedUser(null)}>Close</button>
             </div>
           </div>
         )}
 
-
-        {userList.length === 0 && (
-          <p className="empty-msg">No users found.</p>
-        )}
-
-
+        {userList.length === 0 && <p className="empty-msg">No users found.</p>}
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginTop: 12,
-        }}
-      >
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 12 }}>
         <div>
-          <button
-            onClick={() =>
-              setCurrentPage((p) => Math.max(1, p - 1))
-            }
-            disabled={currentPage <= 1}
-            style={{ padding: "6px 10px", marginRight: 8 }}
-          >
-            Previous
-          </button>
-
-          <button
-            onClick={() =>
-              setCurrentPage((p) =>
-                Math.min(totalPages, p + 1)
-              )
-            }
-            disabled={currentPage >= totalPages}
-            style={{ padding: "6px 10px" }}
-          >
-            Next
-          </button>
+          <button onClick={() => setCurrentPage((p) => Math.max(1, p - 1))} disabled={currentPage <= 1} style={{ padding: "6px 10px", marginRight: 8 }}>Previous</button>
+          <button onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))} disabled={currentPage >= totalPages} style={{ padding: "6px 10px" }}>Next</button>
         </div>
-
-        <div style={{ fontSize: 13, color: "#555" }}>
-          Page {currentPage} / {totalPages}
-        </div>
+        <div style={{ fontSize: 13, color: "#555" }}>Page {currentPage} / {totalPages}</div>
       </div>
     </div>
   );
