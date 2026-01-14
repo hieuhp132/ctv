@@ -132,19 +132,21 @@ export default function UserList() {
   /* ================= RENDER ================= */
   return (
     <div className="management-container">
-      <h2 className="table-title">User Management</h2>
+      <div style={{display:"flex", justifyContent:"space-between"}}> 
+        <h2 className="table-title">User Management</h2>
 
-      <button
-        onClick={handleExportExcel}
-        style={{
-          padding: "6px 12px",
-          fontWeight: 600,
-          cursor: "pointer",
-          marginBottom: "1rem"
-        }}
-      >
-        Export Excel
-      </button>
+        <button
+          onClick={handleExportExcel}
+          style={{
+            padding: "6px 12px",
+            fontWeight: 600,
+            cursor: "pointer",
+            marginBottom: "1rem"
+          }}
+        >
+          Export Excel
+        </button>
+      </div>
 
       <div
         style={{
