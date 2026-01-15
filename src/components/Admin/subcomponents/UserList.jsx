@@ -156,21 +156,7 @@ export default function UserList() {
           gap: 12,
         }}
       >
-        <input
-          type="search"
-          placeholder="Search name, email or role..."
-          value={searchText}
-          onChange={(e) => {
-            setSearchText(e.target.value);
-            setCurrentPage(1);
-          }}
-          style={{
-            padding: 8,
-            borderRadius: 6,
-            border: "1px solid #ddd",
-            width: 320,
-          }}
-        />
+       
         <div style={{ fontSize: 14, color: "#666" }}>
           Showing {filtered.length} users
         </div>
