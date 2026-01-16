@@ -2,13 +2,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Clock, ShieldCheck, ArrowLeft, XCircle } from "lucide-react";
-import { getUserStatusL } from "../api"; // Hàm gọi API backend
+import { getUserStatusL } from "../api"; // Backend API call
 import { useAuth } from "../context/AuthContext";
 import "./Pending.css";
 
 export default function Pending() {
   const navigate = useNavigate();
-  const { user, login, logout } = useAuth(); // Thêm logout từ AuthContext
+  const { user, login, logout } = useAuth(); // Include logout from AuthContext
   const [status, setStatus] = useState(user?.status || "Pending");
 
   useEffect(() => {
@@ -19,13 +19,13 @@ export default function Pending() {
         const res = await getUserStatusL(user.email);
         const { status: freshStatus, user: freshUser, token } = res;
         
-        // Nếu tài khoản Active → login + redirect
+        // If account is Active → login + redirect
         if (freshStatus === "Active" && token && freshUser) {
           login(freshUser, token);
           return;
         }
 
-        // Nếu bị từ chối
+        // If account is Rejected
         if (freshStatus === "Rejected") {
           setStatus("Rejected");
         }
@@ -34,28 +34,28 @@ export default function Pending() {
       }
     };
 
-    // Poll API mỗi 5 giây
+    // Poll API every 5 seconds
     const interval = setInterval(checkStatus, 5000);
-    // Call ngay lần đầu để không phải chờ 5s
+    // Call immediately on first render
     checkStatus();
 
     return () => clearInterval(interval);
   }, [user?.email, login]);
 
-  // Hàm reset toàn bộ dữ liệu và quay lại login
+  // Reset all data and go back to login
   const handleResetAndLogin = () => {
-    // 1️⃣ Xoá sessionStorage + localStorage
+    // 1️⃣ Clear sessionStorage + localStorage
     sessionStorage.clear();
     localStorage.clear();
 
-    // 2️⃣ Reset state AuthContext
+    // 2️⃣ Reset AuthContext state
     if (logout) logout();
 
-    // 3️⃣ Redirect về login
+    // 3️⃣ Redirect to login
     navigate("/login");
   };
 
-  // Nếu status Rejected → hiển thị cảnh báo
+  // If status is Rejected → show warning
   if (status === "Rejected") {
     return (
       <div className="pending-container">
@@ -63,20 +63,20 @@ export default function Pending() {
           <div className="icon-wrapper">
             <XCircle color="#ef4444" size={60} />
           </div>
-          <h1 className="title" style={{ color: "#ef4444" }}>Truy cập bị từ chối</h1>
+          <h1 className="title" style={{ color: "#ef4444" }}>Access Denied</h1>
           <p className="description">
-            Rất tiếc, yêu cầu đăng ký của bạn đã bị Admin từ chối. 
-            Vui lòng liên hệ hỗ trợ để biết thêm chi tiết.
+            Sorry, your registration request has been rejected by the Admin. 
+            Please contact support for more details.
           </p>
           <button className="back-button" onClick={handleResetAndLogin}>
-            <ArrowLeft size={18} /> Quay lại Đăng nhập
+            <ArrowLeft size={18} /> Back to Login
           </button>
         </div>
       </div>
     );
   }
 
-  // Nếu đang Pending → hiển thị chờ phê duyệt
+  // If status is Pending → show waiting message
   return (
     <div className="pending-container">
       <div className="pending-card">
@@ -84,23 +84,23 @@ export default function Pending() {
           <div className="pulse-ring"></div>
           <Clock className="main-icon" size={48} />
         </div>
-        <h1 className="title">Đang chờ phê duyệt</h1>
+        <h1 className="title">Pending Approval</h1>
         <p className="description">
-          Tài khoản <strong>{user?.email}</strong> đang được kiểm tra. 
-          Hệ thống sẽ tự động chuyển hướng khi hoàn tất.
+          The account <strong>{user?.email}</strong> is under review. 
+          The system will automatically redirect once completed.
         </p>
         <div className="status-steps">
           <div className="step completed">
             <ShieldCheck size={20} />
-            <span>Đăng ký thành công</span>
+            <span>Registration Successful</span>
           </div>
           <div className="step processing">
             <div className="spinner-small"></div>
-            <span>Admin đang xác minh...</span>
+            <span>Admin is verifying...</span>
           </div>
         </div>
         <button className="back-button" onClick={handleResetAndLogin}>
-          <ArrowLeft size={18} /> Quay lại Đăng nhập
+          <ArrowLeft size={18} /> Back to Login
         </button>
       </div>
     </div>

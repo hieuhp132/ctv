@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   FaUser,
   FaLock,
@@ -19,6 +20,7 @@ export default function SignUp() {
   const [isShaking, setIsShaking] = useState(false);
   const [serverMessage, setServerMessage] = useState("");
 
+  const navigate = useNavigate();
   const usernameRef = useRef(null);
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
