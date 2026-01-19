@@ -125,6 +125,7 @@ export default function Dashboard() {
       setIsSubmitting(true);
       const cvUrl = await uploadCV();
       if (!cvUrl) return alert("Upload failed");
+      console.log(candidateForm);
       await createSubmissionL({ jobId: selectedJob._id, recruiterId, ...candidateForm, cvUrl });
       alert("Candidate submitted");
       setCandidateForm({
