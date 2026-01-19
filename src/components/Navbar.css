@@ -39,6 +39,7 @@
   transition: opacity 0.3s ease;
   position: relative;
   border: 2px solid white;
+  background: transparent;
 }
 
 .nav-btn::after {
