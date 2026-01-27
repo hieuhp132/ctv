@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { FaArrowRight, FaMapMarkerAlt, FaDollarSign, FaBuilding, FaGlobe, FaUsers, FaHeadset, FaChartLine, FaStar } from "react-icons/fa";
 import "./HomePage.css";
-import logoImg from "../assets/logo.png";
+import logoImg from "../assets/logo.jpeg";
 import fbIcon from "../assets/fb.jpg";
 import teleIcon from "../assets/tele.png";
 import { fetchAllJobs } from "../api";
