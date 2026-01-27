@@ -74,7 +74,7 @@
 }
 
 .logo-img {
-  width: fit-content;
+  width: fit-content !important;
   height: 32px;
   border-radius: 6px;
 }
