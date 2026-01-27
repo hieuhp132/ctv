@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import "./Navbar.css";
 import { getBalances } from "../api";
-import logoImg from "../assets/logo.png";
+import logoImg from "../assets/logo.jpeg";
 
 export default function Navbar() {
   const { user, logout } = useAuth();
