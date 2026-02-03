@@ -19,7 +19,7 @@
 .auth-actions {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 2px;
 }
 
 
@@ -87,7 +87,7 @@
 .navbar-right {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 2px;
 }
 
 /* ===== PROFILE ===== */
@@ -201,9 +201,5 @@
   .stat-pill {
     display: none !important;
   }
-  .logo-img {
-  width: fit-content !important;
-  height: 32px;
-  border-radius: 6px;
-}
+
 }

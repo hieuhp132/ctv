@@ -77,9 +77,10 @@ export default function HomePage() {
       <header className="homepage-header">
         <div className="homepage-container">
           <div className="header-content">
-            <div className="logo">
-              <a href="#hero"><img src={logoImg} alt="Ant-Tech Asia" className="logo-img" /></a>
-            </div>
+            <button className="logo-btn">
+              <img src={logoImg} alt="Logo" className="logo-img" />
+              <span className="logo">Ant-Tech Asia</span>
+            </button>
             <button className="mobile-toggle" onClick={() => { console.log("[DEBUG] Mobile menu opened"); setMenuOpen(true); }}>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <line x1="3" y1="6" x2="21" y2="6" />
@@ -302,10 +303,14 @@ export default function HomePage() {
         </div>
       </footer>
 
-      {/* Floating icons */}
+      {/* FLOATING ICONS */}
       <div className="floating-icons">
-        <a href="https://m.me/anttechasia"><img src={fbIcon} alt="FB" className="logo-img"/></a>
-        <a href="https://t.me/anttechasia"><img src={teleIcon} alt="Telegram" className="logo-img"/></a>
+        <a href="https://m.me/anttechasia" className="floating-icon">
+          <img src={fbIcon} alt="" className="logo-img" />
+        </a>
+        <a href="https://t.me/anttechasia" className="floating-icon">
+          <img src={teleIcon} alt="" className="logo-img" />
+        </a>
       </div>
       {/* ================= MOBILE MENU ================= */}
       {menuOpen && (
