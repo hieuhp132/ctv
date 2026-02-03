@@ -1,12 +1,14 @@
 /* ================= DASHBOARD ================= */
 .dashboard-container {
   padding: 24px;
+  /* max-width: 1400px; */
   margin: 40px auto;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   color: #222;
   background: #fafafa;
   box-sizing: border-box;
 }
+
 
 h2 {
   font-weight: 700;

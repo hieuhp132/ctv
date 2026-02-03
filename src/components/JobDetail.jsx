@@ -160,28 +160,28 @@ export default function JobDetail() {
         <h2>{job.title || "Untitled Job"}</h2>
       </header>
 
-      {job.keywords?.length > 0 && (
+      {/* {job.keywords?.length > 0 && (
         <div className="job-tags">
           {job.keywords.map((k) => (
             <span key={k}>{k}</span>
           ))}
         </div>
-      )}
+      )} */}
 
       <div className="job-layout">
         {/* LEFT */}
         <div>
           <div className="job-info-grid">
             <div className="info-box">
-              <strong>Salary</strong>
+              <strong>Salary:</strong>
               <span>{job.salary || "N/A"}</span>
             </div>
             <div className="info-box">
-              <strong>Location</strong>
+              <strong>Location:</strong>
               <span>{job.location || "N/A"}</span>
             </div>
             <div className="info-box">
-              <strong>Reward</strong>
+              <strong>Reward:</strong>
               <span>{job.rewardCandidateUSD ?? 0} USD</span>
             </div>
           </div>
