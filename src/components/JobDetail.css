@@ -3,8 +3,8 @@
 }
 
 .job-layout {
-  display: grid;
-  grid-template-columns: 1fr 340px;
+  display: flex;
+  /* grid-template-columns: 1fr 340px; */
   gap: 24px;
 }
 
