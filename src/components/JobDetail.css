@@ -4,7 +4,8 @@
 
 .job-layout {
   display: flex;
-  /* grid-template-columns: 1fr 340px; */
+  grid-template-columns: 1fr 340px;
+  flex-wrap: wrap;
   gap: 24px;
 }
 
@@ -28,7 +29,7 @@
 /* INFO GRID */
 .job-info-grid {
   display: flex;
-  grid-template-columns: repeat(3, 1fr);
+  /* grid-template-columns: repeat(3, 1fr); */
   flex-wrap: wrap;
   gap: 12px;
   margin-bottom: 24px;
