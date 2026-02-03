@@ -160,13 +160,13 @@ export default function JobDetail() {
         <h2>{job.title || "Untitled Job"}</h2>
       </header>
 
-      {/* {job.keywords?.length > 0 && (
+      {job.keywords?.length > 0 && (
         <div className="job-tags">
           {job.keywords.map((k) => (
             <span key={k}>{k}</span>
           ))}
         </div>
-      )} */}
+      )}
 
       <div className="job-layout">
         {/* LEFT */}
