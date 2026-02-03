@@ -29,6 +29,7 @@
 .job-info-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  flex-wrap: wrap;
   gap: 12px;
   margin-bottom: 24px;
 }
@@ -39,7 +40,7 @@
   padding: 14px;
   border: 1px solid #eee;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 10px;
 }
 
