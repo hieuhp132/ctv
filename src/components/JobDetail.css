@@ -4,7 +4,7 @@
 
 .job-layout {
   display: flex;
-  grid-template-columns: 1fr 340px;
+  /* grid-template-columns: 1fr 340px; */
   flex-wrap: wrap;
   gap: 24px;
 }
