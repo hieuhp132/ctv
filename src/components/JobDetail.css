@@ -3,6 +3,20 @@
   background: #f9fafb;
 }
 
+.export-btn {
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #f97316, #fb7185);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+.export-btn:hover {
+  filter: brightness(0.95);
+}
+
 .job-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -198,6 +212,15 @@
   border: 1px solid #e5e7eb;
 }
 
+.job-sidebar .card .file-link {
+  display: inline-block;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: bottom;
+}
+
 .job-sidebar .card h4 {
   margin: 0 0 12px 0;
   font-size: 14px;
@@ -365,6 +388,35 @@
 
   .page-header h2 {
     font-size: 1.5rem;
+  }
+}
+
+@media print {
+  html, body {
+    background: #ffffff !important;
+  }
+  .job-detail {
+    background: #ffffff !important;
+  }
+  .page-header {
+    margin: 0 0 8px 0;
+    padding: 0 0 8px 0;
+    border-bottom: none;
+  }
+  .job-layout {
+    display: block !important;
+    padding: 0;
+  }
+  .job-sidebar, .export-btn {
+    display: none !important;
+  }
+  .job-section,
+  .job-html-content p,
+  .job-html-content ul,
+  .job-html-content ol,
+  .info-box {
+    page-break-inside: avoid;
+    break-inside: avoid;
   }
 }
 

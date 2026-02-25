@@ -12,7 +12,18 @@ export default function FilesView({ publicUrl, name }) {
         href={publicUrl}
         target="_blank"
         rel="noopener noreferrer"
-        style={{ color: "#3b82f6", textDecoration: "underline" }}
+        className="file-link"
+        title={name || publicUrl}
+        style={{
+          color: "#3b82f6",
+          textDecoration: "underline",
+          display: "inline-block",
+          maxWidth: "100%",
+          whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+          verticalAlign: "bottom",
+        }}
       >
         {name || "No files"}
       </a>
