@@ -13,7 +13,7 @@ import { ROLE_ROUTES } from "./routes/roleRoutes";
 import Layout from "./components/Layout";
 import Home from "./pages/home/Home";
 import Login from "./pages/login/Login";
-import SignUp from "./pages/signup/Signup";
+import SignUp from "./pages/signup/SignUp";
 import Pending from "./pages/pending/Pending";
 
 // ADMIN
