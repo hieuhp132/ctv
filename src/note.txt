@@ -1,0 +1,6 @@
+Sửa route trang Terms.
+Sửa hiển thị jd trên trang job detail của ctv.
+thay ảnh logo chính thức.
+bỏ màu nghệ trên navbar.
+sửa lại kích cỡ form đăng nhập, đăng ký. xong
+tích hợp lại msg, telegram trên trang login, regis.

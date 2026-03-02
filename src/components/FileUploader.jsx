@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import {uploadFile} from "../api"
+import {uploadFile} from "../services/api";
 
 export default function FileUploader({ onUploadSuccess }) {
   const [file, setFile] = useState(null);
@@ -29,3 +29,4 @@ export default function FileUploader({ onUploadSuccess }) {
     </div>
   );
 }
+

@@ -1,0 +1,893 @@
+Log in as true
+Fetching token...
+Login response: {
+  success: true,
+  message: 'Dang nhap thanh cong',
+  user: {
+    _id: '68bdcf22131c403154a093e8',
+    name: 'Admin',
+    email: 'admin@ant-tech.asia',
+    credit: 0,
+    role: 'admin',
+    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YmRjZjIyMTMxYzQwMzE1NGEwOTNlOCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1ODg4MjM3NSwiZXhwIjoxNzU4OTY4Nzc1fQ.CvInbc0ZU6eLMSEbLX5m03iJTWV7nj7O3S-XhG2KHWw'
+  }
+}
+Recruiter token fetched successfully: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YmRjZjIyMTMxYzQwMzE1NGEwOTNlOCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1ODg4MjM3NSwiZXhwIjoxNzU4OTY4Nzc1fQ.CvInbc0ZU6eLMSEbLX5m03iJTWV7nj7O3S-XhG2KHWw
+Response {
+  items: [
+    {
+      _id: '68d609a3bb948833ec36b9ab',
+      recruiter: [Object],
+      admin: '68bdcf22131c403154a093e8',
+      candidateName: 'Fredi Leonardo Gomez, born in 1978',
+      candidateEmail: 'leo.gomez.working@gmail.com',
+      candidatePhone: '+573192064098',
+      cvFileName: 'LeonardoGomez.pdf',
+      cvKey: '1758857634628_LeonardoGomez.pdf',
+      cvUrl: 'https://yzvqhtunwkgibmpdrisi.supabase.co/storage/v1/object/public/cvs/1758857634628_LeonardoGomez.pdf',
+      linkedin: 'https://linkedin.com/in/leonardogomezr',
+      portfolio: '',
+      suitability: 'My salary expectation for this role is $3,000 - $5,000\r\n' +
+        'I can onboard within 2-4 weeks\r\n' +
+        'Fluent (C1 level)\r\n' +
+        '1. How many years of experience as a Backend or Full-stack Engineer, handling projects of various complexities? \r\n' +
+        ' I have over 10 years of experience as a Backend and Full-stack Engineer, managing projects ranging from high-traffic SaaS platforms supporting 50,000+ monthly active users (at Descartes Systems Group) to scalable microservices architectures for Web3 e-commerce systems (at TechBit Solutions). This includes leading teams, optimizing performance under peak loads, and delivering secure, real-time applications across fintech and logistics domains.\r\n' +
+        '\r\n' +
+        '2. Are highly proficient with Ruby on Rails? Detail? \r\n' +
+        " Yes, I am highly proficient with Ruby on Rails, with approximately 4 years of hands-on experience from my time at Innovatech Solutions (2017-2020), where I used RoR to build a robust backend for a logistics management system handling 10,000+ daily transactions with 99.9% uptime. I architected RESTful APIs, implemented authentication layers, and integrated with PostgreSQL using ActiveRecord for efficient data modeling and migrations. More recently, I've maintained proficiency through side projects involving Rails for SaaS prototypes, ensuring I stay current with best practices like TDD and CI/CD integration.\r\n" +
+        '\r\n' +
+        '3. Have experience working with Javascript? Detail? \r\n' +
+        ' Yes, I have extensive experience with JavaScript (ES6+), spanning over 10 years across full-stack roles. At TechBit Solutions, I developed reusable React components with Tailwind CSS for a Web3 e-commerce frontend, improving development efficiency by 30%. At Wave Financial, I created dynamic dashboards enhancing data visualization for enterprise users, and at Descartes Systems Group, I integrated JS with Nest.js backends for real-time features. My work emphasizes performance optimization, state management with Redux, and seamless API integrations via GraphQL and REST.\r\n' +
+        '\r\n' +
+        '4. Have strong experience working with relational databases, mainly PostgreSQL, and ORM libraries like ActiveRecord? Detail? \r\n' +
+        " Absolutely, I have strong experience with relational databases, particularly PostgreSQL, used in over 8 years of projects, along with ORM libraries including ActiveRecord. In my RoR work at Innovatech Solutions, I designed PostgreSQL schemas with ActiveRecord for complex joins and queries in a transaction-heavy logistics system, ensuring data integrity and scalability. At TechBit Solutions, I led PostgreSQL implementations in AWS Lambda microservices, reducing costs by 25% through query optimization. I've also worked with Django's ORM and SQLAlchemy in Python backends, handling migrations, indexing, and caching with Redis for high-performance applications.\r\n" +
+        '\r\n' +
+        '**Bonus Points:**\r\n' +
+        '\r\n' +
+        '1. Commercial experience with React/React Native? Detail? \r\n' +
+        " Yes, I have 8+ years of commercial experience with React (though not React Native specifically). At Descartes Systems Group, I built high-traffic SaaS frontends with React and TypeScript, supporting zero-downtime peak loads for 50,000+ users. At Innovatech Solutions, I developed responsive interfaces that boosted user retention by 15%, and at TechBit Solutions, I created component-driven UIs for real-time collaborative apps integrated with Supabase. I'm eager to extend this to React Native for any mobile needs at Landed.\r\n" +
+        '\r\n' +
+        '2. Experience or is willing to learn Hotwire / Stimulus? Detail? \r\n' +
+        " While I haven't worked directly with Hotwire or Stimulus yet, I have relevant experience with Turbo (a Hotwire component) in Rails prototypes and am very willing—and excited—to learn them quickly. My background in server-side rendering (SSR) with Next.js and real-time updates via WebSockets positions me well to adopt these for enhancing Rails apps with minimal JavaScript, aligning with my growth mindset.\r\n" +
+        '\r\n' +
+        '3. Experience in the FinTech or SaaS space? Detail? \r\n' +
+        " Yes, I have substantial experience in both FinTech and SaaS. In FinTech, at Wave Financial (2014-2017), I contributed to a Node.js/PostgreSQL CRM platform for 500+ enterprise users, focusing on secure data visualization and system migrations to GCP. For SaaS, at Descartes Systems Group (2021-2024), I led Nest.js/GraphQL development for a high-traffic platform with advanced JWT/OAuth security for financial services, optimizing MongoDB/Redis for 40% faster responses and launching major features on schedule. These roles honed my skills in scalable, secure solutions—perfect for Landed's mission.",
+      job: [Object],
+      status: 'submitted',
+      bonus: 0,
+      message: '',
+      finalized: false,
+      createdAt: '2025-09-26T03:33:55.496Z',
+      updatedAt: '2025-09-26T03:33:55.496Z',
+      __v: 0
+    },
+    {
+      _id: '68d4bea6a825d6754a783e5b',
+      recruiter: [Object],
+      admin: '68bdcf22131c403154a093e8',
+      candidateName: 'Denishkumar Chovatiya',
+      candidateEmail: 'denishkumarchovatiya@gmail.com',
+      candidatePhone: '+1 (346) 599-5334',
+      cvFileName: 'Denish Chovatiya.pdf',
+      cvKey: '1758772902085_Denish Chovatiya.pdf',
+      cvUrl: 'https://yzvqhtunwkgibmpdrisi.supabase.co/storage/v1/object/public/cvs/1758772902085_Denish%20Chovatiya.pdf',
+      linkedin: 'https://www.linkedin.com/in/denishchovatiya/',
+      portfolio: '',
+      suitability: 'Full Name: Denishkumar Chovatiya\r\n' +
+        'Email: denishkumarchovatiya@gmail.com\r\n' +
+        'Phone Number: +1 (346) 599-5334\r\n' +
+        'LinkedIn URL: www.linkedin.com/in/denishchovatiya\r\n' +
+        '\r\n' +
+        'Current Location: Houston, TX\r\n' +
+        'Willing to Relocate? (Yes/No + details): Yes, I am able to relocate within an agreed timeline.\r\n' +
+        'Expected salary: 140K-150K\r\n' +
+        '\r\n' +
+        'Minimum Requirements\r\n' +
+        '1. Do you have 4+ years of experience building and owning backend/platform systems end-to-end? Yes, I have over four years of experience as a full-stack engineer, and the core of my roles has been building and owning backend and platform systems end-to-end. At both JazzB AI and CereBulb, I was responsible for architecting and deploying Python-based microservices using Django and FastAPI. This included designing scalable data models in PostgreSQL, implementing secure REST APIs, and orchestrating asynchronous workflows using RabbitMQ and Redis for high performance.\r\n' +
+        '2. Have you worked at an early-stage, high-growth startup or founded/built your own project? Yes, I have extensive experience in early-stage, high-growth startups, specifically at JazzB AI and CereBulb, Scaleteam. This experience means I thrive in environments that require high agency and a bias toward action. I took direct ownership of full-stack product development, often building features from a "zero-to-one" concept to a fully deployed production system, and constantly balanced speed with stability.\r\n' +
+        '3. Have you not applied to Revic before? Yes, I have not applied to Revic before, and I am highly focused on this opportunity.\r\n' +
+        '4. Are you able to work hybrid (3 days/week) in San Francisco, New York City, or Vancouver (or relocate within an agreed timeline)? Yes\r\n' +
+        '5. Do you have production experience with React + Python? Yes, I have extensive production experience with the React + Python stack. I used Python with Django and FastAPI to build secure, high-throughput backend APIs and used React.js with TypeScript, Redux Toolkit, and Tailwind CSS to craft the highly responsive, user-facing applications. This combination is my strongest area of expertise for building scalable platforms\r\n' +
+        '\r\n' +
+        'Additional Details\r\n' +
+        '1. Relevant Role: Software Engineer\r\n' +
+        '2. Relevant Company: JazzB AI\r\n' +
+        '3. Experience Summary: Full-stack Software Engineer with 4+ years of experience building scalable, high-performance applications using Python (Django, FastAPI) and JavaScript/TypeScript with React.js. I have hands-on experience in AI integration, data engineering, and deploying cloud-native applications on AWS, demonstrating a strong bias for action in fast-paced startup environments.\r\n' +
+        '4. Requires Sponsorship? Optional\r\n' +
+        '5. Resume (PDF): Attached\r\n' +
+        '\r\n' +
+        'Screening Questions\r\n' +
+        '1. Video Walkthrough: https://drive.google.com/file/d/1nvkzcYtdWKTfKRciMJyQJLeyAG689nye/view?usp=sharing\r\n' +
+        '\r\n' +
+        '2. GitHub link: https://github.com/dgchovatiya\r\n' +
+        '\r\n' +
+        '3. What is the most recent technology or skill you taught yourself, and how did you apply it? The most recent skill I taught myself was LLM orchestration. I applied this to build a RAG pipeline that provided a multi-agent system with access to a domain-specific knowledge base. This was essential for our AI agent to produce accurate and relevant content without hallucinating.\r\n' +
+        '\r\n' +
+        '4. Describe a feature or system you built. What problem did it solve for users or the business, and what metrics improved? At JazzB AI, I built a full-stack platform centered around an AI agent designed to automate SEO content generation. The problem was that creating high-quality, keyword-optimized content was a manual and time-consuming process. The system I built connected an LLM (specifically OpenAI and Gemini) with a database of SEO insights via a custom RAG pipeline, allowing the agent to generate tailored, data-driven content. This solution reduced our manual marketing sync efforts by over 60% and increased user workflow efficiency by 3x.\r\n' +
+        '\r\n' +
+        "5. What do you understand about Revic’s product and market? What questions do you have about our approach? Based on my understanding, Revic is an early-stage, high-growth startup building a full-stack platform. I'm excited by the opportunity to apply my skills in an environment that values speed and a bias for action. I'd like to learn more about the specific challenges you're currently facing and how you see the role evolving as the company scales.\r\n" +
+        '\r\n' +
+        '6. Why do you want to work at an early-stage startup? What do you believe it takes to succeed in such an environment? I am passionate about working at early-stage startups because I thrive in environments that require high ownership and a hands-on approach. To succeed, I believe it takes a combination of technical expertise, adaptability, and a relentless bias for action. The ability to tackle ambiguity, learn quickly, and collaborate closely with a small, mission-driven team is essential.\r\n' +
+        '\r\n' +
+        '7. Hybrid location: Comfortable\r\n' +
+        '8. Work Authorization: OPT\r\n' +
+        '9. Availability to Start: 2 weeks',
+      job: [Object],
+      status: 'submitted',
+      bonus: 0,
+      message: '',
+      finalized: false,
+      createdAt: '2025-09-25T04:01:42.757Z',
+      updatedAt: '2025-09-25T04:01:42.757Z',
+      __v: 0
+    },
+    {
+      _id: '68d3d15d76e524fb50b289aa',
+      recruiter: [Object],
+      admin: '68bdcf22131c403154a093e8',
+      candidateName: 'María Alejandra Gómez Casani',
+      candidateEmail: 'maria.alejandra.gomez.casani@gmail.com',
+      candidatePhone: '+51937537007',
+      cvFileName: 'MariaG_resume - Alejandra Gomez (1).pdf',
+      cvKey: '1758712157145_MariaG_resume - Alejandra Gomez (1).pdf',
+      cvUrl: 'https://yzvqhtunwkgibmpdrisi.supabase.co/storage/v1/object/public/cvs/1758712157145_MariaG_resume%20-%20Alejandra%20Gomez%20(1).pdf',
+      linkedin: 'https://www.linkedin.com/in/alejandragomezcasani/',
+      portfolio: '',
+      suitability: '4 năm tại FIS (core banking products: Sunbird, Business Account Opening, mBanker).\r\n' +
+        '\r\n' +
+        'Thêm kinh nghiệm ở Zenmonics.\r\n' +
+        '\r\n' +
+        '✅ Banking enterprise đúng trọng tâm JD.',
+      job: [Object],
+      status: 'submitted',
+      bonus: 0,
+      message: '',
+      finalized: false,
+      createdAt: '2025-09-24T11:09:17.438Z',
+      updatedAt: '2025-09-24T11:09:17.438Z',
+      __v: 0
+    },
+    {
+      _id: '68d3775c2ce06f90a45d6c38',
+      recruiter: [Object],
+      admin: '68bdcf22131c403154a093e8',
+      candidateName: 'Leonardo Miranda Amaral, 1999',
+      candidateEmail: 'leonardo_miranda@icloud.com',
+      candidatePhone: ' +556198632-0492',
+      cvFileName: 'Leonardo.pdf',
+      cvKey: '1758689115197_Leonardo.pdf',
+      cvUrl: 'https://yzvqhtunwkgibmpdrisi.supabase.co/storage/v1/object/public/cvs/1758689115197_Leonardo.pdf',
+      linkedin: 'https://www.linkedin.com/in/leonardo-m-amaral/',
+      portfolio: '',
+      suitability: '- Salary expectation (gross): 120k–140k. \r\n' +
+        '- The time that you can onboard? I can onboard within 3 weeks. However, once I receive an offer, I can try to reduce this time.\r\n' +
+        '- English proficiency: I can write, read, listen, and speak in English. I’ve participated in interviews in English, and my current team communicates in English daily since one of my teammates is based in the US.\r\n' +
+        '- LinkedIn profile: https://www.linkedin.com/in/leonardo-m-amaral/\r\n' +
+        '\r\n' +
+        "II. Let's go through a few questions to confirm your suitability for this position:\r\n" +
+        '1. How many years in DevOps/Platform/SRE roles operating production systems? Detail?\r\n' +
+        'I have nearly 4 years of hands-on experience in DevOps/Platform roles operating production systems on AWS/GCP and Kubernetes. My work has included leading the migration of 80+ services from ECS to EKS, managing large-scale production clusters, participating in on-call rotations, resolving incidents with root cause analysis, and implementing observability stacks with Datadog, Prometheus, and Grafana. I’ve also been directly involved in SOC 2 compliance and security guardrails.\r\n' +
+        '\r\n' +
+        '2. Are you strong Terraform and Terragrunt experience (module design, environment orchestration, CI validation)? Detail?\r\n' +
+        "I have strong Terraform expertise, designing reusable modules and automated templates to standardize infrastructure deployments across multiple environments. I integrated Terraform with CI pipelines for validation and consistency. While I don't have direct experience with Terragrunt specifically, my experience with Terraform module design and orchestration makes me confident in adopting and working with Terragrunt in a similar capacity.\r\n" +
+        '\r\n' +
+        '3. Kubernetes (preferably EKS) operations and Helm proficiency? Detail?\r\n' +
+        'Yes — I have extensive experience operating EKS clusters for both production/staging/development for common workloads and AI/ML workloads. I optimized scalability and performance using Karpenter, enforced security with IAM and VPC policies, and led cost reduction initiatives. I also standardized deployments using Helm and Kustomize, creating reusable charts and managing automated rollouts and upgrades.\r\n' +
+        '\r\n' +
+        '4. Hands-on ArgoCD and GitOps workflows? Detail?\r\n' +
+        'I’ve implemented GitOps pipelines with ArgoCD and Gitlab CI, reducing Kubernetes deployment times and ensuring consistent environments. I integrated approval workflows via JIRA to enhance governance and auditability.\r\n' +
+        '\r\n' +
+        '5. GitLab CI experience building reusable pipelines with templates and includes? Detail?\r\n' +
+        'Yes — I’ve used GitLab CI to build reusable pipelines with templates, and standardization across projects. I’ve also worked with GitHub Actions and Jenkins, but GitLab CI was central in building automation for deployments, infrastructure validation, and CI/CD workflows at scale.\r\n' +
+        '\r\n' +
+        '6. Are you proficient in Bash; Python?\r\n' +
+        'Yes — I can work well with both Bash and Python, and also Golang. I’ve written Python automation scripts for CI/CD pipelines, infrastructure workflows, and maintained an internal ML system, and I’ve used Bash extensively for system automation, scripting, and environment setup.\r\n' +
+        '\r\n' +
+        '7. Solid Linux and networking fundamentals (TCP/IP, DNS, HTTP, TLS)?\r\n' +
+        'Yes — I have Linux administration skills, including automation, and security hardening. I also have deep experience with networking fundamentals: configuring VPCs, IAM policies, DNS with Route 53, TLS termination, and troubleshooting incidents related to TCP/IP, DNS, HTTP, and TLS.\r\n' +
+        '\r\n' +
+        '8. Practical AWS experience: EC2, EKS, IAM, VPC, ALB/NLB, Route 53, S3, CloudWatch?\r\n' +
+        'Yes — I’ve managed AWS production environments extensively:\r\n' +
+        '- EKS: operated and scaled clusters for production and AI/ML workloads.\r\n' +
+        '- EC2: provisioned and optimized compute resources.\r\n' +
+        '- IAM & VPC: designed and enforced secure access and network segmentation.\r\n' +
+        '- ALB/NLB & Route 53: managed ingress, DNS, and service routing.\r\n' +
+        '- S3: used for storage, backups, images storage and important data.\r\n' +
+        '- CloudWatch & Datadog: built observability solutions for monitoring, logging, and metrics.\r\n' +
+        '\r\n' +
+        'I also delivered significant cost optimizations (30% savings) through automation, right-sizing, and scaling optimizations. I also have experience managing databases and solving security vulnerabilities to maintain compliance and reliability.',
+      job: [Object],
+      status: 'submitted',
+      bonus: 0,
+      message: '',
+      finalized: false,
+      createdAt: '2025-09-24T04:45:16.143Z',
+      updatedAt: '2025-09-24T04:45:16.143Z',
+      __v: 0
+    },
+    {
+      _id: '68d2b3c83ad45d21850555a0',
+      recruiter: [Object],
+      admin: '68bdcf22131c403154a093e8',
+      candidateName: ' +1 (314) 329-5605',
+      candidateEmail: 'upendermula99@gmail.com',
+      candidatePhone: ' +1 (314) 329-5605',
+      cvFileName: 'Upender_SE.pdf',
+      cvKey: '1758639047520_Upender_SE.pdf',
+      cvUrl: 'https://yzvqhtunwkgibmpdrisi.supabase.co/storage/v1/object/public/cvs/1758639047520_Upender_SE.pdf',
+      linkedin: '',
+      portfolio: '',
+      suitability: 'Work location & model: open to relocating and can work from the San Francisco office on a hybrid schedule.\r\n' +
+        'Availability: I am available to start immediately (or after a standard notice period).\r\n' +
+        '\r\n' +
+        'Screening questions:\r\n' +
+        'Recently, I strengthened my expertise in Kubernetes, applying it to orchestrate containerized services at scale, which improved deployment reliability and reduced downtime.\r\n' +
+        'At Stripe, I built a real-time financial analytics pipeline using Kafka, PySpark, and FastAPI, which reduced reporting latency by 25% and gave risk teams live visibility into anomalies.\r\n' +
+        '\r\n' +
+        'From my research, Revic helps enterprises optimize workflows with scalable solutions. I’d love to learn more about your roadmap for product adoption and growth.\r\n' +
+        '\r\n' +
+        'I’m drawn to early-stage startups because of the chance to take ownership, move fast, and contribute directly to product and team success. I believe adaptability, problem-solving, and collaboration are key to thriving in such environments.\r\n' +
+        '\r\n' +
+        'Hybrid location: San Francisco office.\r\n' +
+        '\r\n' +
+        'Work authorization: Yes, I am authorized to work in the U.S. without sponsorship.\r\n' +
+        '\r\n' +
+        'Nationality: Indian\r\n' +
+        'Languages: English\r\n' +
+        'Expected salary range: $90K–$150K\r\n',
+      job: [Object],
+      status: 'submitted',
+      bonus: 0,
+      message: '',
+      finalized: false,
+      createdAt: '2025-09-23T14:50:48.169Z',
+      updatedAt: '2025-09-23T14:50:48.169Z',
+      __v: 0
+    },
+    {
+      _id: '68d2a371ff1481964f17cde6',
+      recruiter: [Object],
+      admin: '68bdcf22131c403154a093e8',
+      candidateName: 'MARTÍN COSENTINO',
+      candidateEmail: 'martincosentino95@gmail.com',
+      candidatePhone: '+54 9 341 6811570',
+      cvFileName: 'cv+martinenglish (1).pdf',
+      cvKey: '1758634864106_cv+martinenglish (1).pdf',
+      cvUrl: 'https://yzvqhtunwkgibmpdrisi.supabase.co/storage/v1/object/public/cvs/1758634864106_cv+martinenglish%20(1).pdf',
+      linkedin: '',
+      portfolio: '',
+      suitability: 'State Management in React\r\n' +
+        'I have hands-on experience using the Context API for managing global state across components and have also worked with Redux Toolkit in larger projects to handle more complex state logic. Additionally, I have used React Query for server state management, particularly with APIs, to optimize data fetching and caching.\r\n' +
+        '\r\n' +
+        'Testing Frameworks\r\n' +
+        'I have worked with Jest for unit testing React components and React Testing Library to ensure proper rendering and behavior. I also have familiarity with Cypress for end-to-end testing, mainly for validating user flows and critical paths.\r\n' +
+        '\r\n' +
+        'Year of Birth\r\n' +
+        '1995\r\n' +
+        '\r\n' +
+        'Nationality\r\n' +
+        'Argentine\r\n' +
+        '\r\n' +
+        'Languages Spoken\r\n' +
+        '\r\n' +
+        'Spanish: Native\r\n' +
+        '\r\n' +
+        'English: Intermediate–Advanced (B2–C1, currently improving fluency and preparing for certification)\r\n' +
+        '\r\n' +
+        'Earliest Available Start Date\r\n' +
+        'Two weeks after receiving an offer (negotiable).\r\n' +
+        '\r\n' +
+        'Expected Salary\r\n' +
+        'USD 1800 – 2200 net monthly',
+      job: [Object],
+      status: 'submitted',
+      bonus: 0,
+      message: '',
+      finalized: false,
+      createdAt: '2025-09-23T13:41:05.129Z',
+      updatedAt: '2025-09-23T13:41:05.129Z',
+      __v: 0
+    },
+    {
+      _id: '68d2774ebb32119bb06edc43',
+      recruiter: [Object],
+      admin: '68bdcf22131c403154a093e8',
+      candidateName: 'DALMIRO ALVAREZ',
+      candidateEmail: 'dalmiroalvarez123@gmail.com',
+      candidatePhone: '+(54) 11-4563-8317',
+      cvFileName: 'DalmiroAlvarez.pdf',
+      cvKey: '1758623565456_DalmiroAlvarez.pdf',
+      cvUrl: 'https://yzvqhtunwkgibmpdrisi.supabase.co/storage/v1/object/public/cvs/1758623565456_DalmiroAlvarez.pdf',
+      linkedin: 'https://www.linkedin.com/in/dalmiroalvarez/',
+      portfolio: '',
+      suitability: 'I> Your personal information:\r\n' +
+        '1. Full name and year of birth? Dalmiro Alvarez, 1996\r\n' +
+        '2. What is your salary expectation (gross)? 4000 USD monthly.\r\n' +
+        '3. The time that you can onboard? Inmediatly\r\n' +
+        '4. Your English? C1\r\n' +
+        '\r\n' +
+        "II>Let's go through a few questions to confirm your suitability: \r\n" +
+        '1. How many years of frontend development experience? Detail? +5 Years\r\n' +
+        '2. Are you proficiency with TypeScript and React? Detail? Yes, I have participated for different proyects and teams in which always used this technologies.\r\n' +
+        '3. Do you have experience implementing, managing, and optimizing state in React applications? Detail? Yes, it could use hooks like useState or using Redux for global statement.\r\n' +
+        '4. Do you have A solid understanding of frontend performance optimization techniques? Detail? Yes, I have a solid understanding of frontend performance optimization. I focus on minimizing and bundling code, compressing and lazy-loading assets, using code splitting, caching, and CDNs to improve load times. I also optimize rendering by reducing unnecessary re-renders, prioritizing critical resources, and using tools like Lighthouse and DevTools to monitor and fix performance bottlenecks.\r\n' +
+        '5. Do you have experience with unit testing and end-to-end testing? Detail? Yes, I have hands-on experience with both unit testing and end-to-end (E2E) testing. I’ve written unit tests using frameworks like Jest and Pytest to validate individual functions and components, ensuring they behave as expected in isolation. For E2E testing, I’ve used tools like Cypress and Playwright to simulate real user interactions across the entire application, focusing on critical workflows and edge cases. This combination has helped me catch issues early, maintain code quality, and ensure reliable production releases.\r\n' +
+        'Bonus points if you:\r\n' +
+        '1. Do you have experience with Reactflow? Yes \r\n' +
+        '2. Are you familiar with GitHub Actions? Yes\r\n' +
+        '3. Have you worked with Vite? Yes\r\n' +
+        '4. Do you have experience in Fintech? Detail? Yes, I have worked at ePagos Argentina (Fintech)',
+      job: [Object],
+      status: 'submitted',
+      bonus: 0,
+      message: '',
+      finalized: false,
+      createdAt: '2025-09-23T10:32:46.388Z',
+      updatedAt: '2025-09-23T10:32:46.388Z',
+      __v: 0
+    },
+    {
+      _id: '68d27634bb32119bb06edc0f',
+      recruiter: [Object],
+      admin: '68bdcf22131c403154a093e8',
+      candidateName: 'DAVID HUMBERTO ESCORCE BAYTER',
+      candidateEmail: 'davidescorce03@gmail.com',
+      candidatePhone: '+57 301 269 1625',
+      cvFileName: 'David Escorce.pdf',
+      cvKey: '1758623283944_David Escorce.pdf',
+      cvUrl: 'https://yzvqhtunwkgibmpdrisi.supabase.co/storage/v1/object/public/cvs/1758623283944_David%20Escorce.pdf',
+      linkedin: 'https://www.linkedin.com/in/descorce/',
+      portfolio: '',
+      suitability: '1. David Escorce - 03/May/1997\r\n' +
+        '2. 3000 - 4000 USD, I have a question here, what taxes or deductions do you apply and based on what country?\r\n' +
+        '3. 1 - 2 weeks.\r\n' +
+        '4. B2\r\n' +
+        '\r\n' +
+        'About the questions of my experience:\r\n' +
+        '\r\n' +
+        '1. Currently 7+ Years Working with Angular and React/NextJS, Docker, Tailwind, Typescript and more.\r\n' +
+        '\r\n' +
+        '2. Yes, usually i work every day with this both technologies, Typescript is really good for typing, autocomplete and readability.\r\n' +
+        '\r\n' +
+        "3. Yes, usually i like to work with zustand for global state, and with local state (useState/useReducer) yes you can optimizing it with useCallback, useMemo and memo. I'm the next versions of react it will be unnecesary for the react compiler that is in RC Release.\r\n" +
+        '\r\n' +
+        '4. About optimization yes, there some important thins to do, like:\r\n' +
+        ' - Use CDN for images and optimize it, prefer webp format if possible.\r\n' +
+        '- Use tree-shakable libraries and dont use a library for all, you can make your own code in some cases.\r\n' +
+        '- Lazy loading and dynamic component loading use Lazy and Supense for this.\r\n' +
+        '- A good code splitting is nice to have too.\r\n' +
+        '- We can use Jest + React testing library for Unit testing for functions and components and Playwright for E2E for test a specific flow like login, redirects, results in a page.\r\n' +
+        '\r\n' +
+        '\r\n' +
+        'Bonues questions:\r\n' +
+        '\r\n' +
+        '1. I know about the library, but just use this one time.\r\n' +
+        '2. Yes, I used Github actions for CI/CD frequently.\r\n' +
+        '3. Yes I have experience with vite.\r\n' +
+        '4. I worked with pays and transactions in the past but not for a fintech company.',
+      job: [Object],
+      status: 'submitted',
+      bonus: 0,
+      message: '',
+      finalized: false,
+      createdAt: '2025-09-23T10:28:04.670Z',
+      updatedAt: '2025-09-23T10:28:04.670Z',
+      __v: 0
+    },
+    {
+      _id: '68d2759dbb32119bb06edbc7',
+      recruiter: [Object],
+      admin: '68bdcf22131c403154a093e8',
+      candidateName: 'FARHAT NADER',
+      candidateEmail: 'farhatmnader@gmail.com',
+      candidatePhone: '(718) 640-0449',
+      cvFileName: 'FarhatNader.pdf',
+      cvKey: '1758623132788_FarhatNader.pdf',
+      cvUrl: 'https://yzvqhtunwkgibmpdrisi.supabase.co/storage/v1/object/public/cvs/1758623132788_FarhatNader.pdf',
+      linkedin: 'https://www.linkedin.com/in/farhatnader/',
+      portfolio: '',
+      suitability: 'I> Your personal information: \r\n' +
+        '1. Full name and year of birth? Farhat Nader, 1993\r\n' +
+        '2. What is your salary expectation (gross)? $150k-200k\r\n' +
+        '3. The time that you can onboard? 2 weeks\r\n' +
+        ' \r\n' +
+        "II>Let's go through a few questions to confirm your suitability: \r\n" +
+        ' \r\n' +
+        '1. What’s the most recent technology or skill you taught yourself, and how did you apply it?\r\n' +
+        '--- Most recently I taught myself how to containerize projects with Docker. I applied to CI/CD pipelines, running automated tests in an isolated environment, deploying the bundled container image to servers, for consistency.\r\n' +
+        ' \r\n' +
+        '2. Describe a feature/system you built. What problem did it solve, and what metrics improved? \r\n' +
+        '--- At Just Right Reader, I built a data aggregation tool with Node.js and React that let analysts upload spreadsheets and automatically receive cleaned, structured data for sales fulfillment. Previously, this was done manually and was error-prone. The tool cut processing time from hours to minutes, reduced mistakes by over 80%, and gave the sales team faster access to accurate data, directly improving turnaround for customer orders. \r\n' +
+        ' \r\n' +
+        '3. What do you understand about Revic’s product and market? What questions do you have? \r\n' +
+        "--- From what I gather, Revic is using AI to pull together a lot of scattered sales data and then help revenue teams act on it automatically. It sounds like the idea is to cut down the busywork in CRMs and dashboards so reps can spend more time actually selling. I’m not fully sure yet how that looks day to day for a rep, but it seems like a big opportunity since almost every company struggles with sales execution. I'm curious about a few things:\r\n" +
+        ' What does a rep actually experience when using Revic. Does it feel like an assistant, or more like automated updates in the background?\r\n' +
+        'How do you handle messy or incomplete data coming from different systems? \r\n' +
+        'What are some challenges that someone coming into this role can help address. \r\n' +
+        ' \r\n' +
+        '4. Why do you want to work at an early-stage startup? What does it take to succeed there? \r\n' +
+        '--- I want to work at an early-stage startup because I enjoy having ownership, moving quickly, and seeing my work directly impact customers. To succeed, I think it takes adaptability, a bias for action, and the ability to work with ambiguity, shipping fast, learning, and iterating while keeping the bigger picture in mind. \r\n' +
+        ' \r\n' +
+        '5. Hybrid location (KO): Which office (San Francisco, NYC, Vancouver) can you work from 3 days/week? If relocating, what’s the timeline? \r\n' +
+        '--- I can work out of the NYC office 3 day/week.\r\n' +
+        ' \r\n' +
+        '6. Work authorization (KO): Do you currently have work authorization (US/Canada) without sponsorship? \r\n' +
+        '--- I am a U.S. Citizen.',
+      job: [Object],
+      status: 'submitted',
+      bonus: 0,
+      message: '',
+      finalized: false,
+      createdAt: '2025-09-23T10:25:33.836Z',
+      updatedAt: '2025-09-23T10:25:33.836Z',
+      __v: 0
+    },
+    {
+      _id: '68d26526bb32119bb06ed943',
+      recruiter: [Object],
+      admin: '68bdcf22131c403154a093e8',
+      candidateName: 'Nguyễn Mai Duy Phát',
+      candidateEmail: 'nguyenmaiduyphat@gmail.com',
+      candidatePhone: '0332950160',
+      cvFileName: 'Game Nguyen Mai Duy Phat.pdf',
+      cvKey: '1758618917318_Game Nguyen Mai Duy Phat.pdf',
+      cvUrl: 'https://yzvqhtunwkgibmpdrisi.supabase.co/storage/v1/object/public/cvs/1758618917318_Game%20Nguyen%20Mai%20Duy%20Phat.pdf',
+      linkedin: '',
+      portfolio: '',
+      suitability: '- start đc ngay\r\n- Tiếng anh giao tiếp\r\n- expect 18-20M',
+      job: [Object],
+      status: 'submitted',
+      bonus: 0,
+      message: '',
+      finalized: false,
+      createdAt: '2025-09-23T09:15:18.189Z',
+      updatedAt: '2025-09-23T09:15:18.189Z',
+      __v: 0
+    },
+    {
+      _id: '68d254063a2585e97c742b21',
+      recruiter: [Object],
+      admin: '68bdcf22131c403154a093e8',
+      candidateName: 'Mazzaracm',
+      candidateEmail: 'mazzaracm@gmail.com',
+      candidatePhone: '541127336327',
+      cvFileName: 'Mazzara (1).pdf',
+      cvKey: '1758614532938_Mazzara (1).pdf',
+      cvUrl: 'https://yzvqhtunwkgibmpdrisi.supabase.co/storage/v1/object/public/cvs/1758614532938_Mazzara%20(1).pdf',
+      linkedin: '',
+      portfolio: '',
+      suitability: '1. I have experience mainly in Zustand, Tanstack Query, React Hook Form and Context API, I have used Redux in a couple of occasions too, but not in depth. \r\n' +
+        '2. Yes, Jest, Vitest, Cypress and Playwright.\r\n' +
+        '3. I have worked with Make, Zapier, N8N and shopify. Individually and integrating them into workflows. \r\n' +
+        '4. 2000.\r\n' +
+        '5. Venezuelan/Argentinian.\r\n' +
+        '6. Spanish and English.\r\n' +
+        '7. Immediately. \r\n' +
+        '8. 3500usd / month\r\n',
+      job: [Object],
+      status: 'submitted',
+      bonus: 0,
+      message: '',
+      finalized: false,
+      createdAt: '2025-09-23T08:02:14.173Z',
+      updatedAt: '2025-09-23T08:02:14.173Z',
+      __v: 0
+    },
+    {
+      _id: '68d2333cdc58331beab588ad',
+      recruiter: [Object],
+      admin: '68bdcf22131c403154a093e8',
+      candidateName: 'NG YU REN',
+      candidateEmail: 'Yuren173@gmail.com',
+      candidatePhone: '6591012450',
+      cvFileName: 'NYR Resume 2025.pdf',
+      cvKey: '1758606139802_NYR Resume 2025.pdf',
+      cvUrl: 'https://yzvqhtunwkgibmpdrisi.supabase.co/storage/v1/object/public/cvs/1758606139802_NYR%20Resume%202025.pdf',
+      linkedin: '',
+      portfolio: '',
+      suitability: '\t•\tProduct Lines Managed: Cybersecurity, business productivity, and cloud services\r\n' +
+        '\t•\tAnnual Sales Performance: Consistently achieved 100% attainment\r\n' +
+        '\t•\tClient Portfolio: Enterprise accounts across manufacturing, hospitality, logistics, public sector, and financial services industries\r\n' +
+        '\t•\tReason for Seeking New Role: Looking for new challenges\r\n' +
+        '\t•\tCurrent Compensation: SGD 5,800 basic + SGD 2,000 commission (monthly)\r\n' +
+        '\t•\tExpected Compensation: SGD 7,000 basic + SGD 2,000 commission (monthly)\r\n' +
+        '\t•\tNationality: Singaporean\r\n' +
+        '\t•\tLanguages: Fluent in English and Mandarin\r\n' +
+        '\t•\tAvailability: Immediate\r\n' +
+        '\r\n' +
+        'Yu Ren brings over 5 years of B2B sales experience in IT and cloud solutions, with a proven record of developing and expanding enterprise and public sector accounts. His bilingual ability (English & Mandarin) and track record in consistently meeting sales targets make him a strong fit for this role.\r\n',
+      job: [Object],
+      status: 'rejected',
+      bonus: 0,
+      message: '',
+      finalized: true,
+      createdAt: '2025-09-23T05:42:20.498Z',
+      updatedAt: '2025-09-24T02:42:23.827Z',
+      __v: 0,
+      finalizedAt: '2025-09-24T02:42:18.826Z'
+    },
+    {
+      _id: '68d210ca31fb60db8204fe91',
+      recruiter: [Object],
+      admin: '68bdcf22131c403154a093e8',
+      candidateName: 'Sreeja Gangavarapu',
+      candidateEmail: 'sreeja2135@gmail.com',
+      candidatePhone: '15712957589',
+      cvFileName: 'SREEJA_CV_.pdf',
+      cvKey: '1758597321597_SREEJA_CV_.pdf',
+      cvUrl: 'https://yzvqhtunwkgibmpdrisi.supabase.co/storage/v1/object/public/cvs/1758597321597_SREEJA_CV_.pdf',
+      linkedin: '',
+      portfolio: '',
+      suitability: 'Thank you for considering my application for the Sr. Full-Stack Engineer role at Revic. After reviewing the job description, I am even more excited about the opportunity to contribute to your mission of transforming GTM data into actionable insights. Please find my responses below:\r\n' +
+        '\r\n' +
+        'Work location & model\r\n' +
+        'I am currently based in the Virginia, U.S. and open to relocating. My preference would be the New York office, and I can commit to the hybrid schedule (3 days/week in office). If relocation is required, I would plan to move within a week of an offer.\r\n' +
+        '\r\n' +
+        'Availability\r\n' +
+        'I am available to start as early as October 2025.\r\n' +
+        '\r\n' +
+        'Screening questions\r\n' +
+        '\r\n' +
+        'Recent technology/skill learned:\r\n' +
+        'Most recently, I deepened my expertise in Python FastAPI and AWS serverless orchestration. I applied these skills to build scalable APIs and workflows for internal dashboards at Amazon, integrating data from multiple sources while ensuring low latency and reliability. I also upskilled in Power BI and advanced SQL, which I used to design analytics dashboards that helped leadership track real-time deliverables and risks.\r\n' +
+        '\r\n' +
+        'Feature/system built:\r\n' +
+        'At Amazon, I designed and delivered a bulk upload feature and control panel for the Frisco & Flexico deliverables management dashboards (React + Python backend). This system replaced a manual, error-prone workflow with an automated pipeline that reduced processing time from several hours to minutes. It improved adoption across multiple teams and drove a 40% increase in efficiency and measurable gains in on-time deliverables.\r\n' +
+        '\r\n' +
+        'Understanding of Revic’s product & market:\r\n' +
+        'Revic is building next-generation GTM intelligence tools by leveraging AI, machine learning, and sales/revenue operations data. I see Revic as uniquely positioned to help organizations unify messy CRM and RevOps data, turning it into clear models, scoring, and insights that drive sales effectiveness. My experience designing control panels, risk dashboards, and AI/ML-powered data workflows aligns directly with this mission. I would love to learn more about how Revic envisions agent orchestration and context-graph applications in production.\r\n' +
+        '\r\n' +
+        'Why early-stage startup:\r\n' +
+        'I thrive in environments where I can wear multiple hats, move quickly, and take full ownership of systems. Early-stage startups demand adaptability, initiative, and resilience , qualities I have honed through building complex dashboards at Amazon, managing CR deliverables, and contributing to academic projects where I handled both backend and frontend responsibilities end-to-end. I am drawn to Revic’s mission because I enjoy contributing not just code, but also product ideas, architectural improvements, and process standards.\r\n' +
+        '\r\n' +
+        'Hybrid location (KO):\r\n' +
+        'I would plan to work from the New York office 3 days/week, relocating immediately if necessary.\r\n' +
+        '\r\n' +
+        'Work authorization (KO):\r\n' +
+        'I currently hold valid U.S. work authorization and can start immediately without sponsorship. For the long term, if the collaboration proves a strong fit, I would be open to continuing through either a third-party arrangement or direct sponsorship.\r\n' +
+        '\r\n' +
+        'Personal details\r\n' +
+        'Year of birth: 2000\r\n' +
+        'Nationality: Indian\r\n' +
+        'Languages: English, Telugu, Hindi\r\n' +
+        'Expected salary range: $120,000 – $140,000 (flexible depending on equity and benefits).\r\n' +
+        '\r\n' +
+        'Why I am a strong fit for Revic\r\n' +
+        'With over 5 years of experience in Python, React/TypeScript,  Spring Boot, Angular, SQL, Power BI, and AWS cloud infrastructure, I have delivered enterprise-scale applications that balance usability, scalability, and reliability. My recent work has focused on:\r\n' +
+        '\r\n' +
+        'Frontend excellence: Implementing React/TypeScript tables, filters, and dashboards with a focus on user experience and accessibility.\r\n' +
+        '\r\n' +
+        'Backend/API design: Developing Python services and APIs with validations, integrations, and data modeling across large datasets.\r\n' +
+        '\r\n' +
+        'Cloud + orchestration: Building AWS-based solutions, containerized workloads, and automation pipelines.\r\n' +
+        '\r\n' +
+        'AI/ML interest: Integrating analytics and exploring AI-powered frameworks such as Haystack for retrieval and workflow orchestration.\r\n' +
+        '\r\n' +
+        'I believe this combination of full-stack expertise, startup mindset, and enterprise discipline positions me to add immediate value at Revic while growing with your platform long-term.\r\n' +
+        '\r\n' +
+        'I look forward to the opportunity to discuss next steps.',
+      job: [Object],
+      status: 'submitted',
+      bonus: 0,
+      message: '',
+      finalized: false,
+      createdAt: '2025-09-23T03:15:22.414Z',
+      updatedAt: '2025-09-23T03:15:22.414Z',
+      __v: 0
+    },
+    {
+      _id: '68d209cbdf1c8278a1236292',
+      recruiter: [Object],
+      admin: '68bdcf22131c403154a093e8',
+      candidateName: 'Luis Villa',
+      candidateEmail: 'luis_jem86@icloud.com',
+      candidatePhone: '543812183026',
+      cvFileName: 'Luis_AntonioVilla_Resume (1).pdf',
+      cvKey: '1758595530751_Luis_AntonioVilla_Resume (1).pdf',
+      cvUrl: 'https://yzvqhtunwkgibmpdrisi.supabase.co/storage/v1/object/public/cvs/1758595530751_Luis_AntonioVilla_Resume%20(1).pdf',
+      linkedin: '',
+      portfolio: '',
+      suitability: '1) I have experience with redux, context, zustand, I have been working with this apis about 6 years \r\n' +
+        '2) I have experience with react testing library and jest \r\n' +
+        '3) I know about some low-code platforms but I didn’t work with this in some client in the past \r\n' +
+        '4) my year of birth is 1986\r\n' +
+        '5) I from Argentina \r\n' +
+        '6) I speak in English (B2-c1) and Spanish \r\n' +
+        '7) I can start inmediatly \r\n' +
+        '8) 4000',
+      job: [Object],
+      status: 'submitted',
+      bonus: 0,
+      message: '',
+      finalized: false,
+      createdAt: '2025-09-23T02:45:31.528Z',
+      updatedAt: '2025-09-23T02:45:31.528Z',
+      __v: 0
+    },
+    {
+      _id: '68d16bec5f4757f000ea0529',
+      recruiter: [Object],
+      admin: '68bdcf22131c403154a093e8',
+      candidateName: 'Rappazzini Francisco - CV',
+      candidateEmail: 'franciscorappazzini@gmail.com',
+      candidatePhone: '0985629826',
+      cvFileName: 'Rappazzini Francisco - CV (1).pdf',
+      cvKey: '1758555115473_Rappazzini Francisco - CV (1).pdf',
+      cvUrl: 'https://yzvqhtunwkgibmpdrisi.supabase.co/storage/v1/object/public/cvs/1758555115473_Rappazzini%20Francisco%20-%20CV%20(1).pdf',
+      linkedin: '',
+      portfolio: '',
+      suitability: '* Year of birth: 25/07/1998\r\n' +
+        '* Nationality: Argentina \r\n' +
+        '* Languages spoken: Spanish (native) - English (B1-B2, learning)\r\n' +
+        '* Earliest available start date: right now\r\n' +
+        '* Expected salary:\r\n' +
+        '* Your Linkedin:\r\n' +
+        '* Rust Proficiency (Blockchain context): almost 3 years\r\n' +
+        '* Solana Experience: more than 2 years\r\n' +
+        '\r\n' +
+        "Yes, I'm using Rust every day in Blockchain projects. I'm Rust Smart Contract Developer using Anchor mainly.\r\n" +
+        'I worked on situations where many accounts could be changed in the same transaction. To keep it safe, I use Rust’s ownership system, which makes sure memory and access are handled correctly. Also, Anchor with its macros and constraints helps a lot, because it makes account validation easier and avoids common mistakes with concurrency and memory.\r\n' +
+        'Maybe there are two projects on Solana where I implemented an important piece of logic. The first one, I had to develop a staking program, where I had to calculate manually each reward taking extreme care regarding overflows, underflows, etc. I used SPL, to receive/hold, transfer and mint tokens.\r\n' +
+        'And maybe the second one was a program where I had to receive SOL and swap as many random tokens as I could (randombag.fun). And the problem here was that I had to do that in only one tx, so I had to manage each random account by remaining accounts manually and implement ALTs (https://solana.com/es/developers/guides/advanced/lookup-tables), increment the CU limit and use a custom allocator heap because the tx was very heavy in each way.\r\n' +
+        '\r\n' +
+        'Yes, I have more than 2 years of experience as Solana Smart Contract Engineer using Anchor framework. The biggest challenge maybe was to successfully develop randombag.fun because each limit was reached when I wanted to swap as many tokens as I could. But reading the documentation, asking/reading the Solana forums and with a lot of debugging and testing was done successfully.\r\n' +
+        'Yes, I have experience with SPL. Almost all projects use tokens, so I use SPL in almost all projects. And SPL extensions too, the most common is Metadata extension by Metaplex and also used Transfer Hook extension and cNFT (compressed NFTs). These last two were by testing projects.\r\n' +
+        '\r\n' +
+        `I didn't contribute to any big open-source blockchain project. I just contributed in a Colosseum Hackathon project in the past edition of the Boltick project (boltick.com.ar). I had to "audit" with a lot of testing the Anchor program and solve some problems in the code. Mainly I did testing using Typescript and Rust. And when I found some bugs and security problems I fix these problems on the Anchor program.\r\n` +
+        '\r\n' +
+        'Anchor snippet to create a simple mint:\r\n' +
+        '// instructions/create_mint.rs file\r\n' +
+        '#[derive(Accounts)]\r\n' +
+        "pub struct CreateMint<'info> {\r\n" +
+        '    #[account(mut)]\r\n' +
+        "    pub signer: Signer<'info>,\r\n" +
+        '\r\n' +
+        '    #[account(\r\n' +
+        '        init,\r\n' +
+        '        payer = signer,\r\n' +
+        '        mint::decimals = 9,\r\n' +
+        '        mint::authority = signer.key(),\r\n' +
+        '        mint::freeze_authority = signer.key(),\r\n' +
+        '    )]\r\n' +
+        "    pub mint: InterfaceAccount<'info, Mint>,\r\n" +
+        '\r\n' +
+        "    pub token_program: Interface<'info, TokenInterface>,\r\n" +
+        "    pub system_program: Program<'info, System>,\r\n" +
+        '}\r\n' +
+        '    \r\n' +
+        "impl <'info> CreateMint<'info> {\r\n" +
+        '    pub fn crete_mint(&mut self) -> Result<()> {\r\n' +
+        '        Ok(())\r\n' +
+        '    }\r\n' +
+        '}\r\n' +
+        '\r\n' +
+        '// lib.rs file\r\n' +
+        '... inside the mod program\r\n' +
+        '    \r\n' +
+        'pub fn create_mint(ctx: Context<CreateMint>) -> Result<()> {\r\n' +
+        '    ctx.accounts.create_mint()\r\n' +
+        '    \r\n' +
+        '// ... continue with the file\r\n' +
+        '}\r\n' +
+        '\r\n' +
+        'I look forward to your reply.\r\n' +
+        'Expected salary: 120K USD annually',
+      job: [Object],
+      status: 'rejected',
+      bonus: 0,
+      message: '',
+      finalized: true,
+      createdAt: '2025-09-22T15:31:56.374Z',
+      updatedAt: '2025-09-24T03:02:19.564Z',
+      __v: 0,
+      finalizedAt: '2025-09-24T03:02:14.564Z'
+    },
+    {
+      _id: '68cff8c53ed83cd939103bb3',
+      recruiter: [Object],
+      admin: '68bdcf22131c403154a093e8',
+      candidateName: 'Jayanth Kumar',
+      candidateEmail: 'jayanthkumar1903@gmail.com',
+      candidatePhone: '+919493214526',
+      cvFileName: 'Jay_resume.pdf',
+      cvKey: '1758460100529_Jay_resume.pdf',
+      cvUrl: 'https://yzvqhtunwkgibmpdrisi.supabase.co/storage/v1/object/public/cvs/1758460100529_Jay_resume.pdf',
+      linkedin: '',
+      portfolio: '',
+      suitability: 'Jayanth Kumar is a highly skilled Rust & Solana Engineer with a strong background in blockchain development, zero-knowledge proofs, and cross-chain systems. Currently at 10Clouds, he has built advanced DeFi infrastructures including token swaps, programmable tokens, and multisig authority models. Previously, he contributed to Solana-based financing platforms, cross-chain bridges, and ZKP-powered voting systems, alongside experience at leading firms like Arista Networks and Texas Instruments. With deep expertise in Rust, Solana, and high-performance systems, he is an excellent fit for the Rust Solana Engineer role.',
+      job: [Object],
+      status: 'rejected',
+      bonus: 0,
+      message: '',
+      finalized: true,
+      createdAt: '2025-09-21T13:08:22.028Z',
+      updatedAt: '2025-09-24T02:58:37.842Z',
+      __v: 0,
+      finalizedAt: '2025-09-24T02:58:32.841Z'
+    },
+    {
+      _id: '68ce954e03f885061935249c',
+      recruiter: [Object],
+      admin: '68bdcf22131c403154a093e8',
+      candidateName: 'Armando Pena',
+      candidateEmail: 'armandojose009@gmail.com',
+      candidatePhone: '+573164804495',
+      cvFileName: '20250919_13981063_SrBackendEngineerJav_Pena_A_CV.pdf',
+      cvKey: '1758369102048_20250919_13981063_SrBackendEngineerJav_Pena_A_CV.pdf',
+      cvUrl: 'https://yzvqhtunwkgibmpdrisi.supabase.co/storage/v1/object/public/cvs/1758369102048_20250919_13981063_SrBackendEngineerJav_Pena_A_CV.pdf',
+      linkedin: 'https://www.linkedin.com/in/armando-jose-pe%C3%B1a-mujica-405631110',
+      portfolio: '',
+      suitability: 'He is matching ',
+      job: [Object],
+      status: 'submitted',
+      bonus: 0,
+      message: '',
+      finalized: false,
+      createdAt: '2025-09-20T11:51:42.719Z',
+      updatedAt: '2025-09-20T11:51:42.719Z',
+      __v: 0
+    },
+    {
+      _id: '68ce940603f8850619352485',
+      recruiter: [Object],
+      admin: '68bdcf22131c403154a093e8',
+      candidateName: 'Andrés Felipe Sierra Rojas',
+      candidateEmail: 'andressierrarojas7@gmail.com',
+      candidatePhone: '+573013248972',
+      cvFileName: '20250918_13981063_SrBackendEngineerJav_SierraRojas_A_CV.pdf',
+      cvKey: '1758368774339_20250918_13981063_SrBackendEngineerJav_SierraRojas_A_CV.pdf',
+      cvUrl: 'https://yzvqhtunwkgibmpdrisi.supabase.co/storage/v1/object/public/cvs/1758368774339_20250918_13981063_SrBackendEngineerJav_SierraRojas_A_CV.pdf',
+      linkedin: 'https://www.linkedin.com/in/andressierrarojas/',
+      portfolio: 'https://github.com/andres06-hub',
+      suitability: 'He is matching job',
+      job: [Object],
+      status: 'submitted',
+      bonus: 0,
+      message: '',
+      finalized: false,
+      createdAt: '2025-09-20T11:46:14.710Z',
+      updatedAt: '2025-09-20T11:46:14.710Z',
+      __v: 0
+    },
+    {
+      _id: '68ce938c03f885061935245e',
+      recruiter: [Object],
+      admin: '68bdcf22131c403154a093e8',
+      candidateName: 'Amin Gomez',
+      candidateEmail: 'amin.gomez@hotmail.com',
+      candidatePhone: '+573162446316',
+      cvFileName: '20250918_13981063_SrBackendEngineerJav_Gomez_A_CV.pdf',
+      cvKey: '1758368652292_20250918_13981063_SrBackendEngineerJav_Gomez_A_CV.pdf',
+      cvUrl: 'https://yzvqhtunwkgibmpdrisi.supabase.co/storage/v1/object/public/cvs/1758368652292_20250918_13981063_SrBackendEngineerJav_Gomez_A_CV.pdf',
+      linkedin: 'https://www.linkedin.com/in/amingomez/',
+      portfolio: '',
+      suitability: 'He fit job',
+      job: [Object],
+      status: 'submitted',
+      bonus: 0,
+      message: '',
+      finalized: false,
+      createdAt: '2025-09-20T11:44:12.821Z',
+      updatedAt: '2025-09-20T11:44:12.821Z',
+      __v: 0
+    },
+    {
+      _id: '68cd6ab78c2ed50b7afcd446',
+      recruiter: [Object],
+      admin: '68bdcf22131c403154a093e8',
+      candidateName: 'Caio Santos',
+      candidateEmail: 'caionsantos2000@gmail.com',
+      candidatePhone: '+5585986055270',
+      cvFileName: 'cv-caio-fullstack-node-react.pdf',
+      cvKey: '1758292662436_cv-caio-fullstack-node-react.pdf',
+      cvUrl: 'https://yzvqhtunwkgibmpdrisi.supabase.co/storage/v1/object/public/cvs/1758292662436_cv-caio-fullstack-node-react.pdf',
+      linkedin: '',
+      portfolio: '',
+      suitability: 'I would like to present Caio Santos, a Fullstack Developer from Brazil (LATAM region), who is highly aligned with the Senior Software Engineer (Remote) role.\r\n' +
+        'He has 5+ years of experience working with Node.js, TypeScript, and PostgreSQL, delivering scalable backend systems.\r\n' +
+        'At Rúmina, he built a fintech credit platform with financial integrations and digital contracts, directly relevant to transaction-heavy domains.\r\n' +
+        'He also implemented APIs with idempotency, reliability, and concurrency control, ensuring robustness in critical systems.\r\n' +
+        'Caio is proficient in AWS, GCP, Docker, and distributed messaging (SNS/SQS), which supports the JD’s infrastructure requirements.\r\n' +
+        'He has collaborated across product, infra, and design teams in startups and software houses, showing strong cross-functional communication.\r\n' +
+        'While blockchain and Kubernetes experience are areas for growth, his fintech expertise and backend depth make him a strong candidate.\r\n' +
+        'Based in Brazil, he fits perfectly within the LATAM location criteria.\r\n' +
+        'Overall, Caio combines technical mastery, fintech background, and growth potential to contribute effectively to your engineering team',
+      job: [Object],
+      status: 'rejected',
+      bonus: 0,
+      message: '',
+      finalized: true,
+      createdAt: '2025-09-19T14:37:43.307Z',
+      updatedAt: '2025-09-22T03:03:40.416Z',
+      __v: 0,
+      finalizedAt: '2025-09-22T03:03:40.415Z'
+    },
+    {
+      _id: '68cd23282b39c4e7e8390731',
+      recruiter: [Object],
+      admin: '68bdcf22131c403154a093e8',
+      candidateName: 'Nguyễn thị nhung',
+      candidateEmail: 'nhungnt40@gmail.com',
+      candidatePhone: '0375495462',
+      cvFileName: '20250915_13981063_SrBackendEngineerJav_Aparicio_J_CV.pdf',
+      cvKey: '1758274343766_20250915_13981063_SrBackendEngineerJav_Aparicio_J_CV.pdf',
+      cvUrl: 'https://yzvqhtunwkgibmpdrisi.supabase.co/storage/v1/object/public/cvs/1758274343766_20250915_13981063_SrBackendEngineerJav_Aparicio_J_CV.pdf',
+      linkedin: '',
+      portfolio: '',
+      suitability: 'fit job',
+      job: [Object],
+      status: 'rejected',
+      bonus: 0,
+      message: '',
+      finalized: true,
+      createdAt: '2025-09-19T09:32:24.111Z',
+      updatedAt: '2025-09-26T09:30:59.230Z',
+      __v: 0,
+      finalizedAt: '2025-09-26T09:30:54.229Z'
+    },
+    {
+      _id: '68ccf54da6ec619087586639',
+      recruiter: null,
+      admin: '68bdcf22131c403154a093e8',
+      candidateName: 'a',
+      candidateEmail: 'hieuhp132@gmail.com',
+      candidatePhone: '123456',
+      cvFileName: 'Curriculum_Vitae.pdf',
+      cvKey: '1758262604123_Curriculum_Vitae.pdf',
+      cvUrl: 'https://yzvqhtunwkgibmpdrisi.supabase.co/storage/v1/object/public/cvs/1758262604123_Curriculum_Vitae.pdf',
+      linkedin: '',
+      portfolio: '',
+      suitability: '',
+      job: [Object],
+      status: 'offer',
+      bonus: 0,
+      message: '',
+      finalized: false,
+      createdAt: '2025-09-19T06:16:45.165Z',
+      updatedAt: '2025-09-26T03:46:11.406Z',
+      __v: 0
+    },
+    {
+      _id: '68c83a7990d3385e227447d5',
+      recruiter: [Object],
+      admin: '68bdcf22131c403154a093e8',
+      candidateName: 'Gregory Vieira',
+      candidateEmail: 'vieiragregory42@gmail.com',
+      candidatePhone: '5551998857081',
+      cvFileName: 'cv_1757952633166_2knk.pdf',
+      linkedin: 'https://www.linkedin.com/in/greg-vieira/',
+      portfolio: '',
+      suitability: 'hồ sơ đào lại, chưa mời ứng tuyển',
+      job: [Object],
+      status: 'rejected',
+      bonus: 0,
+      message: '',
+      finalized: true,
+      createdAt: '2025-09-15T16:10:33.387Z',
+      updatedAt: '2025-09-18T08:51:56.009Z',
+      __v: 0,
+      cvKey: '',
+      cvUrl: '',
+      finalizedAt: '2025-09-18T08:51:56.008Z'
+    }
+  ],
+  total: 23,
+  page: 1,
+  limit: 50
+}
+First recruiter email: undefined
+Log in as true
+Fetching token...
+Login response: {
+  success: true,
+  message: 'Dang nhap thanh cong',
+  user: {
+    _id: '68bdcf22131c403154a093e8',
+    name: 'Admin',
+    email: 'admin@ant-tech.asia',
+    credit: 0,
+    role: 'admin',
+    token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YmRjZjIyMTMxYzQwMzE1NGEwOTNlOCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1ODg4MjQ2MSwiZXhwIjoxNzU4OTY4ODYxfQ.JDXQqJArGNDfj5BcNvgVulPzs02wMxJvaB8fo7D9Hy8'
+  }
+}
+Recruiter token fetched successfully: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4YmRjZjIyMTMxYzQwMzE1NGEwOTNlOCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc1ODg4MjQ2MSwiZXhwIjoxNzU4OTY4ODYxfQ.JDXQqJArGNDfj5BcNvgVulPzs02wMxJvaB8fo7D9Hy8

@@ -1,0 +1,21 @@
+[
+  {
+    "_id": "1766198650669",
+    "name": "test User",
+    "email": "a@example.com",
+    "password": "$2b$10$HQoFCHVV8790q1Wd8XIWJuwXD2G.lDs07LaHahzbvJajuvLHc7tx6",
+    "role": "user",
+    "credit": 0,
+    "createdAt": "2025-12-20T02:44:10.669Z"
+  },
+  {
+    "_id": "1766198982691",
+    "name": "Đào Minh Hiếu",
+    "email": "hieuhp132@gmail.com",
+    "password": "$2b$10$/wEY.f479lo8ap5d6lzP2evwppX8DLOSlIuxzqew7rsgGF/Rz1ghG",
+    "role": "user",
+    "credit": 0,
+    "createdAt": "2025-12-20T02:49:42.691Z"
+  },
+
+]

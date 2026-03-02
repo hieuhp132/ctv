@@ -1,0 +1,74 @@
+[
+  {
+    "id": "msg_1770226387754_av45pmlcmkf",
+    "conversationId": "conv_1770226387400_khmelggye",
+    "senderId": "68bdcf22131c403154a093e8",
+    "recipientId": "1769269565040",
+    "content": "Hello",
+    "timestamp": "2026-02-04T17:33:07.754Z",
+    "read": false
+  },
+  {
+    "id": "msg_1770226411269_gpwsm7mrw78",
+    "conversationId": "conv_1770226410931_yep5kbnlo",
+    "senderId": "68bdcf22131c403154a093e8",
+    "recipientId": "68e645db46d97a07d4bef771",
+    "content": "eeeee",
+    "timestamp": "2026-02-04T17:33:31.269Z",
+    "read": true
+  },
+  {
+    "id": "msg_1770226493228_8otcnm99ke5",
+    "conversationId": "conv_1770226492925_fgt9i6vqa",
+    "senderId": "68bdcf22131c403154a093e8",
+    "recipientId": "68e645db46d97a07d4bef771",
+    "content": "Zoo",
+    "timestamp": "2026-02-04T17:34:53.228Z",
+    "read": true
+  },
+  {
+    "id": "msg_1770297505318_kog02ini7fs",
+    "conversationId": "conv_1770297507155_ufbw28s53",
+    "senderId": "1768818480332",
+    "recipientId": "68bdcf22131c403154a093e8",
+    "content": "Heloooo",
+    "timestamp": "2026-02-05T13:18:25.319Z",
+    "read": true
+  },
+  {
+    "id": "msg_1770299703612_xw5bmv0t89",
+    "conversationId": "conv_1770297507155_ufbw28s53",
+    "senderId": "68bdcf22131c403154a093e8",
+    "recipientId": "1768818480332",
+    "content": "Nhận được tin nhắn chưa?",
+    "timestamp": "2026-02-05T13:55:03.612Z",
+    "read": false
+  },
+  {
+    "id": "msg_1770299749978_88437r5v66d",
+    "conversationId": "conv_1770226387400_khmelggye",
+    "senderId": "68bdcf22131c403154a093e8",
+    "recipientId": "1769269565040",
+    "content": "dcm",
+    "timestamp": "2026-02-05T13:55:49.978Z",
+    "read": false
+  },
+  {
+    "id": "msg_1770299754005_ed58gm7utqk",
+    "conversationId": "conv_1770226492925_fgt9i6vqa",
+    "senderId": "68bdcf22131c403154a093e8",
+    "recipientId": "68e645db46d97a07d4bef771",
+    "content": "dcm",
+    "timestamp": "2026-02-05T13:55:54.005Z",
+    "read": true
+  },
+  {
+    "id": "msg_1770299757025_dac5lnfoonk",
+    "conversationId": "conv_1770226410931_yep5kbnlo",
+    "senderId": "68bdcf22131c403154a093e8",
+    "recipientId": "68e645db46d97a07d4bef771",
+    "content": "dcm",
+    "timestamp": "2026-02-05T13:55:57.025Z",
+    "read": true
+  }
+]

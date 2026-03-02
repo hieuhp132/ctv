@@ -1,0 +1,42 @@
+[
+  {
+    "id": "conv_1770226387400_khmelggye",
+    "participants": [
+      "68bdcf22131c403154a093e8",
+      "1769269565040"
+    ],
+    "createdAt": "2026-02-04T17:33:07.752Z",
+    "lastMessage": "dcm",
+    "lastMessageAt": "2026-02-05T13:55:49.976Z"
+  },
+  {
+    "id": "conv_1770226410931_yep5kbnlo",
+    "participants": [
+      "68bdcf22131c403154a093e8",
+      "68e645db46d97a07d4bef771"
+    ],
+    "createdAt": "2026-02-04T17:33:31.267Z",
+    "lastMessage": "dcm",
+    "lastMessageAt": "2026-02-05T13:55:57.023Z"
+  },
+  {
+    "id": "conv_1770226492925_fgt9i6vqa",
+    "participants": [
+      "68bdcf22131c403154a093e8",
+      "68e645db46d97a07d4bef771"
+    ],
+    "createdAt": "2026-02-04T17:34:53.226Z",
+    "lastMessage": "dcm",
+    "lastMessageAt": "2026-02-05T13:55:54.003Z"
+  },
+  {
+    "id": "conv_1770297507155_ufbw28s53",
+    "participants": [
+      "1768818480332",
+      "68bdcf22131c403154a093e8"
+    ],
+    "createdAt": "2026-02-05T13:18:25.315Z",
+    "lastMessage": "Nhận được tin nhắn chưa?",
+    "lastMessageAt": "2026-02-05T13:55:03.608Z"
+  }
+]

@@ -1,0 +1,906 @@
+[
+  {
+    "_id": "68bdcf22131c403154a093e8",
+    "name": "Admin",
+    "email": "admin@ant-tech.asia",
+    "password": "$2b$10$3sfAc0CP0OevM8IZpbVHzOBswF2DDBPo35e2G90pntoR/AMK5aWGW",
+    "credit": 0,
+    "role": "admin",
+    "jobs": [
+      "68bdcf23131c403154a093ee",
+      "68bdcf23131c403154a093f0"
+    ],
+    "__v": 1,
+    "updatedAt": "2025-12-22T09:04:33.083Z"
+  },
+  {
+    "_id": "68c021ae824dc44d6e0831c5",
+    "name": "Nguyen Nhung",
+    "email": "nhungnt40@gmail.com",
+    "password": "$2b$10$bqPMjdsp8lWvJMlxfz58pOrDcRk8aFiNoCpENSuhNTsW7P73VtbFq",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "68c15731def40486cc45762b",
+    "name": "Thoa tran",
+    "email": "thoa.work@gmail.com",
+    "password": "$2b$10$h2SHS5NuEhkSGS7ZbT6f/unOAkkWguX1U1MEMOal1DClFtmPDljHK",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "68c3f214d0bcd19bfd61fadd",
+    "name": "anttechhr@gmail.com",
+    "email": "anttechhr@gmail.com",
+    "password": "$2b$10$Chs5UUOrri7St8HBxf7hHeKxUx7PPsPrCZNT9MAEODcVkK9zBKApW",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "68c42d45896042752037e7a7",
+    "name": "huu123",
+    "email": "huulv2002@gmail.com",
+    "password": "$2b$10$WnRi2mjdiDN2VgsS570j3O5FhS67nHHhDd9dt5tE6hTyQd2Sl7J4S",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "68c6dd64c147358eec8f9e47",
+    "name": "Jade Nguyen",
+    "email": "sha@ant-tech.asia",
+    "password": "$2b$10$t7BExt2Of04IN7LhlmXOW.DE.j1PssJmq8pi9KhJgWJac8TL1aBMO",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "68c7a9e1ebb1a65cd63d8c33",
+    "name": "Roi Freelancer",
+    "email": "royfajardo@ant-tech.asia",
+    "password": "$2b$10$LGBqRvS1OGk4WVlAW63Mw.efNSYc3PRY5EQwJ6fL00QXmgBiPLhIS",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "68c7aa87ebb1a65cd63d8c37",
+    "name": "Royfreelance",
+    "email": "internationalroi2023@gmail.com",
+    "password": "$2b$10$WNv0IX2oS5VodWm3/V1s4ujBMyzkXDtOs.LuGhV16RUooAGBOges6",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "68c7c34643acb7665903d080",
+    "name": "hiepchu0012",
+    "email": "hiepchu0012@gmail.com",
+    "password": "$2b$10$mI2RfKEE6vdlZ25EgiyCd.6Uq/QvOkBp2sOuDpXdgA.89vSlkrGbS",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "68c7c34f43acb7665903d083",
+    "name": "Cloudy Nguyen",
+    "email": "pinkcloudy61@gmail.com",
+    "password": "$2b$10$k.udaoRChxzDb6bHwjg4FOQyI0Gb1TVRwLF5Q7iYppIRYTXZKU8Kq",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "68c7eb0cbd561b593d1a20fa",
+    "name": "ngocdavnnp@gmail.com",
+    "email": "ngocdavnnp@gmail.com",
+    "password": "$2b$10$YVCptYdsnEP5CNoMm5ddi.m0lqzdgx.8Sr3KEsRRAcXciPQ4PWsVy",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "68cec52b65e6a012c734071b",
+    "name": "NhutNZ",
+    "email": "minhnhut220620@gmail.com",
+    "password": "$2b$10$tL0iK2dQU1omTeaSMjOa3uL2lSgWdX36hwkJAA2fGu3.T7HgBaUOC",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "68d0fbc64d0ee0890dbf93ab",
+    "name": "Tammy0203",
+    "email": "tamphamtnm89@gmail.com",
+    "password": "$2b$10$dma0njBjhfcw9YUi3F7RAOgHiYJvyR1mRuBZvXkOsjDc9nEVzdRn6",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "68d0fd8b4d0ee0890dbf93b8",
+    "name": "Helenanguyen",
+    "email": "thaothaothao190902@gmail.com",
+    "password": "$2b$10$ecnYRuG4.7J9E6YHkWtim.k0ej7De7iDUPmpVnOc2b0mh0yeTabfu",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "68d2a5a9ff1481964f17ce09",
+    "name": "Cnguyen0691",
+    "email": "chaunguyen1806@gmail.com",
+    "password": "$2b$10$ibGlPlo2O6Om2LzQ/kd9h.D.HQowarKrdT7Vbrs7d3Qtrfa1u.3xy",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "68d4f404a4d485db23d0772b",
+    "name": "Hanh Tran",
+    "email": "hanhttm2207@gmail.com",
+    "password": "$2b$10$vv.j1uTx6J9UbT5byfyFSOCq37jxmxNvpSVzS17XZBIb1bUEslelK",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "68d8209bd032f7cce71f3efa",
+    "name": "Thoa",
+    "email": "baothoa4112001@gmail.com",
+    "password": "$2b$10$K6QefWru8hXCYawScPnzverfBBVyOglTEgEXtThfG0HShafLpnI9K",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "68da4f147eaae0af39b6aef7",
+    "name": "nhungnguyen137.hr@gmail.com",
+    "email": "nhungnguyen137.hr@gmail.com",
+    "password": "$2b$10$5M.s4zAwSLC7tGim2gW.Bu3ed1YHLqltDl3vVVHXlZ1GwJ8FpXsV2",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "68db0de64ec51fbd745409a7",
+    "name": "linhchu5902",
+    "email": "linhchu592002@gmail.com",
+    "password": "$2b$10$TLmpXIIXCMK3ywGsykmfMu9Q8nmosumuKFLmTgrzTel3zZtiADum6",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "68db9797036f52266796736d",
+    "name": "Andres",
+    "email": "andres.f.bordon@gmail.com",
+    "password": "$2b$10$FLTO2twHc5fHKUZaJscY1.PcIGte4G8mpUbyKPfsZbvMn7UHNgNcK",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "68df9428f7de1a147457a5ce",
+    "name": "trangnth",
+    "email": "nguyenthihuyentrangdhnh@gmail.com",
+    "password": "$2b$10$lCKuBHdgM4Ng6sbW6Q9.lOpqRjaGgNNck..MGaP8gJMRF4dZkmCjG",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "68e3b0b1ff7121c0725b6f9b",
+    "name": "PHUONGGDUNGG232",
+    "email": "PHUONGGDUNGG232@gmail.com",
+    "password": "$2b$10$Y2Znzh6kmUEz29GOTlg1Je6CLi4ELhdn/ffbtOOsbQe41FcdGJ4H.",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "68e607691dbeaf7c02f60d1d",
+    "name": "letinh2103@gmail.com",
+    "email": "letinh2103@gmail.com",
+    "password": "$2b$10$ZXJVWDRq0hf2BpNI7D1NYu9z9dkTbSbVwwhqrTNTIxOegkxdflDQ.",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "68e645db46d97a07d4bef771",
+    "name": "minh hieu",
+    "email": "hieuhp132@gmail.com",
+    "password": "$2b$10$yoVNO7kYbyahFlPp1gi.L.T3w1jESLazPub2MLRzYFG/jiBhcrxDC",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0,
+    "updatedAt": "2025-12-20T20:28:38.140Z"
+  },
+  {
+    "_id": "68e6916dc9ce3d6deba5aee4",
+    "name": "Thoa tran1",
+    "email": "thoatran.work@gmail.com",
+    "password": "$2b$10$Gw3.XPCTl412bHO4QQHAfun6q1KGaFo3iVGGAvK05LoGV97hNIh8O",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "68e9f035c869b5e672ce0773",
+    "name": "Lydie NGUYEN",
+    "email": "nguyen.lydie95@gmail.com",
+    "password": "$2b$10$APBA2KJnaqTfLlxFBeeyZezfapSYepbhgBnKSsoj4cUAzKfDA1ghC",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "68edb86e7ed349b9256fe804",
+    "name": "Lê Thị Mỹ Lệ",
+    "email": "lethimyle223@gmail.com",
+    "password": "$2b$10$nRSaWtNjTb7vv/jtD/thTOQAnUay7/7Muu/fsjNns9dmIit/hzxSa",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "68edbfca7ed349b9256fe844",
+    "name": "Ngọc Huyền",
+    "email": "ngochuyen199876@gmail.com",
+    "password": "$2b$10$VZwuXsYL.ts.2xEsvAleROoQxk2aN9PxBVMORWssya/naKApU9HzK",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "68edd8cd6edd38cb5ea8bb27",
+    "name": "Nghiendibo",
+    "email": "nghiendibo@gmail.com",
+    "password": "$2b$10$2Vr4UkGa2T/ym1FZo7rUF.qpW1mGwHmLirHfZ4HmV/xNisuuV.4rq",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "68ef4d3414d817815f1716bf",
+    "name": "Levananh",
+    "email": "vananh.lie96@gmail.com",
+    "password": "$2b$10$ZsQ4pxlIFxquRDGHO9Ci/eLqwG9z9wne7IgiQ7C7pnobuNmb3JFq.",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "68ef984a14d817815f171739",
+    "name": "minhhuemelissa",
+    "email": "minhhuemelissa@gmail.com",
+    "password": "$2b$10$Jb6hA.TnXdn1DbSZxlZuKOSR/DvCrr30Q2WAZQtce0HPGYdD07fo.",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "68f0e89d14d817815f171bf5",
+    "name": "miyonguyen",
+    "email": "vivianbui17102020@gmail.com",
+    "password": "$2b$10$TrKi8nbcwXGDbkeCjHPHAuu8vSzdytfBZxtNM9ZvBP.li5w1Ol1xe",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "68f2bde214d817815f17206c",
+    "name": "Natalia Pacheco",
+    "email": "multipliqueseustalentos@gmail.com",
+    "password": "$2b$10$x9hV1XTu5I18/KZ2jhhj7eC.BqrDO5ACrNdhHyYuzGmHD2s2FCLCe",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "68fa07ec14d817815f172a84",
+    "name": "Thoatran1",
+    "email": "thoatran.work2025@gmail.com",
+    "password": "$2b$10$Ux1ZdohwFnsatBtdAUv3d.K/1yjujay2AEnSa33RvM7VaPVg3ZWYa",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "6902e1ca474fde4f4780b0d4",
+    "name": "annguyen",
+    "email": "nguyenanfx@gmail.com",
+    "password": "$2b$10$rbg3ysOCvMOY7gmfMlLX7eJDrlfQoJ2HiEV6saWyn8Tx0r6hexwJO",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "69047a6a474fde4f4780b683",
+    "name": "snowcta",
+    "email": "tuyetcao2k2@gmail.com",
+    "password": "$2b$10$v1OFuqzpR4vlIheGieyWtu.Q4A.YR6iKb7kX8QyKy/uCoAsE479Ue",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "6905c757474fde4f4780b89e",
+    "name": "Amani",
+    "email": "work.ndqt@gmail.com",
+    "password": "$2b$10$/SEGKI1PC3ky9il8cSceiekdFhpPueZNl90AnthSRNRGTDGmjkjJq",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "690da58e474fde4f4780bd99",
+    "name": "Bich Chi",
+    "email": "bichchi8@gmail.com",
+    "password": "$2b$10$rS3bBdcAHKwiG4R906meIuUL553mJlBjDFI9vkWYCdxioGbZQQfpa",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "691069b2474fde4f4780c309",
+    "name": "Andros Riando Sitorus",
+    "email": "andros.riando@gmail.com",
+    "password": "$2b$10$3Ttm5IFvA3WUUayFEzHwoOa/RUOuaj5GCw55xkCS5vL5IbKUMI7CG",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "6916ba02474fde4f4780c6da",
+    "name": "Lan Nguyen",
+    "email": "phuonglan.hr01@gmail.com",
+    "password": "$2b$10$KH9Uiz1yLfa7FzunkHpdtOBUrYQmQ8v1/2XxhH2qDbF2b/UWl1uWi",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "6916e968474fde4f4780c85c",
+    "name": "Chrisdao",
+    "email": "dao.nhatcuong171001@gmail.com",
+    "password": "$2b$10$O4x7oK10BvPJdrkkF1TJCuxrn2jnySZXqFkubxcJngqjiS8mZR4GG",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "6916ec7e474fde4f4780c8c9",
+    "name": "tien.le",
+    "email": "tien.lethicam96@gmail.com",
+    "password": "$2b$10$o1hDjWRYWTSYL2xBfxglLOUa8Np9.bVMRpG4zQ6Lhc28.QCciV9GC",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "6916fab2474fde4f4780c959",
+    "name": "Le Hoa",
+    "email": "lehoa84@gmail.com",
+    "password": "$2b$10$HiDlwRmU3PZFUulI6FxzouS0qx79NNfnPZD0666RSAy6WGXqHAWLK",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "691758db474fde4f4780c9db",
+    "name": "katienguyenn",
+    "email": "nguyenhoangtrucphuong0820@gmail.com",
+    "password": "$2b$10$HhGx93eyX41H0tbxMX1TbuMRU.1YungqD2.jNUHoH9RjpLoy/umR.",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "6918972a474fde4f4780d06a",
+    "name": "lindsienguyen",
+    "email": "lindsienguyenhr268@gmail.com",
+    "password": "$2b$10$8pUN1wDStNBzn5iplnwO0OovnjDyl82cFh2M/4QJkwRhFdfdlJM2a",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "69189fbe474fde4f4780d171",
+    "name": "deepikasree",
+    "email": "deepikasree80@gmail.com",
+    "password": "$2b$10$1TnkEQtJru8W6Zyxm6svFOpMjuGK0FvNper3RxRDVi7Lx56ola2Ge",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "691a994b474fde4f4780d32d",
+    "name": "rochelle07",
+    "email": "honeyrochells07@gmail.com",
+    "password": "$2b$10$ijgcDoe6z1lkjQd2DbRejeAaf32SlESJx2bfd.UwqqOdIciU8TjIe",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "691abe95474fde4f4780d3e5",
+    "name": "MyChu",
+    "email": "chulethienmy@gmail.com",
+    "password": "$2b$10$m3hiufQh.RzaROmfn6z7OeULSBcPBrx1QFFG3eiD8sPz70VPvm0H.",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "691ac642474fde4f4780d4f7",
+    "name": "JoyceNguyen250101",
+    "email": "joycenguyen.work251@gmail.com",
+    "password": "$2b$10$2Kg.3zNM4o0Y0lHL0f0oau0YIaqeBpr5.aot81JPto/CLj7qdzaNO",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "691acd1c474fde4f4780d568",
+    "name": "Trinh Nguyen",
+    "email": "trinhngk56neu@gmail.com",
+    "password": "$2b$10$KqMLR31bVddTpv3Nit.8BuOiFDl6wBTFg4wDD3dRgWBpFHP/4wcFa",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "691ad02b474fde4f4780d5a5",
+    "name": "Leo",
+    "email": "QLE295077@GMAIL.COM",
+    "password": "$2b$10$a7hBJ4Lv0X76mu0Y.LRHr.BNjGIPctEhAfCAAenIp0N5csreD5mG2",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "691ad23e474fde4f4780d5d8",
+    "name": "ngocbichpham123",
+    "email": "bichngoc299905@gmail.com",
+    "password": "$2b$10$dEfpyyX0W3i6sRYRrC7Rbuw8MNPOPhkqjeYa5DGBn9U7C8LVjDgwS",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "691bea27474fde4f4780d9c8",
+    "name": "tue.nguyen",
+    "email": "davidtue2610@gmail.com",
+    "password": "$2b$10$vbdr1CicOh34402q2KeU8ukHPyOkeyiIE80kovO2qlVqsiZcUvD.u",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "691c3c53474fde4f4780dac3",
+    "name": "moon.bui",
+    "email": "he.renrui@gmail.com",
+    "password": "$2b$10$tj03OpTiXcSzYMvvUoBqR.TL.VJnhLMO.JZXuIUnlarrkqYDSWJOG",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "691c4594474fde4f4780daf3",
+    "name": "Andy TT",
+    "email": "andytran14121996@gmail.com",
+    "password": "$2b$10$0twOMLW2S/pz91SuVueHxeKonvmbMyVepMXTxtYDuVOBTBpcvccUO",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "691fd873474fde4f4780e911",
+    "name": "Hau Hoang",
+    "email": "phghau.hoang@gmail.com",
+    "password": "$2b$10$QHL.CRMf8lcz/Qbuy0MOaOO2q93310KdCt2ATt.RM9nMbN9AGUDFO",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "691fe7bb474fde4f4780eacb",
+    "name": "Luong Duy Dang",
+    "email": "duydoneg167@gmail.com",
+    "password": "$2b$10$cIMTruKCD0nFQrLAx4d1iuelzY7JLcLHyGDMaeG9cf/q3TeIyFI3O",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "6922aab8474fde4f4780f1e3",
+    "name": "nhanghoa",
+    "email": "hanghoa121297@gmail.com",
+    "password": "$2b$10$XiYlJTOq4ZnjFof8FnqGUeCPElEOW8Kcl7vX.Sbcu1aWK13ItOBy.",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "69234993474fde4f4780f23c",
+    "name": "hoangpnhat",
+    "email": "hoangpnhat@gmail.com",
+    "password": "$2b$10$hIH5YrYOtuv6toRIigNsUe4CZAVvuF.kUp4dpuYF56.R8MKaNYr9S",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "6924148c474fde4f4780f405",
+    "name": "Phuong Leo",
+    "email": "qle295077@gmail.com",
+    "password": "$2b$10$9eUS5DC8IuU4/0hACWvyHOp0lBldFXgWlqjMLvSYdfcWKrNcdFKhC",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "69241f57474fde4f4780f431",
+    "name": "qjade",
+    "email": "pndquyen203@gmail.com",
+    "password": "$2b$10$BJgV62kD.k9pmmOweE92RuKTUwzV3uBBtSTyO3uhTSzg5ZvqdHwPm",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "69255a66474fde4f4780f8b3",
+    "name": "quanghoang332k3",
+    "email": "quanghoang332k3@gmail.com",
+    "password": "$2b$10$bYf2AJpRgku1mj0jBBYMb.YpYuOYJVJuAfpRyFWhb8AaxXk.DHDUK",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "69255ef0474fde4f4780f8c2",
+    "name": "thuydieunek",
+    "email": "thuydieuvtvp@gmail.com",
+    "password": "$2b$10$qdhTSxcQEdL316mX8pWTkesq9E0108w7C53I/t95pehoIsOkE8Egq",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "69256928474fde4f4780f8ea",
+    "name": "nhutr",
+    "email": "anchi11022020@gmail.com",
+    "password": "$2b$10$piVh1WgM367jZYwMp7NuRO57U/FwgTLJgTZAT2LTn/LTtoLCDVyQS",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "69257afe474fde4f4780f941",
+    "name": "Faves",
+    "email": "godsfavourvictor123@gmail.com",
+    "password": "$2b$10$J8vecxnEuU7hVsbbijMFY.9pVlPRP822qIb2mNpcSArdLV9jIAjEm",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "6925a244474fde4f4780f97d",
+    "name": "ducloc1511",
+    "email": "dokhanhlinh24627@gmail.com",
+    "password": "$2b$10$dQ8izhwhJgXljlbhECNvOu7D2.r26RnEExIkoplovi30qNEpA.tOK",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "6925b27a474fde4f4780f9fe",
+    "name": "tr.tnhi1310",
+    "email": "tr.tnhi1310@gmail.com",
+    "password": "$2b$10$XUxEUqUn5H3wZpk5Z7Vu.eFGO1s5hN4HRmnBKi7yYdK9.bLxImuNK",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "692c5f3f474fde4f478111f3",
+    "name": "sanglm2506",
+    "email": "minhsangnrssj@gmail.com",
+    "password": "$2b$10$O.R2hTlyyq4ZFMiQgiQJS.xSStp9l2Ijsd2L6DWVGcX/4h3YKyyoS",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "692e63fc474fde4f478116df",
+    "name": "Nhi Nguyen",
+    "email": "nhinguyenyen3110@gmail.com",
+    "password": "$2b$10$anc0HFbXHeR.nDkYJXr03eFwukkuT8sgS8wDnxRdHzi/HJTdytus6",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "692e6ac9474fde4f47811796",
+    "name": "yonnman",
+    "email": "giangkatie.doan@gmail.com",
+    "password": "$2b$10$pO4USk15/0o1XaX/5.cPvOOvrRWoyBhFlCmFhVAip4K/pd.pruEpK",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "692e6d13474fde4f478117b9",
+    "name": "Tracy",
+    "email": "tracynb239@gmail.com",
+    "password": "$2b$10$yomF/tx1ocxXjMjdXOxHZerQ12eDn4HIYW4RtMN9XVZEo71HBXroS",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "692fcb91474fde4f47811dac",
+    "name": "pnthuytienn@gmail.com",
+    "email": "pnthuytienn@gmail.com",
+    "password": "$2b$10$WJIZaXP4O0aagHI2KdGzyOOy9rQqZQ.u1518xqDG5nrAKUP.5URxK",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "69303db8474fde4f47812034",
+    "name": "VT Hong Phuoc",
+    "email": "vthongphuoc2802@gmail.com",
+    "password": "$2b$10$0ohLkGcd63vaFf.EwFyG.Odujo.tsN0aML1Rzajla/Pqklqh2jFsK",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "693d3c8f2a3d83a5fcbd3a42",
+    "name": "Job Services Global",
+    "email": "hr.globaljob.services@gmail.com",
+    "password": "$2b$10$Ty/tLde4BO7vYO/ADhEO1e0o/XyHqnXjhqdqTqAbf5EFmun3ARzNS",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "693e2c962a3d83a5fcbd3b38",
+    "name": "miyonguyen187",
+    "email": "miyonguyen187@gmail.com",
+    "password": "$2b$10$QMj7JOEOzKPN0np1om1B8u24eD1joGwmTP/tQRx9j5/G0jiycn6sm",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "6940204e2a3d83a5fcbd43af",
+    "name": "𝘾𝙖𝙡𝙚𝙗 𝙢𝙤𝙨𝙚𝙨",
+    "email": "supermosco88@gmail.com",
+    "password": "$2b$10$XSnFqtBpmxkIhBZIacS1NutNM7IgrAaIpIphlNvFoyaXHhlY4tnq2",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "694085a02a3d83a5fcbd46a5",
+    "name": "EmahCharts",
+    "email": "talk2emmanuelanthony2019@gmail.com",
+    "password": "$2b$10$MKZ3b5/HoDmLRFPbxRbcJOFxxtUu5m5eQfNoqntF5Brp5xMegvSe.",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "6941228c2a3d83a5fcbd487c",
+    "name": "Tin Ha",
+    "email": "tin.ha0801@gmail.com",
+    "password": "$2b$10$I4Oj4FJdNwz7U9EKdKYgBOZj5wH8fXfHz1xNWPf8HcXvFAObUsyxC",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "69413dc52a3d83a5fcbd49c1",
+    "name": "Alkanvoire",
+    "email": "awenibright@gmail.com",
+    "password": "$2b$10$m8Iv0Utl4OJuKMrdhXr/eOio1jZCkd9qJjLgnOhluHWzNBoFwtspO",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "69427fdf2a3d83a5fcbd4deb",
+    "name": "Minhhuong",
+    "email": "maingoc191017@gmail.com",
+    "password": "$2b$10$cFuEimEVv6g36Qqe5TXlLue0UmfusK0u..keUfzAz2QqgsFj91V1y",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "6943ae15424691118091b6ca",
+    "name": "Will",
+    "email": "offormawilliam@gmail.com",
+    "password": "$2b$10$lA5kDc4n5kbqSMDCREAgBO4plSWnFn..KQQVCw.jERkiG1zkFeETK",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0
+  },
+  {
+    "_id": "1766163533856",
+    "name": "Some One",
+    "email": "a@example.com",
+    "password": "$2b$10$li5P6qdrqI3vv.UyGGdoI.LfM7Z6JFShs1JegGWoCQV11NQXMU/a2",
+    "role": "recruiter",
+    "updatedAt": "2025-12-22T16:53:49.220Z"
+  },
+    {
+    "_id": "1766372713740",
+    "name": "Nhatcuong",
+    "email": "dao.nhatcuong171001@gmail.com",
+    "password": "$2b$10$mJElO.JJKGTTx8BaFezSBefqGGQ0lXPydHB//Vj50Q/CaNHhA56ei",
+    "role": "recruiter",
+    "credit": 0,
+    "createdAt": "2025-12-22T03:05:13.740Z"
+  },
+  {
+    "_id": "1766831202019",
+    "name": "Quyen Giap",
+    "email": "giapthiquyen90@gmail.com",
+    "password": "$2b$10$agjCoH/3o7VlLEnJJrNi8OCbVOB7DZScvDPXXyI.gGq8Q4DlqlZ.S",
+    "role": "recruiter",
+    "credit": 0,
+    "createdAt": "2025-12-27T10:26:42.019Z"
+  },
+  {
+    "_id": "1766851479233",
+    "name": "thuyle508",
+    "email": "thuyle508@gmail.com",
+    "password": "$2b$10$l6uk9/fKNII9FwcN2SjqqOBGT9VXkHt9EVWwbUKqEFts3cDExmXYa",
+    "role": "recruiter",
+    "credit": 0,
+    "createdAt": "2025-12-27T16:04:39.233Z"
+  },
+  {
+    "_id": "1766907547751",
+    "name": "pancancoi150@gmail.com",
+    "email": "pancancoi150@gmail.com",
+    "password": "$2b$10$0tIbfNY/Cn7E0H2QYBwN1Oy4WF5ueJoI3xzPg4LgELmhBgagi/asy",
+    "role": "recruiter",
+    "credit": 0,
+    "createdAt": "2025-12-28T07:39:07.751Z"
+  },
+  {
+    "_id": "1766908146522",
+    "name": "phamnhatha150",
+    "email": "phamnhatha.c9nvt@gmail.com",
+    "password": "$2b$10$Hw4qFHSCd9ZJBvlPzCRPmehF4hqlnqajZVLpNzTeM6tlI1oAnGy5K",
+    "role": "recruiter",
+    "credit": 0,
+    "createdAt": "2025-12-28T07:49:06.522Z"
+  },
+  {
+    "_id": "1766990772918",
+    "name": "phamnhatha150",
+    "email": "helena@undercurrent.tech",
+    "password": "$2b$10$KYEPcchP2Z5kij0TSPMmUeEj5NwOCerSe4rEb9Nor2cLNgbjs/SVO",
+    "role": "recruiter",
+    "credit": 0,
+    "createdAt": "2025-12-29T06:46:12.918Z"
+  },
+  {
+    "_id": "1766993014300",
+    "name": "Nhu Tran",
+    "email": "nhutran0511@gmail.com",
+    "password": "$2b$10$w.I60eK4MyxMNf7nYYA1m.PYNbEE8CeNcd1jLVOq1GGcDFtVa5fa2",
+    "role": "recruiter",
+    "credit": 0,
+    "createdAt": "2025-12-29T07:23:34.300Z"
+  },
+  {
+    "_id": "1766993128857",
+    "name": "Nhu Tran",
+    "email": "zoeytran.0511@gmail.com",
+    "password": "$2b$10$Lro096bROCkxpAdEbh0r5OiKvHWzwUofvFF.l9kZDClGcfPEuAvx6",
+    "role": "recruiter",
+    "credit": 0,
+    "createdAt": "2025-12-29T07:25:28.857Z"
+  },
+  {
+    "_id": "1767000380749",
+    "name": "Aa",
+    "email": "a@a.c",
+    "password": "$2b$10$vS5nd5.10Y2GxwYvfB/J4O5d10rpBWOC3rOYTosfFh/Ioj9SYgfRW",
+    "role": "recruiter",
+    "credit": 0,
+    "createdAt": "2025-12-29T09:26:20.749Z"
+  }
+]
