@@ -1,119 +1,202 @@
+import CandidateManagement from "./components/Admin/CandidateManagement";
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-  Outlet,
-} from "react-router-dom";
-
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
-import { ROLE_ROUTES } from "./routes/roleRoutes";
+import { MessagingProvider } from "./context/MessagingContext";
+import Login from "./components/login/Login";
+import Dashboard from "./components/Dashboard";
+import AdminDashboard from "./components/Admin/Dashboard";
+import AdminDashboardBeta from "./components/Admin/AdminDashboard";
+import AdminStatistics from "./components/Admin/Statistics";
+import SignUp from "./components/signup/SignUp";
+import Navbar from "./components/Navbar";
+import ViewProfile from "./components/Profile/ViewProfile";
+import MyBrand from "./components/Profile/MyBrand";
+import MyCandidates from "./components/Profile/MyCandidates";
+import SavedJobs from "./components/Profile/SavedJobs";
+import JobDetail from "./components/JobDetail";
+import HomePage from "./components/HomePage";
+import TermsPage from "./components/TermsPage";
+import AdminSavedJobs from "./components/Admin/SavedJobs";
+import UsersManagement from "./components/Admin/UsersManagement";
+import AuthCallback from "./components/auth/AuthPage";
+import Updated from "./components/Updated";
+import Pending from "./components/Pending";
 
-import Layout from "./components/Layout";
-import Home from "./pages/home/Home";
-import Login from "./pages/login/Login";
-import SignUp from "./pages/signup/SignUp";
-import Pending from "./pages/pending/Pending";
-
-// ADMIN
-import AdJobsList from "./pages/admin/jobs/All";
-import AdJobDetail from "./pages/admin/jobs/Detail";
-import AdSavedJobs from "./pages/admin/jobs/Saved";
-import AdProfile from "./pages/admin/profile/Profile";
-import AdMyBrand from "./pages/admin/mybrand/MyBrand";
-import AdCandidates from "./pages/admin/candidates_tracker/Candidates";
-import AdStatistics from "./pages/admin/statistics/Statistics";
-import AdUsersManagement from "./pages/admin/users/UsersManagement";
-import AdNotification from "./pages/admin/notifications/Notification";
-
-// RECRUITER
-import RecrProfile from "./pages/recruiter/profile/Profile";
-import RecrJobsList from "./pages/recruiter/jobs/All";
-import RecrJobDetail from "./pages/recruiter/jobs/Detail";
-import RecrSavedJobs from "./pages/recruiter/jobs/Saved";
-import RecrCandidates from "./pages/recruiter/candidates_tracker/Candidates";
-import RecrNotification from "./pages/recruiter/notifications/Notification";
-import Update from "./pages/update/Update";
-import TermsPage from "./pages/terms/Terms";
-
-function PrivateRoute({ roles }) {
+/* ================= PRIVATE ROUTE ================= */
+function PrivateRoute({ children, roles }) {
   const { user, authReady } = useAuth();
 
   if (!authReady) return null;
   if (!user) return <Navigate to="/login" replace />;
-  if (user.status !== "Active") return <Navigate to="/pending" replace />;
-  if (roles && !roles.includes(user.role))
-    return <Navigate to="/" replace />;
 
-  return <Outlet />;
+  if (roles && !roles.includes(user.role)) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return children;
 }
 
-export default function App() {
-  return (
-    <AuthProvider>
-      <Router>
-        <AppRoutes />
-      </Router>
-    </AuthProvider>
-  );
-}
+/* ================= ROOT HANDLER ================= */
+function RootPage() {
+  const { user, authReady } = useAuth();
 
-function AppRoutes() {
-  const { authReady } = useAuth();
   if (!authReady) return null;
 
+  // Đã login → redirect dashboard tương ứng
+  if (user) {
+    return <Navigate to={user.role === "admin" ? "/admin" : "/dashboard"} replace />;
+  }
+
+  // Chưa login → HomePage (SEO)
+  return <HomePage />;
+  // return <Updated />;
+}
+
+/* ================= MAIN APP ================= */
+export default function App() {
   return (
-    <Routes>
-      <Route element={<Layout />}>
-        {/* PUBLIC */}
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/pending" element={<Pending />} />
-        <Route path="/update" element={<Update />} />
-        <Route path="/terms" element={<TermsPage />} />
+    <Router>
+      <AuthProvider>
+        <MessagingProvider>
+          <Routes>
 
-        {/* ADMIN */}
-        <Route element={<PrivateRoute roles={["admin"]} />}>
-          <Route path={ROLE_ROUTES.admin.profile} element={<AdProfile />} />
-          <Route path={ROLE_ROUTES.admin.jobs} element={<AdJobsList />} />
-          <Route path={ROLE_ROUTES.admin.jobDetail} element={<AdJobDetail />} />
-          <Route path={ROLE_ROUTES.admin.savedJobs} element={<AdSavedJobs />} />
-          <Route path={ROLE_ROUTES.admin.myBrand} element={<AdMyBrand />} />
-          <Route path={ROLE_ROUTES.admin.statistics} element={<AdStatistics />} />
-          <Route path={ROLE_ROUTES.admin.candidates} element={<AdCandidates />} />
-          <Route path={ROLE_ROUTES.admin.users} element={<AdUsersManagement />} />
-          <Route path={ROLE_ROUTES.admin.notification} element={<AdNotification />} />
-        </Route>
+          {/* ✅ ROOT = HOME PAGE */}
+          <Route path="/" element={<RootPage />} />
+          <Route path="/home" element={<HomePage />} />
+          <Route path="/login" element={<><Navbar /><Login /></>} />
+          <Route path="/signup" element={<><Navbar /><SignUp /></>} />
+          <Route path="/terms" element={<TermsPage />} />
+          <Route path="/auth/callback" element={<AuthCallback />} />
+          <Route path="/pending" element={<Pending/>} />
 
-        {/* RECRUITER */}
-        <Route element={<PrivateRoute roles={["recruiter"]} />}>
+          {/* ---------------- PRIVATE ROUTES ---------------- */}
           <Route
-            path={ROLE_ROUTES.recruiter.profile}
-            element={<RecrProfile />}
+            path="/dashboard"
+            element={
+              <PrivateRoute roles={["recruiter", "authenticated"]}>
+                <Navbar />
+                <Dashboard />
+              </PrivateRoute>
+            }
           />
-          <Route
-            path={ROLE_ROUTES.recruiter.jobs}
-            element={<RecrJobsList />}
-          />
-                    <Route
-            path={ROLE_ROUTES.recruiter.jobDetail}
-            element={<RecrJobDetail />}
-          />
-                    <Route
-            path={ROLE_ROUTES.recruiter.savedJobs}
-            element={<RecrSavedJobs />}
-          />
-                    <Route
-            path={ROLE_ROUTES.recruiter.candidates}
-            element={<RecrCandidates />}
-          />
-          <Route path={ROLE_ROUTES.recruiter.notification} element={<RecrNotification />} />
-        </Route>
 
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Route>
-    </Routes>
+          <Route
+            path="/admin"
+            element={
+              <PrivateRoute roles={["admin"]}>
+                <Navbar />
+                <AdminDashboard />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admin-dashboard"
+            element={
+              <PrivateRoute roles={["admin"]}>
+                <Navbar />
+                <AdminDashboardBeta />
+              </PrivateRoute>
+            }
+          />  
+
+          <Route
+            path="/admin-statistics"
+            element={
+              <PrivateRoute roles={["admin"]}>
+                <Navbar />
+                <AdminStatistics />
+              </PrivateRoute>
+            }
+          />  
+
+          <Route
+            path="/user-management"
+            element={
+              <PrivateRoute roles={["admin"]}>
+                <Navbar />
+                <UsersManagement />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/candidate-management"
+            element={
+              <PrivateRoute roles={["admin"]}>
+                <Navbar />
+                <CandidateManagement />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/job/:id"
+            element={
+              <PrivateRoute>
+                <Navbar />
+                <JobDetail />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/profile"
+            element={
+              <PrivateRoute>
+                <Navbar />
+                <ViewProfile />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/my-brand"
+            element={
+              <PrivateRoute>
+                <Navbar />
+                <MyBrand />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/my-candidates"
+            element={
+              <PrivateRoute>
+                <Navbar />
+                <MyCandidates />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/saved-jobs"
+            element={
+              <PrivateRoute roles={["recruiter"]}>
+                <Navbar />
+                <SavedJobs />
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path="/admin/saved-jobs"
+            element={
+              <PrivateRoute roles={["admin"]}>
+                <Navbar />
+                <AdminSavedJobs />
+              </PrivateRoute>
+            }
+          />
+
+          {/* 404 */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+
+        </Routes>
+        </MessagingProvider>
+      </AuthProvider>
+    </Router>
   );
 }

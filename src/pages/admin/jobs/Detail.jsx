@@ -208,14 +208,14 @@ export default function JobDetail() {
       `
       : "",
       
-      job.jobsdetail?.other
-      ? `
-      <div style="${sectionStyle}">
-      <div style="${titleStyle}">Other Information</div>
-      <div>${cleanJobHtml(job.jobsdetail.other)}</div>
-      </div>
-      `
-      : ""
+      // job.jobsdetail?.other
+      // ? `
+      // <div style="${sectionStyle}">
+      // <div style="${titleStyle}">Other Information</div>
+      // <div>${cleanJobHtml(job.jobsdetail.other)}</div>
+      // </div>
+      // `
+      // : ""
       
       ];
   };
