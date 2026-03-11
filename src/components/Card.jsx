@@ -141,11 +141,11 @@ export default function Card({
           <span style={{ marginLeft: 8 }}>Applicants: {job.applicants}</span>
         </div>
 
-        {textPreview && (
+        {/* {textPreview && (
           <div style={{ fontSize: 13, color: "#444", marginBottom: 10 }}>
             {textPreview}...
           </div>
-        )}
+        )} */}
 
         {/* REWARD */}
 
