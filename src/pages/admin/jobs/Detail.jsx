@@ -251,12 +251,6 @@ export default function JobDetail() {
             </div>
           ` : ''}
 
-          ${jobOther ? `
-            <div class="section">
-              <h3 class="section-title">Other Information</h3>
-              <div class="section-content">${jobOther}</div>
-            </div>
-          ` : ''}
         </div>
       `;
       

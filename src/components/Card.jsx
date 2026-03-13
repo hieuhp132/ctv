@@ -200,7 +200,7 @@ export default function Card({
 
           {role === "recruiter" && (
             <>
-              <button
+              {/* <button
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
@@ -208,7 +208,7 @@ export default function Card({
                 }}
               >
                 Share
-              </button>
+              </button> */}
               <button
                 className="primary"
                 onClick={(e) => {
