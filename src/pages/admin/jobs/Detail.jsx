@@ -385,9 +385,6 @@ export default function JobDetail() {
   };
 
   const handleDeletePDF = async () => {
-    if (!pdfUrl) return alert("No PDF file to delete");
-    if (!window.confirm("Are you sure you want to delete this PDF?")) return;
-    
     try {
       // File deletion would be implemented in backend
       // For now, just clear the state
