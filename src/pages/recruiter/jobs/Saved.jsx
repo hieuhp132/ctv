@@ -62,7 +62,7 @@ export default function SavedJobs() {
         gridProps={{
           isInactive: false,
           onSaveToggle: handleUnsave,
-          onClick: job => navigate(`/job/${job._id}`),
+          onClick: job => navigate(`/${user.role}/job/${job._id}`),
         }}
       />
     </div>
