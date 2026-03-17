@@ -1,5 +1,17 @@
 [
   {
+    "id": "1773515199542",
+    "type": "job_created",
+    "description": "Admin created job \"Senior FrontEnd Developer\"",
+    "metadata": {
+      "jobId": "1773515199534",
+      "jobTitle": "Senior FrontEnd Developer",
+      "adminName": "Admin",
+      "adminRole": "admin"
+    },
+    "timestamp": "2026-03-14T19:06:39.542Z"
+  },
+  {
     "id": "1773245967107",
     "type": "job_updated",
     "description": "Admin updated job \"Senior Compliance Officer -bitFlyer Europe S.A\"",

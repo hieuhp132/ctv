@@ -83,7 +83,7 @@ function parseAmount(input) {
 // Session helpers for Authorization
 function getSession() {
   try {
-    const raw = sessionStorage.getItem("authSession");
+    const raw = localStorage.getItem("authSession");
     return raw ? JSON.parse(raw) : null;
   } catch {
     return null;
@@ -95,7 +95,8 @@ function getCurrentUser() {
 }
 
 function authHeaders() {
-  const token = getCurrentUser()?.token;
+  const session = getSession();
+  const token = session?.token || session?.user?.token;
   return token ? { Authorization: `Bearer ${token}` } : {};
 }
 

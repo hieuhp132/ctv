@@ -1100,5 +1100,15 @@
     "status": "Pending",
     "credit": 0,
     "createdAt": "2026-01-24T15:46:05.040Z"
+  },
+  {
+    "_id": "1773481185599",
+    "name": "Test User",
+    "email": "asd@123.com",
+    "password": "$2b$10$npMbpxjGZhqUH2BQ1AYvoeQ0vCrL8nJXyt3CrxHLHn6eR09yy5aki",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-03-14T09:39:45.599Z"
   }
 ]

@@ -11,11 +11,10 @@ import { AuthProvider, useAuth } from "./context/AuthContext";
 import { ROLE_ROUTES } from "./routes/roleRoutes";
 
 import Layout from "./components/Layout";
-import Home from "./pages/home/Home";
+// import Home from "./pages/home/Home";
+import Pending from "./pages/pending/Pending";
 import Login from "./pages/login/Login";
 import SignUp from "./pages/signup/SignUp";
-import Pending from "./pages/pending/Pending";
-
 // ADMIN
 import AdJobsList from "./pages/admin/jobs/All";
 import AdJobDetail from "./pages/admin/jobs/Detail";
@@ -49,6 +48,11 @@ function PrivateRoute({ roles }) {
   return <Outlet />;
 }
 
+function RedirectToHome() {
+  window.location.href = "/index_merged.html";
+  return null;
+}
+
 export default function App() {
   return (
     <AuthProvider>
@@ -67,7 +71,10 @@ function AppRoutes() {
     <Routes>
       <Route element={<Layout />}>
         {/* PUBLIC */}
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={
+          // <Home />
+          <RedirectToHome />
+        } />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/pending" element={<Pending />} />
@@ -97,15 +104,15 @@ function AppRoutes() {
             path={ROLE_ROUTES.recruiter.jobs}
             element={<RecrJobsList />}
           />
-                    <Route
+          <Route
             path={ROLE_ROUTES.recruiter.jobDetail}
             element={<RecrJobDetail />}
           />
-                    <Route
+          <Route
             path={ROLE_ROUTES.recruiter.savedJobs}
             element={<RecrSavedJobs />}
           />
-                    <Route
+          <Route
             path={ROLE_ROUTES.recruiter.candidates}
             element={<RecrCandidates />}
           />

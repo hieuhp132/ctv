@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  
+  --color-primary: #FF465E;
+  --color-accent: #FFA63D;
+  --color-text-dark: #1a1a1a;
+  --color-text-medium: #4a4a4a;
+  --color-text-light: #6b6b6b;
+  --color-bg-white: #ffffff;
+  --color-bg-light: #f8f9fa;
+  --color-bg-gray: #f5f5f5;
+  --color-border-light: #e8e8e8;
+  
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+@layer base {
+  body {
+    @apply bg-bg-white text-text-medium antialiased selection:bg-primary/20;
+  }
+}
+
+@layer components {
+  .glass-card {
+    @apply bg-white border border-border-light rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300;
+  }
+  
+  .btn-primary {
+    @apply px-6 py-3 bg-gradient-to-r from-accent to-primary hover:opacity-90 text-white font-semibold rounded-xl transition-all duration-200 shadow-md shadow-primary/20;
+  }
+  
+  .btn-secondary {
+    @apply px-6 py-3 bg-white hover:bg-bg-light text-text-dark font-semibold rounded-xl border border-border-light transition-all duration-200;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-accent to-primary;
+  }
+}

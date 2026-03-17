@@ -2,8 +2,9 @@ import React, { useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext.jsx";
 import "./Navbar.css";
-import logoImg from "../../assets/logo.png";
-import { MdMessage, MdNotifications, MdMenu, MdClose } from "react-icons/md";
+import logoImg from "/logo.jpeg";
+import { MdNotifications } from "react-icons/md";
+import { Menu, X } from "lucide-react";
 import Messenger from "../../components/Messenger.jsx";
 import Notifications from "../../components/Notifications.jsx";
 import { getUnreadMessages } from "../../services/api.js";
@@ -94,142 +95,130 @@ export default function Navbar() {
   /* ================= RENDER ================= */
   return (
     <>
-      <header className="navbar">
-        <div className="navbar-inner">
-          {/* LEFT */}
-          <div className="navbar-left">
-            <button className="logo-btn" onClick={goHome}>
-              <img src={logoImg} alt="Logo" className="logo-img" /> 
-            </button>
-          </div>
-
-          {/* RIGHT */}
-          <div className="navbar-right">
-            {!user ? (
-              <div className="auth-actions">
-                <button className="nav-btn" onClick={() => navigate("/login")}>
-                  Login
-                </button>
-                <button className="nav-btn" onClick={() => navigate("/signup")}>
-                  Sign up
-                </button>
-                <button className="nav-btn" onClick={() => navigate("/home")}>
-                  Home
-                </button>
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-border-light">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-20">
+            {/* LEFT LOGO */}
+            <div className="flex items-center gap-2 cursor-pointer" onClick={goHome}>
+              <div className="w-10 h-10 flex items-center justify-center">
+                <img src={logoImg} alt="Logo" className="w-full h-full object-contain" />
               </div>
-            ) : (
-              <div className="navbar-actions">
-                {/* MESSENGER */}
-                {/* <button
-                  className="icon-btn messenger-btn"
-                  onClick={() => setMessengerOpen(true)}
-                  title="Messages"
-                >
-                  <MdMessage size={20} />
-                  {unreadCount > 0 && (
-                    <span className="badge">{unreadCount}</span>
-                  )}
-                </button> */}
+              <span className="text-2xl font-display font-bold text-text-dark tracking-tight"></span>
+            </div>
 
-                {/* NOTIFICATIONS */}
-                <button
-                  className="icon-btn notifications-btn"
-                  onClick={() => setNotificationsOpen(true)}
-                  title="Notifications"
-                >
-                  <MdNotifications size={20} />
-                </button>
+            {/* MIDDLE LINKS */}
+     
 
-                {/* PROFILE */}
-                <div className="profile-dropdown" ref={dropdownRef}>
-                  {user.role === "admin" && (
-                    <span className="stat-pill">Credit: 0$</span>
-                  )}
-
-                  <div
-                    className="profile-box"
-                    onClick={() => setOpen((o) => !o)}
-                  >
-                    <img
-                      src={`https://ui-avatars.com/api/?name=${encodeURIComponent(
-                        user.name || "User",
-                      )}&background=FF5E62&color=fff`}
-                      alt="avatar"
-                      className="avatar"
-                    />
-                    <span className="username">{user.name}</span>
-                  </div>
-
-                  <ul className={`dropdown-menu ${open ? "open" : ""}`}>
-                    <li
-                      className={isActive("/profile") ? "active" : ""}
-                      onClick={() => navigate(`${user.role}/profile`)}
-                    >
-                      View Profile
-                    </li>
-
-                    <div className="dropdown-divider" />
-
-                    {roleMenus.map((item) => (
-                      <li
-                        key={item.path}
-                        className={isActive(item.path) ? "active" : ""}
-                        onClick={() => navigate(item.path)}
-                      >
-                        {item.label}
-                      </li>
-                    ))}
-
-                    <div className="dropdown-divider" />
-
-                    <li className="danger" onClick={handleLogout}>
-                      Logout
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            )}
-
-            <button className="mobile-toggle" onClick={() => setMobileMenuOpen(true)}>
-              <MdMenu size={22} />
-            </button>
-          </div>
-        </div>
-      </header>
-
-      {mobileMenuOpen && (
-        <div className="mobile-menu" onClick={() => setMobileMenuOpen(false)}>
-          <div className="mobile-menu-panel" onClick={(e) => e.stopPropagation()}>
-            <button className="mobile-close" onClick={() => setMobileMenuOpen(false)}>
-              <MdClose size={20} />
-            </button>
-            {!user ? (
-              <>
-                <button className="mobile-item" onClick={() => { navigate("/"); setMobileMenuOpen(false); }}>Home</button>
-                <button className="mobile-item" onClick={() => { navigate("/login"); setMobileMenuOpen(false); }}>Login</button>
-                <button className="mobile-item primary" onClick={() => { navigate("/signup"); setMobileMenuOpen(false); }}>Signup</button>
-              </>
-            ) : (
-              <>
-                <button className="mobile-item" onClick={() => { navigate(`${user.role}/profile`); setMobileMenuOpen(false); }}>Profile</button>
-                { (Array.isArray(menuItemsByRole[user.role]) ? menuItemsByRole[user.role] : []).map((item) => (
-                  <button key={item.path} className="mobile-item" onClick={() => { navigate(item.path); setMobileMenuOpen(false); }}>
-                    {item.label}
+            {/* RIGHT DESKTOP */}
+            <div className="hidden md:flex items-center gap-4">
+              {!user ? (
+                <>
+                  <button className="text-sm font-medium text-text-dark hover:text-primary transition-colors" onClick={() => navigate("/login")}>
+                    Log in
                   </button>
-                )) }
-                <button className="mobile-item danger" onClick={() => { handleLogout(); setMobileMenuOpen(false); }}>Logout</button>
-              </>
-            )}
+                  <button className="text-sm font-medium text-text-dark hover:text-primary transition-colors" onClick={() => navigate("/signup")}>
+                    Sign Up
+                  </button>
+                </>
+              ) : (
+                <div className="flex items-center gap-6">
+                  {/* NOTIFICATIONS */}
+                  <button
+                    className="relative text-text-medium hover:text-primary transition-colors"
+                    onClick={() => setNotificationsOpen(true)}
+                    title="Notifications"
+                  >
+                    <MdNotifications size={24} />
+                  </button>
+
+                  {/* PROFILE */}
+                  <div className="relative" ref={dropdownRef}>
+                    <div className="flex items-center gap-3 cursor-pointer" onClick={() => setOpen((o) => !o)}>
+
+                      <img
+                        src={`https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || "User")}&background=FF5E62&color=fff`}
+                        alt="avatar"
+                        className="w-10 h-10 shadow-sm rounded-xl"
+                      />
+                      <span className="text-sm font-bold text-text-dark hidden lg:block">{user.name}</span>
+                    </div>
+
+                    {open && (
+                      <ul className="absolute right-0 mt-3 w-56 bg-white border border-border-light rounded-2xl shadow-xl py-2 z-50 overflow-hidden">
+                        <li className="px-4 py-2 hover:bg-bg-gray cursor-pointer text-sm font-semibold text-text-dark transition-colors" onClick={() => navigate(`${user.role}/profile`)}>
+                          View Profile
+                        </li>
+                        <div className="h-px bg-border-light my-1" />
+                        {roleMenus.map((item) => (
+                          <li
+                            key={item.path}
+                            className={`px-4 py-2 hover:bg-bg-gray cursor-pointer text-sm transition-colors ${isActive(item.path) ? "text-primary font-bold" : "text-text-dark font-medium"}`}
+                            onClick={() => navigate(item.path)}
+                          >
+                            {item.label}
+                          </li>
+                        ))}
+                        <div className="h-px bg-border-light my-1" />
+                        <li className="px-4 py-2 hover:bg-red-50 text-red-600 font-bold cursor-pointer text-sm transition-colors" onClick={handleLogout}>
+                          Logout
+                        </li>
+                      </ul>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* MOBILE TOGGLE */}
+            <div className="md:hidden">
+              <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="text-text-medium p-2">
+                {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            </div>
           </div>
         </div>
-      )}
+
+        {/* MOBILE MENU */}
+        {mobileMenuOpen && (
+          <div className="md:hidden bg-white border-b border-border-light px-4 pt-2 pb-6 space-y-1 shadow-2xl">
+            <a href="" onClick={() => navigate(`/${user?.role}/jobs`)} className="block px-3 py-4 text-base font-medium text-text-medium border-b border-gray-50">Find Jobs</a>
+            <a href="" onClick={() => alert("Comming soon")} className="block px-3 py-4 text-base font-medium text-text-medium border-b border-gray-50">For Companies</a>
+            <a href="" onClick={() => alert("Comming soon")} className="block px-3 py-4 text-base font-medium text-text-medium border-b border-gray-50">Headhunters</a>
+            <a href="" onClick={() => alert("Comming soon")} className="block px-3 py-4 text-base font-medium text-text-medium border-b border-gray-50">Resources</a>
+
+            {!user ? (
+              <div className="pt-4 flex flex-col gap-3">
+                <button onClick={() => { navigate("/login"); setMobileMenuOpen(false); }} className="w-full btn-secondary">Log in</button>
+                <button onClick={() => { navigate("/signup"); setMobileMenuOpen(false); }} className="w-full btn-primary">Sign Up</button>
+              </div>
+            ) : (
+              <div className="pt-4 flex flex-col gap-2">
+                <div className="flex items-center gap-3 px-3 py-2 mb-2">
+                  <img
+                    src={`https://ui-avatars.com/api/?name=${encodeURIComponent(user.name || "User")}&background=FF5E62&color=fff`}
+                    alt="avatar"
+                    className="w-10 h-10 shadow-sm rounded-xl"
+                  />
+                  <div>
+                    <div className="text-sm font-bold text-text-dark">{user.name}</div>
+                    <div className="text-xs text-text-light capitalize">{user.role}</div>
+                  </div>
+                </div>
+                {user.role === "admin" && (
+                  <div className="px-3 pb-2 text-xs font-bold text-primary tracking-wider uppercase">Credit: 0$</div>
+                )}
+                <button onClick={() => { navigate(`${user.role}/profile`); setMobileMenuOpen(false); }} className="w-full text-left px-3 py-3 text-sm font-semibold text-text-dark bg-bg-gray rounded-xl">View Profile</button>
+                {roleMenus.map(item => (
+                  <button key={item.path} onClick={() => { navigate(item.path); setMobileMenuOpen(false); }} className={`w-full text-left px-3 py-3 text-sm rounded-xl ${isActive(item.path) ? "text-white bg-primary font-bold" : "text-text-dark font-medium hover:bg-bg-gray"}`}>{item.label}</button>
+                ))}
+                <button onClick={() => { handleLogout(); setMobileMenuOpen(false); }} className="w-full text-left px-3 py-3 text-sm font-bold text-red-600 bg-red-50 rounded-xl mt-2">Logout</button>
+              </div>
+            )}
+          </div>
+        )}
+      </nav>
 
       {/* OVERLAYS */}
-      {/* <Messenger
-        isOpen={messengerOpen}
-        onClose={() => setMessengerOpen(false)}
-      /> */}
-
       <Notifications
         isOpen={notificationsOpen}
         onClose={() => setNotificationsOpen(false)}

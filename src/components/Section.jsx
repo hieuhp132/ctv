@@ -12,11 +12,19 @@ export default function Section({
   gridProps,
   action,
   role,
+  count,
 }) {
   return (
     <section className="section">
       <div className="section-header">
-        <h2 className={`section-title ${color}`}>{title}</h2>
+        <h2 className={`section-title ${color} flex items-center gap-2`}>
+          {title}
+          {count !== undefined && (
+            <span className="px-2.5 py-0.5 rounded-full bg-gray-100/80 text-xs font-semibold text-gray-700 border border-gray-200/60 shadow-sm ml-2">
+              {count}
+            </span>
+          )}
+        </h2>
         {action && <div className="section-action">{action}</div>}
       </div>
 

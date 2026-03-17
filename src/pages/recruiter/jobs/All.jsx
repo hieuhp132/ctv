@@ -376,6 +376,7 @@ export default function All() {
       <Section
         title="ACTIVE JOBS"
         color="green"
+        count={activeJobs.length}
         action={<button onClick={openAddModal}>+ Add Job</button>}
         jobs={paginate(activeJobs, activePage)}
         page={activePage}

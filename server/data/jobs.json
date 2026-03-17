@@ -5659,8 +5659,7 @@
       }
     ],
     "savedBy": [
-      "admin@ant-tech.asia",
-      "hieuhp132@gmail.com"
+      "asd@123.com"
     ]
   },
   {
@@ -5697,8 +5696,8 @@
       }
     ],
     "savedBy": [
-      "admin@ant-tech.asia",
-      "hieuhp132@gmail.com"
+      "asd@123.com",
+      "admin@ant-tech.asia"
     ]
   },
   {
@@ -5734,6 +5733,32 @@
         "editedAt": null
       }
     ],
+    "savedBy": [
+      "admin@ant-tech.asia"
+    ]
+  },
+  {
+    "_id": "1773515199534",
+    "title": "Senior FrontEnd Developer",
+    "company": "VHV Gruppe",
+    "location": "Hannover, Germany",
+    "salary": "$2000",
+    "bonus": "",
+    "rewardCandidateUSD": 500,
+    "rewardInterviewUSD": 2,
+    "vacancies": 1,
+    "applicants": 0,
+    "deadline": "2026-10-20",
+    "status": "Active",
+    "keywords": [],
+    "jobsdetail": {
+      "description": "<p>Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest</p><p>Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest</p><p>Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest</p><p>Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest</p>",
+      "requirement": "<p>Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest</p><p>Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest</p><p>Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest</p><p>Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest</p>",
+      "benefits": "<p>Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest</p><p>Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest</p><p>Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest</p><p>Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest</p>",
+      "other": "<p>Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest</p><p>Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest</p><p>Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest</p><p>Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest&nbsp;Tsest</p>"
+    },
+    "createdAt": "2026-03-14T19:06:39.533Z",
+    "updatedAt": "2026-03-14T19:06:39.533Z",
     "savedBy": [
       "admin@ant-tech.asia"
     ]

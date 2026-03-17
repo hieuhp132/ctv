@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AntTech Asia | Premier Tech Talent Hub</title>
+    <!-- Tailwind CSS 3 CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Alpine.js for simple interactivity -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap"
+        rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                        display: ['Space Grotesk', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#FF465E',
+                        accent: '#FFA63D',
+                        'text-dark': '#1a1a1a',
+                        'text-medium': '#4a4a4a',
+                        'text-light': '#6b6b6b',
+                        'bg-white': '#ffffff',
+                        'bg-light': '#f8f9fa',
+                        'bg-gray': '#f5f5f5',
+                        'border-light': '#e8e8e8',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @layer components {
+            .glass-card {
+                background: white;
+                border: 1px solid #e8e8e8;
+                border-radius: 1rem;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            .glass-card:hover {
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+            }
+
+            .btn-primary {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0.75rem 1.5rem;
+                background: linear-gradient(to right, #FFA63D, #FF465E);
+                color: white;
+                font-weight: 600;
+                border-radius: 0.75rem;
+                transition: all 0.2s;
+                box-shadow: 0 4px 12px rgba(255, 70, 94, 0.2);
+            }
+
+            .btn-primary:hover {
+                opacity: 0.9;
+                transform: translateY(-1px);
+            }
+
+            .btn-secondary {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0.75rem 1.5rem;
+                background: white;
+                color: #1a1a1a;
+                font-weight: 600;
+                border-radius: 0.75rem;
+                border: 1px solid #e8e8e8;
+                transition: all 0.2s;
+            }
+
+            .btn-secondary:hover {
+                background: #f8f9fa;
+            }
+
+            .text-gradient {
+                background-clip: text;
+                -webkit-background-clip: text;
+                color: transparent;
+                background-image: linear-gradient(to right, #FFA63D, #FF465E);
+            }
+        }
+
+        body {
+            background-color: #ffffff;
+            color: #4a4a4a;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal-up.visible,
+        .reveal-left.visible,
+        .reveal-right.visible {
+            opacity: 1;
+            transform: translate(0);
+        }
+
+        /* Staggered Children */
+        .reveal-item {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body x-data="{ mobileMenuOpen: false }">
+
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-border-light">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center gap-2">
+                    <!-- <div class="w-10 h-10 bg-gradient-to-br from-accent to-primary rounded-lg flex items-center justify-center">
+                        <i data-lucide="zap" class="text-white w-6 h-6 fill-current"></i>
+                    </div> -->
+                    <div class="w-10 h-10 flex items-center justify-center">
+                        <img src="./logo.jpeg" class="w-full h-full object-contain" />
+                    </div>
+                    <span class="text-2xl font-display font-bold text-text-dark tracking-tight">Ant Tech-<span
+                            class="text-primary">Asia</span></span>
+                </div>
+
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="/login"
+                        class="text-sm font-medium text-text-medium hover:text-primary transition-colors">Find
+                        Jobs</a>
+                    <a href="#" class="text-sm font-medium text-text-medium hover:text-primary transition-colors">For
+                        Companies</a>
+                    <a href="#"
+                        class="text-sm font-medium text-text-medium hover:text-primary transition-colors">Headhunters</a>
+                    <a href="#"
+                        class="text-sm font-medium text-text-medium hover:text-primary transition-colors">Resources</a>
+                </div>
+
+                <div class="hidden md:flex items-center gap-4">
+
+                    <button class="text-sm font-medium text-text-dark hover:text-primary transition-colors"
+                        onClick="window.location.href='/login'">Log
+                        in</button>
+                    <button onclick="window.location.href='/signup'"
+                        class="text-sm font-medium text-text-dark hover:text-primary transition-colors">Sign
+                        Up</button>
+                </div>
+
+                <div class="md:hidden">
+                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="text-text-medium p-2">
+                        <i x-show="!mobileMenuOpen" data-lucide="menu"></i>
+                        <i x-show="mobileMenuOpen" data-lucide="x"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div x-show="mobileMenuOpen" x-transition:enter="transition ease-out duration-200"
+            x-transition:enter-start="opacity-0 -translate-y-4" x-transition:enter-end="opacity-100 translate-y-0"
+            class="md:hidden bg-white border-b border-border-light px-4 pt-2 pb-6 space-y-1">
+            <a href="/login" class="block px-3 py-4 text-base font-medium text-text-medium border-b border-gray-50">Find
+                Jobs</a>
+            <a href="#" class="block px-3 py-4 text-base font-medium text-text-medium border-b border-gray-50">For
+                Companies</a>
+            <a href="#"
+                class="block px-3 py-4 text-base font-medium text-text-medium border-b border-gray-50">Headhunters</a>
+            <a href="#"
+                class="block px-3 py-4 text-base font-medium text-text-medium border-b border-gray-50">Resources</a>
+            <div class="pt-4 flex flex-col gap-3">
+                <button onclick="window.location.href='/login'" class="w-full btn-secondary">Log in</button>
+                <button onclick="window.location.href='/signup'" class="w-full btn-primary">Join Now</button>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-bg-light">
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10">
+                <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] bg-primary/10 blur-[120px] rounded-full">
+                </div>
+                <div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-accent/10 blur-[120px] rounded-full">
+                </div>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center reveal-stagger">
+                <div>
+                    <span
+                        class="inline-block py-1 px-3 rounded-full bg-primary/5 border border-primary/10 text-primary text-xs font-bold uppercase tracking-wider mb-6 reveal-item">
+                        The Future of Tech Hiring in Asia
+                    </span>
+                    <h1
+                        class="text-5xl lg:text-7xl font-display font-bold text-text-dark mb-8 leading-[1.1] reveal-item">
+                        Connect with the <span class="text-gradient">Top 1%</span> <br />
+                        Tech Talent in Asia
+                    </h1>
+                    <p class="text-lg lg:text-xl text-text-medium max-w-2xl mx-auto mb-10 leading-relaxed reveal-item">
+                        AntTech Asia is the premier recruitment platform for high-growth startups and tech giants
+                        looking to scale their engineering teams across the continent.
+                    </p>
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 reveal-item">
+                        <button onClick="window.location.href='/login'"
+                            class="w-full sm:w-auto text-lg px-8 py-4 flex items-center justify-center gap-2 hover:scale-105 transition-transform">
+                            Find Your Next Role <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                        </button>
+                        <button onClick="window.location.href='/login'"
+                            class="w-full sm:w-auto btn-secondary text-lg px-8 py-4 hover:scale-105 transition-transform">
+                            Hire Top Talent
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stats -->
+                <div class="mt-20 grid grid-cols-2 lg:grid-cols-4 gap-8 max-w-4xl mx-auto reveal-item">
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-text-dark mb-1">2,500+</div>
+                        <div class="text-sm text-text-light font-medium uppercase tracking-wide">Active Jobs</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-text-dark mb-1">50k+</div>
+                        <div class="text-sm text-text-light font-medium uppercase tracking-wide">Top Engineers</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-text-dark mb-1">800+</div>
+                        <div class="text-sm text-text-light font-medium uppercase tracking-wide">Partner Companies</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-3xl font-bold text-text-dark mb-1">35%</div>
+                        <div class="text-sm text-text-light font-medium uppercase tracking-wide">Avg. Salary Hike</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Search Bar -->
+        <!-- <section class="relative z-10 -mt-10 px-4 reveal-up">
+            <div
+                class="max-w-5xl mx-auto glass-card p-4 lg:p-6 flex flex-col lg:flex-row gap-4 items-center bg-white shadow-xl">
+                <div class="flex-1 w-full relative">
+                    <i data-lucide="search"
+                        class="absolute left-4 top-1/2 -translate-y-1/2 text-text-light w-5 h-5"></i>
+                    <input id="searchInput" type="text" autocomplete="off" placeholder="Job title, keywords, or company"
+                        class="w-full bg-bg-gray border border-border-light rounded-xl py-3 pl-12 pr-4 text-text-dark focus:outline-none focus:border-primary/50 transition-colors">
+                    <div id="searchSuggestions"
+                        class="absolute top-full left-0 w-full mt-2 bg-white border border-border-light rounded-xl shadow-2xl z-50 hidden max-h-60 overflow-y-auto text-left">
+                    </div>
+                </div>
+                <div class="flex-1 w-full relative">
+                    <i data-lucide="map-pin"
+                        class="absolute left-4 top-1/2 -translate-y-1/2 text-text-light w-5 h-5"></i>
+                    <select id="locationInput"
+                        class="w-full bg-bg-gray border border-border-light rounded-xl py-3 pl-12 pr-10 text-text-dark focus:outline-none focus:border-primary/50 transition-colors appearance-none">
+                        <option value="">All Locations</option>
+                        <option value="Singapore">Singapore</option>
+                        <option value="Vietnam">Vietnam</option>
+                        <option value="Thailand">Thailand</option>
+                        <option value="Indonesia">Indonesia</option>
+                        <option value="Remote">Remote</option>
+                    </select>
+                    <i data-lucide="chevron-down"
+                        class="absolute right-4 top-1/2 -translate-y-1/2 text-text-light w-4 h-4 pointer-events-none"></i>
+                </div>
+
+            </div>
+        </section> -->
+
+        <!-- Featured Jobs -->
+        <section class="py-24 px-4 reveal-stagger" id="jobs">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex justify-between items-end mb-12 reveal-item">
+                    <div>
+                        <h2 class="text-3xl font-display font-bold text-text-dark mb-4">Featured Opportunities</h2>
+                        <p class="text-text-light">Hand-picked roles from top tech companies in Asia.</p>
+                    </div>
+                    <button
+                        class="hidden sm:flex items-center gap-2 text-primary font-semibold hover:text-accent transition-colors">
+                        View all jobs <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <div id="jobsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Jobs will be rendered here dynamically -->
+                </div>
+                <div id="jobsLoading" class="text-center py-8 text-text-light hidden">Loading jobs...</div>
+                <div id="jobsError" class="text-center py-8 text-red-500 hidden"></div>
+                <div id="jobsEmpty" class="text-center py-8 text-text-light hidden">No jobs available.</div>
+            </div>
+        </section>
+
+        <!-- Split Section -->
+        <section class="py-24 bg-bg-light border-y border-border-light px-4 reveal-stagger">
+            <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- For Companies -->
+                <div class="glass-card p-10 relative overflow-hidden group reveal-item">
+                    <div
+                        class="absolute top-0 right-0 w-32 h-32 bg-primary/5 blur-3xl -mr-16 -mt-16 group-hover:bg-primary/10 transition-all">
+                    </div>
+                    <i data-lucide="building-2" class="w-12 h-12 text-primary mb-6"></i>
+                    <h2 class="text-3xl font-display font-bold text-text-dark mb-4">For Companies</h2>
+                    <p class="text-text-medium mb-8 leading-relaxed">
+                        Scale your engineering team with pre-vetted tech talent. Our platform uses AI to match you with
+                        candidates who fit your technical requirements and culture.
+                    </p>
+                    <ul class="space-y-4 mb-10">
+                        <li class="flex items-center gap-3 text-text-medium"><i data-lucide="check-circle-2"
+                                class="w-5 h-5 text-accent"></i> Access to top 1% tech talent in Asia</li>
+                        <li class="flex items-center gap-3 text-text-medium"><i data-lucide="check-circle-2"
+                                class="w-5 h-5 text-accent"></i> AI-powered candidate matching</li>
+                        <li class="flex items-center gap-3 text-text-medium"><i data-lucide="check-circle-2"
+                                class="w-5 h-5 text-accent"></i> Dedicated account manager</li>
+                    </ul>
+                    <button class="w-full sm:w-auto border-accent/20 hover:bg-accent/5">Start Hiring</button>
+                </div>
+
+                <!-- For Headhunters -->
+                <div class="glass-card p-10 relative overflow-hidden group reveal-item">
+                    <div
+                        class="absolute top-0 right-0 w-32 h-32 bg-accent/5 blur-3xl -mr-16 -mt-16 group-hover:bg-accent/10 transition-all">
+                    </div>
+                    <i data-lucide="users" class="w-12 h-12 text-accent mb-6"></i>
+                    <h2 class="text-3xl font-display font-bold text-text-dark mb-4">For Headhunters</h2>
+                    <p class="text-text-medium mb-8 leading-relaxed">
+                        Monetize your network. Refer top candidates to our exclusive job openings and earn
+                        industry-leading commissions on every successful placement.
+                    </p>
+                    <ul class="space-y-4 mb-10">
+                        <li class="flex items-center gap-3 text-text-medium"><i data-lucide="check-circle-2"
+                                class="w-5 h-5 text-primary"></i> Earn up to 20% commission per hire</li>
+                        <li class="flex items-center gap-3 text-text-medium"><i data-lucide="check-circle-2"
+                                class="w-5 h-5 text-primary"></i> Access to exclusive high-paying roles</li>
+                        <li class="flex items-center gap-3 text-text-medium"><i data-lucide="check-circle-2"
+                                class="w-5 h-5 text-primary"></i> Real-time referral tracking</li>
+                    </ul>
+                    <button class="btn-secondary w-full sm:w-auto border-accent/20 hover:bg-accent/5">Become a
+                        Partner</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works -->
+        <section class="py-24 px-4 reveal-stagger">
+            <div class="max-w-7xl mx-auto text-center">
+                <h2 class="text-4xl font-display font-bold text-text-dark mb-16 reveal-item">How It Works</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
+                    <div
+                        class="hidden md:block absolute top-1/2 left-1/4 right-1/4 h-0.5 bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 -translate-y-12 -z-10">
+                    </div>
+
+                    <div class="flex flex-col items-center reveal-item">
+                        <div
+                            class="w-20 h-20 rounded-2xl bg-bg-gray border border-border-light flex items-center justify-center mb-6 shadow-md">
+                            <i data-lucide="users" class="w-8 h-8 text-primary"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-text-dark mb-3">Create Profile</h3>
+                        <p class="text-text-medium max-w-xs">Build your professional tech profile or company dashboard
+                            in minutes.</p>
+                    </div>
+                    <div class="flex flex-col items-center reveal-item">
+                        <div
+                            class="w-20 h-20 rounded-2xl bg-bg-gray border border-border-light flex items-center justify-center mb-6 shadow-md">
+                            <i data-lucide="zap" class="w-8 h-8 text-accent"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-text-dark mb-3">Smart Matching</h3>
+                        <p class="text-text-medium max-w-xs">Our AI algorithms match talent with the most relevant
+                            opportunities.</p>
+                    </div>
+                    <div class="flex flex-col items-center reveal-item">
+                        <div
+                            class="w-20 h-20 rounded-2xl bg-bg-gray border border-border-light flex items-center justify-center mb-6 shadow-md">
+                            <i data-lucide="award" class="w-8 h-8 text-primary"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-text-dark mb-3">Get Hired</h3>
+                        <p class="text-text-medium max-w-xs">Interview directly with decision-makers and land your dream
+                            role.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="py-24 px-4 bg-white border-b border-border-light reveal-up" id="about">
+            <div class="max-w-7xl mx-auto glass-card p-8 lg:p-12">
+                <div class="max-w-3xl">
+                    <h2 class="text-4xl font-display font-bold text-text-dark mb-6">About the program</h2>
+                    <div class="text-text-medium leading-relaxed space-y-6">
+                        <p class="text-lg">
+                            The Ant-Tech Collaborator Program is designed for anyone who wants
+                            to earn additional income by connecting great talent with the
+                            right job opportunities. You don't need to be a professional
+                            recruiter – if you know talented people, you can become a
+                            collaborator with us.
+                        </p>
+                        <div class="pt-6 border-t border-border-light">
+                            <h3 class="text-2xl font-bold text-text-dark mb-4">Why join?</h3>
+                            <ul class="space-y-4">
+                                <li class="flex items-start gap-3">
+                                    <i data-lucide="check-circle-2"
+                                        class="w-6 h-6 text-primary flex-shrink-0 mt-0.5"></i>
+                                    <span>Transparent and attractive commission for each successful placement</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i data-lucide="check-circle-2"
+                                        class="w-6 h-6 text-primary flex-shrink-0 mt-0.5"></i>
+                                    <span>Work flexibly, anytime and anywhere</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <i data-lucide="check-circle-2"
+                                        class="w-6 h-6 text-primary flex-shrink-0 mt-0.5"></i>
+                                    <span>Access to training and continuous support from the Ant-Tech HR team</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feature Grid / Solutions -->
+        <section class="py-24 px-4 bg-bg-light border-b border-border-light reveal-stagger" id="features">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-16 reveal-item">
+                    <h2 class="text-4xl font-display font-bold text-text-dark mb-4">Your Partner to Grow and Expand
+                        Anywhere</h2>
+                    <p class="text-lg text-text-medium">Comprehensive solutions for your hiring and expansion needs.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div class="glass-card p-8 hover:-translate-y-2 transition-transform duration-300 reveal-item">
+                        <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6">
+                            <i data-lucide="globe" class="w-6 h-6 text-primary"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-text-dark mb-3">Enter New Markets Fast</h3>
+                        <p class="text-text-medium text-sm leading-relaxed">Operate without setting up a local entity —
+                            skip months of setup time.</p>
+                    </div>
+
+                    <div
+                        class="glass-card p-8 hover:-translate-y-2 transition-transform duration-300 reveal-item border-t-4 border-t-accent">
+                        <div class="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center mb-6">
+                            <i data-lucide="users" class="w-6 h-6 text-accent"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-text-dark mb-3">Hire Top Talent Anywhere</h3>
+                        <p class="text-text-medium text-sm leading-relaxed">Leverage our headhunter network and talent
+                            database to find the right people.</p>
+                    </div>
+
+                    <div class="glass-card p-8 hover:-translate-y-2 transition-transform duration-300 reveal-item">
+                        <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-6">
+                            <i data-lucide="headset" class="w-6 h-6 text-primary"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-text-dark mb-3">All-in-One HR & Recruitment</h3>
+                        <p class="text-text-medium text-sm leading-relaxed">From recruitment to admin and compliance —
+                            we handle it so you focus on growth.</p>
+                    </div>
+
+                    <div class="glass-card p-8 hover:-translate-y-2 transition-transform duration-300 reveal-item">
+                        <div class="w-12 h-12 rounded-xl bg-accent/10 flex items-center justify-center mb-6">
+                            <i data-lucide="line-chart" class="w-6 h-6 text-accent"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-text-dark mb-3">Cost-Effective & Scalable</h3>
+                        <p class="text-text-medium text-sm leading-relaxed">Scale quickly with competitive pricing,
+                            built for startups and high-growth teams.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3-Step Process -->
+        <section class="py-24 px-4 reveal-stagger" id="process">
+            <div class="max-w-7xl mx-auto text-center">
+                <h2 class="text-4xl font-display font-bold text-text-dark mb-16 reveal-item">How We Work With You</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
+                    <div
+                        class="hidden md:block absolute top-10 left-1/4 right-1/4 h-0.5 border-t-2 border-dashed border-border-light -z-10">
+                    </div>
+
+                    <div class="flex flex-col items-center reveal-item">
+                        <div
+                            class="w-20 h-20 rounded-full bg-white border-4 border-primary text-primary font-display font-bold text-2xl flex items-center justify-center mb-6 shadow-lg z-10">
+                            1
+                        </div>
+                        <h3 class="text-xl font-bold text-text-dark mb-3">Consultation & Assessment</h3>
+                        <p class="text-text-medium max-w-xs">We learn your hiring needs, target roles, and markets you
+                            want to enter.</p>
+                    </div>
+
+                    <div class="flex flex-col items-center reveal-item">
+                        <div
+                            class="w-20 h-20 rounded-full bg-white border-4 border-accent text-accent font-display font-bold text-2xl flex items-center justify-center mb-6 shadow-lg z-10">
+                            2
+                        </div>
+                        <h3 class="text-xl font-bold text-text-dark mb-3">Get a Customized Plan</h3>
+                        <p class="text-text-medium max-w-xs">We design a tailored solution for your needs and budget,
+                            aligned with your goals.</p>
+                    </div>
+
+                    <div class="flex flex-col items-center reveal-item">
+                        <div
+                            class="w-20 h-20 rounded-full bg-white border-4 border-primary text-primary font-display font-bold text-2xl flex items-center justify-center mb-6 shadow-lg z-10">
+                            3
+                        </div>
+                        <h3 class="text-xl font-bold text-text-dark mb-3">Hire & Scale</h3>
+                        <p class="text-text-medium max-w-xs">Use our services to hire, operate, and ensure your
+                            objectives are met.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="py-24 px-4 bg-bg-light border-y border-border-light reveal-up" id="faq">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl font-display font-bold text-text-dark mb-4">Frequently Asked Questions</h2>
+                    <p class="text-lg text-text-medium">Everything you need to know about the collaborator program.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="glass-card p-6 x-data='{ open: false }'">
+                        <button class="w-full flex justify-between items-center text-left"
+                            onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('i.lucide-chevron-down').classList.toggle('rotate-180')">
+                            <h3 class="text-xl font-bold text-text-dark">Who can join the collaborator program?</h3>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-text-medium transition-transform"></i>
+                        </button>
+                        <div class="hidden pt-4 mt-4 border-t border-border-light text-text-medium">
+                            Anyone with a network of professionals looking for job opportunities. No recruitment
+                            background is required.
+                        </div>
+                    </div>
+
+                    <div class="glass-card p-6">
+                        <button class="w-full flex justify-between items-center text-left"
+                            onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('i.lucide-chevron-down').classList.toggle('rotate-180')">
+                            <h3 class="text-xl font-bold text-text-dark">How do I earn commission?</h3>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-text-medium transition-transform"></i>
+                        </button>
+                        <div class="hidden pt-4 mt-4 border-t border-border-light text-text-medium">
+                            You earn commission for every candidate you refer who is successfully hired.
+                        </div>
+                    </div>
+
+                    <div class="glass-card p-6">
+                        <button class="w-full flex justify-between items-center text-left"
+                            onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('i.lucide-chevron-down').classList.toggle('rotate-180')">
+                            <h3 class="text-xl font-bold text-text-dark">When will I receive my payout?</h3>
+                            <i data-lucide="chevron-down" class="w-5 h-5 text-text-medium transition-transform"></i>
+                        </button>
+                        <div class="hidden pt-4 mt-4 border-t border-border-light text-text-medium">
+                            Commissions are paid according to Ant-Tech Asia's payout schedule, which is fully
+                            transparent in your dashboard.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials -->
+        <!-- <section class="py-24 px-4 bg-bg-light reveal-stagger">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-16 reveal-item">
+                    <p class="text-text-light font-semibold uppercase tracking-widest mb-8">Trusted by industry leaders
+                    </p>
+                    <div
+                        class="flex flex-wrap justify-center items-center gap-12 opacity-40 grayscale hover:grayscale-0 transition-all duration-500">
+                        <span class="text-2xl font-display font-bold text-text-dark">Grab</span>
+                        <span class="text-2xl font-display font-bold text-text-dark">Sea</span>
+                        <span class="text-2xl font-display font-bold text-text-dark">Gojek</span>
+                        <span class="text-2xl font-display font-bold text-text-dark">Traveloka</span>
+                        <span class="text-2xl font-display font-bold text-text-dark">VNG</span>
+                        <span class="text-2xl font-display font-bold text-text-dark">AntGroup</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="glass-card p-8 reveal-item">
+                        <div class="flex gap-1 mb-6">
+                            <i data-lucide="star" class="w-4 h-4 text-accent fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 text-accent fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 text-accent fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 text-accent fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 text-accent fill-current"></i>
+                        </div>
+                        <p class="text-lg text-text-medium italic mb-8 leading-relaxed">"AntTech Asia helped us find a
+                            Lead Architect in less than 2 weeks. The quality of candidates is significantly higher than
+                            other platforms we've used."</p>
+                        <div class="flex items-center gap-4">
+                            <img src="https://picsum.photos/seed/sarah/100/100" alt="Sarah"
+                                class="w-12 h-12 rounded-full object-cover">
+                            <div>
+                                <div class="text-text-dark font-bold">Sarah Chen</div>
+                                <div class="text-text-light text-sm">Head of Engineering at Grab</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="glass-card p-8 reveal-item">
+                        <div class="flex gap-1 mb-6">
+                            <i data-lucide="star" class="w-4 h-4 text-accent fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 text-accent fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 text-accent fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 text-accent fill-current"></i>
+                            <i data-lucide="star" class="w-4 h-4 text-accent fill-current"></i>
+                        </div>
+                        <p class="text-lg text-text-medium italic mb-8 leading-relaxed">"As a headhunter, the commission
+                            structure and transparency on AntTech are unmatched. It's become my primary source for
+                            high-level tech placements."</p>
+                        <div class="flex items-center gap-4">
+                            <img src="https://picsum.photos/seed/david/100/100" alt="David"
+                                class="w-12 h-12 rounded-full object-cover">
+                            <div>
+                                <div class="text-text-dark font-bold">David Nguyen</div>
+                                <div class="text-text-light text-sm">Senior Tech Recruiter</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section> -->
+
+        <!-- Commission Section -->
+        <section class="py-24 px-4 reveal-up">
+            <div
+                class="max-w-7xl mx-auto glass-card bg-gradient-to-br from-primary/5 via-white to-accent/5 p-12 lg:p-20 text-center relative overflow-hidden">
+                <div
+                    class="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-5 pointer-events-none">
+                </div>
+                <div class="reveal-stagger">
+                    <i data-lucide="trending-up" class="w-16 h-16 text-accent mx-auto mb-8 reveal-item"></i>
+                    <h2 class="text-4xl lg:text-5xl font-display font-bold text-text-dark mb-6 reveal-item">Earn
+                        Commission for Every Success Referral</h2>
+                    <p class="text-xl text-text-medium max-w-2xl mx-auto mb-10 reveal-item">
+                        Join our exclusive network of tech headhunters. Refer top-tier developers and earn up to <span
+                            class="text-text-dark font-bold">$2,000 per successful hire</span>.
+                    </p>
+                    <div class="flex flex-wrap justify-center gap-6 reveal-item">
+                        <div class="flex items-center gap-2 text-text-dark font-semibold"><i
+                                data-lucide="check-circle-2" class="text-primary w-5 h-5"></i> High Payouts</div>
+                        <div class="flex items-center gap-2 text-text-dark font-semibold"><i
+                                data-lucide="check-circle-2" class="text-primary w-5 h-5"></i> Real-time Tracking</div>
+                        <div class="flex items-center gap-2 text-text-dark font-semibold"><i
+                                data-lucide="check-circle-2" class="text-primary w-5 h-5"></i> Global Network</div>
+                    </div>
+                    <button onClick="window.location.href='/login'"
+                        class="mt-12 btn-primary text-lg px-10 py-4 reveal-item">Start Referring Now</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Blog Section -->
+        <section class="py-24 px-4 reveal-stagger">
+            <div class="max-w-7xl mx-auto">
+                <div class="flex justify-between items-end mb-12 reveal-item">
+                    <div>
+                        <h2 class="text-3xl font-display font-bold text-text-dark mb-4">Insights & Resources</h2>
+                        <p class="text-text-light">Stay updated with the latest in Asian tech recruitment.</p>
+                    </div>
+                    <button class="text-primary font-semibold hover:text-accent transition-colors">Read all
+                        articles</button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="group cursor-pointer reveal-item">
+                        <div class="rounded-2xl overflow-hidden mb-6 aspect-video">
+                            <img src="https://picsum.photos/seed/asia/600/400" alt="Market Trends"
+                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <span class="text-xs font-bold text-primary uppercase tracking-widest mb-3 block">Market
+                            Trends</span>
+                        <h3
+                            class="text-xl font-bold text-text-dark mb-3 group-hover:text-primary transition-colors leading-tight">
+                            The Rise of Remote Tech Hubs in Southeast Asia</h3>
+                        <p class="text-text-light text-sm">Mar 12, 2024</p>
+                    </div>
+                    <div class="group cursor-pointer reveal-item">
+                        <div class="rounded-2xl overflow-hidden mb-6 aspect-video">
+                            <img src="https://picsum.photos/seed/interview/600/400" alt="Career Advice"
+                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <span class="text-xs font-bold text-primary uppercase tracking-widest mb-3 block">Career
+                            Advice</span>
+                        <h3
+                            class="text-xl font-bold text-text-dark mb-3 group-hover:text-primary transition-colors leading-tight">
+                            How to Ace Your System Design Interview in 2024</h3>
+                        <p class="text-text-light text-sm">Mar 10, 2024</p>
+                    </div>
+                    <div class="group cursor-pointer reveal-item">
+                        <div class="rounded-2xl overflow-hidden mb-6 aspect-video">
+                            <img src="https://picsum.photos/seed/tech/600/400" alt="Technology"
+                                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <span
+                            class="text-xs font-bold text-primary uppercase tracking-widest mb-3 block">Technology</span>
+                        <h3
+                            class="text-xl font-bold text-text-dark mb-3 group-hover:text-primary transition-colors leading-tight">
+                            Why Companies are Moving from Java to Go</h3>
+                        <p class="text-text-light text-sm">Mar 08, 2024</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="pt-24 pb-12 px-4 border-t border-border-light bg-bg-gray">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+                <div>
+                    <div class="flex items-center gap-2 mb-6">
+                        <div
+                            class="w-8 h-8 bg-gradient-to-br from-accent to-primary rounded flex items-center justify-center">
+                            <i data-lucide="zap" class="text-white w-5 h-5 fill-current"></i>
+                        </div>
+                        <span class="text-xl font-display font-bold text-text-dark">AntTech Asia</span>
+                    </div>
+                    <p class="text-text-light text-sm leading-relaxed mb-6">
+                        The premier tech recruitment platform connecting top talent with high-growth companies across
+                        Asia.
+                    </p>
+                    <div class="flex gap-4">
+                        <a href=""
+                            class="w-8 h-8 rounded-full bg-white border border-border-light flex items-center justify-center text-text-light hover:bg-primary hover:text-white transition-all">
+                            <i data-lucide="twitter" class="w-4 h-4"></i>
+                        </a>
+                        <a href=""
+                            class="w-8 h-8 rounded-full bg-white border border-border-light flex items-center justify-center text-text-light hover:bg-primary hover:text-white transition-all">
+                            <i data-lucide="linkedin" class="w-4 h-4"></i>
+                        </a>
+                        <a href="https://m.me/anttechasia"
+                            class="w-8 h-8 rounded-full bg-white border border-border-light flex items-center justify-center text-text-light hover:bg-primary hover:text-white transition-all">
+                            <i data-lucide="facebook" class="w-4 h-4"></i>
+                        </a>
+                        <a href="https://t.me/anttechasia"
+                            class="w-8 h-8 rounded-full bg-white border border-border-light flex items-center justify-center text-text-light hover:bg-primary hover:text-white transition-all">
+                            <i data-lucide="send" class="w-4 h-4"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-text-dark font-bold mb-6">For Candidates</h4>
+                    <ul class="space-y-4 text-sm text-text-light">
+                        <li><a href="/login" class="hover:text-primary transition-colors">Browse
+                                Jobs</a></li>
+                        <li><a href="" class="hover:text-primary transition-colors">Career Advice</a></li>
+                        <li><a href="" class="hover:text-primary transition-colors">Salary Insights</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-text-dark font-bold mb-6">For Employers</h4>
+                    <ul class="space-y-4 text-sm text-text-light">
+                        <li><a href="/login'" class="hover:text-primary transition-colors">Post a
+                                Job</a></li>
+                        <li><a href="" class="hover:text-primary transition-colors">Hiring Solutions</a></li>
+                        <li><a href="" class="hover:text-primary transition-colors">Pricing</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-text-dark font-bold mb-6">Company</h4>
+                    <ul class="space-y-4 text-sm text-text-light">
+                        <li><a href="" class="hover:text-primary transition-colors">About Us</a></li>
+                        <li><a href="" class="hover:text-primary transition-colors">Contact</a></li>
+                        <li><a href="/terms" class="hover:text-primary transition-colors">Privacy
+                                Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-border-light flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-text-light text-xs">© 2024 AntTech Asia. All rights reserved.</p>
+                <div class="flex items-center gap-6 text-xs text-text-light">
+                    <a href="" class="hover:text-text-dark">English (US)</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Reveal animation on scroll
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const target = entry.target;
+
+                    // If it's a staggered container
+                    if (target.classList.contains('reveal-stagger')) {
+                        const items = target.querySelectorAll('.reveal-item');
+                        items.forEach((item, index) => {
+                            setTimeout(() => {
+                                item.classList.add('visible');
+                            }, index * 150); // Delay between each item
+                        });
+                        target.classList.add('visible');
+                        observer.unobserve(target); // Only animate once
+                    } else {
+                        target.classList.add('visible');
+                        observer.unobserve(target);
+                    }
+                }
+            });
+        }, observerOptions);
+
+        // Observe both individual elements and staggered containers
+        document.querySelectorAll('.reveal-up, .reveal-left, .reveal-right, .reveal-stagger').forEach(el => {
+            observer.observe(el);
+        });
+        let allCachedJobs = [];
+        const API_BASE = window.location.hostname === "localhost" ? "http://localhost:3000" : "https://apih.ant-tech.asia";
+
+        async function fetchJobs(limit = 6, keyword = "", location = "") {
+            const container = document.getElementById('jobsContainer');
+            const loading = document.getElementById('jobsLoading');
+            const errorEl = document.getElementById('jobsError');
+            const emptyEl = document.getElementById('jobsEmpty');
+
+            container.innerHTML = '';
+            loading.classList.remove('hidden');
+            errorEl.classList.add('hidden');
+            emptyEl.classList.add('hidden');
+
+            try {
+                const res = await fetch(`${API_BASE}/local/jobs`);
+                if (!res.ok) throw new Error("Failed to load");
+                let data = await res.json();
+
+                let jobs = data.jobs || [];
+
+                // Store all jobs in cache on the very first load
+                if (allCachedJobs.length === 0 && jobs.length > 0) {
+                    allCachedJobs = jobs;
+
+                    // Populate locations dropdown from actual jobs data just once
+                    const locationInput = document.getElementById('locationInput');
+                    if (locationInput && locationInput.options.length <= 6) {
+                        // It currently has 6 hardcoded options, we update it
+                        const locations = [...new Set(
+                            allCachedJobs
+                                .filter(j => j.location)
+                                .map(j => j.location.trim())
+                                .filter(loc => loc.length > 0)
+                        )].sort();
+
+                        locationInput.innerHTML = '<option value="">All Locations</option>' +
+                            locations.map(loc => `<option value="${loc}">${loc}</option>`).join('');
+
+                        // Set it back to the active select option if there was one
+                        if (location) locationInput.value = location;
+                    }
+                }
+
+                if (keyword) {
+                    jobs = jobs.filter(j => {
+                        const titleMatch = (j.title || "").toLowerCase().includes(keyword.toLowerCase());
+                        let kwMatch = false;
+                        if (Array.isArray(j.keywords)) {
+                            kwMatch = j.keywords.some(k => String(k).toLowerCase().includes(keyword.toLowerCase()));
+                        } else if (typeof j.keywords === 'string') {
+                            kwMatch = j.keywords.toLowerCase().includes(keyword.toLowerCase());
+                        }
+                        return titleMatch || kwMatch;
+                    });
+                }
+                if (location) {
+                    jobs = jobs.filter(j => (j.location || "").toLowerCase().includes(location.toLowerCase()));
+                }
+
+                if (limit) jobs = jobs.slice(0, limit);
+
+                loading.classList.add('hidden');
+
+                if (jobs.length === 0) {
+                    emptyEl.classList.remove('hidden');
+                    return;
+                }
+
+                jobs.forEach((job, index) => {
+                    const el = document.createElement('div');
+                    el.className = 'glass-card p-6 hover:border-primary/30 transition-all cursor-pointer group reveal-item';
+                    el.innerHTML = `
+                        <div class="flex justify-between items-start mb-6">
+                            <div class="w-12 h-12 rounded-xl overflow-hidden bg-bg-gray flex items-center justify-center">
+                                <i data-lucide="briefcase" class="w-6 h-6 text-text-medium"></i>
+                            </div>
+                            <span class="px-3 py-1 rounded-full bg-bg-gray text-xs font-medium text-text-light border border-border-light">${job.type || 'Full-time'}</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-text-dark mb-2 group-hover:text-primary transition-colors">${job.title}</h3>
+                        <p class="text-text-light text-sm mb-4 flex items-center gap-1">
+                            <i data-lucide="map-pin" class="w-4 h-4"></i> ${job.location || 'Remote/Onsite'}
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-6">
+                            ${(job.keywords || []).slice(0, 3).map(k => `<span class="px-2 py-1 rounded-md bg-primary/5 text-[10px] font-bold text-primary uppercase tracking-wider border border-primary/10">${k}</span>`).join('')}
+                        </div>
+                        <div class="pt-4 border-t border-border-light flex justify-between items-center">
+                            <span class="text-text-dark font-bold">${job.salary || 'Negotiable'}</span>
+                            <a href="/job/${job._id}" class="text-sm font-semibold text-text-medium group-hover:text-primary flex items-center gap-1">
+                                View Details <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                            </a>
+                        </div>
+                    `;
+                    container.appendChild(el);
+
+                    // Trigger staggered animation manually since they are added after observer runs
+                    setTimeout(() => {
+                        el.classList.add('visible');
+                    }, index * 100);
+                });
+                lucide.createIcons(); // re-init icons for new HTML
+            } catch (err) {
+                console.error(err);
+                loading.classList.add('hidden');
+                errorEl.textContent = "Không tải được danh sách công việc";
+                errorEl.classList.remove('hidden');
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            fetchJobs(9);
+
+            // const searchBtn = document.getElementById('searchBtn');
+            // const searchInput = document.getElementById('searchInput');
+            // const locationInput = document.getElementById('locationInput');
+            // const suggestionsBox = document.getElementById('searchSuggestions');
+
+            // searchBtn.addEventListener('click', () => {
+            //     suggestionsBox.classList.add('hidden');
+            //     fetchJobs(9, searchInput.value, locationInput.value);
+            // });
+
+            // locationInput.addEventListener('change', () => {
+            //     fetchJobs(9, searchInput.value, locationInput.value);
+            // });
+
+            // searchInput.addEventListener('keydown', (e) => {
+            //     if (e.key === 'Enter') {
+            //         suggestionsBox.classList.add('hidden');
+            //         fetchJobs(9, searchInput.value, locationInput.value);
+            //     }
+            // });
+
+            // searchInput.addEventListener('input', (e) => {
+            //     const val = e.target.value.toLowerCase().trim();
+
+            //     if (!val) {
+            //         suggestionsBox.classList.add('hidden');
+            //         return;
+            //     }
+
+            //     // Filter safely, handling potentially malformed keywords data
+            //     const matches = allCachedJobs.filter(j => {
+            //         const titleMatch = (j.title || "").toLowerCase().includes(val);
+            //         let kwMatch = false;
+            //         if (Array.isArray(j.keywords)) {
+            //             kwMatch = j.keywords.some(k => String(k).toLowerCase().includes(val));
+            //         } else if (typeof j.keywords === 'string') {
+            //             kwMatch = j.keywords.toLowerCase().includes(val);
+            //         }
+            //         return titleMatch || kwMatch;
+            //     }).slice(0, 6);
+
+            //     if (matches.length > 0) {
+            //         suggestionsBox.innerHTML = matches.map(m => `
+            //             <div class="px-4 py-3 hover:bg-bg-gray cursor-pointer border-b border-border-light last:border-0 suggestion-item" data-title="${m.title}">
+            //                 <div class="font-bold text-text-dark text-sm w-full truncate">${m.title}</div>
+            //                 <div class="text-xs text-text-light flex items-center gap-1 mt-1">
+            //                     <i data-lucide="map-pin" class="w-3 h-3"></i> ${m.location || 'Remote/Onsite'}
+            //                 </div>
+            //             </div>
+            //         `).join('');
+
+            //         lucide.createIcons();
+            //         suggestionsBox.classList.remove('hidden');
+
+            //         document.querySelectorAll('.suggestion-item').forEach(item => {
+            //             item.addEventListener('click', function (evt) {
+            //                 evt.stopPropagation();
+            //                 searchInput.value = this.getAttribute('data-title');
+            //                 suggestionsBox.classList.add('hidden');
+            //                 fetchJobs(9, searchInput.value, locationInput.value);
+            //             });
+            //         });
+            //     } else {
+            //         suggestionsBox.classList.add('hidden');
+            //     }
+            // });
+
+            // document.addEventListener('click', (e) => {
+            //     if (!searchInput.contains(e.target) && !suggestionsBox.contains(e.target)) {
+            //         suggestionsBox.classList.add('hidden');
+            //     }
+            // });
+        });
+    </script>
+</body>
+
+</html>
