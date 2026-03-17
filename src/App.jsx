@@ -49,7 +49,7 @@ function PrivateRoute({ roles }) {
 }
 
 function RedirectToHome() {
-  window.location.href = "/index.html";
+  window.location.href = "/index_n.html";
   return null;
 }
 
