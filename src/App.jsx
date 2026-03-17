@@ -49,7 +49,7 @@ function PrivateRoute({ roles }) {
 }
 
 function RedirectToHome() {
-  window.location.href = "/index_merged.html";
+  window.location.href = "/index.html";
   return null;
 }
 
