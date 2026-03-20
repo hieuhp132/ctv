@@ -5,26 +5,24 @@
   font-family: "Segoe UI", system-ui, sans-serif;
 }
 
-/* HEADER */
-.profile-header {
+.profile-page .profile-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2.25rem;
 }
 
-.profile-header h2 {
+.profile-page .profile-header h2 {
   margin: 0;
   font-size: 1.8rem;
 }
 
-.subtitle {
+.profile-page .subtitle {
   color: #666;
   font-size: 0.9rem;
 }
 
-/* BUTTONS */
-.btn {
+.profile-page .btn {
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -35,17 +33,15 @@
   cursor: pointer;
 }
 
-.primary { background: #ff6b00; color: #fff; width: fit-content !important;}
-.success { background: #2e7d32; color: #fff; }
-/* .danger  { background: #c62828; color: #fff; } */
+.profile-page .primary { background: #ff6b00; color: #fff; width: fit-content !important;}
+.profile-page .success { background: #2e7d32; color: #fff; }
 
-.action-group {
+.profile-page .action-group {
   display: flex;
   gap: 0.5rem;
 }
 
-/* CARD */
-.card {
+.profile-page .card {
   background: #fff;
   border-radius: 16px;
   padding: 1.75rem 2.25rem;
@@ -54,7 +50,7 @@
   box-shadow: 0 6px 20px rgba(0,0,0,0.06);
 }
 
-.card h3 {
+.profile-page .card h3 {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -63,21 +59,21 @@
 }
 
 /* GRID */
-.grid {
+.profile-page .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   column-gap: 2.25rem;
   row-gap: 2rem;
 }
 
-.grid-item {
+.profile-page .grid-item {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
   min-height: 64px;
 }
 
-.grid label {
+.profile-page .grid label {
   font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -85,28 +81,27 @@
   color: #777;
 }
 
-.grid span,
-.grid input,
-.grid .badge {
+.profile-page .grid span,
+.profile-page .grid input,
+.profile-page .grid .badge {
   min-height: 40px;
   display: flex;
   align-items: center;
 }
 
-.grid span {
+.profile-page .grid span {
   font-size: 1rem;
   font-weight: 500;
 }
 
-.grid input {
+.profile-page .grid input {
   padding: 0.6rem 0.75rem;
   border-radius: 8px;
   border: 1px solid #ddd;
   font-size: 1rem;
 }
 
-/* BADGE */
-.badge {
+.profile-page .badge {
   padding: 0.3rem 0.7rem;
   border-radius: 20px;
   font-size: 0.75rem;
@@ -114,18 +109,17 @@
   display: inline-flex;
 }
 
-.badge.admin {
+.profile-page .badge.admin {
   background: #ffecec;
   color: #c62828;
 }
 
-.badge.recruiter {
+.profile-page .badge.recruiter {
   background: #e8f5e9;
   color: #2e7d32;
 }
 
-/* NOTE */
-.note {
+.profile-page .note {
   margin-top: 1.75rem;
   padding: 1rem;
   background: #f7f7f7;
@@ -136,17 +130,17 @@
 
 /* MOBILE */
 @media (max-width: 768px) {
-  .profile-header {
+  .profile-page .profile-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
   }
 
-  .card {
+  .profile-page .card {
     padding: 1.25rem;
   }
 
-  .grid {
+  .profile-page .grid {
     row-gap: 1.5rem;
   }
 }

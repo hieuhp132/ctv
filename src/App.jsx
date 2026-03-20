@@ -15,6 +15,8 @@ import Layout from "./components/Layout";
 import Pending from "./pages/pending/Pending";
 import Login from "./pages/login/Login";
 import SignUp from "./pages/signup/SignUp";
+import Home from "./pages/home/Home_Updated";
+
 // ADMIN
 import AdJobsList from "./pages/admin/jobs/All";
 import AdJobDetail from "./pages/admin/jobs/Detail";
@@ -73,7 +75,8 @@ function AppRoutes() {
         {/* PUBLIC */}
         <Route path="/" element={
           // <Home />
-          <RedirectToHome />
+          // <RedirectToHome />
+          <Home />
         } />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />

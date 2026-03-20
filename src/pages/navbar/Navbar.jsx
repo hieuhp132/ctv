@@ -95,7 +95,7 @@ export default function Navbar() {
   /* ================= RENDER ================= */
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-border-light">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-100 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             {/* LEFT LOGO */}
@@ -107,7 +107,12 @@ export default function Navbar() {
             </div>
 
             {/* MIDDLE LINKS */}
-
+            <div className="hidden md:flex items-center gap-10">
+              <a href="#" onClick={() => navigate("/")} className="text-sm font-semibold text-text-dark hover:text-primary transition-colors">Find Jobs</a>
+              <a href="#" onClick={() => navigate("/companies")} className="text-sm font-semibold text-text-dark hover:text-primary transition-colors">For Companies</a>
+              <a href="#" onClick={() => navigate("/headhunters")} className="text-sm font-semibold text-text-dark hover:text-primary transition-colors">Headhunters</a>
+              <a href="#" onClick={() => navigate("/resources")} className="text-sm font-semibold text-text-dark hover:text-primary transition-colors">Resources</a>
+            </div>
 
             {/* RIGHT DESKTOP */}
             <div className="hidden md:flex items-center gap-4">
