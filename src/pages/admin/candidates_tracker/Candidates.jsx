@@ -579,7 +579,7 @@ export default function CandidateManagement() {
             {data.map((r) => (
               <tr key={r._id} className="hover:bg-gray-50 transition-colors">
                 <td className="px-5 py-4 font-medium text-gray-900">{r.candidateName}</td>
-                <td className="px-5 py-4 text-gray-600 max-w-[200px] truncate" title={jobMap[r.job]?.title}>{jobMap[r.job]?.title || "Unknown Job"}</td>
+                <td className="px-5 py-4 text-gray-600 w-fit break-words" title={jobMap[r.job]?.title}>{jobMap[r.job]?.title || "Unknown Job"}</td>
                 <td className="px-5 py-4 text-gray-600">
                   {recruiterMap[r.recruiter]?.email ||
                     r.recruiter ||

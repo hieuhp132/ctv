@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext.jsx";
 import "./Navbar.css";
-import logoImg from "/logo.jpeg";
+import logoImg from "/logo.jfif";
 import { MdNotifications } from "react-icons/md";
 import { Menu, X } from "lucide-react";
 import Messenger from "../../components/Messenger.jsx";
@@ -100,14 +100,14 @@ export default function Navbar() {
           <div className="flex justify-between items-center h-20">
             {/* LEFT LOGO */}
             <div className="flex items-center gap-2 cursor-pointer" onClick={goHome}>
-              <div className="w-10 h-10 flex items-center justify-center">
+              <div className="w-20 h-20 flex items-center justify-center">
                 <img src={logoImg} alt="Logo" className="w-full h-full object-contain" />
               </div>
               <span className="text-2xl font-display font-bold text-text-dark tracking-tight"></span>
             </div>
 
             {/* MIDDLE LINKS */}
-     
+
 
             {/* RIGHT DESKTOP */}
             <div className="hidden md:flex items-center gap-4">

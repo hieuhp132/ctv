@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext.jsx";
 import "./Navbar.css";
-import logoImg from "../../assets/logo.png";
+import logoImg from "logo.jpeg";
 import { MdMessage, MdNotifications, MdMenu, MdClose } from "react-icons/md";
 import Messenger from "../../components/Messenger.jsx";
 import Notifications from "../../components/Notifications.jsx";
@@ -99,7 +99,7 @@ export default function Navbar() {
           {/* LEFT */}
           <div className="navbar-left">
             <button className="logo-btn" onClick={goHome}>
-              <img src={logoImg} alt="Logo" className="logo-img" /> 
+              <img src={logoImg} alt="Logo" className="logo-img" />
             </button>
           </div>
 
@@ -212,11 +212,11 @@ export default function Navbar() {
             ) : (
               <>
                 <button className="mobile-item" onClick={() => { navigate(`${user.role}/profile`); setMobileMenuOpen(false); }}>Profile</button>
-                { (Array.isArray(menuItemsByRole[user.role]) ? menuItemsByRole[user.role] : []).map((item) => (
+                {(Array.isArray(menuItemsByRole[user.role]) ? menuItemsByRole[user.role] : []).map((item) => (
                   <button key={item.path} className="mobile-item" onClick={() => { navigate(item.path); setMobileMenuOpen(false); }}>
                     {item.label}
                   </button>
-                )) }
+                ))}
                 <button className="mobile-item danger" onClick={() => { handleLogout(); setMobileMenuOpen(false); }}>Logout</button>
               </>
             )}
