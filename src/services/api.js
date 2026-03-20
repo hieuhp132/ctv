@@ -3,8 +3,8 @@ export const API_BASE =
     import.meta.env &&
     import.meta.env.VITE_API_BASE) ||
   (typeof window !== "undefined" &&
-  window.location &&
-  window.location.hostname === "localhost"
+    window.location &&
+    window.location.hostname === "localhost"
     ? "http://localhost:3000"
     : "https://apih.ant-tech.asia");
 import axios from "axios";
@@ -59,13 +59,13 @@ function readJson(key, fallback) {
 function writeJson(key, value) {
   try {
     localStorage.setItem(key, JSON.stringify(value));
-  } catch {}
+  } catch { }
 }
 
 function removeKey(key) {
   try {
     localStorage.removeItem(key);
-  } catch {}
+  } catch { }
 }
 
 function nowId(prefix = "id") {
@@ -386,8 +386,10 @@ export async function uploadFile(file) {
         errMsg = await response.text();
       }
 
-      return null;
+      console.error("UPLOAD ERROR:", errMsg); // ✅ thêm dòng này
+      throw new Error(errMsg); // ✅ đừng return null
     }
+
     const data = await response.json(); // Parse JSON response
 
     return data; // Return response data for further use

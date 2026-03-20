@@ -1,5 +1,31 @@
 [
   {
+    "id": "1774015142343",
+    "type": "job_updated",
+    "description": "Admin updated job \"Senior FinCrime Product Owner - Deblock\"",
+    "metadata": {
+      "jobId": "1773244017988",
+      "jobTitle": "Senior FinCrime Product Owner - Deblock",
+      "adminName": "Admin",
+      "adminRole": "admin",
+      "details": "general update"
+    },
+    "timestamp": "2026-03-20T13:59:02.343Z"
+  },
+  {
+    "id": "1774015112023",
+    "type": "job_updated",
+    "description": "Admin updated job \"Software Engineer (Full Stack) - Alliance\"",
+    "metadata": {
+      "jobId": "1773244609422",
+      "jobTitle": "Software Engineer (Full Stack) - Alliance",
+      "adminName": "Admin",
+      "adminRole": "admin",
+      "details": "general update"
+    },
+    "timestamp": "2026-03-20T13:58:32.023Z"
+  },
+  {
     "id": "1773515199542",
     "type": "job_created",
     "description": "Admin created job \"Senior FrontEnd Developer\"",

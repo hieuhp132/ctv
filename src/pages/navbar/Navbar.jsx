@@ -107,12 +107,12 @@ export default function Navbar() {
             </div>
 
             {/* MIDDLE LINKS */}
-            <div className="hidden md:flex items-center gap-10">
+            {/* <div className="hidden md:flex items-center gap-10">
               <a href="#" onClick={() => navigate("/")} className="text-sm font-semibold text-text-dark hover:text-primary transition-colors">Find Jobs</a>
               <a href="#" onClick={() => navigate("/companies")} className="text-sm font-semibold text-text-dark hover:text-primary transition-colors">For Companies</a>
               <a href="#" onClick={() => navigate("/headhunters")} className="text-sm font-semibold text-text-dark hover:text-primary transition-colors">Headhunters</a>
               <a href="#" onClick={() => navigate("/resources")} className="text-sm font-semibold text-text-dark hover:text-primary transition-colors">Resources</a>
-            </div>
+            </div> */}
 
             {/* RIGHT DESKTOP */}
             <div className="hidden md:flex items-center gap-4">

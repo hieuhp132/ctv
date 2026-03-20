@@ -2,12 +2,12 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
-import { 
-  getJobByIdL, 
-  createSubmissionL, 
-  updateJobL, 
-  getListFiles, 
-  uploadFile 
+import {
+  getJobByIdL,
+  createSubmissionL,
+  updateJobL,
+  getListFiles,
+  uploadFile
 } from "../../../services/api.js";
 import { useAuth } from "../../../context/AuthContext.jsx";
 import FilesView from "../../../components/FileView";
@@ -42,7 +42,7 @@ export default function JobDetail() {
 
   useEffect(() => {
     getJobByIdL(id).then((res) => setJob(res.job));
-    
+
     // Load PDF info from localStorage
     const storedPdf = localStorage.getItem(`pdf_${id}`);
     if (storedPdf) {
@@ -59,16 +59,16 @@ export default function JobDetail() {
   useEffect(() => {
     if (!job?.jdLink) return;
     getListFiles().then((files) => {
-      const matched = files?.find(f => 
-        decodeURIComponent(f.publicUrl.split("/").pop()) === 
+      const matched = files?.find(f =>
+        decodeURIComponent(f.publicUrl.split("/").pop()) ===
         decodeURIComponent(job.jdLink.split("/").pop())
       );
       setJdPublicUrl(matched?.publicUrl || null);
       setJdFileName(matched?.name || null);
-      
+
       // Check if PDF already exists
-      const pdfFile = files?.find(f => 
-        f.name.toLowerCase().includes(job.title?.toLowerCase().replace(/\s+/g, '_')) && 
+      const pdfFile = files?.find(f =>
+        f.name.toLowerCase().includes(job.title?.toLowerCase().replace(/\s+/g, '_')) &&
         f.name.endsWith('.pdf')
       );
       setPdfUrl(pdfFile?.publicUrl || null);
@@ -120,7 +120,7 @@ export default function JobDetail() {
       container.style.top = '-9999px';
       container.style.width = '800px'; // Use px for better compatibility
       container.style.background = 'white';
-      
+
       const jobDescription = cleanJobHtml(job.jobsdetail?.description || job.description || "");
       const jobRequirement = cleanJobHtml(job.jobsdetail?.requirement || job.requirements || "");
       const jobBenefits = cleanJobHtml(job.jobsdetail?.benefits || job.benefits || "");
@@ -253,7 +253,7 @@ export default function JobDetail() {
 
         </div>
       `;
-      
+
       document.body.appendChild(container);
 
       // Wait for content and potential images
@@ -304,7 +304,7 @@ export default function JobDetail() {
           const data = ctxFull.getImageData(0, y, width, 1).data;
           let whiteCount = 0;
           for (let i = 0; i < data.length; i += 4) {
-            const r = data[i], g = data[i+1], b = data[i+2], a = data[i+3];
+            const r = data[i], g = data[i + 1], b = data[i + 2], a = data[i + 3];
             if (a === 0 || (r > 245 && g > 245 && b > 245)) whiteCount++;
           }
           return whiteCount / (data.length / 4);
@@ -353,14 +353,23 @@ export default function JobDetail() {
 
       // Get PDF blob and upload
       const pdfBlob = pdf.output('blob');
-      const fileName = `${job.title?.replace(/\s+/g, '_') || 'job'}_${Date.now()}.pdf`;
+      const safeName = job.title
+        ?.normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^\w\s-]/g, "")
+        .replace(/\s+/g, "_")
+        .replace(/_+/g, "_")
+        .trim();
+
+      const fileName = `${safeName || "job"}_${Date.now()}.pdf`;
       const pdfFile = new File([pdfBlob], fileName, { type: 'application/pdf' });
 
       const res = await uploadFile(pdfFile);
+      console.log(res);
       if (res?.publicUrl) {
         setPdfUrl(res.publicUrl);
         setPdfFileName(fileName);
-        
+
         // Save to localStorage
         try {
           localStorage.setItem(`pdf_${id}`, JSON.stringify({
@@ -371,7 +380,7 @@ export default function JobDetail() {
         } catch (err) {
           console.error('Error saving PDF to localStorage:', err);
         }
-        
+
         alert('PDF created and uploaded successfully!');
       } else {
         alert('PDF created but upload failed');
@@ -390,14 +399,14 @@ export default function JobDetail() {
       // For now, just clear the state
       setPdfUrl(null);
       setPdfFileName(null);
-      
+
       // Remove from localStorage
       try {
         localStorage.removeItem(`pdf_${id}`);
       } catch (err) {
         console.error('Error removing PDF from localStorage:', err);
       }
-      
+
       alert("PDF deleted successfully!");
     } catch (err) {
       console.error('PDF deletion error:', err);
@@ -426,7 +435,7 @@ export default function JobDetail() {
 
           <section className="job-section">
             <h1>Description</h1>
-            <div className="job-html-content" dangerouslySetInnerHTML={{ __html: cleanJobHtml(job.jobsdetail.description)|| "No description provided" }} />
+            <div className="job-html-content" dangerouslySetInnerHTML={{ __html: cleanJobHtml(job.jobsdetail.description) || "No description provided" }} />
           </section>
 
           <section className="job-section">
@@ -466,7 +475,7 @@ export default function JobDetail() {
                 updateJobL({ _id: id, jdLink: data.publicUrl }).then(setJob);
                 setJdPublicUrl(data.publicUrl);
               }} />
-              
+
               <div style={{ height: 20 }} />
               <h4>Job Description PDF manuell</h4>
               {pdfUrl ? (
@@ -475,7 +484,7 @@ export default function JobDetail() {
                   <FilesView publicUrl={pdfUrl} name={pdfFileName} onDelete={handleDeletePDF} />
                 </div>
               ) : (
-                <button 
+                <button
                   onClick={handleCreatePDF}
                   disabled={creatingPDF}
                   style={{
@@ -534,22 +543,22 @@ export default function JobDetail() {
               <div className="form-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px' }}>
                 <div className="form-group">
                   <label>Full Name</label>
-                  <input required value={candidateForm.candidateName} onChange={(e) => setCandidateForm({...candidateForm, candidateName: e.target.value})} />
+                  <input required value={candidateForm.candidateName} onChange={(e) => setCandidateForm({ ...candidateForm, candidateName: e.target.value })} />
                 </div>
                 <div className="form-group">
                   <label>Email</label>
-                  <input type="email" required value={candidateForm.candidateEmail} onChange={(e) => setCandidateForm({...candidateForm, candidateEmail: e.target.value})} />
+                  <input type="email" required value={candidateForm.candidateEmail} onChange={(e) => setCandidateForm({ ...candidateForm, candidateEmail: e.target.value })} />
                 </div>
               </div>
-              
+
               <div className="form-group">
                 <label>Phone Number</label>
-                <input required value={candidateForm.candidatePhone} onChange={(e) => setCandidateForm({...candidateForm, candidatePhone: e.target.value})} />
+                <input required value={candidateForm.candidatePhone} onChange={(e) => setCandidateForm({ ...candidateForm, candidatePhone: e.target.value })} />
               </div>
 
               <div className="form-group">
                 <label>LinkedIn Profile</label>
-                <input value={candidateForm.linkedin} onChange={(e) => setCandidateForm({...candidateForm, linkedin: e.target.value})} />
+                <input value={candidateForm.linkedin} onChange={(e) => setCandidateForm({ ...candidateForm, linkedin: e.target.value })} />
               </div>
 
               <div className="form-group">
