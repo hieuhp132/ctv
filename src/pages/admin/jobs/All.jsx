@@ -8,12 +8,14 @@ import {
   saveJobL,
   updateJobL,
   createJobL,
+  
 } from "../../../services/api.js";
 import Section from "../../../components/Section.jsx";
 import Modal from "../../../components/Modal.jsx";
 import Filters from "../../../components/Filters.jsx";
 import { useAuth } from "../../../context/AuthContext";
 import { NavLink, useSearchParams } from "react-router-dom";
+import {createPDF } from "../../../utils/createPDF.js";
 
 const EMPTY_JOB_FORM = {
   title: "",
@@ -68,6 +70,10 @@ export default function All() {
   const [jobForm, setJobForm] = useState(EMPTY_JOB_FORM);
   const [editingJob, setEditingJob] = useState(null);
   const [showJobModal, setShowJobModal] = useState(false);
+  const [isMigrating, setIsMigrating] = useState(false);
+  const [migrationProgress, setMigrationProgress] = useState({ current: 0, total: 0 });
+  const [completedJobs, setCompletedJobs] = useState([]);
+
 
   const [searchText, setSearchText] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -124,7 +130,6 @@ export default function All() {
       let list = [...(res.jobs || [])].sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
       );
-
       if (user?.email) {
         const saved = await fetchSavedJobsL(user.email);
         const savedIds = new Set(
@@ -232,6 +237,7 @@ export default function All() {
     setJobForm(EMPTY_JOB_FORM);
     setShowJobModal(true);
   };
+
 
   const openEditModal = (job) => {
     setEditingJob(job);
@@ -355,6 +361,65 @@ export default function All() {
     }),
     menu: (base) => ({ ...base, zIndex: 9999 }),
   };
+
+
+  const handleMigrateJDs = async () => {
+    // Only target jobs that have a description but NO jdLink
+    // The check includes jobs where jdLink is undefined, null, or empty string
+    const toFill = jobs.filter((j) => !j.jdLink || j.jdLink === "");
+    
+    if (toFill.length === 0) {
+      alert("All jobs already have a Job Description link.");
+      return;
+    }
+
+    if (!window.confirm(`Found ${toFill.length} jobs without JD links. Start generating them now?`)) {
+      return;
+    }
+
+    setIsMigrating(true);
+    setMigrationProgress({ current: 0, total: toFill.length });
+    setCompletedJobs([]);
+
+    try {
+      // Process each job sequentially to avoid server overload
+      for (let i = 0; i < toFill.length; i++) {
+        const job = toFill[i];
+        setMigrationProgress((prev) => ({ ...prev, current: i + 1 }));
+
+        try {
+          const res = await createPDF({ job });
+          // Fixed: createPDF returns { url: string, name: string }
+          if (res?.url) {
+            const newJdLink = res.url;
+            
+            // 1. Update Server
+            await updateJobL({ _id: job._id, jdLink: newJdLink });
+
+            // 2. Update Local State immediately so the Card UI updates
+            setJobs((prevJobs) =>
+              prevJobs.map((j) =>
+                j._id === job._id ? { ...j, jdLink: newJdLink } : j
+              )
+            );
+
+            // 3. Track completed jobs
+            setCompletedJobs(prev => [...prev, { id: job._id, title: job.title, status: 'success' }]);
+          } else {
+            setCompletedJobs(prev => [...prev, { id: job._id, title: job.title, status: 'failed' }]);
+          }
+        } catch (err) {
+          console.error(`Failed to generate JD for job ${job._id}:`, err);
+          setCompletedJobs(prev => [...prev, { id: job._id, title: job.title, status: 'error' }]);
+        }
+      }
+    } catch (error) {
+      console.error("Migration process error:", error);
+    } finally {
+      // Keep isMigrating true to show final results list
+    }
+  };
+
   /* ================= RENDER ================= */
   return (
     <div className="admin-dashboard">
@@ -386,7 +451,14 @@ export default function All() {
         title="ACTIVE JOBS"
         color="green"
         count={activeJobs.length}
-        action={<button onClick={openAddModal}>+ Add Job</button>}
+        actions={[
+          <button key="add" onClick={openAddModal}>+ Add Job</button>,
+          user?.role === "admin" && (
+            <button key="migrate" onClick={handleMigrateJDs} disabled={isMigrating}>
+              {isMigrating ? "Migrating..." : "Migrate JDs"}
+            </button>
+          ),
+        ].filter(Boolean)}
         jobs={paginate(activeJobs, activePage)}
         page={activePage}
         totalPages={Math.ceil(activeJobs.length / jobsPerPage)}
@@ -432,6 +504,43 @@ export default function All() {
         onSubmit={submitJobForm}
         onClose={() => setShowJobModal(false)}
       />
+
+      {isMigrating && (
+        <div className="migration-overlay">
+          <div className="migration-card">
+            <div className="migration-header">
+              <h3>{migrationProgress.current === migrationProgress.total ? "Migration Complete!" : "Generating Job Descriptions..."}</h3>
+              {migrationProgress.current === migrationProgress.total && (
+                <button className="close-migration" onClick={() => setIsMigrating(false)}>×</button>
+              )}
+            </div>
+            
+            <div className="progress-bar-container">
+              <div 
+                className="progress-bar-fill" 
+                style={{ width: `${(migrationProgress.current / migrationProgress.total) * 100}%` }}
+              ></div>
+            </div>
+            
+            <p>Processing job {migrationProgress.current} of {migrationProgress.total}</p>
+            
+            <div className="migration-list">
+              {completedJobs.map((job, idx) => (
+                <div key={job.id + idx} className={`migration-item ${job.status}`}>
+                  <span className="job-title-mini">{job.title}</span>
+                  <span className="job-status-badge">
+                    {job.status === 'success' ? '✓ Success' : '✗ Failed'}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            {migrationProgress.current !== migrationProgress.total && (
+              <span className="migration-warning">Please do not close this window.</span>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -10,7 +10,7 @@ export default function Section({
   onPrev,
   onNext,
   gridProps,
-  action,
+  actions,
   role,
   count,
 }) {
@@ -25,7 +25,12 @@ export default function Section({
             </span>
           )}
         </h2>
-        {action && <div className="section-action">{action}</div>}
+        {actions && (
+          <div className="section-action flex items-center gap-2">
+            {actions}
+            {}
+          </div>
+        )}
       </div>
 
       {/* GIỮ CHIỀU CAO CỐ ĐỊNH */}

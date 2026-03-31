@@ -9,6 +9,10 @@ const upload = multer({ storage });
 // Upload route
 router.post("/upload", upload.single("file"), supabaseCtrl.uploadFile);
 
+// Debug routes 👇
+router.get("/debug/list-files", supabaseCtrl.debugListAllFiles);
+router.get("/debug/upload-local", supabaseCtrl.debugUploadLocal);
+
 // Other routes
 router.get("/download/:filename", supabaseCtrl.downloadFile);
 router.delete("/delete/:filename", supabaseCtrl.deleteFile);

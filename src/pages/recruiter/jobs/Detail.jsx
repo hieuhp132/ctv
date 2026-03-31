@@ -15,7 +15,7 @@ import FileUploader from "../../../components/FileUploader";
 import Comments from "../../../components/Comments";
 import Activity from "../../../components/Activity";
 import SubmitCandidateModal from "../../../components/SubmitCandidateModal";
-import { cleanJobHtml } from "../../../components/CleanJobHtml.jsx";
+import { cleanJobHtml } from "../../../utils/cleanJobHtml.js";
 import "./Detail.css";
 
 export default function JobDetail() {
@@ -58,23 +58,37 @@ export default function JobDetail() {
   }, [id]);
 
   useEffect(() => {
-    if (!job?.jdLink) return;
+    if (!job?.jdLink) {
+      setJdPublicUrl(null);
+      setJdFileName(null);
+      return;
+    }
+
+    // Direct assignment if it's already a full URL
+    if (job.jdLink.startsWith("http")) {
+      setJdPublicUrl(job.jdLink);
+      const fileName = decodeURIComponent(job.jdLink.split("/").pop());
+      setJdFileName(fileName || "Job_Description.pdf");
+    }
+
     getListFiles().then((files) => {
       const matched = files?.find(f => 
         decodeURIComponent(f.publicUrl.split("/").pop()) === 
         decodeURIComponent(job.jdLink.split("/").pop())
       );
-      setJdPublicUrl(matched?.publicUrl || null);
-      setJdFileName(matched?.name || null);
+      if (matched) {
+        setJdPublicUrl(matched.publicUrl);
+        setJdFileName(matched.name);
+      }
       
       // Check if PDF already exists
       const pdfFile = files?.find(f => 
         f.name.toLowerCase().includes(job.title?.toLowerCase().replace(/\s+/g, '_')) && 
         f.name.endsWith('.pdf')
       );
-      setPdfUrl(pdfFile?.publicUrl || null);
+      if (pdfFile) setPdfUrl(pdfFile.publicUrl);
     });
-  }, [job?.jdLink]);
+  }, [job?.jdLink, job?.title]);
 
   const keywords = useMemo(() => {
     if (!job?.keywords) return [];

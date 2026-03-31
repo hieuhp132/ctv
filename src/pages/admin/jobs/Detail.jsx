@@ -15,7 +15,8 @@ import FileUploader from "../../../components/FileUploader";
 import Comments from "../../../components/Comments";
 import Activity from "../../../components/Activity";
 import "./Detail.css";
-import { cleanJobHtml } from "../../../components/CleanJobHtml.jsx";
+import { cleanJobHtml } from "../../../utils/cleanJobHtml.js";
+import { createPDF } from "../../../utils/createPDF.js";
 
 export default function JobDetail() {
   const { id } = useParams();
@@ -57,23 +58,37 @@ export default function JobDetail() {
   }, [id]);
 
   useEffect(() => {
-    if (!job?.jdLink) return;
+    if (!job?.jdLink) {
+      setJdPublicUrl(null);
+      setJdFileName(null);
+      return;
+    }
+
+    // Direct assignment if it's already a full URL
+    if (job.jdLink.startsWith("http")) {
+      setJdPublicUrl(job.jdLink);
+      const fileName = decodeURIComponent(job.jdLink.split("/").pop());
+      setJdFileName(fileName || "Job_Description.pdf");
+    }
+
     getListFiles().then((files) => {
       const matched = files?.find(f =>
         decodeURIComponent(f.publicUrl.split("/").pop()) ===
         decodeURIComponent(job.jdLink.split("/").pop())
       );
-      setJdPublicUrl(matched?.publicUrl || null);
-      setJdFileName(matched?.name || null);
+      if (matched) {
+        setJdPublicUrl(matched.publicUrl);
+        setJdFileName(matched.name);
+      }
 
       // Check if PDF already exists
       const pdfFile = files?.find(f =>
         f.name.toLowerCase().includes(job.title?.toLowerCase().replace(/\s+/g, '_')) &&
         f.name.endsWith('.pdf')
       );
-      setPdfUrl(pdfFile?.publicUrl || null);
+      if (pdfFile) setPdfUrl(pdfFile.publicUrl);
     });
-  }, [job?.jdLink]);
+  }, [job?.jdLink, job?.title]);
 
   const keywords = useMemo(() => {
     if (!job?.keywords) return [];
@@ -108,290 +123,298 @@ export default function JobDetail() {
   };
 
 
-  const handleCreatePDF = async () => {
-    if (!job) return alert("Job data not available");
-    try {
-      setCreatingPDF(true);
+  // const createPDF(job) = async () => {
+  //   if (!job) return alert("Job data not available");
+  //   try {
+  //     setCreatingPDF(true);
 
-      // Create temporary container with content
-      const container = document.createElement('div');
-      container.style.position = 'fixed';
-      container.style.left = '-9999px';
-      container.style.top = '-9999px';
-      container.style.width = '800px'; // Use px for better compatibility
-      container.style.background = 'white';
+  //     // Create temporary container with content
+  //     const container = document.createElement('div');
+  //     container.style.position = 'fixed';
+  //     container.style.left = '-9999px';
+  //     container.style.top = '-9999px';
+  //     container.style.width = '800px'; // Use px for better compatibility
+  //     container.style.background = 'white';
 
-      const jobDescription = cleanJobHtml(job.jobsdetail?.description || job.description || "");
-      const jobRequirement = cleanJobHtml(job.jobsdetail?.requirement || job.requirements || "");
-      const jobBenefits = cleanJobHtml(job.jobsdetail?.benefits || job.benefits || "");
-      const jobOther = cleanJobHtml(job.jobsdetail?.other || job.other || "");
+  //     const jobDescription = cleanJobHtml(job.jobsdetail?.description || job.description || "");
+  //     const jobRequirement = cleanJobHtml(job.jobsdetail?.requirement || job.requirements || "");
+  //     const jobBenefits = cleanJobHtml(job.jobsdetail?.benefits || job.benefits || "");
+  //     const jobOther = cleanJobHtml(job.jobsdetail?.other || job.other || "");
 
-      container.innerHTML = `
-        <style>
-          * { box-sizing: border-box; -webkit-print-color-adjust: exact; }
-          .pdf-container {
-            font-family: "Arial", sans-serif;
-            color: #374151;
-            line-height: 1.7;
-            padding: 40px;
-            width: 800px;
-            background: white;
-          }
-          .job-title {
-            font-size: 24px;
-            font-weight: bold;
-            color: #111827;
-            margin: 0 0 16px 0;
-            padding-bottom: 12px;
-            border-bottom: 2px solid #3b82f6;
-          }
-          .info-grid {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 24px;
-          }
-          .info-item {
-            flex: 1;
-            background: #f3f4f6;
-            padding: 12px;
-            border-radius: 6px;
-          }
-          .info-label {
-            font-size: 11px;
-            font-weight: bold;
-            color: #6b7280;
-            text-transform: uppercase;
-            margin-bottom: 4px;
-          }
-          .info-value {
-            font-size: 14px;
-            font-weight: bold;
-            color: #111827;
-          }
-          .tags {
-            margin-bottom: 24px;
-          }
-          .tag {
-            display: inline-block;
-            background: #dbeafe;
-            color: #1e40af;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: bold;
-            margin-right: 6px;
-            margin-bottom: 6px;
-          }
-          .section {
-            margin-bottom: 24px;
-            background: white;
-            border-radius: 10px;
-            padding: 24px;
-            border: 1px solid #e5e7eb;
-          }
-          .section-title {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #111827;
-            margin: 0 0 16px 0;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #f3f4f6;
-            text-transform: none; /* Trả về dạng thường giống web */
-          }
-          .section-content {
-            font-size: 15px;
-            line-height: 1.7;
-            color: #374151;
-            white-space: pre-wrap;
-            word-break: break-word; /* Đảm bảo không tràn nhưng vẫn tự nhiên */
-          }
-          .section-content p { margin-bottom: 12px; }
-          .section-content ul, .section-content ol { padding-left: 24px; margin-bottom: 16px; }
-          .section-content li { margin-bottom: 8px; }
-          .section-content strong { color: #111827; }
-        </style>
-        <div class="pdf-container">
-          <h1 class="job-title">${job.title || "Job Description"}</h1>
+  //     container.innerHTML = `
+  //       <style>
+  //         * { box-sizing: border-box; -webkit-print-color-adjust: exact; }
+  //         .pdf-container {
+  //           font-family: "Arial", sans-serif;
+  //           color: #374151;
+  //           line-height: 1.7;
+  //           padding: 40px;
+  //           width: 800px;
+  //           background: white;
+  //         }
+  //         .job-title {
+  //           font-size: 24px;
+  //           font-weight: bold;
+  //           color: #111827;
+  //           margin: 0 0 16px 0;
+  //           padding-bottom: 12px;
+  //           border-bottom: 2px solid #3b82f6;
+  //         }
+  //         .info-grid {
+  //           display: flex;
+  //           gap: 20px;
+  //           margin-bottom: 24px;
+  //         }
+  //         .info-item {
+  //           flex: 1;
+  //           background: #f3f4f6;
+  //           padding: 12px;
+  //           border-radius: 6px;
+  //         }
+  //         .info-label {
+  //           font-size: 11px;
+  //           font-weight: bold;
+  //           color: #6b7280;
+  //           text-transform: uppercase;
+  //           margin-bottom: 4px;
+  //         }
+  //         .info-value {
+  //           font-size: 14px;
+  //           font-weight: bold;
+  //           color: #111827;
+  //         }
+  //         .tags {
+  //           margin-bottom: 24px;
+  //         }
+  //         .tag {
+  //           display: inline-block;
+  //           background: #dbeafe;
+  //           color: #1e40af;
+  //           padding: 4px 10px;
+  //           border-radius: 12px;
+  //           font-size: 11px;
+  //           font-weight: bold;
+  //           margin-right: 6px;
+  //           margin-bottom: 6px;
+  //         }
+  //         .section {
+  //           margin-bottom: 24px;
+  //           background: white;
+  //           border-radius: 10px;
+  //           padding: 24px;
+  //           border: 1px solid #e5e7eb;
+  //         }
+  //         .section-title {
+  //           font-size: 1.25rem;
+  //           font-weight: 700;
+  //           color: #111827;
+  //           margin: 0 0 16px 0;
+  //           padding-bottom: 8px;
+  //           border-bottom: 2px solid #f3f4f6;
+  //           text-transform: none; /* Trả về dạng thường giống web */
+  //         }
+  //         .section-content {
+  //           font-size: 15px;
+  //           line-height: 1.7;
+  //           color: #374151;
+  //           white-space: pre-wrap;
+  //           word-break: break-word; /* Đảm bảo không tràn nhưng vẫn tự nhiên */
+  //         }
+  //         .section-content p { margin-bottom: 12px; }
+  //         .section-content ul, .section-content ol { padding-left: 24px; margin-bottom: 16px; }
+  //         .section-content li { margin-bottom: 8px; }
+  //         .section-content strong { color: #111827; }
+  //       </style>
+  //       <div class="pdf-container">
+  //         <h1 class="job-title">${job.title || "Job Description"}</h1>
           
-          <div class="info-grid">
-            <div class="info-item">
-              <div class="info-label">Salary</div>
-              <div class="info-value">${job.salary || "Negotiable"}</div>
-            </div>
-            <div class="info-item">
-              <div class="info-label">Location</div>
-              <div class="info-value">${job.location || "Remote"}</div>
-            </div>
-          </div>
+  //         <div class="info-grid">
+  //           <div class="info-item">
+  //             <div class="info-label">Salary</div>
+  //             <div class="info-value">${job.salary || "Negotiable"}</div>
+  //           </div>
+  //           <div class="info-item">
+  //             <div class="info-label">Location</div>
+  //             <div class="info-value">${job.location || "Remote"}</div>
+  //           </div>
+  //         </div>
 
-          ${keywords.length > 0 ? `
-            <div class="tags">
-              ${keywords.map(k => `<span class="tag">${k}</span>`).join('')}
-            </div>
-          ` : ''}
+  //         ${keywords.length > 0 ? `
+  //           <div class="tags">
+  //             ${keywords.map(k => `<span class="tag">${k}</span>`).join('')}
+  //           </div>
+  //         ` : ''}
 
-          ${jobDescription ? `
-            <div class="section">
-              <h3 class="section-title">Description</h3>
-              <div class="section-content">${jobDescription}</div>
-            </div>
-          ` : ''}
+  //         ${jobDescription ? `
+  //           <div class="section">
+  //             <h3 class="section-title">Description</h3>
+  //             <div class="section-content">${jobDescription}</div>
+  //           </div>
+  //         ` : ''}
 
-          ${jobRequirement ? `
-            <div class="section">
-              <h3 class="section-title">Requirements</h3>
-              <div class="section-content">${jobRequirement}</div>
-            </div>
-          ` : ''}
+  //         ${jobRequirement ? `
+  //           <div class="section">
+  //             <h3 class="section-title">Requirements</h3>
+  //             <div class="section-content">${jobRequirement}</div>
+  //           </div>
+  //         ` : ''}
 
-          ${jobBenefits ? `
-            <div class="section">
-              <h3 class="section-title">Benefits</h3>
-              <div class="section-content">${jobBenefits}</div>
-            </div>
-          ` : ''}
+  //         ${jobBenefits ? `
+  //           <div class="section">
+  //             <h3 class="section-title">Benefits</h3>
+  //             <div class="section-content">${jobBenefits}</div>
+  //           </div>
+  //         ` : ''}
 
-        </div>
-      `;
+  //       </div>
+  //     `;
 
-      document.body.appendChild(container);
+  //     document.body.appendChild(container);
 
-      // Wait for content and potential images
-      await new Promise(resolve => setTimeout(resolve, 1000));
+  //     // Wait for content and potential images
+  //     await new Promise(resolve => setTimeout(resolve, 1000));
 
-      const canvas = await html2canvas(container, {
-        scale: 2,
-        useCORS: true,
-        logging: false,
-        backgroundColor: '#ffffff'
-      });
+  //     const canvas = await html2canvas(container, {
+  //       scale: 2,
+  //       useCORS: true,
+  //       logging: false,
+  //       backgroundColor: '#ffffff'
+  //     });
 
-      document.body.removeChild(container);
+  //     document.body.removeChild(container);
 
-      const imgData = canvas.toDataURL('image/jpeg', 0.95);
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
-        format: 'a4',
-        compress: true
-      });
+  //     const imgData = canvas.toDataURL('image/jpeg', 0.95);
+  //     const pdf = new jsPDF({
+  //       orientation: 'portrait',
+  //       unit: 'mm',
+  //       format: 'a4',
+  //       compress: true
+  //     });
 
-      const pdfWidth = 210; // A4 width in mm
-      const pdfHeight = 297; // A4 height in mm
-      const margin = 10; // 10mm margins
-      const contentWidth = pdfWidth - 2 * margin;
-      const contentHeight = pdfHeight - 2 * margin;
+  //     const pdfWidth = 210; // A4 width in mm
+  //     const pdfHeight = 297; // A4 height in mm
+  //     const margin = 10; // 10mm margins
+  //     const contentWidth = pdfWidth - 2 * margin;
+  //     const contentHeight = pdfHeight - 2 * margin;
 
-      // Calculate image dimensions in mm
-      const imgWidthMM = contentWidth;
-      const imgHeightMM = (canvas.height * imgWidthMM) / canvas.width;
+  //     // Calculate image dimensions in mm
+  //     const imgWidthMM = contentWidth;
+  //     const imgHeightMM = (canvas.height * imgWidthMM) / canvas.width;
 
-      if (imgHeightMM <= contentHeight) {
-        // Fits on one page
-        pdf.addImage(imgData, 'JPEG', margin, margin, imgWidthMM, imgHeightMM);
-      } else {
-        // Spans multiple pages
-        let sourceY = 0;
-        let pageNumber = 0;
+  //     if (imgHeightMM <= contentHeight) {
+  //       // Fits on one page
+  //       pdf.addImage(imgData, 'JPEG', margin, margin, imgWidthMM, imgHeightMM);
+  //     } else {
+  //       // Spans multiple pages
+  //       let sourceY = 0;
+  //       let pageNumber = 0;
 
-        // Detection settings
-        const ctxFull = canvas.getContext('2d', { willReadFrequently: true });
-        const width = canvas.width;
-        const SCAN_RANGE = Math.floor(canvas.height / imgHeightMM * 20); // Scan 20mm range
-        const THRESH = 0.98; // 98% white is considered safe
-        const rowWhiteness = (y) => {
-          if (y < 0 || y >= canvas.height) return 0;
-          const data = ctxFull.getImageData(0, y, width, 1).data;
-          let whiteCount = 0;
-          for (let i = 0; i < data.length; i += 4) {
-            const r = data[i], g = data[i + 1], b = data[i + 2], a = data[i + 3];
-            if (a === 0 || (r > 245 && g > 245 && b > 245)) whiteCount++;
-          }
-          return whiteCount / (data.length / 4);
-        };
+  //       // Detection settings
+  //       const ctxFull = canvas.getContext('2d', { willReadFrequently: true });
+  //       const width = canvas.width;
+  //       const SCAN_RANGE = Math.floor(canvas.height / imgHeightMM * 20); // Scan 20mm range
+  //       const THRESH = 0.98; // 98% white is considered safe
+  //       const rowWhiteness = (y) => {
+  //         if (y < 0 || y >= canvas.height) return 0;
+  //         const data = ctxFull.getImageData(0, y, width, 1).data;
+  //         let whiteCount = 0;
+  //         for (let i = 0; i < data.length; i += 4) {
+  //           const r = data[i], g = data[i + 1], b = data[i + 2], a = data[i + 3];
+  //           if (a === 0 || (r > 245 && g > 245 && b > 245)) whiteCount++;
+  //         }
+  //         return whiteCount / (data.length / 4);
+  //       };
 
-        while (sourceY < canvas.height) {
-          if (pageNumber > 0) pdf.addPage();
+  //       while (sourceY < canvas.height) {
+  //         if (pageNumber > 0) pdf.addPage();
 
-          // Target end in canvas pixels
-          const canvasHeightPerPage = (contentHeight * canvas.width) / imgWidthMM;
-          let targetEnd = Math.min(sourceY + canvasHeightPerPage, canvas.height);
+  //         // Target end in canvas pixels
+  //         const canvasHeightPerPage = (contentHeight * canvas.width) / imgWidthMM;
+  //         let targetEnd = Math.min(sourceY + canvasHeightPerPage, canvas.height);
 
-          // If not the last page, find best cut point
-          if (targetEnd < canvas.height) {
-            let bestY = targetEnd;
-            let bestScore = -1;
-            for (let dy = 0; dy <= SCAN_RANGE; dy++) {
-              const y = targetEnd - dy;
-              if (y <= sourceY) break;
-              const s = rowWhiteness(y);
-              if (s > bestScore) {
-                bestScore = s;
-                bestY = y;
-              }
-              if (s >= THRESH) break; // Found a good enough spot
-            }
-            targetEnd = bestY;
-          }
+  //         // If not the last page, find best cut point
+  //         if (targetEnd < canvas.height) {
+  //           let bestY = targetEnd;
+  //           let bestScore = -1;
+  //           for (let dy = 0; dy <= SCAN_RANGE; dy++) {
+  //             const y = targetEnd - dy;
+  //             if (y <= sourceY) break;
+  //             const s = rowWhiteness(y);
+  //             if (s > bestScore) {
+  //               bestScore = s;
+  //               bestY = y;
+  //             }
+  //             if (s >= THRESH) break; // Found a good enough spot
+  //           }
+  //           targetEnd = bestY;
+  //         }
 
-          const sourceHeight = targetEnd - sourceY;
-          const displayHeightMM = (sourceHeight * imgWidthMM) / canvas.width;
+  //         const sourceHeight = targetEnd - sourceY;
+  //         const displayHeightMM = (sourceHeight * imgWidthMM) / canvas.width;
 
-          // Create temporary canvas for the slice
-          const tempCanvas = document.createElement('canvas');
-          tempCanvas.width = canvas.width;
-          tempCanvas.height = sourceHeight;
-          const tempCtx = tempCanvas.getContext('2d');
-          tempCtx.drawImage(canvas, 0, sourceY, canvas.width, sourceHeight, 0, 0, canvas.width, sourceHeight);
+  //         // Create temporary canvas for the slice
+  //         const tempCanvas = document.createElement('canvas');
+  //         tempCanvas.width = canvas.width;
+  //         tempCanvas.height = sourceHeight;
+  //         const tempCtx = tempCanvas.getContext('2d');
+  //         tempCtx.drawImage(canvas, 0, sourceY, canvas.width, sourceHeight, 0, 0, canvas.width, sourceHeight);
 
-          pdf.addImage(tempCanvas.toDataURL('image/jpeg', 0.95), 'JPEG', margin, margin, imgWidthMM, displayHeightMM);
+  //         pdf.addImage(tempCanvas.toDataURL('image/jpeg', 0.95), 'JPEG', margin, margin, imgWidthMM, displayHeightMM);
 
-          sourceY = targetEnd;
-          pageNumber++;
-        }
-      }
+  //         sourceY = targetEnd;
+  //         pageNumber++;
+  //       }
+  //     }
 
-      // Get PDF blob and upload
-      const pdfBlob = pdf.output('blob');
-      const safeName = job.title
-        ?.normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^\w\s-]/g, "")
-        .replace(/\s+/g, "_")
-        .replace(/_+/g, "_")
-        .trim();
+  //     // Get PDF blob and upload
+  //     const pdfBlob = pdf.output('blob');
+  //     const safeName = job.title
+  //       ?.normalize("NFD")
+  //       .replace(/[\u0300-\u036f]/g, "")
+  //       .replace(/[^\w\s-]/g, "")
+  //       .replace(/\s+/g, "_")
+  //       .replace(/_+/g, "_")
+  //       .trim();
 
-      const fileName = `${safeName || "job"}_${Date.now()}.pdf`;
-      const pdfFile = new File([pdfBlob], fileName, { type: 'application/pdf' });
+  //     const fileName = `${safeName || "job"}_${Date.now()}.pdf`;
+  //     const pdfFile = new File([pdfBlob], fileName, { type: 'application/pdf' });
 
-      const res = await uploadFile(pdfFile);
-      console.log(res);
-      if (res?.publicUrl) {
-        setPdfUrl(res.publicUrl);
-        setPdfFileName(fileName);
+  //     const res = await uploadFile(pdfFile);
+  //     console.log(res);
+  //     if (res?.publicUrl) {
+  //       setPdfUrl(res.publicUrl);
+  //       setPdfFileName(fileName);
 
-        // Save to localStorage
-        try {
-          localStorage.setItem(`pdf_${id}`, JSON.stringify({
-            url: res.publicUrl,
-            name: fileName,
-            createdAt: new Date().toISOString()
-          }));
-        } catch (err) {
-          console.error('Error saving PDF to localStorage:', err);
-        }
+  //       // Save to localStorage
+  //       try {
+  //         localStorage.setItem(`pdf_${id}`, JSON.stringify({
+  //           url: res.publicUrl,
+  //           name: fileName,
+  //           createdAt: new Date().toISOString()
+  //         }));
+  //       } catch (err) {
+  //         console.error('Error saving PDF to localStorage:', err);
+  //       }
 
-        alert('PDF created and uploaded successfully!');
-      } else {
-        alert('PDF created but upload failed');
-      }
-    } catch (err) {
-      console.error('PDF creation error:', err);
-      alert('Failed to create PDF: ' + err.message);
-    } finally {
-      setCreatingPDF(false);
-    }
-  };
+  //       alert('PDF created and uploaded successfully!');
+  //     } else {
+  //       alert('PDF created but upload failed');
+  //     }
+  //   } catch (err) {
+  //     console.error('PDF creation error:', err);
+  //     alert('Failed to create PDF: ' + err.message);
+  //   } finally {
+  //     setCreatingPDF(false);
+  //   }
+  // };
+
+const handleCreatePDF = async () => {
+  setCreatingPDF(true);
+  const res = await createPDF({ job, keywords });
+  setPdfUrl(res.url);
+  setPdfFileName(res.name);
+  setCreatingPDF(false);
+};
 
   const handleDeletePDF = async () => {
     try {
@@ -418,7 +441,6 @@ export default function JobDetail() {
 
   return (
     <div className="job-detail">
-      {console.log("Rendering JobDetail with job:", job)}
       <header className="page-header">
         <h2>{job.title || "Untitled Job"}</h2>
         <div className="job-tags">
