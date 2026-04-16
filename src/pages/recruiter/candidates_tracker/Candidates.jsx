@@ -26,7 +26,7 @@ const paginate = (data, page) =>
 /* ================= AUTOCOMPLETE INPUT ================= */
 const AutocompleteInput = ({ label, placeholder, value, onChange, options }) => {
   const [isOpen, setIsOpen] = useState(false);
-  
+
   const filteredOptions = useMemo(() => {
     if (!value) return options.slice(0, 10);
     return options.filter(o => o.toLowerCase().includes(value.toLowerCase()) && o !== value).slice(0, 10);
@@ -46,9 +46,9 @@ const AutocompleteInput = ({ label, placeholder, value, onChange, options }) => 
       {isOpen && filteredOptions.length > 0 && (
         <ul className="absolute z-10 top-full mt-1 left-0 right-0 bg-white border border-gray-100 shadow-xl rounded-xl max-h-48 overflow-y-auto custom-scrollbar">
           {filteredOptions.map((o, i) => (
-            <li 
-              key={i} 
-              className="px-4 py-2 hover:bg-gray-50 cursor-pointer text-sm font-medium text-gray-700" 
+            <li
+              key={i}
+              className="px-4 py-2 hover:bg-gray-50 cursor-pointer text-sm font-medium text-gray-700"
               onClick={() => { onChange(o); setIsOpen(false); }}
             >
               {o}
@@ -84,11 +84,11 @@ function CandidateTable({ title, rows, jobMap }) {
     const names = new Set();
     const jobs = new Set();
     const emails = new Set();
-    
+
     rows.forEach(r => {
-       if (r.candidateName) names.add(r.candidateName);
-       if (r.candidateEmail) emails.add(r.candidateEmail);
-       if (r.job && jobMap[r.job]?.title) jobs.add(jobMap[r.job].title);
+      if (r.candidateName) names.add(r.candidateName);
+      if (r.candidateEmail) emails.add(r.candidateEmail);
+      if (r.job && jobMap[r.job]?.title) jobs.add(jobMap[r.job].title);
     });
     return {
       candidates: Array.from(names),
@@ -122,16 +122,16 @@ function CandidateTable({ title, rows, jobMap }) {
 
   const handleApply = () => setAppliedFilters(localFilters);
   const handleClear = () => {
-     const empty = { status: "", candidate: "", job: "", email: "" };
-     setLocalFilters(empty);
-     setAppliedFilters(empty);
+    const empty = { status: "", candidate: "", job: "", email: "" };
+    setLocalFilters(empty);
+    setAppliedFilters(empty);
   };
 
   return (
     <div className="mb-12 relative">
       <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2 px-2">
-          {title}
-          <span className="ml-2 px-2.5 py-0.5 rounded-full bg-gray-200 text-xs font-semibold text-gray-700">{filtered.length}</span>
+        {title}
+        <span className="ml-2 px-2.5 py-0.5 rounded-full bg-gray-200 text-xs font-semibold text-gray-700">{filtered.length}</span>
       </h3>
 
       {/* FILTER */}
@@ -204,28 +204,28 @@ function CandidateTable({ title, rows, jobMap }) {
             <tbody className="divide-y divide-gray-100">
               {paged.map((c) => (
                 <tr key={c._id} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-5 py-4 font-medium text-gray-900">{c.candidateName}</td>
-                  <td className="px-5 py-4 text-gray-600 max-w-[200px] truncate" title={jobMap[c.job]?.title}>{jobMap[c.job]?.title || "-"}</td>
+                  <td className="px-5 py-4 font-medium text-gray-900 w-fit break-words">{c.candidateName}</td>
+                  <td className="px-5 py-4 text-gray-600 w-fit break-words" title={jobMap[c.job]?.title}>{jobMap[c.job]?.title || "-"}</td>
                   <td className="px-5 py-4 text-gray-600 font-semibold">{jobMap[c.job]?.salary || "-"}</td>
                   <td className="px-5 py-4">
-                      {c.status ? (
-                          <span className={`px-2.5 py-1 rounded-full text-xs font-bold leading-none
+                    {c.status ? (
+                      <span className={`px-2.5 py-1 rounded-full text-xs font-bold leading-none
                               ${c.status === 'hired' ? 'bg-green-100 text-green-700' :
-                              c.status === 'rejected' ? 'bg-red-100 text-red-700' :
-                              c.status.includes('review') ? 'bg-yellow-100 text-yellow-700' :
+                          c.status === 'rejected' ? 'bg-red-100 text-red-700' :
+                            c.status.includes('review') ? 'bg-yellow-100 text-yellow-700' :
                               c.status === 'offer' ? 'bg-purple-100 text-purple-700' :
-                              'bg-blue-100 text-blue-700'}`}
-                          >
-                              {c.status.replace(/_/g, ' ').toUpperCase()}
-                          </span>
-                      ) : (
-                          "-"
-                      )}
+                                'bg-blue-100 text-blue-700'}`}
+                      >
+                        {c.status.replace(/_/g, ' ').toUpperCase()}
+                      </span>
+                    ) : (
+                      "-"
+                    )}
                   </td>
                   <td className="px-5 py-4 text-gray-600 font-semibold">{c.bonus ?? "-"}</td>
                   <td className="px-5 py-4 text-gray-600">{c.candidateEmail || "-"}</td>
                   <td className="px-5 py-4 text-gray-600">{c.candidatePhone || "-"}</td>
-  
+
                   <td className="px-5 py-4">
                     {c.cvUrl ? (
                       <a href={c.cvUrl} target="_blank" rel="noreferrer" className="text-primary hover:text-blue-700 font-medium transition-colors">
@@ -235,45 +235,45 @@ function CandidateTable({ title, rows, jobMap }) {
                       <span className="text-gray-400 italic">N/A</span>
                     )}
                   </td>
-  
+
                   <td className="px-5 py-4">
                     <div className="flex items-center gap-3">
-                        {c.linkedin ? (
+                      {c.linkedin ? (
                         <a href={c.linkedin} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">
-                            LinkedIn
+                          LinkedIn
                         </a>
-                        ) : (
+                      ) : (
                         <span className="text-gray-300">-</span>
-                        )}
-                        {c.portfolio ? (
+                      )}
+                      {c.portfolio ? (
                         <a href={c.portfolio} target="_blank" rel="noreferrer" className="text-blue-600 hover:underline">
-                            Port.
+                          Port.
                         </a>
-                        ) : (
+                      ) : (
                         <span className="text-gray-300">-</span>
-                        )}
+                      )}
                     </div>
                   </td>
-  
+
                   <td className="px-5 py-4 text-xs text-gray-500 font-medium">
                     {c.createdAt
                       ? new Date(c.createdAt).toLocaleString("vi-VN", {
-                          hour: '2-digit', minute:'2-digit',
-                          day: '2-digit', month: '2-digit', year: 'numeric'
+                        hour: '2-digit', minute: '2-digit',
+                        day: '2-digit', month: '2-digit', year: 'numeric'
                       })
                       : "-"}
                   </td>
                 </tr>
               ))}
-  
+
               {!paged.length && (
                 <tr>
                   <td colSpan="11">
                     <div className="flex flex-col items-center justify-center py-12 text-center">
-                        <div className="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center mb-3">
-                            <i data-lucide="inbox" className="w-6 h-6 text-gray-400"></i>
-                        </div>
-                        <p className="text-gray-500 font-medium">No candidates found in this view</p>
+                      <div className="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center mb-3">
+                        <i data-lucide="inbox" className="w-6 h-6 text-gray-400"></i>
+                      </div>
+                      <p className="text-gray-500 font-medium">No candidates found in this view</p>
                     </div>
                   </td>
                 </tr>
@@ -281,15 +281,15 @@ function CandidateTable({ title, rows, jobMap }) {
             </tbody>
           </table>
         </div>
-  
+
         {/* PAGINATION */}
         <div className="flex items-center justify-between mt-6 px-2">
           <p className="text-sm text-gray-500 font-medium">Showing page <span className="font-bold text-gray-900">{page}</span> of {Math.ceil(filtered.length / PAGE_SIZE) || 1}</p>
           <div className="flex gap-2">
-            <button 
-                disabled={page === 1} 
-                onClick={() => setPage(page - 1)}
-                className="px-4 py-2 border border-gray-200 rounded-lg text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:hover:bg-white transition-colors"
+            <button
+              disabled={page === 1}
+              onClick={() => setPage(page - 1)}
+              className="px-4 py-2 border border-gray-200 rounded-lg text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:hover:bg-white transition-colors"
             >
               Previous
             </button>
@@ -339,7 +339,7 @@ export default function MyCandidates() {
       setArchived(rejected || []);
     });
 
- 
+
   }, [userId, userEmail]);
 
   /* ===== LOAD JOB INFO ===== */
@@ -375,26 +375,26 @@ export default function MyCandidates() {
             <p className="text-gray-500 text-base">Track the status and progress of the candidates you've referred.</p>
           </div>
           <div className="flex items-center gap-3">
-              <div className="px-4 py-2.5 bg-green-50 text-green-700 font-bold rounded-xl border border-green-200 shadow-sm flex items-center gap-2">
-                  <i data-lucide="wallet" className="w-5 h-5"></i>
-                  Balance: ${balance}
-              </div>
+            <div className="px-4 py-2.5 bg-green-50 text-green-700 font-bold rounded-xl border border-green-200 shadow-sm flex items-center gap-2">
+              <i data-lucide="wallet" className="w-5 h-5"></i>
+              Balance: ${balance}
+            </div>
           </div>
         </header>
 
-      <CandidateTable
-        title="Active Candidates"
-        rows={candidates.filter((c) => c.status !== "rejected")}
-        jobMap={jobMap}
-      />
+        <CandidateTable
+          title="Active Candidates"
+          rows={candidates.filter((c) => c.status !== "rejected")}
+          jobMap={jobMap}
+        />
 
-      <CandidateTable
-        title="Rejected Candidates"
-        rows={archived}
-        jobMap={jobMap}
-      />
+        <CandidateTable
+          title="Rejected Candidates"
+          rows={archived}
+          jobMap={jobMap}
+        />
 
-      <Icons />
+        <Icons />
       </div>
     </div>
   );
