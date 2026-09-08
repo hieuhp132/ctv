@@ -306,6 +306,91 @@
   background: #f8fbff;
 }
 
+.related-jobs-grid {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 2px 4px 10px 0;
+  scroll-snap-type: x proximity;
+  perspective: 1000px;
+}
+
+.related-jobs-empty {
+  margin: 0;
+  padding: 18px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 8px;
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 14px;
+  text-align: center;
+}
+
+.related-job-card {
+  position: relative;
+  flex: 0 0 calc((100% - 24px) / 3);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  padding: 14px;
+  color: inherit;
+  text-decoration: none;
+  border: 1px solid #cbdcf0;
+  border-radius: 8px;
+  background: #f8fbff;
+  scroll-snap-align: start;
+  transform: perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0);
+  transform-style: preserve-3d;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  will-change: transform;
+  overflow: hidden;
+}
+
+.related-job-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 3px;
+  background: linear-gradient(90deg, #2563eb, #06b6d4);
+  transform: translateZ(2px);
+}
+
+.related-job-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(115deg, rgba(255, 255, 255, 0.55), transparent 38%);
+  transform: translateZ(1px);
+  opacity: 0.7;
+  transition: transform 0.45s ease, opacity 0.45s ease;
+}
+
+.related-job-card:hover {
+  border-color: #06b6d4;
+  background: #f0f9ff;
+  transform: perspective(1000px) rotateX(3deg) rotateY(-2deg) translateY(-7px) translateZ(10px);
+  box-shadow: 0 16px 26px rgba(14, 116, 144, 0.2), 0 0 0 3px rgba(6, 182, 212, 0.08);
+}
+
+.related-job-card:hover::after { transform: translate3d(115%, 0, 1px); opacity: 0; }
+.related-job-card:hover strong { color: #1d4ed8; }
+.related-job-card:focus-visible { outline: 3px solid rgba(6, 182, 212, 0.35); outline-offset: 3px; }
+.related-job-card strong { color: #1f2937; font-size: 14px; overflow-wrap: anywhere; }
+.related-job-card span { color: #64748b; font-size: 12px; }
+
+@media (max-width: 640px) {
+  .related-job-card { flex-basis: 82%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .related-job-card { transition: none; }
+  .related-job-card:hover { transform: none; }
+  .related-job-card::after { transition: none; }
+}
+
 /* SIDEBAR */
 .job-sidebar {
   display: flex;

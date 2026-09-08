@@ -73,6 +73,7 @@ export default function Card({
       }}
     >
       <Link
+          className="job-card-link"
         to={jobUrl}
         style={{
           display: "block",
@@ -93,15 +94,13 @@ export default function Card({
             justifyContent: "space-between",
           }}
         >
-          <div
-            className="job-title"
-          >
+            <div className="job-title">
             {job.title}
           </div>
 
           {/* SAVE */}
           <button
-            className={`save-btn ${job.isSaved ? "saved" : ""}`}
+              className={`save-btn ${job.isSaved ? "saved" : ""}`}
             onClick={(e) => {
               e.preventDefault(); // Prevent Link navigation
               e.stopPropagation();
@@ -121,6 +120,7 @@ export default function Card({
           <div><strong>Salary:</strong> {job.salary || "N/A"}</div>
 
           <span
+              className={`job-status ${isInactive ? "inactive" : "active"}`}
             style={{
               fontWeight: "bold",
               color: isInactive ? "red" : "green",

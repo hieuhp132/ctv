@@ -1,9 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import {
   getJobByIdL,
+  fetchAllJobs,
   createSubmissionL,
   updateJobL,
   getListFiles,
@@ -26,6 +27,7 @@ export default function JobDetail() {
   const recruiterId = useMemo(() => user?.email || user?.id, [user]);
 
   const [job, setJob] = useState(null);
+  const [relatedJobs, setRelatedJobs] = useState([]);
   const [open, setOpen] = useState(false);
   const [jdPublicUrl, setJdPublicUrl] = useState(null);
   const [jdFileName, setJdFileName] = useState(null);
@@ -42,6 +44,7 @@ export default function JobDetail() {
   });
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
     getJobByIdL(id).then((res) => setJob(res.job));
 
     // Load PDF info from localStorage
@@ -56,6 +59,19 @@ export default function JobDetail() {
       }
     }
   }, [id]);
+
+  useEffect(() => {
+    if (!job?.company) return;
+    fetchAllJobs().then((res) => {
+      const company = String(job.company).trim().toLowerCase();
+      const jobs = Array.isArray(res?.jobs) ? res.jobs : [];
+      setRelatedJobs(
+        jobs
+          .filter((item) => item._id !== job._id && String(item.company || "").trim().toLowerCase() === company)
+          .sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0)),
+      );
+    });
+  }, [job]);
 
   useEffect(() => {
     if (!job?.jdLink) {
@@ -496,6 +512,22 @@ const handleCreatePDF = async () => {
                 <tr><td>95 days</td><td>25%</td></tr>
               </tbody>
             </table>
+          </section>
+          <section className="job-section related-jobs-section">
+            <h1>Related Jobs at {job.company}</h1>
+            {relatedJobs.length > 0 ? (
+              <div className="related-jobs-grid">
+                {relatedJobs.map((relatedJob) => (
+                  <Link className="related-job-card" key={relatedJob._id} to={`/admin/job/${relatedJob._id}`} onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
+                    <strong>{relatedJob.title || "Untitled Job"}</strong>
+                    <span>{relatedJob.location || "Location not specified"}</span>
+                    <span>{relatedJob.salary || "Salary not specified"}</span>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <p className="related-jobs-empty">No related jobs available.</p>
+            )}
           </section>
         </main>
 
