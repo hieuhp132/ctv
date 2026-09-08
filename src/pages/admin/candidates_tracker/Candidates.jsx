@@ -195,7 +195,7 @@ export default function CandidateManagement() {
   useEffect(() => {
     if (!adminId) return;
 
-    listReferrals({ id: adminId, email, isAdmin: true, limit: 1000 }).then(
+    listReferrals({ id: adminId, email, isAdmin: true, limit: 10000 }).then(
       async (res = []) => {
         setRows(res);
 
