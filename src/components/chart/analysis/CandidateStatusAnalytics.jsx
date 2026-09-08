@@ -38,7 +38,7 @@ export default function CandidateStatusCharts() {
   const fetchData = () => {
     if (!adminId) return;
     setLoading(true);
-    listReferrals({ id: adminId, email, isAdmin: true, limit: 1000 })
+    listReferrals({ id: adminId, email, isAdmin: true, limit: 10000 })
       .then((res = []) => setRows(Array.isArray(res) ? res : []))
       .catch((err) => console.error("Failed to list referrals", err))
       .finally(() => setLoading(false));
@@ -247,4 +247,4 @@ export default function CandidateStatusCharts() {
       </div>
     </div>
   );
-}
+}
