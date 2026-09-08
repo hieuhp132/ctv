@@ -493,9 +493,13 @@ export default function JobDetail() {
                 <tr><th>Payment Date</th><th>Payment Amount</th></tr>
               </thead>
               <tbody>
-                <tr><td>35 days</td><td>50%</td></tr>
-                <tr><td>65 days</td><td>25%</td></tr>
-                <tr><td>95 days</td><td>25%</td></tr>
+                {(job.paymentSchedule?.length > 0 ? job.paymentSchedule : [
+                  { date: "35 days", amount: "50%" },
+                  { date: "65 days", amount: "25%" },
+                  { date: "95 days", amount: "25%" },
+                ]).map((payment, index) => (
+                  <tr key={`${payment.date}-${index}`}><td>{payment.date}</td><td>{payment.amount}</td></tr>
+                ))}
               </tbody>
             </table>
           </section>

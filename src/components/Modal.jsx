@@ -241,6 +241,43 @@ export default function Modal({
                   style={inputStyle}
                 />
               </div>
+              <div style={formGroupFull}>
+                <label style={labelStyle}>Payment Schedule</label>
+                <div style={paymentScheduleEditor}>
+                  {(jobForm.paymentSchedule || []).map((payment, index) => (
+                    <div style={paymentScheduleRow} key={index}>
+                      <input
+                        value={payment.date}
+                        onChange={(e) => {
+                          setIsDirty(true);
+                          setJobForm((prev) => ({
+                            ...prev,
+                            paymentSchedule: prev.paymentSchedule.map((item, itemIndex) =>
+                              itemIndex === index ? { ...item, date: e.target.value } : item,
+                            ),
+                          }));
+                        }}
+                        placeholder="Payment date"
+                        style={inputStyle}
+                      />
+                      <input
+                        value={payment.amount}
+                        onChange={(e) => {
+                          setIsDirty(true);
+                          setJobForm((prev) => ({
+                            ...prev,
+                            paymentSchedule: prev.paymentSchedule.map((item, itemIndex) =>
+                              itemIndex === index ? { ...item, amount: e.target.value } : item,
+                            ),
+                          }));
+                        }}
+                        placeholder="Payment amount"
+                        style={inputStyle}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
 
             <div style={formGroupFull}>
@@ -376,6 +413,8 @@ const inputGrid = {
 };
 const formGroup = { display: "flex", flexDirection: "column", gap: 4 };
 const formGroupFull = { display: "flex", flexDirection: "column", gap: 4 };
+const paymentScheduleEditor = { display: "flex", flexDirection: "column", gap: 8 };
+const paymentScheduleRow = { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 };
 
 const labelStyle = { fontSize: "13px", fontWeight: "600", color: "#555" };
 const inputStyle = {

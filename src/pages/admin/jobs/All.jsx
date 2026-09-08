@@ -34,6 +34,11 @@ const EMPTY_JOB_FORM = {
     interviewing: 0,
     lastActivity: "",
   },
+  paymentSchedule: [
+    { date: "35 days", amount: "50%" },
+    { date: "65 days", amount: "25%" },
+    { date: "95 days", amount: "25%" },
+  ],
   keywords: "",
   jobsdetail: {
     description: "",
@@ -60,6 +65,9 @@ const mapJobToForm = (job) => ({
     interviewing: Number(job.pipeline?.interviewing) || 0,
     lastActivity: job.pipeline?.lastActivity || "",
   },
+  paymentSchedule: Array.isArray(job.paymentSchedule) && job.paymentSchedule.length > 0
+    ? job.paymentSchedule.map((item) => ({ date: item.date || "", amount: item.amount || "" }))
+    : EMPTY_JOB_FORM.paymentSchedule,
   keywords: Array.isArray(job.keywords)
     ? job.keywords.join(", ")
     : job.keywords || "",
@@ -303,6 +311,7 @@ export default function All() {
         deadline: payload.deadline,
         status: payload.status,
         pipeline: payload.pipeline,
+        paymentSchedule: payload.paymentSchedule,
         keywords: String(payload.keywords || "")
           .split(",")
           .map((k) => k.trim())
@@ -332,6 +341,7 @@ export default function All() {
       deadline: payload.deadline,
       status: payload.status,
       pipeline: payload.pipeline,
+      paymentSchedule: payload.paymentSchedule,
       keywords: String(payload.keywords || "")
         .split(",")
         .map((k) => k.trim())
