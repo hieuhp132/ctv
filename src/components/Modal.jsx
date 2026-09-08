@@ -194,6 +194,53 @@ export default function Modal({
                   style={inputStyle}
                 />
               </div>
+              <div style={formGroup}>
+                <label style={labelStyle}>Pipeline - Reviewing</label>
+                <input
+                  type="number"
+                  min="0"
+                  value={jobForm.pipeline?.reviewing ?? 0}
+                  onChange={(e) => {
+                    setIsDirty(true);
+                    setJobForm((prev) => ({
+                      ...prev,
+                      pipeline: { ...(prev.pipeline || {}), reviewing: e.target.value },
+                    }));
+                  }}
+                  style={inputStyle}
+                />
+              </div>
+              <div style={formGroup}>
+                <label style={labelStyle}>Pipeline - Interviewing</label>
+                <input
+                  type="number"
+                  min="0"
+                  value={jobForm.pipeline?.interviewing ?? 0}
+                  onChange={(e) => {
+                    setIsDirty(true);
+                    setJobForm((prev) => ({
+                      ...prev,
+                      pipeline: { ...(prev.pipeline || {}), interviewing: e.target.value },
+                    }));
+                  }}
+                  style={inputStyle}
+                />
+              </div>
+              <div style={formGroupFull}>
+                <label style={labelStyle}>Pipeline - Last Activity</label>
+                <input
+                  value={jobForm.pipeline?.lastActivity || ""}
+                  onChange={(e) => {
+                    setIsDirty(true);
+                    setJobForm((prev) => ({
+                      ...prev,
+                      pipeline: { ...(prev.pipeline || {}), lastActivity: e.target.value },
+                    }));
+                  }}
+                  placeholder="e.g. 4 days ago"
+                  style={inputStyle}
+                />
+              </div>
             </div>
 
             <div style={formGroupFull}>

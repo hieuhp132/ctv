@@ -436,6 +436,14 @@ export default function JobDetail() {
           <span className="badge-location">📍 {job.location || "Remote"}</span>
           {keywords.length > 0 && keywords.map((k) => <span key={k} className="badge-keyword">{k}</span>)}
         </div>
+        <section className="job-pipeline" aria-label="Hiring Manager Pipeline">
+          <h3>Hiring Manager Pipeline</h3>
+          <div className="job-pipeline-grid">
+            <div><span>Reviewing</span><strong>{job.pipeline?.reviewing ?? 0} candidates</strong></div>
+            <div><span>Interviewing</span><strong>{job.pipeline?.interviewing ?? 0} candidates</strong></div>
+            <div><span>Last Activity</span><strong>{job.pipeline?.lastActivity || "No activity"}</strong></div>
+          </div>
+        </section>
       </header>
 
       <div className="job-layout">
@@ -458,6 +466,22 @@ export default function JobDetail() {
           <section className="job-section">
             <h1>Other Information</h1>
             <div className="job-html-content" dangerouslySetInnerHTML={{ __html: cleanJobHtml(job.jobsdetail?.other) || "No other information provided" }} />
+          </section>
+          <section className="job-section payment-schedule-section">
+            <h1>Payment Schedule</h1>
+            <p className="payment-schedule-intro">
+              If your candidate is hired, the bounty will be paid in installments based on the candidate's start date. These payments follow the same schedule as the rebate terms agreed with the client.
+            </p>
+            <table className="payment-schedule-table">
+              <thead>
+                <tr><th>Payment Date</th><th>Payment Amount</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>35 days</td><td>50%</td></tr>
+                <tr><td>65 days</td><td>25%</td></tr>
+                <tr><td>95 days</td><td>25%</td></tr>
+              </tbody>
+            </table>
           </section>
         </main>
 

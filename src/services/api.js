@@ -271,6 +271,15 @@ export async function listReferrals({
   return Array.isArray(data.items) ? data.items : [];
 }
 
+export async function fetchAdminReferrals(adminId, email) {
+  return listReferrals({
+    id: adminId || email,
+    email,
+    isAdmin: true,
+    limit: 10000,
+  });
+}
+
 export async function updateReferralFieldsById(id, updates) {
   const res = await fetch(`${API_BASE}/local/referrals/update/${id}`, {
     method: "PUT",

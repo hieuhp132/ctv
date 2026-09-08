@@ -29,6 +29,11 @@ const EMPTY_JOB_FORM = {
   applicants: 0,
   deadline: "",
   status: "Active",
+  pipeline: {
+    reviewing: 0,
+    interviewing: 0,
+    lastActivity: "",
+  },
   keywords: "",
   jobsdetail: {
     description: "",
@@ -50,6 +55,11 @@ const mapJobToForm = (job) => ({
   applicants: job.applicants ?? 0,
   deadline: job.deadline || "",
   status: job.status || "Active",
+  pipeline: {
+    reviewing: Number(job.pipeline?.reviewing) || 0,
+    interviewing: Number(job.pipeline?.interviewing) || 0,
+    lastActivity: job.pipeline?.lastActivity || "",
+  },
   keywords: Array.isArray(job.keywords)
     ? job.keywords.join(", ")
     : job.keywords || "",
@@ -130,6 +140,7 @@ export default function All() {
       let list = [...(res.jobs || [])].sort(
         (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
       );
+
       if (user?.email) {
         const saved = await fetchSavedJobsL(user.email);
         const savedIds = new Set(
@@ -257,10 +268,15 @@ export default function All() {
 
   const handleToggleStatus = async (job) => {
     const newStatus = job.status === "Active" ? "Inactive" : "Active";
-    await updateJobL({ _id: job._id, status: newStatus });
+    const lastStatusChangeAt = new Date().toISOString();
+    await updateJobL({ _id: job._id, status: newStatus, lastStatusChangeAt });
 
     setJobs((jobs) =>
-      jobs.map((j) => (j._id === job._id ? { ...j, status: newStatus } : j)),
+      jobs.map((j) =>
+        j._id === job._id
+          ? { ...j, status: newStatus, lastStatusChangeAt }
+          : j,
+      ),
     );
   };
 
@@ -286,6 +302,7 @@ export default function All() {
         applicants: payload.applicants,
         deadline: payload.deadline,
         status: payload.status,
+        pipeline: payload.pipeline,
         keywords: String(payload.keywords || "")
           .split(",")
           .map((k) => k.trim())
@@ -314,6 +331,7 @@ export default function All() {
       applicants: payload.applicants,
       deadline: payload.deadline,
       status: payload.status,
+      pipeline: payload.pipeline,
       keywords: String(payload.keywords || "")
         .split(",")
         .map((k) => k.trim())

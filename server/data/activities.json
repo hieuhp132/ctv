@@ -1,5 +1,18 @@
 [
   {
+    "id": "1788855358068",
+    "type": "job_updated",
+    "description": "Admin updated job \"Overseas Medical Expert — Senior Researcher / Professor\"",
+    "metadata": {
+      "jobId": "1774603466528",
+      "jobTitle": "Overseas Medical Expert — Senior Researcher / Professor",
+      "adminName": "Admin",
+      "adminRole": "admin",
+      "details": "general update"
+    },
+    "timestamp": "2026-09-08T08:15:58.068Z"
+  },
+  {
     "id": "1774969613067",
     "type": "job_updated",
     "description": "Admin updated job \"Junior/Senior Software Engineer (Dev Game)\"",

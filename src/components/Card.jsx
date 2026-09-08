@@ -1,6 +1,12 @@
 import React from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { BsBookmark, BsBookmarkFill } from "react-icons/bs";
+import {
+  BsBookmark,
+  BsBookmarkFill,
+  BsClock,
+  BsEye,
+  BsPeople,
+} from "react-icons/bs";
 
 export default function Card({
   job,
@@ -53,6 +59,8 @@ export default function Card({
 
   const jobUrl = `/${role}/job/${job._id}`;
 
+  const pipeline = job.pipeline || {};
+
   return (
     <div
       className="job-card"
@@ -87,10 +95,6 @@ export default function Card({
         >
           <div
             className="job-title"
-            style={{ 
-              fontWeight: 600, 
-              fontSize: "1.1em",
-            }}
           >
             {job.title}
           </div>
@@ -109,22 +113,12 @@ export default function Card({
         </div>
 
         {/* INFO */}
-        <div style={{ fontSize: 13, color: "#555", marginBottom: 6 }}>
-          <strong>Company:</strong> {job.company}
-        </div>
+        <div className="job-info"><strong>Company:</strong> {job.company}</div>
 
-        <div style={{ fontSize: 13, color: "#555", marginBottom: 6 }}>
-          <strong>Location:</strong> {job.location}
-        </div>
+        <div className="job-info"><strong>Location:</strong> {job.location}</div>
 
         <div className="job-meta">
-          <div>
-            <strong style={{ marginRight: 4, fontSize: 13, color: "#555", }}>Salary:</strong> {job.salary || "N/A"}
-          </div>
-
-          {job.deadline && (
-            <span className="job-deadline" style={{ fontSize: 13, color: "#555", }}>Deadline: {job.deadline}</span>
-          )}
+          <div><strong>Salary:</strong> {job.salary || "N/A"}</div>
 
           <span
             style={{
@@ -136,9 +130,35 @@ export default function Card({
           </span>
         </div>
 
-        <div style={{ fontSize: 12, color: "#666", marginBottom: 6 }}>
+        <div className="pipeline-label">Hiring Manager Pipeline:</div>
+        <div className="pipeline">
+          <div className="pipeline-item reviewing">
+            <BsEye />
+            <span>Reviewing:<strong>{pipeline.reviewing || 0} candidate{pipeline.reviewing === 1 ? "" : "s"}</strong></span>
+          </div>
+          <div className="pipeline-item interviewing">
+            <BsPeople />
+            <span>Interviewing:<strong>{pipeline.interviewing || 0} candidate{pipeline.interviewing === 1 ? "" : "s"}</strong></span>
+          </div>
+          <div className="pipeline-item activity">
+            <BsClock />
+            <span>Last Activity:<strong>{pipeline.lastActivity || "No activity"}</strong></span>
+          </div>
+        </div>
+
+        <div className="job-counts">
           <span>Vacancies: {job.vacancies}</span>
-          <span style={{ marginLeft: 8 }}>Applicants: {job.applicants}</span>
+          <span>Applicants: {job.applicants}</span>
+        </div>
+
+        <div className="reward-line">
+          <span className="reward-badge">
+            {normalizeReward(job.rewardCandidateUSD)}
+          </span>
+          <span className="reward-badge secondary">
+            {normalizeInterviewReward(job.rewardInterviewUSD)}
+          </span>
+          {job.bonus && <span className="job-bonus">{job.bonus}</span>}
         </div>
 
         {/* {textPreview && (
@@ -146,20 +166,6 @@ export default function Card({
             {textPreview}...
           </div>
         )} */}
-
-        {/* REWARD */}
-
-        <div className="reward-line">
-          <span className="reward-badge">
-            {normalizeReward(job.rewardCandidateUSD)}
-          </span>
-
-          <span className="reward-badge secondary">
-            {normalizeInterviewReward(job.rewardInterviewUSD)}
-          </span>
-
-          {job.bonus && <span className="job-bonus">{job.bonus}</span>}
-        </div>
 
         {/* ACTIONS */}
         <div className="job-actions">

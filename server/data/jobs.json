@@ -6628,8 +6628,13 @@
       "other": "<p><strong>Key&nbsp;targeting&nbsp;note:&nbsp;</strong></p><p>Focus&nbsp;exclusively&nbsp;on&nbsp;Chinese&nbsp;nationals&nbsp;currently&nbsp;working&nbsp;as&nbsp;Associate&nbsp;Professor&nbsp;/&nbsp;Professor&nbsp;/&nbsp;Senior&nbsp;Researcher&nbsp;at&nbsp;overseas&nbsp;universities&nbsp;or&nbsp;research&nbsp;institutions&nbsp;—&nbsp;particularly&nbsp;in&nbsp;USA,&nbsp;UK,&nbsp;Europe,&nbsp;Canada,&nbsp;Australia,&nbsp;Japan.&nbsp;Medical&nbsp;disciplines&nbsp;only.</p><p></p><p><strong>Questions&nbsp;from&nbsp;the&nbsp;client&nbsp;to&nbsp;ask&nbsp;to&nbsp;the&nbsp;candidate</strong></p><p>Are&nbsp;you&nbsp;of&nbsp;Chinese&nbsp;nationality?</p><p>What&nbsp;is&nbsp;your&nbsp;current&nbsp;academic&nbsp;position&nbsp;and&nbsp;institution?</p><p>Do&nbsp;you&nbsp;have&nbsp;a&nbsp;strong&nbsp;motivation&nbsp;to&nbsp;relocate&nbsp;permanently&nbsp;to&nbsp;Chongqing?</p><p>Can&nbsp;you&nbsp;describe&nbsp;your&nbsp;most&nbsp;significant&nbsp;internationally&nbsp;recognized&nbsp;research&nbsp;achievement?</p>"
     },
     "createdAt": "2026-03-27T09:24:26.528Z",
-    "updatedAt": "2026-03-27T09:39:19.315Z",
-    "jdLink": "https://yzvqhtunwkgibmpdrisi.supabase.co/storage/v1/object/public/files/jd_1774604025494_Overseas_Medical_Expert_Senior_Researcher_Professor_1774603970247.pdf"
+    "updatedAt": "2026-09-08T08:15:58.056Z",
+    "jdLink": "https://yzvqhtunwkgibmpdrisi.supabase.co/storage/v1/object/public/files/jd_1774604025494_Overseas_Medical_Expert_Senior_Researcher_Professor_1774603970247.pdf",
+    "pipeline": {
+      "reviewing": "12",
+      "interviewing": 0,
+      "lastActivity": ""
+    }
   },
   {
     "_id": "1774882941366",

@@ -768,12 +768,18 @@ const updateJob = (req, res) => {
     }
 
     const oldJob = jobs[index];
+    const statusChanged = req.body.status !== undefined &&
+      req.body.status !== oldJob.status;
     const updatedJob = {
         ...jobs[index],
         ...req.body,
         _id: id, // giữ nguyên id
         updatedAt: new Date().toISOString(),
     };
+
+    if (statusChanged) {
+      updatedJob.lastStatusChangeAt = new Date().toISOString();
+    }
 
     jobs[index] = updatedJob;
     writeFile("jobs.json", jobs);
