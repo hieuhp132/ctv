@@ -10,7 +10,12 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+.vite
 *.local
+
+# Local application data and database backups
+server/data/
+server/backup/
 
 # Editor directories and files
 .vscode/*

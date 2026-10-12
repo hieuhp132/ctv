@@ -1,0 +1,98 @@
+[data-dashboard-card] {
+  animation: dashboard-card-enter 560ms cubic-bezier(0.2, 0.7, 0.25, 1) both;
+}
+
+.recruiter-metrics > [data-dashboard-card],
+.recruiter-stage-counts > [data-dashboard-card],
+.recruiter-job-grid > [data-dashboard-card],
+.admin-analytics-dashboard [data-dashboard-card],
+.admin-dashboard .jobs-grid > .job-card {
+  animation:
+    dashboard-card-enter 560ms cubic-bezier(0.2, 0.7, 0.25, 1) both,
+    dashboard-card-pulse 4.6s cubic-bezier(0.4, 0, 0.6, 1) 560ms infinite;
+}
+
+[data-dashboard-card="interactive"] {
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease;
+}
+
+.recruiter-metrics > [data-dashboard-card]:nth-child(2),
+.recruiter-stage-counts > [data-dashboard-card]:nth-child(2),
+.recruiter-job-grid > [data-dashboard-card]:nth-child(2),
+.admin-dashboard .jobs-grid > .job-card:nth-child(2),
+.admin-analytics-dashboard .grid > [data-dashboard-card]:nth-child(2) {
+  animation-delay: 70ms, 720ms;
+}
+
+.recruiter-metrics > [data-dashboard-card]:nth-child(3),
+.recruiter-stage-counts > [data-dashboard-card]:nth-child(3),
+.recruiter-job-grid > [data-dashboard-card]:nth-child(3),
+.admin-dashboard .jobs-grid > .job-card:nth-child(3),
+.admin-analytics-dashboard .grid > [data-dashboard-card]:nth-child(3) {
+  animation-delay: 140ms, 880ms;
+}
+
+.recruiter-metrics > [data-dashboard-card]:nth-child(4),
+.recruiter-stage-counts > [data-dashboard-card]:nth-child(4),
+.recruiter-job-grid > [data-dashboard-card]:nth-child(4),
+.admin-dashboard .jobs-grid > .job-card:nth-child(4),
+.admin-analytics-dashboard .grid > [data-dashboard-card]:nth-child(4) {
+  animation-delay: 210ms, 1040ms;
+}
+
+.recruiter-job-grid > [data-dashboard-card]:nth-child(n + 5) {
+  animation-delay: 280ms, 1200ms;
+}
+
+.admin-dashboard .jobs-grid > .job-card:nth-child(n + 5) {
+  animation-delay: 280ms, 1200ms;
+}
+
+@keyframes dashboard-card-enter {
+  from {
+    opacity: 0;
+    scale: 0.985;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+@keyframes dashboard-card-pulse {
+  0%, 100% { scale: 1; filter: brightness(1); }
+  16% { scale: 1.018; filter: brightness(1.045); }
+  30% { scale: 0.997; filter: brightness(1.01); }
+  42% { scale: 1.008; filter: brightness(1.025); }
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  [data-dashboard-card="interactive"]:hover,
+  [data-dashboard-card="interactive"]:focus-within {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 28px rgba(22, 40, 62, 0.12);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-dashboard-card] {
+    animation: none;
+  }
+
+  .admin-dashboard .jobs-grid > .job-card {
+    animation: none;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+  }
+
+  [data-dashboard-card="interactive"] {
+    transition: none;
+  }
+
+  [data-dashboard-card="interactive"]:hover,
+  [data-dashboard-card="interactive"]:focus-within {
+    transform: none;
+  }
+}

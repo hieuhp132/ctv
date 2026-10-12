@@ -1,0 +1,318 @@
+.employer-home {
+  min-height: calc(100vh - 56px);
+  background: #0c1118;
+  color: #d5dbe4;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+.employer-home * {
+  box-sizing: border-box;
+}
+
+.employer-home a {
+  text-decoration: none;
+}
+
+.employer-home__hero {
+  position: relative;
+  overflow: hidden;
+  padding: 73px 20px 55px;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(0, 235, 137, 0.12), transparent 52%),
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    #0c1118;
+  background-size: auto, 34px 34px, 34px 34px, auto;
+  text-align: center;
+}
+
+.employer-home__eyebrow,
+.employer-home__section-heading > span {
+  color: #00eb89;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+}
+
+.employer-home__hero h1 {
+  margin: 18px 0 0;
+  color: #f5f8fc;
+  font-size: clamp(36px, 6vw, 64px);
+  letter-spacing: -0.05em;
+  line-height: 1.06;
+}
+
+.employer-home__hero h1 span {
+  color: #00eb89;
+}
+
+.employer-home__hero > p {
+  max-width: 600px;
+  margin: 18px auto 0;
+  color: #9ba7b6;
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+.employer-home__actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  margin-top: 26px;
+}
+
+.employer-home__actions a:first-child {
+  display: inline-flex;
+  min-height: 46px;
+  align-items: center;
+  gap: 9px;
+  padding: 0 18px;
+  border-radius: 10px;
+  background: linear-gradient(105deg, #00eb89, #00b982);
+  color: #062017;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.employer-home__actions a:last-child {
+  color: #c2cbd7;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.employer-home__dashboard {
+  width: min(100%, 760px);
+  margin: 48px auto 0;
+  overflow: hidden;
+  border: 1px solid #27313d;
+  border-radius: 16px;
+  background: rgba(18, 25, 34, 0.96);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.32);
+  text-align: left;
+}
+
+.employer-home__dashboard-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 17px 20px;
+  border-bottom: 1px solid #27313d;
+  color: #e6edf5;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.employer-home__dashboard-head > span:first-child {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.employer-home__dashboard-head svg {
+  color: #00eb89;
+}
+
+.employer-home__status {
+  color: #9ba7b6;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.employer-home__status i,
+.employer-home__pipeline > div i {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 5px;
+  border-radius: 50%;
+  background: #00eb89;
+}
+
+.employer-home__dashboard-content {
+  display: grid;
+  grid-template-columns: 0.8fr 2fr;
+  gap: 20px;
+  padding: 20px;
+}
+
+.employer-home__metric {
+  display: flex;
+  min-height: 116px;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px;
+  border: 1px solid #27313d;
+  border-radius: 12px;
+  background: #151d27;
+}
+
+.employer-home__metric span {
+  color: #9ba7b6;
+  font-size: 11px;
+}
+
+.employer-home__metric strong {
+  color: #00eb89;
+  font-size: 16px;
+}
+
+.employer-home__pipeline {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.employer-home__pipeline > div {
+  display: grid;
+  grid-template-columns: 24px 1fr 8px;
+  align-items: center;
+  gap: 8px;
+  padding: 13px;
+  border: 1px solid #27313d;
+  border-radius: 12px;
+  background: #151d27;
+}
+
+.employer-home__pipeline > div > span {
+  display: grid;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  border-radius: 8px;
+  background: rgba(0, 235, 137, 0.12);
+  color: #00eb89;
+  font-size: 11px;
+}
+
+.employer-home__pipeline strong {
+  color: #cbd5e1;
+  font-size: 10px;
+}
+
+.employer-home__pipeline > div i {
+  width: 7px;
+  height: 7px;
+  margin: 0;
+  background: #475569;
+}
+
+.employer-home__pipeline > div i.is-complete {
+  background: #00eb89;
+}
+
+.employer-home__benefits {
+  padding: 58px 20px 66px;
+  background: #101620;
+}
+
+.employer-home__section-heading {
+  width: min(100%, 900px);
+  margin: 0 auto 26px;
+  text-align: center;
+}
+
+.employer-home__section-heading h2 {
+  margin: 12px auto 0;
+  color: #f1f5f9;
+  font-size: clamp(22px, 4vw, 32px);
+  letter-spacing: -0.035em;
+}
+
+.employer-home__benefit-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  width: min(100%, 900px);
+  margin: 0 auto;
+}
+
+.employer-home__benefit-grid article {
+  position: relative;
+  min-height: 195px;
+  padding: 21px;
+  border: 1px solid #27313d;
+  border-radius: 14px;
+  background: #141a23;
+}
+
+.employer-home__benefit-grid article > span {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border-radius: 12px;
+  background: rgba(0, 235, 137, 0.1);
+  color: #00eb89;
+}
+
+.employer-home__benefit-grid h3 {
+  margin: 16px 0 7px;
+  color: #e6edf5;
+  font-size: 14px;
+}
+
+.employer-home__benefit-grid p {
+  margin: 0;
+  color: #9ba7b6;
+  font-size: 11px;
+  line-height: 1.65;
+}
+
+.employer-home__check {
+  position: absolute;
+  top: 25px;
+  right: 21px;
+  color: #00eb89;
+}
+
+.employer-home__switch {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 32px;
+  color: #9ba7b6;
+  font-size: 12px;
+}
+
+.employer-home__switch a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #00e5f5;
+  font-weight: 700;
+}
+
+@media (max-width: 680px) {
+  .employer-home__hero {
+    padding: 56px 16px 42px;
+  }
+
+  .employer-home__dashboard-content,
+  .employer-home__benefit-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .employer-home__dashboard {
+    margin-top: 36px;
+  }
+
+  .employer-home__switch,
+  .employer-home__actions {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 420px) {
+  .employer-home__pipeline {
+    grid-template-columns: 1fr;
+  }
+
+  .employer-home__dashboard-head {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 9px;
+  }
+}

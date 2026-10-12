@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 import { QUILL_MODULES, QUILL_FORMATS } from "./editor/quillConfig.js";
+import "./Modal.css";
 
 export default function Modal({
   open,
@@ -53,9 +54,8 @@ export default function Modal({
   };
 
   return (
-    <div style={overlayStyle}>
-      {console.log("debug:", jobForm)}
-      <div style={modalStyle}>
+    <div className="job-editor-overlay" style={overlayStyle}>
+    <div className="job-editor-modal" style={modalStyle}>
         {/* Header */}
         <div style={modalHeader}>
           <h3 style={{ margin: 0 }}>
@@ -366,9 +366,10 @@ const overlayStyle = {
 };
 
 const modalStyle = {
-  background: "#fff",
+  background: "var(--app-surface)",
+  color: "var(--app-text)",
   borderRadius: 12,
-  width: 750,
+  width: "min(750px, calc(100vw - 32px))",
   maxHeight: "90vh",
   display: "flex",
   flexDirection: "column",
@@ -378,7 +379,7 @@ const modalStyle = {
 
 const modalHeader = {
   padding: "16px 24px",
-  borderBottom: "1px solid #eee",
+  borderBottom: "1px solid var(--app-border)",
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
@@ -386,8 +387,8 @@ const modalHeader = {
 
 const tabContainer = {
   display: "flex",
-  background: "#f9f9f9",
-  borderBottom: "1px solid #eee",
+  background: "var(--app-surface-muted)",
+  borderBottom: "1px solid var(--app-border)",
 };
 const tabStyle = {
   flex: 1,
@@ -395,14 +396,14 @@ const tabStyle = {
   border: "none",
   background: "none",
   cursor: "pointer",
-  color: "#666",
+  color: "var(--app-text-muted)",
   fontWeight: "500",
 };
 const activeTabStyle = {
   ...tabStyle,
-  color: "#007bff",
-  borderBottom: "2px solid #007bff",
-  background: "#fff",
+  color: "var(--app-cyan)",
+  borderBottom: "2px solid var(--app-cyan)",
+  background: "var(--app-surface)",
 };
 
 const formContainer = { padding: "24px", overflowY: "auto", flex: 1 };
@@ -416,18 +417,20 @@ const formGroupFull = { display: "flex", flexDirection: "column", gap: 4 };
 const paymentScheduleEditor = { display: "flex", flexDirection: "column", gap: 8 };
 const paymentScheduleRow = { display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 };
 
-const labelStyle = { fontSize: "13px", fontWeight: "600", color: "#555" };
+const labelStyle = { fontSize: "13px", fontWeight: "600", color: "var(--app-text-muted)" };
 const inputStyle = {
   padding: "10px",
   borderRadius: "6px",
-  border: "1px solid #ccc",
+  border: "1px solid var(--app-border)",
   fontSize: "14px",
+  background: "var(--app-surface-muted)",
+  color: "var(--app-text)",
 };
 const quillGroup = { display: "flex", flexDirection: "column", gap: 8 };
 
 const modalFooter = {
   padding: "16px 24px",
-  borderTop: "1px solid #eee",
+  borderTop: "1px solid var(--app-border)",
   display: "flex",
   justifyContent: "flex-end",
   gap: 12,
@@ -435,16 +438,16 @@ const modalFooter = {
 const cancelBtn = {
   padding: "8px 16px",
   borderRadius: "6px",
-  border: "1px solid #ccc",
-  background: "#fff",
+  border: "1px solid var(--app-border)",
+  background: "var(--app-surface-raised)",
   cursor: "pointer",
-  color: "#374151",
+  color: "var(--app-text)",
 };
 const submitBtn = {
   padding: "8px 16px",
   borderRadius: "6px",
   border: "none",
-  background: "#007bff",
+  background: "var(--app-purple)",
   color: "#fff",
   cursor: "pointer",
   fontWeight: "600",
@@ -454,5 +457,5 @@ const closeButton = {
   border: "none",
   fontSize: "20px",
   cursor: "pointer",
-  color: "#999",
+  color: "var(--app-text-muted)",
 };

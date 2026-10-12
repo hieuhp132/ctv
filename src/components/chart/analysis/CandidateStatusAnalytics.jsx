@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { listReferrals } from "../../../services/api.js";
 import { useAuth } from "../../../context/AuthContext";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
-import { Info, Users, CheckCircle2, RefreshCw } from "lucide-react";
+import { Info, Users, CheckCircle2, RefreshCw, UserRoundX } from "lucide-react";
 
 /* ================= CONSTANTS ================= */
 export const STATUS_COLORS = {
@@ -107,8 +107,8 @@ export default function CandidateStatusCharts() {
   return (
     <div className="space-y-6 mb-8">
       {/* Overview Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex items-center gap-4 transition-transform hover:-translate-y-1 duration-300">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+        <div data-dashboard-card="interactive" className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex items-center gap-4 transition-transform hover:-translate-y-1 duration-300">
           <div className="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
             <Users className="w-7 h-7" />
           </div>
@@ -118,7 +118,7 @@ export default function CandidateStatusCharts() {
           </div>
         </div>
 
-        <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex items-center gap-4 transition-transform hover:-translate-y-1 duration-300">
+        <div data-dashboard-card="interactive" className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex items-center gap-4 transition-transform hover:-translate-y-1 duration-300">
           <div className="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
             <CheckCircle2 className="w-7 h-7" />
           </div>
@@ -130,7 +130,7 @@ export default function CandidateStatusCharts() {
           </div>
         </div>
 
-        <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex items-center gap-4 transition-transform hover:-translate-y-1 duration-300">
+        <div data-dashboard-card="interactive" className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex items-center gap-4 transition-transform hover:-translate-y-1 duration-300">
           <div className="w-14 h-14 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center">
             <RefreshCw className="w-7 h-7" />
           </div>
@@ -141,11 +141,23 @@ export default function CandidateStatusCharts() {
             </h4>
           </div>
         </div>
+
+        <div data-dashboard-card="interactive" className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100 flex items-center gap-4 transition-transform hover:-translate-y-1 duration-300">
+          <div className="w-14 h-14 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center">
+            <UserRoundX className="w-7 h-7" />
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-gray-500 uppercase tracking-wider">Rejected</p>
+            <h4 className="text-3xl font-extrabold text-gray-900">
+              {statusCounts.rejected || 0}
+            </h4>
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Overall Distribution */}
-        <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 flex flex-col items-center relative overflow-hidden group">
+        <div data-dashboard-card className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 flex flex-col items-center relative overflow-hidden group">
           <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-indigo-500 to-violet-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           
           <div className="w-full flex justify-between items-center mb-6">
@@ -198,7 +210,7 @@ export default function CandidateStatusCharts() {
         </div>
 
         {/* Conversion Focus Chart */}
-        <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 flex flex-col items-center relative overflow-hidden group">
+        <div data-dashboard-card className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 flex flex-col items-center relative overflow-hidden group">
            <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-emerald-400 to-teal-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
           
            <div className="w-full flex justify-between items-center mb-6">

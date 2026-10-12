@@ -4,6 +4,8 @@ const AuthContext = createContext();
 
 const LS_SESSION = "authSession";
 const ONE_DAY = 24 * 60 * 60 * 1000;
+const normalizeRole = (user) =>
+  user?.role === "recruiter" ? { ...user, role: "recruiter_freelancer" } : user;
 
 /* ===== session helpers ===== */
 const readSession = () => {
@@ -41,13 +43,18 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     const s = readSession();
-    if (s?.user) setUser(s.user);
+    if (s?.user) {
+      const normalizedUser = normalizeRole(s.user);
+      setUser(normalizedUser);
+      if (normalizedUser !== s.user) writeSession(normalizedUser, s.token);
+    }
     setAuthReady(true);
   }, []);
 
   const login = (user, token) => {
-    setUser(user);
-    writeSession(user, token);
+    const normalizedUser = normalizeRole(user);
+    setUser(normalizedUser);
+    writeSession(normalizedUser, token);
   };
 
   const logout = () => {
@@ -57,11 +64,12 @@ export function AuthProvider({ children }) {
 
   /* ✅ helper chuẩn */
   const updateUser = (newUser) => {
-    setUser(newUser);
+    const normalizedUser = normalizeRole(newUser);
+    setUser(normalizedUser);
 
     const s = readSession();
     if (s) {
-      writeSession(newUser, s.token);
+      writeSession(normalizedUser, s.token);
     }
   };
 

@@ -1,0 +1,64 @@
+.job-editor-modal input::placeholder,
+.job-editor-modal textarea::placeholder {
+  color: var(--app-text-muted);
+  opacity: 0.75;
+}
+
+.job-editor-modal .ql-toolbar.ql-snow,
+.job-editor-modal .ql-container.ql-snow {
+  border-color: var(--app-border);
+}
+
+.job-editor-modal .ql-toolbar.ql-snow {
+  background: var(--app-surface-muted);
+  border-radius: 6px 6px 0 0;
+}
+
+.job-editor-modal .ql-container.ql-snow {
+  background: var(--app-surface-raised);
+  border-radius: 0 0 6px 6px;
+  color: var(--app-text);
+  min-height: 150px;
+}
+
+.job-editor-modal .ql-editor {
+  color: var(--app-text);
+  min-height: 150px;
+}
+
+.job-editor-modal .ql-editor.ql-blank::before {
+  color: var(--app-text-muted);
+}
+
+.job-editor-modal .ql-stroke {
+  stroke: var(--app-text-muted);
+}
+
+.job-editor-modal .ql-fill {
+  fill: var(--app-text-muted);
+}
+
+.job-editor-modal .ql-picker {
+  color: var(--app-text-muted);
+}
+
+.job-editor-modal .ql-picker-options {
+  background: var(--app-surface-raised);
+  border-color: var(--app-border);
+}
+
+.job-editor-modal .ql-picker-item {
+  color: var(--app-text);
+}
+
+@media (max-width: 640px) {
+  .job-editor-modal input {
+    box-sizing: border-box;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .job-editor-modal [style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+}

@@ -14,8 +14,19 @@ import Section from "../../../components/Section.jsx";
 import Modal from "../../../components/Modal.jsx";
 import Filters from "../../../components/Filters.jsx";
 import { useAuth } from "../../../context/AuthContext";
+import { useTheme } from "../../../context/ThemeContext.jsx";
 import { NavLink, useSearchParams } from "react-router-dom";
+import {
+  BriefcaseBusiness,
+  CircleCheck,
+  CircleX,
+  FileText,
+  Plus,
+  Users,
+} from "lucide-react";
 import {createPDF } from "../../../utils/createPDF.js";
+import Ambient3DObject from "../../../components/Ambient3DObject.jsx";
+import "../../../styles/DashboardMotion.css";
 
 const EMPTY_JOB_FORM = {
   title: "",
@@ -81,6 +92,7 @@ const mapJobToForm = (job) => ({
 
 export default function All() {
   const { user } = useAuth();
+  const { theme } = useTheme();
   const adminId = user?.id || user?.email;
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -210,6 +222,12 @@ export default function All() {
 
   const activeJobs = filteredJobs.filter(isActive);
   const inactiveJobs = filteredJobs.filter((j) => !isActive(j));
+  const allActiveJobs = jobs.filter(isActive);
+  const allInactiveJobs = jobs.length - allActiveJobs.length;
+  const totalApplicants = jobs.reduce((total, job) => {
+    const applicants = Number(job.applicants);
+    return total + (Number.isFinite(applicants) ? applicants : 0);
+  }, 0);
 
   const paginate = (list, page) =>
     list.slice((page - 1) * jobsPerPage, page * jobsPerPage);
@@ -377,17 +395,56 @@ export default function All() {
       minHeight: 40,
       borderRadius: 8,
       fontSize: 14,
+      borderColor: theme === "dark" ? "#354253" : "#d5dde7",
+      backgroundColor: theme === "dark" ? "#171f2a" : "#f8fafc",
+      boxShadow: "none",
+      ":hover": {
+        borderColor: theme === "dark" ? "#00b8c4" : "#008b9a",
+      },
     }),
     valueContainer: (base) => ({ ...base, padding: "2px 10px" }),
     option: (base, state) => ({
       ...base,
       padding: "10px 12px",
       fontSize: 14,
-      backgroundColor: state.isFocused ? "#f3f4f6" : "#fff",
-      color: "#111",
+      backgroundColor: state.isFocused
+        ? theme === "dark" ? "#263445" : "#eaf3f6"
+        : theme === "dark" ? "#171f2a" : "#f8fafc",
+      color: theme === "dark" ? "#e2eaf2" : "#263445",
       cursor: "pointer",
     }),
-    menu: (base) => ({ ...base, zIndex: 9999 }),
+    menu: (base) => ({
+      ...base,
+      zIndex: 9999,
+      overflow: "hidden",
+      border: `1px solid ${theme === "dark" ? "#354253" : "#d5dde7"}`,
+      backgroundColor: theme === "dark" ? "#171f2a" : "#f8fafc",
+    }),
+    singleValue: (base) => ({
+      ...base,
+      color: theme === "dark" ? "#e2eaf2" : "#263445",
+    }),
+    placeholder: (base) => ({
+      ...base,
+      color: theme === "dark" ? "#9aa9ba" : "#64748b",
+    }),
+    input: (base) => ({
+      ...base,
+      color: theme === "dark" ? "#e2eaf2" : "#263445",
+    }),
+    indicatorSeparator: (base) => ({
+      ...base,
+      backgroundColor: theme === "dark" ? "#354253" : "#d5dde7",
+    }),
+    dropdownIndicator: (base) => ({
+      ...base,
+      color: theme === "dark" ? "#9aa9ba" : "#64748b",
+      ":hover": { color: theme === "dark" ? "#52dce4" : "#008b9a" },
+    }),
+    clearIndicator: (base) => ({
+      ...base,
+      color: theme === "dark" ? "#9aa9ba" : "#64748b",
+    }),
   };
 
 
@@ -451,12 +508,32 @@ export default function All() {
   /* ================= RENDER ================= */
   return (
     <div className="admin-dashboard">
-      {user.role === "admin" && (
+      <Ambient3DObject className="ambient-3d-object--admin" />
+      {["admin", "lower_admin"].includes(user.role) && (
         <div className="tasks">
           <NavLink to="/admin-dashboard">Beta</NavLink>
           <NavLink to="/admin/users">Users List</NavLink>
         </div>)
         }
+
+      <section className="jobs-overview" aria-label="Job overview">
+        <article className="jobs-overview-card">
+          <span className="jobs-overview-icon"><BriefcaseBusiness size={19} /></span>
+          <div><span>Total jobs</span><strong>{jobs.length}</strong></div>
+        </article>
+        <article className="jobs-overview-card">
+          <span className="jobs-overview-icon"><CircleCheck size={19} /></span>
+          <div><span>Active jobs</span><strong>{allActiveJobs.length}</strong></div>
+        </article>
+        <article className="jobs-overview-card">
+          <span className="jobs-overview-icon"><CircleX size={19} /></span>
+          <div><span>Inactive jobs</span><strong>{allInactiveJobs}</strong></div>
+        </article>
+        <article className="jobs-overview-card">
+          <span className="jobs-overview-icon"><Users size={19} /></span>
+          <div><span>Total applicants</span><strong>{totalApplicants}</strong></div>
+        </article>
+      </section>
 
       <Filters
         searchText={searchText}
@@ -480,10 +557,26 @@ export default function All() {
         color="green"
         count={activeJobs.length}
         actions={[
-          <button key="add" onClick={openAddModal}>+ Add Job</button>,
-          user?.role === "admin" && (
-            <button key="migrate" onClick={handleMigrateJDs} disabled={isMigrating}>
-              {isMigrating ? "Migrating..." : "Migrate JDs"}
+          <button
+            className="section-action-button section-action-button--add"
+            key="add"
+            onClick={openAddModal}
+            type="button"
+          >
+            <Plus size={17} aria-hidden="true" />
+            <span>Add Job</span>
+          </button>,
+          ["admin", "lower_admin"].includes(user?.role) && (
+            <button
+              className="section-action-button section-action-button--generate"
+              key="migrate"
+              onClick={handleMigrateJDs}
+              disabled={isMigrating}
+              title="Generate job descriptions for jobs that do not have one"
+              type="button"
+            >
+              <FileText size={16} aria-hidden="true" />
+              <span>{isMigrating ? "Generating descriptions..." : "Generate Job Descriptions"}</span>
             </button>
           ),
         ].filter(Boolean)}

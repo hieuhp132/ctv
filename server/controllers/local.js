@@ -1,5 +1,6 @@
-const bcrypt = require("bcrypt");
+﻿const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { randomBytes } = require("crypto");
 const { callSupabaseFunction } = require("../utils/supabaseClient"); // chỗ bạn export supabase function
 const { logLogin } = require("../utils/authLogger");
 const { writeFile, readFile } = require("../utils/fileStore.js");
@@ -9,7 +10,14 @@ const { logActivityInternal } = require("./comments.js");
 // -------------------- USERS --------------------
 const getUsers = (req, res) => {
     const users = readFile("users.json");
-    res.json(users);
+    res.json(users.map(({ _id, name, email, role, status }) => ({
+        _id,
+        id: _id,
+        name,
+        email,
+        role,
+        status,
+    })));
 };
 
 const getUserById = (req, res) => {
@@ -54,14 +62,25 @@ const updateUserStatus = async (req, res) => {
         // Chỉ chấp nhận các trạng thái hợp lệ
         const validStatuses = ["Pending", "Active", "Rejected"];
         if (!validStatuses.includes(newStatus)) {
-            return res.status(400).json({ success: false, message: "Trạng thái không hợp lệ" });
+            return res.status(400).json({ success: false, message: "Invalid status" });
         }
 
         const users = readFile("users.json");
         const userIndex = users.findIndex(u => u._id === userId);
 
         if (userIndex === -1) {
-            return res.status(404).json({ success: false, message: "Không tìm thấy người dùng" });
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+
+        const targetUser = users[userIndex];
+        if (String(targetUser._id) === String(req.admin._id) && newStatus !== "Active") {
+            return res.status(400).json({ success: false, message: "You cannot deactivate your own account" });
+        }
+        if (targetUser.role === "admin" && targetUser.status === "Active" && newStatus !== "Active") {
+            const activeAdmins = users.filter(user => user.role === "admin" && user.status === "Active");
+            if (activeAdmins.length <= 1) {
+                return res.status(400).json({ success: false, message: "At least one active admin must remain" });
+            }
         }
 
         // Cập nhật trạng thái
@@ -74,7 +93,7 @@ const updateUserStatus = async (req, res) => {
 
         res.json({
             success: true,
-            message: `Đã cập nhật trạng thái thành ${newStatus}`,
+            message: `Status updated to ${newStatus}`,
             user: {
                 email: users[userIndex].email,
                 status: users[userIndex].status
@@ -83,7 +102,7 @@ const updateUserStatus = async (req, res) => {
 
     } catch (err) {
         console.error("Update status error:", err);
-        res.status(500).json({ success: false, message: "Lỗi server" });
+        res.status(500).json({ success: false, message: "Server error" });
     }
 };
 
@@ -104,7 +123,7 @@ const getUserStatus = (req, res) => {
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: "Không tìm thấy user"
+        message: "User not found"
       });
     }
 
@@ -137,24 +156,26 @@ const getUserStatus = (req, res) => {
     console.error("getUserStatus error:", err);
     return res.status(500).json({
       success: false,
-      message: "Lỗi server"
+      message: "Server error"
     });
   }
 };
 
-const updateBasicInfo = (req, res) => {
+const updateBasicInfo = async (req, res) => {
   try {
     const { id } = req.params;
     const {
       name,
       email,
-      role,
       newPassword,
       bankInfo,
     } = req.body;
 
     if (!id) {
       return res.status(400).json({ message: "User id is required" });
+    }
+    if (String(req.user.id) !== String(id)) {
+      return res.status(403).json({ message: "You can only update your own profile" });
     }
 
     const users = readFile("users.json") || [];
@@ -178,14 +199,8 @@ const updateBasicInfo = (req, res) => {
       user.email = email;
     }
 
-    if (role !== undefined) {
-      user.role = role;
-    }
-
-    /* ================= UPDATE PASSWORD ================= */
-    // ⚠️ Local demo: plain text (KHÔNG dùng cho production)
     if (newPassword && newPassword.trim()) {
-      user.password = newPassword;
+      user.password = await bcrypt.hash(newPassword, 10);
     }
 
     /* ================= UPDATE BANK INFO ================= */
@@ -375,7 +390,7 @@ const doLogin = async (req, res) => {
     if (!user || !user.password) {
       return res.status(400).json({
         success: false,
-        message: "Email hoặc mật khẩu không đúng",
+        message: "Invalid account. Please check your email or password again!",
       });
     }
 
@@ -384,8 +399,8 @@ const doLogin = async (req, res) => {
         success: false,
         message:
           user.status === "Pending"
-            ? "Tài khoản đang chờ phê duyệt"
-            : "Tài khoản đã bị từ chối",
+            ? "Account pending. Please contact with Admin"
+            : "Account denied",
       });
     }
 
@@ -393,8 +408,14 @@ const doLogin = async (req, res) => {
     if (!match) {
       return res.status(400).json({
         success: false,
-        message: "Email hoặc mật khẩu không đúng",
+        message: "Invalid account. Check your email or password again!",
       });
+    }
+
+    if (user.role === "recruiter") {
+      user.role = "recruiter_freelancer";
+      user.updatedAt = new Date().toISOString();
+      writeFile("users.json", users);
     }
 
     const token = jwt.sign(
@@ -421,31 +442,48 @@ const doLogin = async (req, res) => {
     });
   } catch (err) {
     console.error("doLogin error:", err);
-    res.status(500).json({ success: false, message: "Lỗi server" });
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };
 
-const doRegister = async (req, res) => {
+const registerLocalUser = (role, requireCompany = false) => async (req, res) => {
   try {
-    const { name, email, password, fromSupabase } = req.body;
-    const users = readFile("users.json");
+    const name = String(req.body.name || "").trim();
+    const email = String(req.body.email || "").trim().toLowerCase();
+    const password = String(req.body.password || "");
+    const company = String(req.body.company || "").trim();
+    const users = readFile("users.json") || [];
 
-    const existed = users.find(u => u.email === email);
-    if (existed && existed.password && !fromSupabase) {
+    if (!name || name.length > 100) {
+      return res.status(400).json({ success: false, message: "A valid name is required" });
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254) {
+      return res.status(400).json({ success: false, message: "A valid email address is required" });
+    }
+    if (password.length < 6) {
+      return res.status(400).json({ success: false, message: "Password must be at least 6 characters" });
+    }
+    if (requireCompany && !company) {
+      return res.status(400).json({ success: false, message: "Company name is required" });
+    }
+
+    const existed = users.find((user) => String(user.email || "").trim().toLowerCase() === email);
+    if (existed && (requireCompany || existed.password)) {
       return res.status(400).json({
         success: false,
-        message: "Email đã tồn tại",
+        message: "An account with this email already exists",
       });
     }
 
-    const hashed = password ? await bcrypt.hash(password, 10) : null;
+    const hashed = await bcrypt.hash(password, 10);
 
     const newUser = {
       _id: Date.now().toString(),
-      name: name || "New User",
+      name,
       email,
       password: hashed,
-      role: "recruiter",
+      ...(requireCompany ? { company } : {}),
+      role,
       status: "Pending",
       credit: 0,
       createdAt: new Date().toISOString(),
@@ -458,19 +496,31 @@ const doRegister = async (req, res) => {
 
     res.json({
       success: true,
-      message: "Đăng ký thành công, chờ phê duyệt",
+      message: "Registration successful. Your account is pending approval.",
       user: safeUser,
     });
   } catch (err) {
-    console.error("doRegister error:", err);
-    res.status(500).json({ success: false, message: "Lỗi server" });
+    console.error("Recruiter registration error:", err);
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };
+
+const doRegister = registerLocalUser("recruiter_freelancer");
+const doRegisterFulltime = registerLocalUser("recruiter_fulltime", true);
 
 
 const resetPassword = async (req, res) => {
   try {
     const { email, newPassword, responseWithEmail } = req.body;
+    if (!email) {
+      return res.status(400).json({ success: false, message: "Email is required" });
+    }
+    if (responseWithEmail) {
+      return res.status(400).json({ success: false, message: "Use the forgot-password endpoint" });
+    }
+    if (typeof newPassword !== "string" || newPassword.length < 8) {
+      return res.status(400).json({ success: false, message: "Password must be at least 8 characters" });
+    }
 
     const users = readFile("users.json") || [];
 
@@ -481,7 +531,7 @@ const resetPassword = async (req, res) => {
     if (index === -1) {
       return res.status(404).json({
         success: false,
-        message: "Không tìm thấy người dùng",
+        message: "User not found",
       });
     }
 
@@ -491,32 +541,56 @@ const resetPassword = async (req, res) => {
 
     writeFile("users.json", users);
 
-    if (responseWithEmail) {
-      try {
-        await callSupabaseFunction("resetPassword", {
-          email,
-          password: newPassword,
-        });
-      } catch (err) {
-        console.error("⚠️ Failed to send notification:", err.message);
-      }
-
-      return res.json({
-        success: true,
-        message: "New password sent to your email.",
-      });
-    }
-
     return res.json({
       success: true,
-      message: "Đặt lại mật khẩu thành công",
+      message: "Password reset successfully.",
     });
 
   } catch (err) {
     console.error("resetPassword error:", err);
     res.status(500).json({
       success: false,
-      message: "Lỗi server",
+      message: "Server error",
+    });
+  }
+};
+
+const forgotPassword = async (req, res) => {
+  const email = String(req.body.email || "").trim().toLowerCase();
+  if (!email) {
+    return res.status(400).json({ success: false, message: "Email is required" });
+  }
+
+  try {
+    const users = readFile("users.json") || [];
+    const userIndex = users.findIndex(
+      user => String(user.email || "").toLowerCase() === email
+    );
+
+    if (userIndex === -1) {
+      return res.json({
+        success: true,
+        message: "If the account exists, a new password will be sent to its email.",
+      });
+    }
+
+    const newPassword = randomBytes(24).toString("base64url");
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await callSupabaseFunction("resetPassword", { email, password: newPassword });
+
+    users[userIndex].password = hashedPassword;
+    users[userIndex].updatedAt = new Date().toISOString();
+    writeFile("users.json", users);
+
+    return res.json({
+      success: true,
+      message: "If the account exists, a new password will be sent to its email.",
+    });
+  } catch (err) {
+    console.error("Forgot password failed:", err);
+    return res.status(502).json({
+      success: false,
+      message: "Unable to send the reset email. Please try again later.",
     });
   }
 };
@@ -738,7 +812,7 @@ const createJob = (req, res) => {
   writeFile("jobs.json", jobs);
 
   // Log activity
-  const adminName = req.body.adminName || req.user?.name || "Admin";
+  const adminName = req.body.adminName || req.user?.name || "Recruiter";
   logActivityInternal(
     "job_created",
     `${adminName} created job "${newJob.title}"`,
@@ -768,18 +842,12 @@ const updateJob = (req, res) => {
     }
 
     const oldJob = jobs[index];
-    const statusChanged = req.body.status !== undefined &&
-      req.body.status !== oldJob.status;
     const updatedJob = {
         ...jobs[index],
         ...req.body,
         _id: id, // giữ nguyên id
         updatedAt: new Date().toISOString(),
     };
-
-    if (statusChanged) {
-      updatedJob.lastStatusChangeAt = new Date().toISOString();
-    }
 
     jobs[index] = updatedJob;
     writeFile("jobs.json", jobs);
@@ -810,6 +878,34 @@ const updateJob = (req, res) => {
     res.json(updatedJob);
 };
 
+const createHiringManagerJob = (req, res) => {
+  const title = String(req.body.title || "").trim();
+  const company = String(req.body.company || "").trim();
+  const location = String(req.body.location || "").trim();
+  if (!title || !company || !location) {
+    return res.status(400).json({ message: "Job title, company and location are required" });
+  }
+  req.body = { ...req.body, title, company, location, createdBy: req.user.id };
+  return createJob(req, res);
+};
+
+const updateHiringManagerJob = (req, res) => {
+  const jobs = readFile("jobs.json") || [];
+  const job = jobs.find((entry) => String(entry._id) === String(req.params.id));
+  if (!job) return res.status(404).json({ message: "Job not found" });
+  if (String(job.createdBy || "") !== String(req.user.id)) {
+    return res.status(403).json({ message: "You can only manage job openings you created" });
+  }
+  if (req.body.title !== undefined && !String(req.body.title).trim()) {
+    return res.status(400).json({ message: "Job title cannot be empty" });
+  }
+  const { createdBy, _id, ...updates } = req.body;
+  const updated = { ...job, ...updates, _id: job._id, createdBy: job.createdBy, updatedAt: new Date().toISOString() };
+  const jobIndex = jobs.findIndex((entry) => String(entry._id) === String(job._id));
+  jobs[jobIndex] = updated;
+  writeFile("jobs.json", jobs);
+  return res.json(updated);
+};
 
 const removeJob = (req, res) => {
   const { id } = req.params;
@@ -869,7 +965,7 @@ const getReferrals = (req, res) => {
       email,
       isAdmin,
       page = 1,
-      limit = 50,
+      limit,
       status,
       jobId,
       q = "",
@@ -893,7 +989,6 @@ const getReferrals = (req, res) => {
       : null;
 
     let filtered = referrals.filter((ref) => {
-      /* ===== OWNER FILTER ===== */
       if (isAdminBool) {
         // ADMIN: chỉ match theo admin id
         if (!ref.admin) return false;
@@ -935,19 +1030,90 @@ const getReferrals = (req, res) => {
     );
 
     const total = filtered.length;
-    const start = (Number(page) - 1) * Number(limit);
-    const items = filtered.slice(start, start + Number(limit));
+    const numericLimit = Number(limit);
+    const hasLimit = Number.isFinite(numericLimit) && numericLimit > 0;
+    const start = hasLimit ? (Number(page) - 1) * numericLimit : 0;
+    const items = hasLimit
+      ? filtered.slice(start, start + numericLimit)
+      : filtered;
 
     res.json({
       items,
       total,
       page: Number(page),
-      limit: Number(limit),
+      limit: hasLimit ? numericLimit : null,
     });
   } catch (err) {
     console.error("getReferrals error:", err);
     res.status(500).json({ message: "Server error" });
   }
+};
+
+const getHiringManagerReferrals = (req, res) => {
+  try {
+    const ownedJobs = (readFile("jobs.json") || [])
+      .filter((job) => String(job.createdBy || "") === String(req.user.id));
+    const ownedJobIds = new Set(ownedJobs.map((job) => String(job._id)));
+    const { page = 1, limit = 1000, status, q = "" } = req.query;
+    let referrals = (readFile("referrals.json") || []).filter((referral) => ownedJobIds.has(String(referral.job)));
+    if (status) referrals = referrals.filter((referral) => referral.status === status);
+    if (q) {
+      const search = String(q).toLowerCase();
+      referrals = referrals.filter((referral) =>
+        String(referral.candidateName || "").toLowerCase().includes(search) ||
+        String(referral.candidateEmail || "").toLowerCase().includes(search)
+      );
+    }
+    referrals.sort((left, right) => new Date(right.createdAt) - new Date(left.createdAt));
+    const numericLimit = Number(limit);
+    const start = Math.max(0, (Number(page) - 1) * numericLimit);
+    const items = Number.isFinite(numericLimit) && numericLimit > 0
+      ? referrals.slice(start, start + numericLimit)
+      : referrals;
+    return res.json({ items, total: referrals.length, page: Number(page), limit: numericLimit || null });
+  } catch (error) {
+    console.error("getHiringManagerReferrals error:", error);
+    return res.status(500).json({ message: "Failed to load hiring pipeline" });
+  }
+};
+
+const updateHiringManagerReferral = (req, res) => {
+  const referrals = readFile("referrals.json") || [];
+  const referralIndex = referrals.findIndex((entry) => String(entry._id) === String(req.params.id));
+  if (referralIndex === -1) return res.status(404).json({ message: "Candidate referral not found" });
+
+  const referral = referrals[referralIndex];
+  const ownsJob = (readFile("jobs.json") || []).some((job) =>
+    String(job._id) === String(referral.job) && String(job.createdBy || "") === String(req.user.id)
+  );
+  if (!ownsJob) return res.status(403).json({ message: "You can only manage candidates for your job openings" });
+
+  const allowedFields = [
+    "status", "interviewAt", "interviewScore", "interviewQuestions",
+    "crmNotes", "candidateFeedback", "offerSalary", "isTalentPool", "hiredAt",
+  ];
+  const updates = Object.fromEntries(
+    allowedFields.filter((field) => Object.hasOwn(req.body, field)).map((field) => [field, req.body[field]])
+  );
+  const stages = ["submitted", "under_review", "interviewing", "offer", "hired", "onboard", "rejected"];
+  if (updates.status !== undefined && !stages.includes(updates.status)) {
+    return res.status(400).json({ message: "Invalid candidate stage" });
+  }
+  if (updates.interviewScore !== undefined && updates.interviewScore !== "" &&
+      (!Number.isFinite(Number(updates.interviewScore)) || Number(updates.interviewScore) < 0 || Number(updates.interviewScore) > 100)) {
+    return res.status(400).json({ message: "Interview score must be between 0 and 100" });
+  }
+  if (updates.offerSalary !== undefined && updates.offerSalary !== "" &&
+      (!Number.isFinite(Number(updates.offerSalary)) || Number(updates.offerSalary) < 0)) {
+    return res.status(400).json({ message: "Offer salary must be a non-negative number" });
+  }
+  if (updates.interviewAt && Number.isNaN(new Date(updates.interviewAt).getTime())) {
+    return res.status(400).json({ message: "Interview date is invalid" });
+  }
+
+  referrals[referralIndex] = { ...referral, ...updates, updatedAt: new Date().toISOString() };
+  writeFile("referrals.json", referrals);
+  return res.json({ message: "Candidate updated", referral: referrals[referralIndex] });
 };
 
 
@@ -965,8 +1131,8 @@ const createReferral = (req, res) => {
       recruiterId,
       adminId,
       candidateName,
-      email,
-      phone,
+      candidateEmail,
+      candidatePhone,
       linkedin,
       portfolio,
       suitability,
@@ -1006,8 +1172,8 @@ const createReferral = (req, res) => {
       job: jobId,
 
       candidateName,
-      candidateEmail: email || "",
-      candidatePhone: phone || "",
+      candidateEmail: candidateEmail || "",
+      candidatePhone: candidatePhone || "",
 
       cvUrl: cvUrl || "",
 
@@ -1015,7 +1181,11 @@ const createReferral = (req, res) => {
       portfolio: portfolio || "",
       suitability: suitability || "",
 
-      bonus: Number(bonus) || 0,
+      bonus: (() => {
+        const match = String(bonus ?? "").match(/[-+]?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?/);
+        const amount = match ? Number(match[0].replace(/,/g, "")) : 0;
+        return Number.isFinite(amount) ? amount : 0;
+      })(),
       message: message || "",
 
       status: "submitted",
@@ -1029,7 +1199,7 @@ const createReferral = (req, res) => {
     const recruiterName = req.body.recruiterName || "Recruiter";
     logActivityInternal(
       "referral_created",
-      `${recruiterName} submitted referral for "${candidateName}" on job "${job.title}"`,
+      `${recruiterName} submitted new referral on job "${job.title}"`,
       {
         referralId: referral._id,
         jobId,
@@ -1063,7 +1233,7 @@ const removeReferral = (req, res) => {
   const adminName = req.body?.adminName || req.user?.name || "Admin";
   logActivityInternal(
     "referral_deleted",
-    `${adminName} deleted referral for "${found.candidateName}"`,
+    `${adminName} deleted a referral"`,
     {
       referralId: id,
       candidateName: found.candidateName,
@@ -1082,6 +1252,14 @@ const updateReferral = (req, res) => {
   let referrals = readFile("referrals.json");
   const index = referrals.findIndex(r => r._id === id);
   if (index === -1) return res.status(404).json({ message: "Referral not found" });
+
+  if (Object.hasOwn(updates, "bonus")) {
+    const bonus = Number(String(updates.bonus ?? "").replace(/[, ]/g, ""));
+    if (!Number.isFinite(bonus) || bonus < 0) {
+      return res.status(400).json({ message: "Commission must be a valid non-negative amount" });
+    }
+    updates.bonus = bonus;
+  }
 
   const oldReferral = referrals[index];
   referrals[index] = { ...referrals[index], ...updates, updatedAt: new Date().toISOString() };
@@ -1103,7 +1281,7 @@ const updateReferral = (req, res) => {
   
   logActivityInternal(
     "referral_updated",
-    `${adminName} updated referral for "${referrals[index].candidateName}"`,
+    `${adminName} updated a referral"`,
     {
       referralId: id,
       candidateName: referrals[index].candidateName,
@@ -1120,20 +1298,21 @@ const updateReferral = (req, res) => {
 module.exports = {
     // Users
     getUsers, getUserById, getProfile,
-    resetPassword, updateBasicInfo,
+    resetPassword, forgotPassword, updateBasicInfo,
     createUser,
     removeUser,
     doLogin,
     doRegister,
+    doRegisterFulltime,
     // Jobs
     getJobs,
     resetJobs,
     getJobById, saveJob, unsaveJob,
     getJobsByStatus, 
-    createJob, updateJob,
+    createJob, updateJob, createHiringManagerJob, updateHiringManagerJob,
     removeJob, updateUserStatus, getUserStatus,
     // Referrals
-    getReferrals,
+    getReferrals, getHiringManagerReferrals, updateHiringManagerReferral,
     resetReferrals,
     createReferral,
     removeReferral, updateReferral,

@@ -160,8 +160,8 @@ router.get("/notifications", authMiddleWare, (req, res) => {
       {
         id: "notif_1",
         type: "announcement",
-        title: "LIFE AI vừa ráp rếng chốt 1 headcount Marketing",
-        message: "Vị trí Senior .NET Dev đang tuyển nhân. Experience working with international clients (US, UK, Sing, Japan, Korea...)",
+        title: "LIFE AI has filled a Marketing position",
+        message: "A Senior .NET Developer role is open. Experience with international clients (US, UK, Singapore, Japan, Korea, and more) is preferred.",
         timestamp: new Date(Date.now() - 3600000),
         read: false,
         icon: "🔥",

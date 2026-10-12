@@ -119,8 +119,6 @@ const updateComment = (req, res) => {
 
 const deleteComment = (req, res) => {
   try {
-    console.log("Delete comment function called");
-
     const { jobId, commentId } = req.params;
     const { userId, isAdmin } = req.body;
 
@@ -152,18 +150,6 @@ const deleteComment = (req, res) => {
     jobs[jobIndex].updatedAt = new Date().toISOString();
 
     writeFile("jobs.json", jobs);
-
-    // Log activity
-    logActivityInternal(
-      "delete_comment",
-      `${comment.author} deleted a comment on job "${jobs[jobIndex].title}"`,
-      {
-        jobId,
-        commentId,
-        author: comment.author,
-        authorRole: comment.authorRole
-      }
-    );
 
     res.json({ success: true, message: "Comment deleted" });
   } catch (err) {

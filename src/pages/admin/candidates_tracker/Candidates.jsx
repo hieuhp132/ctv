@@ -10,6 +10,14 @@ import {
 import { useAuth } from "../../../context/AuthContext";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import {
+  Activity,
+  Archive,
+  CheckCircle2,
+  Download,
+  Users,
+  UserRoundX,
+} from "lucide-react";
 
 /* ================= CONSTANTS ================= */
 const STATUS_OPTIONS = [
@@ -26,6 +34,19 @@ const PAGE_SIZE = 10;
 /* ================= HELPERS ================= */
 const paginate = (data, page) =>
   data.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+const parseCommissionAmount = (value) => {
+  if (value === null || value === undefined || value === "") return null;
+  const match = String(value).match(/[-+]?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?/);
+  if (!match) return null;
+  const amount = Number(match[0].replace(/,/g, ""));
+  return Number.isFinite(amount) ? amount : null;
+};
+
+const commissionInputValue = (value) => {
+  const amount = parseCommissionAmount(value);
+  return amount === null ? "" : String(amount);
+};
 
 // Track downloaded CVs to support incremental downloads
 const STORAGE_KEY_DOWNLOADED = "downloadedCVs_v1";
@@ -99,7 +120,7 @@ const FilterUI = React.memo(({ onApply, dataOptions }) => {
   };
 
   return (
-    <div className="bg-white p-6 sm:p-8 rounded-t-[24px] shadow-sm shadow-blue-900/5 border border-gray-100 border-b-0 relative z-10">
+    <div className="candidate-filter-panel bg-white p-6 sm:p-8 rounded-t-[24px] shadow-sm shadow-blue-900/5 border border-gray-100 border-b-0 relative z-10">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
         <AutocompleteInput
           label="Candidate Name"
@@ -146,10 +167,10 @@ const FilterUI = React.memo(({ onApply, dataOptions }) => {
         </div>
       </div>
       <div className="flex items-center justify-end gap-3 mt-6">
-        <button onClick={handleClear} className="px-5 py-2.5 text-sm font-semibold text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-all">
+        <button onClick={handleClear} className="candidate-filter-clear px-5 py-2.5 text-sm font-semibold text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-all">
           Clear Filters
         </button>
-        <button onClick={() => onApply(localFilters)} className="px-5 py-2.5 text-sm font-semibold text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-all">
+        <button onClick={() => onApply(localFilters)} className="candidate-filter-apply px-5 py-2.5 text-sm font-semibold text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-xl transition-all">
           Apply Filters
         </button>
       </div>
@@ -177,10 +198,13 @@ export default function CandidateManagement() {
   });
   const [activePage, setActivePage] = useState(1);
   const [rejectedPage, setRejectedPage] = useState(1);
+  const [candidateTab, setCandidateTab] = useState("active");
 
   const [jobMap, setJobMap] = useState({});
   const [recruiterMap, setRecruiterMap] = useState({});
   const [localStatuses, setLocalStatuses] = useState({});
+  const [localBonuses, setLocalBonuses] = useState({});
+  const [savingReferralId, setSavingReferralId] = useState("");
   const [zipping, setZipping] = useState(false);
   const [zipProgress, setZipProgress] = useState(0);
   const [zipAdded, setZipAdded] = useState(0);
@@ -317,6 +341,12 @@ export default function CandidateManagement() {
 
   const activeRows = sorted.filter((r) => r.status !== "rejected");
   const rejectedRows = sorted.filter((r) => r.status === "rejected");
+  const hiredCount = sorted.filter((r) =>
+    ["hired", "onboard"].includes(String(r.status || "").toLowerCase()),
+  ).length;
+  const inProgressCount = sorted.filter(
+    (r) => !["hired", "onboard", "rejected"].includes(String(r.status || "").toLowerCase()),
+  ).length;
 
   const activePaged = paginate(activeRows, activePage);
   const rejectedPaged = paginate(rejectedRows, rejectedPage);
@@ -363,18 +393,34 @@ export default function CandidateManagement() {
     setLocalStatuses((p) => ({ ...p, [id]: value }));
 
   const handleUpdate = async (id) => {
-    if (!window.confirm("Update candidate status?")) return;
+    const referral = rows.find((row) => row._id === id);
+    const bonusValue = localBonuses[id] ?? referral?.bonus ?? "";
+    const parsedBonus = parseCommissionAmount(bonusValue);
+    if (parsedBonus === null || parsedBonus < 0) {
+      window.alert("Commission must be a valid non-negative amount.");
+      return;
+    }
+    if (!window.confirm("Update candidate status and commission?")) return;
 
     const newStatus = localStatuses[id];
     const now = new Date().toISOString();
 
-    await updateReferralFieldsById(id, { status: newStatus });
-
-    setRows((p) =>
-      p.map((r) =>
-        r._id === id ? { ...r, status: newStatus, updatedAt: now } : r,
-      ),
-    );
+    setSavingReferralId(id);
+    try {
+      await updateReferralFieldsById(id, { status: newStatus, bonus: parsedBonus });
+      setRows((p) =>
+        p.map((r) =>
+          r._id === id
+            ? { ...r, status: newStatus, bonus: parsedBonus, updatedAt: now }
+            : r,
+        ),
+      );
+      setLocalBonuses((current) => ({ ...current, [id]: String(parsedBonus) }));
+    } catch (error) {
+      window.alert(error.message || "Unable to update candidate commission.");
+    } finally {
+      setSavingReferralId("");
+    }
   };
 
   const handleRemove = async (id) => {
@@ -414,7 +460,7 @@ export default function CandidateManagement() {
     try {
       const items = sorted.filter((r) => r.cvUrl);
       if (!items.length) {
-        alert("Không có CV để tải");
+        alert("There are no CVs to download.");
         return;
       }
       setZipping(true);
@@ -442,7 +488,7 @@ export default function CandidateManagement() {
         } catch { }
       }
       if (!added) {
-        alert("Không có CV hợp lệ để nén");
+        alert("There are no valid CVs to add to the ZIP file.");
         setZipping(false);
         return;
       }
@@ -469,14 +515,14 @@ export default function CandidateManagement() {
         } catch { }
       }
       if (!ok) {
-        alert("Không thể tải file ZIP");
+        alert("Unable to download the ZIP file.");
       }
       // mark all as downloaded
       markDownloaded(items);
       setZipProgress(100);
       setZipping(false);
     } catch (e) {
-      alert("Không thể tạo file ZIP");
+      alert("Unable to create the ZIP file.");
       setZipping(false);
     }
   };
@@ -485,7 +531,7 @@ export default function CandidateManagement() {
     try {
       const items = newCvItems;
       if (!items.length) {
-        alert("Không có CV mới");
+        alert("There are no new CVs.");
         return;
       }
       setZipping(true);
@@ -513,7 +559,7 @@ export default function CandidateManagement() {
         } catch { }
       }
       if (!added) {
-        alert("Không có CV hợp lệ để nén");
+        alert("There are no valid CVs to add to the ZIP file.");
         setZipping(false);
         return;
       }
@@ -538,15 +584,14 @@ export default function CandidateManagement() {
       setZipProgress(100);
       setZipping(false);
     } catch (e) {
-      alert("Không thể tạo file ZIP");
+      alert("Unable to create the ZIP file.");
       setZipping(false);
     }
   };
 
   /* ================= TABLE ================= */
-  const renderTable = (title, data, page, setPage, total, isFirst = false) => (
-    <section className={`bg-white shadow-sm shadow-blue-900/5 border border-gray-100 p-6 sm:p-8 mb-8 ${isFirst ? 'rounded-b-[24px] border-t-0' : 'rounded-[24px]'}`}>
-      {isFirst && <div className="h-[1px] w-full bg-gray-100 mb-8 mt-[-32px]"></div>}
+  const renderTable = (title, data, page, setPage, total) => (
+    <section className="candidate-table-section bg-white shadow-sm shadow-blue-900/5 border border-gray-100 p-6 sm:p-8 mb-8 rounded-[24px]">
       <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
         <i data-lucide={title.includes("Active") ? "users" : "user-x"} className="w-5 h-5 text-gray-400"></i>
         {title}
@@ -569,6 +614,7 @@ export default function CandidateManagement() {
               <th className="px-5 py-4 font-semibold text-gray-600">CV</th>
               <th className="px-5 py-4 font-semibold text-gray-600">Links</th>
               <th className="px-5 py-4 font-semibold text-gray-600">Status</th>
+              <th className="px-5 py-4 font-semibold text-gray-600">Commission (Bonus)</th>
               <th className="px-5 py-4 font-semibold text-gray-600 cursor-pointer hover:bg-gray-100 transition-colors" onClick={() => toggleSort("updatedAt")}>
                 <div className="flex items-center gap-2">Time <span className="text-gray-400">{sortIcon("updatedAt")}</span></div>
               </th>
@@ -618,6 +664,24 @@ export default function CandidateManagement() {
                     ))}
                   </select>
                 </td>
+                <td className="px-5 py-4">
+                  <label className="sr-only" htmlFor={`candidate-commission-${r._id}`}>
+                    Commission for {r.candidateName || "candidate"}
+                  </label>
+                  <input
+                    id={`candidate-commission-${r._id}`}
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    className="w-28 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+                    value={localBonuses[r._id] ?? commissionInputValue(r.bonus)}
+                    onChange={(event) => setLocalBonuses((current) => ({
+                      ...current,
+                      [r._id]: event.target.value,
+                    }))}
+                    aria-label={`Commission bonus for ${r.candidateName || "candidate"}`}
+                  />
+                </td>
                 <td className="px-5 py-4 text-xs text-gray-500 font-medium">
                   {new Date(r.updatedAt || r.createdAt).toLocaleString("vi-VN", {
                     hour: '2-digit', minute: '2-digit',
@@ -626,10 +690,10 @@ export default function CandidateManagement() {
                 </td>
                 <td className="px-5 py-4 text-right">
                   <div className="flex justify-end gap-2">
-                    <button onClick={() => handleUpdate(r._id)} className="px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg text-xs font-bold transition-colors">
-                      Save
+                    <button onClick={() => handleUpdate(r._id)} disabled={savingReferralId === r._id} className="candidate-row-save px-3 py-1.5 rounded-lg text-xs font-bold transition-colors disabled:opacity-50">
+                      {savingReferralId === r._id ? "Saving…" : "Save"}
                     </button>
-                    <button onClick={() => handleRemove(r._id)} className="px-3 py-1.5 bg-red-50 text-red-600 hover:bg-red-100 rounded-lg text-xs font-bold transition-colors">
+                    <button onClick={() => handleRemove(r._id)} className="candidate-row-delete px-3 py-1.5 rounded-lg text-xs font-bold transition-colors">
                       Delete
                     </button>
                   </div>
@@ -638,7 +702,7 @@ export default function CandidateManagement() {
             ))}
             {!data.length && (
               <tr>
-                <td colSpan="9">
+                <td colSpan="10">
                   <div className="flex flex-col items-center justify-center py-12 text-center">
                     <div className="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center mb-3">
                       <i data-lucide="inbox" className="w-6 h-6 text-gray-400"></i>
@@ -688,7 +752,7 @@ export default function CandidateManagement() {
       "Job Salary": jobMap[r.job]?.salary || "",
       "CTV Email": recruiterMap[r.recruiter]?.email || r.recruiter || "",
       Status: r.status,
-      Bonus: r.bonus ?? "",
+      "Commission (Bonus)": r.bonus ?? "",
       "CV Link": r.cvUrl || "",
       LinkedIn: r.linkedin || "",
       Portfolio: r.portfolio || "",
@@ -722,10 +786,11 @@ export default function CandidateManagement() {
 
   /* ================= RENDER ================= */
   return (
-    <div className="min-h-screen bg-[#f8fafc] py-12 px-6">
-      <div className="max-w-[1600px] mx-auto">
-        <header className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 text-left">
+    <div className="admin-candidate-management min-h-screen bg-[#f8fafc] py-12 px-6">
+      <div className="candidate-management-content max-w-[1600px] mx-auto">
+        <header className="candidate-page-header flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 text-left">
           <div>
+            <span className="candidate-eyebrow">TALENT OPERATIONS</span>
             <h2 className="text-3xl font-extrabold text-gray-900 tracking-tight mb-2">Candidate Management</h2>
             <p className="text-gray-500 text-base">Track, filter, and modify candidates across all listings.</p>
           </div>
@@ -733,7 +798,7 @@ export default function CandidateManagement() {
           <div className="flex items-center gap-3">
             <button
               onClick={handleExportExcel}
-              className="flex items-center gap-2 px-4 py-2 border border-gray-200 hover:border-gray-300 text-gray-700 font-semibold rounded-xl shadow-sm transition-all text-sm"
+              className="candidate-export-button flex items-center gap-2 px-4 py-2 border border-gray-200 hover:border-gray-300 text-gray-700 font-semibold rounded-xl shadow-sm transition-all text-sm"
             >
               <i data-lucide="download" className="w-4 h-4"></i>
               Export Excel
@@ -741,13 +806,40 @@ export default function CandidateManagement() {
             <button
               onClick={downloadAllCVs}
               disabled={zipping}
-              className="flex items-center gap-2 px-4 py-2 border border-gray-200 hover:border-gray-300 text-gray-700 font-semibold rounded-xl shadow-sm transition-all text-sm"
+              className="candidate-export-button flex items-center gap-2 px-4 py-2 border border-gray-200 hover:border-gray-300 text-gray-700 font-semibold rounded-xl shadow-sm transition-all text-sm"
             >
               <i data-lucide="file-archive" className="w-4 h-4"></i>
               {zipping ? "Compressing..." : "Download CVs"}
             </button>
           </div>
         </header>
+
+        <section className="candidate-overview" aria-label="Candidate overview">
+          <article className="candidate-overview-card">
+            <span className="candidate-overview-icon candidate-overview-icon--cyan"><Users size={20} /></span>
+            <div><span>Total candidates</span><strong>{sorted.length}</strong></div>
+          </article>
+          <article className="candidate-overview-card">
+            <span className="candidate-overview-icon candidate-overview-icon--cyan"><Activity size={20} /></span>
+            <div><span>In progress</span><strong>{inProgressCount}</strong></div>
+          </article>
+          <article className="candidate-overview-card">
+            <span className="candidate-overview-icon candidate-overview-icon--cyan"><CheckCircle2 size={20} /></span>
+            <div><span>Hired</span><strong>{hiredCount}</strong></div>
+          </article>
+          <article className="candidate-overview-card">
+            <span className="candidate-overview-icon candidate-overview-icon--pink"><UserRoundX size={20} /></span>
+            <div><span>Rejected candidates</span><strong>{rejectedRows.length}</strong></div>
+          </article>
+          <article className="candidate-overview-card">
+            <span className="candidate-overview-icon candidate-overview-icon--violet"><Archive size={20} /></span>
+            <div><span>New CVs to review</span><strong>{newCvItems.length}</strong></div>
+          </article>
+          <button className="candidate-overview-download" onClick={downloadNewCVs} disabled={zipping || !newCvItems.length}>
+            <Download size={17} />
+            Download new CVs
+          </button>
+        </section>
 
         {zipping && (
           <div className="mb-6 p-4 bg-white border border-blue-100 rounded-xl flex items-center gap-4 shadow-sm">
@@ -764,22 +856,59 @@ export default function CandidateManagement() {
           dataOptions={dataOptions}
         />
 
-        {renderTable(
-          "Active Candidates",
-          activePaged,
-          activePage,
-          setActivePage,
-          activeRows.length,
-          true
-        )}
+        <div className="candidate-tabs" role="tablist" aria-label="Candidate status">
+          <button
+            id="candidate-tab-active"
+            type="button"
+            role="tab"
+            aria-selected={candidateTab === "active"}
+            aria-controls="candidate-panel-active"
+            className={`candidate-tab${candidateTab === "active" ? " is-active" : ""}`}
+            onClick={() => setCandidateTab("active")}
+          >
+            Active <span>{activeRows.length}</span>
+          </button>
+          <button
+            id="candidate-tab-rejected"
+            type="button"
+            role="tab"
+            aria-selected={candidateTab === "rejected"}
+            aria-controls="candidate-panel-rejected"
+            className={`candidate-tab${candidateTab === "rejected" ? " is-active" : ""}`}
+            onClick={() => setCandidateTab("rejected")}
+          >
+            Rejected <span>{rejectedRows.length}</span>
+          </button>
+        </div>
 
-        {renderTable(
-          "Rejected Candidates",
-          rejectedPaged,
-          rejectedPage,
-          setRejectedPage,
-          rejectedRows.length,
-          false
+        {candidateTab === "active" ? (
+          <div
+            id="candidate-panel-active"
+            role="tabpanel"
+            aria-labelledby="candidate-tab-active"
+          >
+            {renderTable(
+              "Active Candidates",
+              activePaged,
+              activePage,
+              setActivePage,
+              activeRows.length
+            )}
+          </div>
+        ) : (
+          <div
+            id="candidate-panel-rejected"
+            role="tabpanel"
+            aria-labelledby="candidate-tab-rejected"
+          >
+            {renderTable(
+              "Rejected Candidates",
+              rejectedPaged,
+              rejectedPage,
+              setRejectedPage,
+              rejectedRows.length
+            )}
+          </div>
         )}
       </div>
     </div>

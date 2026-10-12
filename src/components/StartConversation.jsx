@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext.jsx";
+import { getRoleLabel } from "../routes/roleRoutes.js";
 import { getUsersListL, sendMessage } from "../services/api.js";
 import "./StartConversation.css";
 import { IoClose, IoSend } from "react-icons/io5";
@@ -145,7 +146,7 @@ export default function StartConversation({
                       </div>
                       <div className="user-info">
                         <div className="user-name">{u.name || u.email}</div>
-                        <div className="user-role">{u.role}</div>
+                        <div className="user-role">{getRoleLabel(u.role)}</div>
                       </div>
                     </div>
                   ))}

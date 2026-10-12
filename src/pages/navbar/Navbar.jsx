@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext.jsx";
+import { getRoleLabel } from "../../routes/roleRoutes.js";
 import "./Navbar.css";
 import logoImg from "/logo.jfif";
 import { MdNotifications } from "react-icons/md";
@@ -71,7 +72,7 @@ export default function Navbar() {
 
   const isActive = (path) => location.pathname === path;
 
-  const homePath = user?.role === "admin" ? "/admin" : "/dashboard";
+  const homePath = ["admin", "lower_admin"].includes(user?.role) ? "/admin" : "/dashboard";
   const goHome = () => navigate(homePath);
 
   const menuItemsByRole = {
@@ -80,6 +81,13 @@ export default function Navbar() {
       { label: "Statistics", path: "/admin/statistics" },
       { label: "Candidate Management", path: "/admin/candidates" },
       { label: "Saved Jobs", path: "/admin/saved-jobs" },
+    ],
+    lower_admin: [
+      { label: "Dashboard", path: "/admin/jobs" },
+      { label: "Statistics", path: "/admin/statistics" },
+      { label: "Candidate Management", path: "/admin/candidates" },
+      { label: "Saved Jobs", path: "/admin/saved-jobs" },
+      { label: "User Management", path: "/admin/users" },
     ],
     recruiter: [
       { label: "Dashboard", path: "/recruiter/jobs" },
@@ -206,10 +214,10 @@ export default function Navbar() {
                   />
                   <div>
                     <div className="text-sm font-bold text-text-dark">{user.name}</div>
-                    <div className="text-xs text-text-light capitalize">{user.role}</div>
+                    <div className="text-xs text-text-light capitalize">{getRoleLabel(user.role)}</div>
                   </div>
                 </div>
-                {user.role === "admin" && (
+                {["admin", "lower_admin"].includes(user.role) && (
                   <div className="px-3 pb-2 text-xs font-bold text-primary tracking-wider uppercase">Credit: 0$</div>
                 )}
                 <button onClick={() => { navigate(`${user.role}/profile`); setMobileMenuOpen(false); }} className="w-full text-left px-3 py-3 text-sm font-semibold text-text-dark bg-bg-gray rounded-xl">View Profile</button>

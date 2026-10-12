@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useAuth } from "../context/AuthContext.jsx";
+import { getRoleLabel } from "../routes/roleRoutes.js";
 import {
   getUsersListL,
   fetchConversations,
@@ -230,7 +231,7 @@ export default function Messenger({ isOpen, onClose }) {
                     </div>
                     <div className="conv-info">
                       <h4>{u.name || u.email}</h4>
-                      <p className="user-role">{u.role || "User"}</p>
+                      <p className="user-role">{getRoleLabel(u.role) || "User"}</p>
                     </div>
                   </div>
                 ))}

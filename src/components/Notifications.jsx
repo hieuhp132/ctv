@@ -120,6 +120,9 @@ export default function Notifications({ isOpen, onClose }) {
     <div className="notifications-overlay" onClick={onClose}>
       <div
         className="notifications-container"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Activity feed"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
@@ -128,7 +131,7 @@ export default function Notifications({ isOpen, onClose }) {
             <h2>Activity Feed</h2>
             <span className="unread-badge">{activities.length}</span>
           </div>
-          <button className="close-btn" onClick={onClose}>
+          <button className="close-btn" onClick={onClose} aria-label="Close activity feed">
             <IoClose size={24} />
           </button>
         </div>

@@ -9,7 +9,7 @@ export const API_BASE =
     : "https://apih.ant-tech.asia");
 import axios from "axios";
 
-// console.log(API_BASE);
+console.log(API_BASE);
 
 export async function getUsersListL() {
   const res = await fetch(`${API_BASE}/local/users`, {
@@ -17,7 +17,16 @@ export async function getUsersListL() {
     headers: { "Content-Type": "application/json" },
   });
   if (!res.ok) throw new Error("[Client]: Failed get local userlist");
-  return await res.json();
+  const users = await res.json();
+  return Array.isArray(users) ? users : [];
+}
+
+export async function fetchAllJobsStrict() {
+  const res = await fetch(`${API_BASE}/local/jobs`);
+  if (!res.ok) throw new Error("Failed to load job openings.");
+  const data = await res.json();
+  if (!Array.isArray(data.jobs)) throw new Error("The jobs response was invalid.");
+  return data.jobs;
 }
 
 export async function saveJobL(jobId, userId) {
@@ -100,6 +109,72 @@ function authHeaders() {
   return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
+async function adminUsersRequest(path = "", options = {}) {
+  const response = await fetch(`${API_BASE}/local/admin/users${path}`, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...authHeaders(),
+      ...options.headers,
+    },
+  });
+  const responseText = await response.text();
+  let data;
+  try {
+    data = responseText ? JSON.parse(responseText) : {};
+  } catch {
+    if (response.status === 404) {
+      throw new Error("User management API is not deployed on the backend yet. Deploy the latest server code and try again.");
+    }
+    throw new Error(`User management API returned an invalid response (HTTP ${response.status}).`);
+  }
+  if (!response.ok || data.success === false) {
+    throw new Error(data.message || "User management request failed");
+  }
+  return data;
+}
+
+export async function getAdminUsersL() {
+  const data = await adminUsersRequest();
+  return data.data.map((user) =>
+    user.role === "recruiter" ? { ...user, role: "recruiter_freelancer" } : user
+  );
+}
+
+export async function createAdminUserL(user) {
+  return adminUsersRequest("", {
+    method: "POST",
+    body: JSON.stringify(user),
+  });
+}
+
+export async function updateAdminUserRoleL(userId, role) {
+  return adminUsersRequest(`/${encodeURIComponent(userId)}/role`, {
+    method: "PATCH",
+    body: JSON.stringify({ role }),
+  });
+}
+
+export async function updateAdminUserStatusL(userId, status) {
+  return adminUsersRequest(`/${encodeURIComponent(userId)}/status`, {
+    method: "PATCH",
+    body: JSON.stringify({ status }),
+  });
+}
+
+export async function resetAdminUserPasswordL(userId, password) {
+  return adminUsersRequest(`/${encodeURIComponent(userId)}/password`, {
+    method: "PUT",
+    body: JSON.stringify({ password }),
+  });
+}
+
+export async function deleteAdminUserL(userId) {
+  return adminUsersRequest(`/${encodeURIComponent(userId)}`, {
+    method: "DELETE",
+  });
+}
+
 export async function fetchAllJobs(limit) {
   try {
     const res = await fetch(`${API_BASE}/local/jobs`);
@@ -133,6 +208,7 @@ export async function createJobL(job) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(job),
   });
+  if (!res.ok) throw new Error("Failed to create job.");
   const created = await res.json();
   return created;
 }
@@ -144,8 +220,43 @@ export async function updateJobL(updated) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   });
+  if (!res.ok) throw new Error("Failed to update job.");
   const saved = await res.json();
   return saved;
+}
+
+async function employeeRequest(path, options) {
+  const res = await fetch(`${API_BASE}${path}`, {
+    ...options,
+    headers: {
+      "Content-Type": "application/json",
+      ...authHeaders(),
+      ...options.headers,
+    },
+  });
+  const responseText = await res.text();
+  let data;
+  try {
+    data = responseText ? JSON.parse(responseText) : {};
+  } catch {
+    throw new Error(`Recruiter workspace returned an invalid response (HTTP ${res.status}).`);
+  }
+  if (!res.ok) throw new Error(data.message || "Recruiter workspace request failed.");
+  return data;
+}
+
+export async function createEmployeeJobL(job) {
+  return employeeRequest("/local/recruiter-fulltime/jobs", {
+    method: "POST",
+    body: JSON.stringify(job),
+  });
+}
+
+export async function updateEmployeeJobL(id, updates) {
+  return employeeRequest(`/local/recruiter-fulltime/jobs/${encodeURIComponent(id)}`, {
+    method: "PUT",
+    body: JSON.stringify(updates),
+  });
 }
 
 export async function deleteJobL(id) {
@@ -188,14 +299,19 @@ export async function lregister({
   name,
   email,
   password,
+  company,
   promoCode = null,
   fromSupabase,
+  recruiterType = "freelancer",
 }) {
   try {
-    const res = await fetch(`${API_BASE}/local/register`, {
+    const registrationPath = recruiterType === "fulltime"
+      ? "/local/register/recruiter-fulltime"
+      : "/local/register";
+    const res = await fetch(`${API_BASE}${registrationPath}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, password, promoCode, fromSupabase }),
+      body: JSON.stringify({ name, email, password, company, promoCode, fromSupabase }),
     });
 
     const data = await res.json();
@@ -243,8 +359,22 @@ export async function listReferrals({
   jobId,
   q,
   finalized,
+  isHiringManager = false,
+  jobIds = [],
 } = {}) {
   if (!id && !email) return [];
+
+  if (isHiringManager) {
+    const managerParams = new URLSearchParams({ page: String(page), limit: String(limit) });
+    if (status) managerParams.set("status", status);
+    if (q) managerParams.set("q", q);
+    const res = await fetch(`${API_BASE}/local/referrals/hiring-manager?${managerParams.toString()}`, {
+      headers: authHeaders(),
+    });
+    if (!res.ok) throw new Error("Failed to load the candidate pipeline.");
+    const data = await res.json();
+    return Array.isArray(data.items) ? data.items : [];
+  }
 
   const params = new URLSearchParams({
     isAdmin: String(isAdmin),
@@ -261,14 +391,44 @@ export async function listReferrals({
   if (finalized !== undefined) {
     params.set("finalized", String(finalized));
   }
+  if (jobIds.length) params.set("jobIds", jobIds.join(","));
 
   const res = await fetch(`${API_BASE}/local/referrals?${params.toString()}`);
 
-  if (!res.ok) return [];
+  if (!res.ok) throw new Error("Failed to load the candidate pipeline.");
 
   const data = await res.json();
   // console.log("listReferrals data:", data);
   return Array.isArray(data.items) ? data.items : [];
+}
+
+export async function updateEmployeeReferralL(id, updates) {
+  return employeeRequest(`/local/referrals/hiring-manager/${encodeURIComponent(id)}`, {
+    method: "PUT",
+    body: JSON.stringify(updates),
+  });
+}
+
+export async function getRecruiterDashboardStats() {
+  const response = await fetch(`${API_BASE}/api/metrics/recruiter-dashboard`, {
+    headers: {
+      "Content-Type": "application/json",
+      ...authHeaders(),
+    },
+  });
+  const responseText = await response.text();
+  let data;
+  try {
+    data = responseText ? JSON.parse(responseText) : {};
+  } catch {
+    throw new Error(`Dashboard metrics returned an invalid response (HTTP ${response.status}).`);
+  }
+  if (!response.ok) throw new Error(data.message || "Failed to load dashboard metrics.");
+  const metricFields = ["referralCredits", "toReview", "confirmedAmount", "inProgressAmount"];
+  if (metricFields.some((field) => !Number.isFinite(data[field]) || data[field] < 0)) {
+    throw new Error("Dashboard metrics response is missing valid values.");
+  }
+  return data;
 }
 
 export async function fetchAdminReferrals(adminId, email) {
@@ -309,12 +469,17 @@ export async function removeReferralFieldsById(id) {
 }
 
 export async function createSubmissionL(payload) {
+  const bonusMatch = String(payload.bonus ?? "").match(/[-+]?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?/);
+  const parsedBonus = bonusMatch ? Number(bonusMatch[0].replace(/,/g, "")) : 0;
   const res = await fetch(`${API_BASE}/local/referrals`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(payload),
+    body: JSON.stringify({
+      ...payload,
+      bonus: Number.isFinite(parsedBonus) ? parsedBonus : 0,
+    }),
   });
 
   if (!res.ok) {
@@ -339,7 +504,7 @@ export async function updateBasicInfoOnServerL(userId, basicInfo) {
       `${API_BASE}/local/users/updateBasicInfo/${userId}`,
       {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...authHeaders() },
         body: JSON.stringify(basicInfo),
       },
     );

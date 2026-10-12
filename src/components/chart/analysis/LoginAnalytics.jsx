@@ -122,7 +122,7 @@ const LoginAnalytics = () => {
   ];
 
   return (
-    <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 relative">
+    <div data-dashboard-card className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100 relative">
       <div className="flex justify-between items-center mb-8">
         <div>
           <h2 className="text-2xl font-extrabold text-gray-900 tracking-tight">System Login Analytics</h2>
@@ -173,7 +173,7 @@ const LoginAnalytics = () => {
               <StatCard label="Total Logins" value={peakAnalytics.total} sub="24-hour total" icon={<Users />} color="text-indigo-500" bg="bg-indigo-50" />
             </div>
 
-            <div className="bg-gray-50/50 rounded-3xl p-6 border border-gray-100">
+            <div data-dashboard-card className="bg-gray-50/50 rounded-3xl p-6 border border-gray-100">
               <h3 className="text-lg font-bold text-gray-800 mb-6">Login Volume (24h)</h3>
               {peakTimes.length > 0 ? (
                 <div className="h-[320px] w-full">
@@ -206,7 +206,7 @@ const LoginAnalytics = () => {
         {/* USERS */}
         {activeTab === 'users' && (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="bg-gray-50/50 rounded-3xl p-6 border border-gray-100">
+            <div data-dashboard-card className="bg-gray-50/50 rounded-3xl p-6 border border-gray-100">
               <h3 className="text-lg font-bold text-gray-800 mb-6">Top Users Activity</h3>
               {userStats.length ? (
                 <div className="h-[400px] w-full">
@@ -233,7 +233,7 @@ const LoginAnalytics = () => {
         {/* DATES */}
         {activeTab === 'dates' && (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="bg-gray-50/50 rounded-3xl p-6 border border-gray-100">
+            <div data-dashboard-card className="bg-gray-50/50 rounded-3xl p-6 border border-gray-100">
                <h3 className="text-lg font-bold text-gray-800 mb-6">Historical Login Trends</h3>
               {dateStatsArray.length ? (
                 <div className="h-[400px] w-full">
@@ -262,7 +262,7 @@ const LoginAnalytics = () => {
         {activeTab === 'peak' && (
           <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-              <div className="bg-gray-50/50 rounded-3xl p-6 border border-gray-100 overflow-hidden relative">
+              <div data-dashboard-card className="bg-gray-50/50 rounded-3xl p-6 border border-gray-100 overflow-hidden relative">
                  <h3 className="text-lg font-bold text-gray-800 mb-6">Peak Analytics</h3>
                   {peakTimes.length ? (
                     <div className="h-[300px] w-full">
@@ -283,7 +283,7 @@ const LoginAnalytics = () => {
                   ) : <EmptyState message="No pie data" />}
               </div>
 
-              <div className="bg-gray-50/50 rounded-3xl p-6 border border-gray-100">
+              <div data-dashboard-card className="bg-gray-50/50 rounded-3xl p-6 border border-gray-100">
                  <h3 className="text-lg font-bold text-gray-800 mb-4">Top Hours Ranking</h3>
                  {peakTimes.length ? (
                     <div className="overflow-x-auto custom-scrollbar max-h-[300px] rounded-xl border border-gray-100 bg-white">
@@ -325,7 +325,7 @@ const LoginAnalytics = () => {
 /* ---------------- SMALL COMPONENTS ---------------- */
 
 const StatCard = ({ label, value, sub, icon, color, bg }) => (
-  <div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+  <div data-dashboard-card="interactive" className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
     <div className="flex justify-between items-start mb-4">
       <div className={`w-10 h-10 rounded-xl ${bg} ${color} flex items-center justify-center`}>
         {icon}
@@ -349,4 +349,3 @@ const EmptyState = ({ message }) => (
 );
 
 export default LoginAnalytics;
-

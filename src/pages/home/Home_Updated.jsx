@@ -27,7 +27,7 @@ export default function LandingPage() {
 
             setJobs(jobsList);
         } catch (err) {
-            setError("Không tải được danh sách công việc");
+            setError("Unable to load the job listings.");
         } finally {
             setLoading(false);
         }

@@ -1,10 +1,9 @@
 [
   {
     "_id": "68bdcf22131c403154a093e8",
-    "name": "Admin",
-    "status": "Active",
+    "name": "Admin Ant-Tech ",
     "email": "admin@ant-tech.asia",
-    "password": "$2b$10$Rc9LOUxakMes8IyCoMeneuDpUrZJQ/y72g0EsVOChf5p3avCXAnQm",
+    "password": "$2b$10$e2ie3c7rKw2XaHAz5Y1lDe7eQ0P66yTi4MsNUeLNB/2MDL8C8BSYm",
     "credit": 0,
     "role": "admin",
     "jobs": [
@@ -12,250 +11,31 @@
       "68bdcf23131c403154a093f0"
     ],
     "__v": 1,
-    "updatedAt": "2026-02-26T08:01:48.658Z",
+    "updatedAt": "2026-10-08T09:34:23.957Z",
     "bankInfo": {
-      "accountHolderName": "AAAAA",
-      "bankName": "vietcomebank",
+      "accountHolderName": "BANK OWNER",
+      "bankName": "BANK NAME",
       "branchName": "BRANCH NAME",
       "accountNumber": "11122233344444",
-      "ibanSwiftCode": "DEHANN123",
-      "currency": "VNĐ",
-      "registeredEmail": "immhisme1@gmail.com",
-      "registeredPhone": "015901976796",
+      "ibanSwiftCode": "DE4521245785511",
+      "currency": "",
+      "registeredEmail": "admin@ant-tech.asia",
+      "registeredPhone": "+111224455",
       "ethAddress": "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
-    }
+    },
+    "status": "Active"
   },
   {
     "_id": "68c021ae824dc44d6e0831c5",
     "name": "Nguyen Nhung",
     "email": "nhungnt40@gmail.com",
-    "password": "$2b$10$bqPMjdsp8lWvJMlxfz58pOrDcRk8aFiNoCpENSuhNTsW7P73VtbFq",
-    "credit": 0,
-    "role": "recruiter",
-    "jobs": [],
-    "__v": 0
-  },
-  {
-    "_id": "68c15731def40486cc45762b",
-    "name": "Thoa tran",
-    "email": "thoa.work@gmail.com",
-    "password": "$2b$10$h2SHS5NuEhkSGS7ZbT6f/unOAkkWguX1U1MEMOal1DClFtmPDljHK",
-    "credit": 0,
-    "role": "recruiter",
-    "jobs": [],
-    "__v": 0
-  },
-  {
-    "_id": "68c3f214d0bcd19bfd61fadd",
-    "name": "anttechhr@gmail.com",
-    "email": "anttechhr@gmail.com",
-    "password": "$2b$10$Chs5UUOrri7St8HBxf7hHeKxUx7PPsPrCZNT9MAEODcVkK9zBKApW",
-    "credit": 0,
-    "role": "recruiter",
-    "jobs": [],
-    "__v": 0
-  },
-  {
-    "_id": "68c42d45896042752037e7a7",
-    "name": "huu123",
-    "email": "huulv2002@gmail.com",
-    "password": "$2b$10$WnRi2mjdiDN2VgsS570j3O5FhS67nHHhDd9dt5tE6hTyQd2Sl7J4S",
-    "credit": 0,
-    "role": "recruiter",
-    "jobs": [],
-    "__v": 0
-  },
-  {
-    "_id": "68c6dd64c147358eec8f9e47",
-    "name": "Jade Nguyen",
-    "email": "sha@ant-tech.asia",
-    "password": "$2b$10$t7BExt2Of04IN7LhlmXOW.DE.j1PssJmq8pi9KhJgWJac8TL1aBMO",
-    "credit": 0,
-    "role": "recruiter",
-    "jobs": [],
-    "__v": 0
-  },
-  {
-    "_id": "68c7a9e1ebb1a65cd63d8c33",
-    "name": "Roi Freelancer",
-    "email": "royfajardo@ant-tech.asia",
-    "password": "$2b$10$LGBqRvS1OGk4WVlAW63Mw.efNSYc3PRY5EQwJ6fL00QXmgBiPLhIS",
-    "credit": 0,
-    "role": "recruiter",
-    "jobs": [],
-    "__v": 0
-  },
-  {
-    "_id": "68c7aa87ebb1a65cd63d8c37",
-    "name": "Royfreelance",
-    "email": "internationalroi2023@gmail.com",
-    "password": "$2b$10$WNv0IX2oS5VodWm3/V1s4ujBMyzkXDtOs.LuGhV16RUooAGBOges6",
-    "credit": 0,
-    "role": "recruiter",
-    "jobs": [],
-    "__v": 0
-  },
-  {
-    "_id": "68c7c34643acb7665903d080",
-    "name": "hiepchu0012",
-    "email": "hiepchu0012@gmail.com",
-    "password": "$2b$10$mI2RfKEE6vdlZ25EgiyCd.6Uq/QvOkBp2sOuDpXdgA.89vSlkrGbS",
-    "credit": 0,
-    "role": "recruiter",
-    "jobs": [],
-    "__v": 0
-  },
-  {
-    "_id": "68c7c34f43acb7665903d083",
-    "name": "Cloudy Nguyen",
-    "email": "pinkcloudy61@gmail.com",
-    "password": "$2b$10$k.udaoRChxzDb6bHwjg4FOQyI0Gb1TVRwLF5Q7iYppIRYTXZKU8Kq",
-    "credit": 0,
-    "role": "recruiter",
-    "jobs": [],
-    "__v": 0
-  },
-  {
-    "_id": "68c7eb0cbd561b593d1a20fa",
-    "name": "ngocdavnnp@gmail.com",
-    "email": "ngocdavnnp@gmail.com",
-    "password": "$2b$10$YVCptYdsnEP5CNoMm5ddi.m0lqzdgx.8Sr3KEsRRAcXciPQ4PWsVy",
-    "credit": 0,
-    "role": "recruiter",
-    "jobs": [],
-    "__v": 0
-  },
-  {
-    "_id": "68cec52b65e6a012c734071b",
-    "name": "NhutNZ",
-    "email": "minhnhut220620@gmail.com",
-    "password": "$2b$10$tL0iK2dQU1omTeaSMjOa3uL2lSgWdX36hwkJAA2fGu3.T7HgBaUOC",
-    "credit": 0,
-    "role": "recruiter",
-    "jobs": [],
-    "__v": 0
-  },
-  {
-    "_id": "68d0fbc64d0ee0890dbf93ab",
-    "name": "Tammy0203",
-    "email": "tamphamtnm89@gmail.com",
-    "password": "$2b$10$dma0njBjhfcw9YUi3F7RAOgHiYJvyR1mRuBZvXkOsjDc9nEVzdRn6",
-    "credit": 0,
-    "role": "recruiter",
-    "jobs": [],
-    "__v": 0
-  },
-  {
-    "_id": "68d0fd8b4d0ee0890dbf93b8",
-    "name": "Helenanguyen",
-    "email": "thaothaothao190902@gmail.com",
-    "password": "$2b$10$ecnYRuG4.7J9E6YHkWtim.k0ej7De7iDUPmpVnOc2b0mh0yeTabfu",
-    "credit": 0,
-    "role": "recruiter",
-    "jobs": [],
-    "__v": 0
-  },
-  {
-    "_id": "68d2a5a9ff1481964f17ce09",
-    "name": "Cnguyen0691",
-    "email": "chaunguyen1806@gmail.com",
-    "password": "$2b$10$ibGlPlo2O6Om2LzQ/kd9h.D.HQowarKrdT7Vbrs7d3Qtrfa1u.3xy",
-    "credit": 0,
-    "role": "recruiter",
-    "jobs": [],
-    "__v": 0
-  },
-  {
-    "_id": "68d4f404a4d485db23d0772b",
-    "name": "Hanh Tran",
-    "email": "hanhttm2207@gmail.com",
-    "password": "$2b$10$vv.j1uTx6J9UbT5byfyFSOCq37jxmxNvpSVzS17XZBIb1bUEslelK",
-    "credit": 0,
-    "role": "recruiter",
-    "jobs": [],
-    "__v": 0
-  },
-  {
-    "_id": "68d8209bd032f7cce71f3efa",
-    "name": "Thoa",
-    "email": "baothoa4112001@gmail.com",
-    "password": "$2b$10$K6QefWru8hXCYawScPnzverfBBVyOglTEgEXtThfG0HShafLpnI9K",
-    "credit": 0,
-    "role": "recruiter",
-    "jobs": [],
-    "__v": 0
-  },
-  {
-    "_id": "68da4f147eaae0af39b6aef7",
-    "name": "nhungnguyen137.hr@gmail.com",
-    "email": "nhungnguyen137.hr@gmail.com",
-    "password": "$2b$10$5M.s4zAwSLC7tGim2gW.Bu3ed1YHLqltDl3vVVHXlZ1GwJ8FpXsV2",
-    "credit": 0,
-    "role": "recruiter",
-    "jobs": [],
-    "__v": 0
-  },
-  {
-    "_id": "68db0de64ec51fbd745409a7",
-    "name": "linhchu5902",
-    "email": "linhchu592002@gmail.com",
-    "password": "$2b$10$TLmpXIIXCMK3ywGsykmfMu9Q8nmosumuKFLmTgrzTel3zZtiADum6",
-    "credit": 0,
-    "role": "recruiter",
-    "jobs": [],
-    "__v": 0
-  },
-  {
-    "_id": "68db9797036f52266796736d",
-    "name": "Andres",
-    "email": "andres.f.bordon@gmail.com",
-    "password": "$2b$10$FLTO2twHc5fHKUZaJscY1.PcIGte4G8mpUbyKPfsZbvMn7UHNgNcK",
-    "credit": 0,
-    "role": "recruiter",
-    "jobs": [],
-    "__v": 0
-  },
-  {
-    "_id": "68df9428f7de1a147457a5ce",
-    "name": "trangnth",
-    "email": "nguyenthihuyentrangdhnh@gmail.com",
-    "password": "$2b$10$lCKuBHdgM4Ng6sbW6Q9.lOpqRjaGgNNck..MGaP8gJMRF4dZkmCjG",
-    "credit": 0,
-    "role": "recruiter",
-    "jobs": [],
-    "__v": 0
-  },
-  {
-    "_id": "68e3b0b1ff7121c0725b6f9b",
-    "name": "PHUONGGDUNGG232",
-    "email": "PHUONGGDUNGG232@gmail.com",
-    "password": "$2b$10$Y2Znzh6kmUEz29GOTlg1Je6CLi4ELhdn/ffbtOOsbQe41FcdGJ4H.",
-    "credit": 0,
-    "role": "recruiter",
-    "jobs": [],
-    "__v": 0
-  },
-  {
-    "_id": "68e607691dbeaf7c02f60d1d",
-    "name": "letinh2103@gmail.com",
-    "email": "letinh2103@gmail.com",
-    "password": "$2b$10$ZXJVWDRq0hf2BpNI7D1NYu9z9dkTbSbVwwhqrTNTIxOegkxdflDQ.",
-    "credit": 0,
-    "role": "recruiter",
-    "jobs": [],
-    "__v": 0
-  },
-  {
-    "_id": "68e645db46d97a07d4bef771",
-    "name": "minh hieu",
-    "email": "hieuhp132@gmail.com",
-    "password": "$2b$10$JrCcKSxMsKxmhXHsOQVlq.EmypklPphvaS83BvVbssxQYVoxWUXPO",
+    "password": "$2b$10$GbEJkvTVwVuF8El2z5xMGOK.wp4k/4/3DwFLc0vzUbd/EP0CHyJB6",
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
     "__v": 0,
-    "updatedAt": "2026-02-26T07:59:52.614Z",
     "status": "Active",
+    "updatedAt": "2026-03-15T08:56:07.017Z",
     "bankInfo": {
       "accountHolderName": "",
       "bankName": "",
@@ -269,14 +49,217 @@
     }
   },
   {
-    "_id": "68e6916dc9ce3d6deba5aee4",
-    "name": "Thoa tran1",
-    "email": "thoatran.work@gmail.com",
-    "password": "$2b$10$Gw3.XPCTl412bHO4QQHAfun6q1KGaFo3iVGGAvK05LoGV97hNIh8O",
+    "_id": "68c3f214d0bcd19bfd61fadd",
+    "name": "anttechhr@gmail.com",
+    "email": "anttechhr@gmail.com",
+    "password": "$2b$10$Chs5UUOrri7St8HBxf7hHeKxUx7PPsPrCZNT9MAEODcVkK9zBKApW",
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-03-15T08:55:54.857Z"
+  },
+  {
+    "_id": "68c42d45896042752037e7a7",
+    "name": "huu123",
+    "email": "huulv2002@gmail.com",
+    "password": "$2b$10$WnRi2mjdiDN2VgsS570j3O5FhS67nHHhDd9dt5tE6hTyQd2Sl7J4S",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-04-22T09:40:34.474Z"
+  },
+  {
+    "_id": "68c7aa87ebb1a65cd63d8c37",
+    "name": "Roy freelance",
+    "email": "internationalroi2023@gmail.com",
+    "password": "$2b$10$oYZF./zfHNtG5Q6BdwHQjuEvr1wf.kuATR05T/HmsyMH92TVffRDi",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-03-06T15:54:52.047Z",
+    "bankInfo": {
+      "accountHolderName": "",
+      "bankName": "",
+      "branchName": "",
+      "accountNumber": "",
+      "ibanSwiftCode": "",
+      "currency": "VNĐ",
+      "registeredEmail": "",
+      "registeredPhone": "",
+      "ethAddress": ""
+    }
+  },
+  {
+    "_id": "68c7c34643acb7665903d080",
+    "name": "hiepchu0012",
+    "email": "hiepchu0012@gmail.com",
+    "password": "$2b$10$mI2RfKEE6vdlZ25EgiyCd.6Uq/QvOkBp2sOuDpXdgA.89vSlkrGbS",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-04-22T09:40:35.256Z"
+  },
+  {
+    "_id": "68c7c34f43acb7665903d083",
+    "name": "Cloudy Nguyen",
+    "email": "pinkcloudy61@gmail.com",
+    "password": "$2b$10$k.udaoRChxzDb6bHwjg4FOQyI0Gb1TVRwLF5Q7iYppIRYTXZKU8Kq",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-06-18T11:19:32.283Z"
+  },
+  {
+    "_id": "68c7eb0cbd561b593d1a20fa",
+    "name": "ngocdavnnp@gmail.com",
+    "email": "ngocdavnnp@gmail.com",
+    "password": "$2b$10$YVCptYdsnEP5CNoMm5ddi.m0lqzdgx.8Sr3KEsRRAcXciPQ4PWsVy",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-06-18T11:19:32.650Z"
+  },
+  {
+    "_id": "68d0fbc64d0ee0890dbf93ab",
+    "name": "Tammy0203",
+    "email": "tamphamtnm89@gmail.com",
+    "password": "$2b$10$dma0njBjhfcw9YUi3F7RAOgHiYJvyR1mRuBZvXkOsjDc9nEVzdRn6",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-06-18T11:19:35.560Z"
+  },
+  {
+    "_id": "68d0fd8b4d0ee0890dbf93b8",
+    "name": "Helenanguyen",
+    "email": "thaothaothao190902@gmail.com",
+    "password": "$2b$10$ecnYRuG4.7J9E6YHkWtim.k0ej7De7iDUPmpVnOc2b0mh0yeTabfu",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-06-18T11:19:34.993Z"
+  },
+  {
+    "_id": "68d2a5a9ff1481964f17ce09",
+    "name": "Cnguyen0691",
+    "email": "chaunguyen1806@gmail.com",
+    "password": "$2b$10$ibGlPlo2O6Om2LzQ/kd9h.D.HQowarKrdT7Vbrs7d3Qtrfa1u.3xy",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:23:29.337Z"
+  },
+  {
+    "_id": "68d4f404a4d485db23d0772b",
+    "name": "Hanh Tran",
+    "email": "hanhttm2207@gmail.com",
+    "password": "$2b$10$vv.j1uTx6J9UbT5byfyFSOCq37jxmxNvpSVzS17XZBIb1bUEslelK",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-06-18T11:19:36.558Z"
+  },
+  {
+    "_id": "68d8209bd032f7cce71f3efa",
+    "name": "Thoa",
+    "email": "baothoa4112001@gmail.com",
+    "password": "$2b$10$K6QefWru8hXCYawScPnzverfBBVyOglTEgEXtThfG0HShafLpnI9K",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-06-18T11:19:41.228Z"
+  },
+  {
+    "_id": "68df9428f7de1a147457a5ce",
+    "name": "trangnth",
+    "email": "nguyenthihuyentrangdhnh@gmail.com",
+    "password": "$2b$10$lCKuBHdgM4Ng6sbW6Q9.lOpqRjaGgNNck..MGaP8gJMRF4dZkmCjG",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-06-18T11:19:41.569Z"
+  },
+  {
+    "_id": "68e3b0b1ff7121c0725b6f9b",
+    "name": "PHUONGGDUNGG232",
+    "email": "PHUONGGDUNGG232@gmail.com",
+    "password": "$2b$10$Y2Znzh6kmUEz29GOTlg1Je6CLi4ELhdn/ffbtOOsbQe41FcdGJ4H.",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-06-18T11:19:42.902Z"
+  },
+  {
+    "_id": "68e607691dbeaf7c02f60d1d",
+    "name": "letinh2103@gmail.com",
+    "email": "letinh2103@gmail.com",
+    "password": "$2b$10$ZXJVWDRq0hf2BpNI7D1NYu9z9dkTbSbVwwhqrTNTIxOegkxdflDQ.",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-06-18T11:19:43.328Z"
+  },
+  {
+    "_id": "68e645db46d97a07d4bef771",
+    "name": "minh hieu",
+    "email": "hieuhp132@gmail.com",
+    "password": "$2b$10$u8v/zw3axuCMyX9Em5DYmO4AkVczPZueoImNZVcG9kbJEcbD2w8RC",
+    "credit": 0,
+    "role": "recruiter_freelancer",
+    "jobs": [],
+    "__v": 0,
+    "updatedAt": "2026-10-10T15:18:43.765Z",
+    "status": "Active",
+    "bankInfo": {
+      "accountHolderName": "Minh Hieu",
+      "bankName": "vietcomebank",
+      "branchName": "vietcomebank",
+      "accountNumber": "+2211455122",
+      "ibanSwiftCode": "vn212154774",
+      "currency": "VNĐ",
+      "registeredEmail": "hieuhp132@gmail.com",
+      "registeredPhone": "+111224551"
+    }
+  },
+  {
+    "_id": "68e6916dc9ce3d6deba5aee4",
+    "name": "Thoa tran1",
+    "email": "thoatran.work@gmail.com",
+    "password": "$2b$10$e/xya2/ZVdISvsFusgwBge2tz4/xkAYTXhvCGBTDFBJFmfgldcCAS",
+    "credit": 0,
+    "role": "recruiter",
+    "jobs": [],
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-06-18T11:19:44.536Z"
   },
   {
     "_id": "68e9f035c869b5e672ce0773",
@@ -286,7 +269,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-06-18T11:19:46.471Z"
   },
   {
     "_id": "68edb86e7ed349b9256fe804",
@@ -296,7 +281,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:23:17.583Z"
   },
   {
     "_id": "68edbfca7ed349b9256fe844",
@@ -306,7 +293,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-06-18T11:19:47.621Z"
   },
   {
     "_id": "68edd8cd6edd38cb5ea8bb27",
@@ -316,7 +305,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-06-18T11:19:48.184Z"
   },
   {
     "_id": "68ef4d3414d817815f1716bf",
@@ -326,7 +317,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-06-18T11:19:49.602Z"
   },
   {
     "_id": "68ef984a14d817815f171739",
@@ -336,7 +329,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-06-18T11:19:50.085Z"
   },
   {
     "_id": "68f0e89d14d817815f171bf5",
@@ -346,7 +341,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:23:03.949Z"
   },
   {
     "_id": "68f2bde214d817815f17206c",
@@ -356,7 +353,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:23:05.328Z"
   },
   {
     "_id": "68fa07ec14d817815f172a84",
@@ -366,7 +365,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:23:06.116Z"
   },
   {
     "_id": "6902e1ca474fde4f4780b0d4",
@@ -376,7 +377,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:58.036Z"
   },
   {
     "_id": "69047a6a474fde4f4780b683",
@@ -386,7 +389,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:58.452Z"
   },
   {
     "_id": "6905c757474fde4f4780b89e",
@@ -396,7 +401,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:23:00.427Z"
   },
   {
     "_id": "690da58e474fde4f4780bd99",
@@ -406,7 +413,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:55.826Z"
   },
   {
     "_id": "691069b2474fde4f4780c309",
@@ -416,7 +425,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:54.944Z"
   },
   {
     "_id": "6916ba02474fde4f4780c6da",
@@ -426,7 +437,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:54.130Z"
   },
   {
     "_id": "6916e968474fde4f4780c85c",
@@ -436,7 +449,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:53.679Z"
   },
   {
     "_id": "6916ec7e474fde4f4780c8c9",
@@ -446,7 +461,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:37.379Z"
   },
   {
     "_id": "6916fab2474fde4f4780c959",
@@ -456,7 +473,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-06-22T14:23:00.979Z"
   },
   {
     "_id": "691758db474fde4f4780c9db",
@@ -466,7 +485,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:38.364Z"
   },
   {
     "_id": "6918972a474fde4f4780d06a",
@@ -476,7 +497,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:38.977Z"
   },
   {
     "_id": "69189fbe474fde4f4780d171",
@@ -486,7 +509,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:39.421Z"
   },
   {
     "_id": "691a994b474fde4f4780d32d",
@@ -496,7 +521,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:40.895Z"
   },
   {
     "_id": "691abe95474fde4f4780d3e5",
@@ -506,7 +533,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:41.519Z"
   },
   {
     "_id": "691ac642474fde4f4780d4f7",
@@ -516,7 +545,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:43.873Z"
   },
   {
     "_id": "691acd1c474fde4f4780d568",
@@ -526,7 +557,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:44.322Z"
   },
   {
     "_id": "691ad02b474fde4f4780d5a5",
@@ -536,7 +569,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:45.235Z"
   },
   {
     "_id": "691ad23e474fde4f4780d5d8",
@@ -546,7 +581,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:49.074Z"
   },
   {
     "_id": "691bea27474fde4f4780d9c8",
@@ -556,7 +593,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:51.356Z"
   },
   {
     "_id": "691c3c53474fde4f4780dac3",
@@ -566,7 +605,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:23.711Z"
   },
   {
     "_id": "691c4594474fde4f4780daf3",
@@ -576,17 +617,21 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-01-14T05:42:13.133Z"
   },
   {
     "_id": "691fd873474fde4f4780e911",
     "name": "Hau Hoang",
     "email": "phghau.hoang@gmail.com",
-    "password": "$2b$10$QHL.CRMf8lcz/Qbuy0MOaOO2q93310KdCt2ATt.RM9nMbN9AGUDFO",
+    "password": "$2b$10$vGeS92cFiOIAazA4BTRxf.XJzymU6L2sAf.jBZUVrSdzqZD49H3KK",
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:24.653Z"
   },
   {
     "_id": "691fe7bb474fde4f4780eacb",
@@ -596,7 +641,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:25.123Z"
   },
   {
     "_id": "6922aab8474fde4f4780f1e3",
@@ -606,7 +653,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:26.274Z"
   },
   {
     "_id": "69234993474fde4f4780f23c",
@@ -616,7 +665,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:26.787Z"
   },
   {
     "_id": "6924148c474fde4f4780f405",
@@ -626,17 +677,32 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:27.956Z"
   },
   {
     "_id": "69241f57474fde4f4780f431",
     "name": "qjade",
     "email": "pndquyen203@gmail.com",
-    "password": "$2b$10$BJgV62kD.k9pmmOweE92RuKTUwzV3uBBtSTyO3uhTSzg5ZvqdHwPm",
+    "password": "232003",
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-03T06:26:15.730Z",
+    "bankInfo": {
+      "accountHolderName": "",
+      "bankName": "",
+      "branchName": "",
+      "accountNumber": "",
+      "ibanSwiftCode": "",
+      "currency": "VNĐ",
+      "registeredEmail": "",
+      "registeredPhone": "",
+      "ethAddress": ""
+    }
   },
   {
     "_id": "69255a66474fde4f4780f8b3",
@@ -646,7 +712,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:30.760Z"
   },
   {
     "_id": "69255ef0474fde4f4780f8c2",
@@ -656,7 +724,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:32.505Z"
   },
   {
     "_id": "69256928474fde4f4780f8ea",
@@ -666,7 +736,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:31.915Z"
   },
   {
     "_id": "69257afe474fde4f4780f941",
@@ -676,7 +748,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:33.104Z"
   },
   {
     "_id": "6925a244474fde4f4780f97d",
@@ -686,7 +760,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:05.795Z"
   },
   {
     "_id": "6925b27a474fde4f4780f9fe",
@@ -696,7 +772,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:06.169Z"
   },
   {
     "_id": "692c5f3f474fde4f478111f3",
@@ -706,7 +784,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:06.792Z"
   },
   {
     "_id": "692e63fc474fde4f478116df",
@@ -716,7 +796,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:08.138Z"
   },
   {
     "_id": "692e6ac9474fde4f47811796",
@@ -726,7 +808,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:08.637Z"
   },
   {
     "_id": "692e6d13474fde4f478117b9",
@@ -736,7 +820,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:10.025Z"
   },
   {
     "_id": "692fcb91474fde4f47811dac",
@@ -746,7 +832,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:11.180Z"
   },
   {
     "_id": "69303db8474fde4f47812034",
@@ -756,7 +844,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:11.534Z"
   },
   {
     "_id": "693d3c8f2a3d83a5fcbd3a42",
@@ -766,7 +856,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:12.466Z"
   },
   {
     "_id": "693e2c962a3d83a5fcbd3b38",
@@ -776,7 +868,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:12.911Z"
   },
   {
     "_id": "6940204e2a3d83a5fcbd43af",
@@ -786,7 +880,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:18.967Z"
   },
   {
     "_id": "694085a02a3d83a5fcbd46a5",
@@ -796,7 +892,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:19.497Z"
   },
   {
     "_id": "6941228c2a3d83a5fcbd487c",
@@ -806,7 +904,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-03-24T16:13:40.882Z"
   },
   {
     "_id": "69413dc52a3d83a5fcbd49c1",
@@ -816,7 +916,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:21:55.028Z"
   },
   {
     "_id": "69427fdf2a3d83a5fcbd4deb",
@@ -826,7 +928,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:21:56.699Z"
   },
   {
     "_id": "6943ae15424691118091b6ca",
@@ -836,7 +940,9 @@
     "credit": 0,
     "role": "recruiter",
     "jobs": [],
-    "__v": 0
+    "__v": 0,
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:21:57.117Z"
   },
   {
     "_id": "1766372713740",
@@ -845,7 +951,9 @@
     "password": "$2b$10$mJElO.JJKGTTx8BaFezSBefqGGQ0lXPydHB//Vj50Q/CaNHhA56ei",
     "role": "recruiter",
     "credit": 0,
-    "createdAt": "2025-12-22T03:05:13.740Z"
+    "createdAt": "2025-12-22T03:05:13.740Z",
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:21:57.884Z"
   },
   {
     "_id": "1766831202019",
@@ -854,7 +962,9 @@
     "password": "$2b$10$agjCoH/3o7VlLEnJJrNi8OCbVOB7DZScvDPXXyI.gGq8Q4DlqlZ.S",
     "role": "recruiter",
     "credit": 0,
-    "createdAt": "2025-12-27T10:26:42.019Z"
+    "createdAt": "2025-12-27T10:26:42.019Z",
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:21:58.476Z"
   },
   {
     "_id": "1766851479233",
@@ -863,7 +973,9 @@
     "password": "$2b$10$l6uk9/fKNII9FwcN2SjqqOBGT9VXkHt9EVWwbUKqEFts3cDExmXYa",
     "role": "recruiter",
     "credit": 0,
-    "createdAt": "2025-12-27T16:04:39.233Z"
+    "createdAt": "2025-12-27T16:04:39.233Z",
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:21:59.938Z"
   },
   {
     "_id": "1766907547751",
@@ -873,7 +985,8 @@
     "role": "recruiter",
     "credit": 0,
     "createdAt": "2025-12-28T07:39:07.751Z",
-    "updatedAt": "2026-01-04T14:20:49.996Z"
+    "updatedAt": "2026-05-02T09:22:00.203Z",
+    "status": "Active"
   },
   {
     "_id": "1766908146522",
@@ -882,7 +995,9 @@
     "password": "$2b$10$Hw4qFHSCd9ZJBvlPzCRPmehF4hqlnqajZVLpNzTeM6tlI1oAnGy5K",
     "role": "recruiter",
     "credit": 0,
-    "createdAt": "2025-12-28T07:49:06.522Z"
+    "createdAt": "2025-12-28T07:49:06.522Z",
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:00.865Z"
   },
   {
     "_id": "1766990772918",
@@ -891,7 +1006,9 @@
     "password": "$2b$10$KYEPcchP2Z5kij0TSPMmUeEj5NwOCerSe4rEb9Nor2cLNgbjs/SVO",
     "role": "recruiter",
     "credit": 0,
-    "createdAt": "2025-12-29T06:46:12.918Z"
+    "createdAt": "2025-12-29T06:46:12.918Z",
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:02.324Z"
   },
   {
     "_id": "1766993014300",
@@ -900,16 +1017,20 @@
     "password": "$2b$10$w.I60eK4MyxMNf7nYYA1m.PYNbEE8CeNcd1jLVOq1GGcDFtVa5fa2",
     "role": "recruiter",
     "credit": 0,
-    "createdAt": "2025-12-29T07:23:34.300Z"
+    "createdAt": "2025-12-29T07:23:34.300Z",
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:22:01.954Z"
   },
   {
     "_id": "1766993128857",
     "name": "Nhu Tran",
     "email": "zoeytran.0511@gmail.com",
-    "password": "$2b$10$Lro096bROCkxpAdEbh0r5OiKvHWzwUofvFF.l9kZDClGcfPEuAvx6",
+    "password": "$2b$10$mNnQn8lPk7xe6A2i2Q74venecoELXDC5kZYqILhMHCW3NNrdUUoKi",
     "role": "recruiter",
     "credit": 0,
-    "createdAt": "2025-12-29T07:25:28.857Z"
+    "createdAt": "2025-12-29T07:25:28.857Z",
+    "status": "Active",
+    "updatedAt": "2026-06-29T07:47:13.804Z"
   },
   {
     "_id": "1767068878079",
@@ -918,7 +1039,9 @@
     "password": "$2b$10$W2jp9ZnYhQoiAhuob5WW..3VKhF4FownP1R32szzcu9mCPEhKEQaK",
     "role": "recruiter",
     "credit": 0,
-    "createdAt": "2025-12-30T04:27:58.079Z"
+    "createdAt": "2025-12-30T04:27:58.079Z",
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:21:50.052Z"
   },
   {
     "_id": "1767362889354",
@@ -927,7 +1050,9 @@
     "password": "$2b$10$OlsewWPOBd7I2nDDE2qZ9ORUjzS5epOc6lKUO5BaMcsXGyOrsfg0q",
     "role": "recruiter",
     "credit": 0,
-    "createdAt": "2026-01-02T14:08:09.354Z"
+    "createdAt": "2026-01-02T14:08:09.354Z",
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:21:48.720Z"
   },
   {
     "_id": "1767363383659",
@@ -937,7 +1062,8 @@
     "role": "recruiter",
     "credit": 0,
     "createdAt": "2026-01-02T14:16:23.659Z",
-    "updatedAt": "2026-01-02T14:18:51.685Z"
+    "updatedAt": "2026-05-02T09:21:48.242Z",
+    "status": "Active"
   },
   {
     "_id": "1767364740240",
@@ -946,7 +1072,9 @@
     "password": "$2b$10$vbghqAn6rZ6y9Om6BfgHW.w8RF6NIFGfEimLyjxSxlB3ZkmRKGN.u",
     "role": "recruiter",
     "credit": 0,
-    "createdAt": "2026-01-02T14:39:00.240Z"
+    "createdAt": "2026-01-02T14:39:00.240Z",
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:21:47.743Z"
   },
   {
     "_id": "1767365470283",
@@ -955,7 +1083,9 @@
     "password": "$2b$10$/wmoySVDOlZWVwu1BF0sauUB976va1vjMsIolzG2z9L7OBHIg5t0W",
     "role": "recruiter",
     "credit": 0,
-    "createdAt": "2026-01-02T14:51:10.284Z"
+    "createdAt": "2026-01-02T14:51:10.284Z",
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:21:46.236Z"
   },
   {
     "_id": "1767372103275",
@@ -964,16 +1094,31 @@
     "password": "$2b$10$yEVTT7gRoPFdmGC/pH4eX.vo1WdI4bqgH9IdIZlMCJ03QagHqUDBC",
     "role": "recruiter",
     "credit": 0,
-    "createdAt": "2026-01-02T16:41:43.276Z"
+    "createdAt": "2026-01-02T16:41:43.276Z",
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:21:45.911Z"
   },
   {
     "_id": "1767372518017",
-    "name": "ilhambonet",
+    "name": "Mochamad Ilham Maulana",
     "email": "boluilham62@gmail.com",
-    "password": "$2b$10$pbZJ8Y/fxoDn2mqTmGkkPucvo126VyRn8jAgfSaKfvP4IP7T40P7q",
+    "password": "04071970Aa",
     "role": "recruiter",
     "credit": 0,
-    "createdAt": "2026-01-02T16:48:38.017Z"
+    "createdAt": "2026-01-02T16:48:38.017Z",
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:21:45.097Z",
+    "bankInfo": {
+      "accountHolderName": "",
+      "bankName": "",
+      "branchName": "",
+      "accountNumber": "",
+      "ibanSwiftCode": "",
+      "currency": "USD",
+      "registeredEmail": "",
+      "registeredPhone": "",
+      "ethAddress": ""
+    }
   },
   {
     "_id": "1767599636811",
@@ -982,7 +1127,9 @@
     "password": "$2b$10$fFFxH9i3YPZV.r4a98lqX.be8qWp52J.DK4T3VpFgMOPOR/6wyvBG",
     "role": "recruiter",
     "credit": 0,
-    "createdAt": "2026-01-05T07:53:56.811Z"
+    "createdAt": "2026-01-05T07:53:56.811Z",
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:21:43.994Z"
   },
   {
     "_id": "1767632856046",
@@ -991,7 +1138,9 @@
     "password": "$2b$10$d6KTwNZvLD/BjS8BzSTSKepENtNhcHocxri1EW43VoDa18YC8l1Su",
     "role": "recruiter",
     "credit": 0,
-    "createdAt": "2026-01-05T17:07:36.046Z"
+    "createdAt": "2026-01-05T17:07:36.046Z",
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:21:42.648Z"
   },
   {
     "_id": "1767679550404",
@@ -1001,7 +1150,8 @@
     "role": "recruiter",
     "credit": 0,
     "createdAt": "2026-01-06T06:05:50.404Z",
-    "updatedAt": "2026-01-08T06:32:08.060Z"
+    "updatedAt": "2026-05-02T09:21:43.466Z",
+    "status": "Active"
   },
   {
     "_id": "1767720296148",
@@ -1010,7 +1160,9 @@
     "password": "$2b$10$0Y/V6ve9bQGBOPvpYJib9OBhe6.jlRSULnluaFOHVtV1mUqRVGcYq",
     "role": "recruiter",
     "credit": 0,
-    "createdAt": "2026-01-06T17:24:56.148Z"
+    "createdAt": "2026-01-06T17:24:56.148Z",
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:21:41.349Z"
   },
   {
     "_id": "1767854087608",
@@ -1019,7 +1171,9 @@
     "password": "$2b$10$8SDfrzsTcsTf0wZk9j/7luUU1FxMkIMoqsLC7ypmeeQ7FVryyicIG",
     "role": "recruiter",
     "credit": 0,
-    "createdAt": "2026-01-08T06:34:47.608Z"
+    "createdAt": "2026-01-08T06:34:47.608Z",
+    "status": "Active",
+    "updatedAt": "2026-05-02T09:21:40.804Z"
   },
   {
     "_id": "1767953696855",
@@ -1028,7 +1182,9 @@
     "password": "$2b$10$B/Suvst98eqqo4ErcAG8bewblIpY9.RLIS8oCQKbq3Gzs5i0azANi",
     "role": "recruiter",
     "credit": 0,
-    "createdAt": "2026-01-09T10:14:56.855Z"
+    "createdAt": "2026-01-09T10:14:56.855Z",
+    "status": "Active",
+    "updatedAt": "2026-04-16T09:12:08.733Z"
   },
   {
     "_id": "1767953733330",
@@ -1037,7 +1193,9 @@
     "password": "$2b$10$RjK5i2/4TvrKRfLZ8f7RfeP8gAF3WuOJaXk6GnApBFD1xUuv7CT1K",
     "role": "recruiter",
     "credit": 0,
-    "createdAt": "2026-01-09T10:15:33.330Z"
+    "createdAt": "2026-01-09T10:15:33.330Z",
+    "status": "Active",
+    "updatedAt": "2026-04-16T09:12:06.810Z"
   },
   {
     "_id": "1768028684940",
@@ -1046,69 +1204,1299 @@
     "password": "$2b$10$vv4CdKFXgTulIAJqq5AvfurmoLVTjAznm9PKGsEtUh6pHIoVijU1u",
     "role": "recruiter",
     "credit": 0,
-    "createdAt": "2026-01-10T07:04:44.940Z"
+    "createdAt": "2026-01-10T07:04:44.940Z",
+    "status": "Active",
+    "updatedAt": "2026-04-16T09:12:06.246Z"
   },
   {
-    "_id": "1768242676299",
-    "name": "aa",
-    "email": "aa@a.c",
-    "password": "$2b$10$B5FNtAnjtflAbuSiz/egxO2PoKY5lLxRSupMLLZf4zGL3YmWPK5NK",
+    "_id": "1768380525510",
+    "name": "Regine",
+    "email": "Reginelamirez@gmail.com",
+    "password": "$2b$10$7ePuDM9GUuDfn5Up7RwxguCidm5NOxZ7lWBBiwyVIKI9l2WDFPa9u",
     "role": "recruiter",
     "status": "Active",
     "credit": 0,
-    "createdAt": "2026-01-12T18:31:16.299Z",
-    "updatedAt": "2026-01-13T19:53:14.429Z"
+    "createdAt": "2026-01-14T08:48:45.510Z",
+    "updatedAt": "2026-01-20T01:42:54.609Z"
   },
   {
-    "_id": "1768581034140",
-    "name": "aaaa",
-    "email": "a@example.com",
-    "password": "$2b$10$W8TDKVbKewl1cARusWC4n.6qe4PwsJwnuipfms0RGTVmumXbYOyhG",
+    "_id": "1768389852877",
+    "name": "Amrit",
+    "email": "amrit.lami.dev@gmail.com",
+    "password": "$2b$10$CIvEnhwrES8FLd83BGT2f.i/9iHXsBaD9nomLIjm1LH0j/KsE2V9y",
     "role": "recruiter",
     "status": "Active",
     "credit": 0,
-    "createdAt": "2026-01-16T16:30:34.140Z",
-    "updatedAt": "2026-01-16T16:32:34.983Z"
+    "createdAt": "2026-01-14T11:24:12.877Z",
+    "updatedAt": "2026-04-16T09:12:05.253Z"
   },
   {
-    "_id": "1768818480332",
-    "name": "Me",
-    "email": "hihi@smile.next",
-    "password": "$2b$10$ZtPalaYujW2nrcIPppp2guHZ/2OEO3N1PTY60epZJWRT7gVMsugLO",
+    "_id": "1768504973464",
+    "name": "Nesley Zapata",
+    "email": "leyzapata06@gmail.com",
+    "password": "$2b$10$noOKEoUgd/yvQIFt.ou9PuHfFU35/T4YPopENq42VbMHPfRz4mgOG",
     "role": "recruiter",
     "status": "Active",
     "credit": 0,
-    "createdAt": "2026-01-19T10:28:00.332Z",
-    "updatedAt": "2026-01-20T11:12:00.790Z",
+    "createdAt": "2026-01-15T19:22:53.464Z",
+    "updatedAt": "2026-05-05T14:42:20.668Z",
     "bankInfo": {
-      "accountHolderName": "AAAAA",
-      "bankName": "vietcomebank",
-      "branchName": "BRANCH NAME",
-      "accountNumber": "11122233344444",
-      "ibanSwiftCode": "DE24220122155",
+      "accountHolderName": "",
+      "bankName": "",
+      "branchName": "",
+      "accountNumber": "",
+      "ibanSwiftCode": "",
       "currency": "VNĐ",
-      "registeredEmail": "hihi@smile.next",
-      "registeredPhone": "+11122545455"
+      "registeredEmail": "",
+      "registeredPhone": "",
+      "ethAddress": ""
     }
   },
   {
-    "_id": "1769269565040",
-    "name": "Minh Hieu",
-    "email": "hieuhp1321@gmail.com",
-    "password": "$2b$10$rt45ue.nRfJ/Dg0C.A.8YuquFWuCvkEz66geAMaavI0lTSWjgB/rC",
-    "role": "recruiter",
-    "status": "Pending",
-    "credit": 0,
-    "createdAt": "2026-01-24T15:46:05.040Z"
-  },
-  {
-    "_id": "1773481185599",
-    "name": "Test User",
-    "email": "asd@123.com",
-    "password": "$2b$10$npMbpxjGZhqUH2BQ1AYvoeQ0vCrL8nJXyt3CrxHLHn6eR09yy5aki",
+    "_id": "1768733970110",
+    "name": "Alice Zarate",
+    "email": "alicezarate7@gmail.com",
+    "password": "$2b$10$N9DNc/fmf9ETCs97tVfQ0eZBEmcFWynM4kRRmakNzO7JM72pKDZvi",
     "role": "recruiter",
     "status": "Active",
     "credit": 0,
-    "createdAt": "2026-03-14T09:39:45.599Z"
+    "createdAt": "2026-01-18T10:59:30.110Z",
+    "updatedAt": "2026-04-16T09:12:10.904Z"
+  },
+  {
+    "_id": "1769483446070",
+    "name": "RegineS",
+    "email": "reginesalico@gmail.com",
+    "password": "$2b$10$6ckz1g21Pl9mPHBaYmcDp.sG40B8EYbjGRTmTzh/2XhgJBHMsioBW",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-01-27T03:10:46.070Z",
+    "updatedAt": "2026-04-16T09:12:12.032Z",
+    "bankInfo": {
+      "accountHolderName": "",
+      "bankName": "",
+      "branchName": "",
+      "accountNumber": "",
+      "ibanSwiftCode": "",
+      "currency": "PESO",
+      "registeredEmail": "",
+      "registeredPhone": ""
+    }
+  },
+  {
+    "_id": "1769939174545",
+    "name": "Anna",
+    "email": "Contact3189@gmail.com",
+    "password": "$2b$10$wCF5uOqiyOZptVnzykQYE.OYA0Zk8AY.rv80RPLG990QXTLj3Kb2a",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-02-01T09:46:14.545Z",
+    "updatedAt": "2026-04-16T09:12:13.137Z"
+  },
+  {
+    "_id": "1770100391827",
+    "name": "Hi Nguyen",
+    "email": "contact3189@gmail.com",
+    "password": "$2b$10$PbtokjMHhgf.aCXaP6PNMOkA0Lt9QACxSmjEZC5qOvQagMVZNoxKu",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-02-03T06:33:11.827Z",
+    "updatedAt": "2026-04-16T09:12:14.081Z"
+  },
+  {
+    "_id": "1770350380191",
+    "name": "PIS Studio",
+    "email": "pistu.works@gmail.com",
+    "password": "$2b$10$OpPnjDd.wafq9SJmFzl8xeHxg3K26fJJ8Kj07jYcS7995Q1z8lyeC",
+    "role": "recruiter",
+    "status": "Pending",
+    "credit": 0,
+    "createdAt": "2026-02-06T03:59:40.191Z"
+  },
+  {
+    "_id": "1770553057406",
+    "name": "jayvonjackson23",
+    "email": "tankbball@gmail.com",
+    "password": "$2b$10$xoTqBtj5Lnv.QwwxqzQ/OeVvYD/Iu9P4aAc8kVnK2/NRV0TafnOOy",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-02-08T12:17:37.406Z",
+    "updatedAt": "2026-04-16T09:12:17.191Z"
+  },
+  {
+    "_id": "1770642848021",
+    "name": "John",
+    "email": "johnallenvillanueva01@gmail.com",
+    "password": "$2b$10$uzHyb5Jf.8KGZbcQKu4Ze.DKbbjLf4hgXbYynTy9pBLTjU2cDEO62",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-02-09T13:14:08.021Z",
+    "updatedAt": "2026-04-22T09:41:33.723Z"
+  },
+  {
+    "_id": "1770716638584",
+    "name": "Minh",
+    "email": "immhisme1@gmail.com",
+    "password": "$2b$10$6Cp3xOMvKMlM/kdT3e11FuC8aYb2RosRJpI/Mkv2NZ.hwX5gwGRh.",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-02-10T09:43:58.584Z",
+    "updatedAt": "2026-04-22T09:41:34.937Z"
+  },
+  {
+    "_id": "1770871950548",
+    "name": "Thúy Diệu",
+    "email": "thuydieuvtvp@gmail.com",
+    "password": "$2b$10$biDcUMak8Ju41UiO6OfXGeLvRSoeQBIeYkndxPXj0TRBr/oN1cYla",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-02-12T04:52:30.548Z",
+    "updatedAt": "2026-04-22T09:41:35.902Z"
+  },
+  {
+    "_id": "1771077220694",
+    "name": "chr4stine",
+    "email": "christinemuthoni811@gmail.com",
+    "password": "$2b$10$ho9tMdcDtmjfm/Axz/JHKeOs3oh3W3vH9iwNHcsoa5Gm7QFpTPeUK",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-02-14T13:53:40.695Z",
+    "updatedAt": "2026-04-22T09:41:36.380Z"
+  },
+  {
+    "_id": "1771079370399",
+    "name": "Robin Son",
+    "email": "transon.hust.hr@gmail.com",
+    "password": "$2b$10$Hd0qGtjRFM5P8pFYH2Loxuwu31WkOuzpMMo2RypDW0ss8UxgmizP2",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-02-14T14:29:30.399Z",
+    "updatedAt": "2026-02-14T14:51:01.863Z"
+  },
+  {
+    "_id": "1771262209035",
+    "name": "Hasamukh makwana",
+    "email": "hasamukhmakwana60@gmail.com",
+    "password": "$2b$10$OMRxomaWoYEhBDthD92G2OCwJmxnAA6tGAxZZSwmNcLt55OgdtQeW",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-02-16T17:16:49.035Z",
+    "updatedAt": "2026-04-18T09:13:14.611Z"
+  },
+  {
+    "_id": "1771517746779",
+    "name": "glenndales",
+    "email": "glenmdales21@gmail.com",
+    "password": "$2b$10$CA.wSgddNKAnAP9sUyKHDeXnh5IwEGMGBzw.vD7yAedQq/jKV4Q3q",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-02-19T16:15:46.779Z",
+    "updatedAt": "2026-04-18T09:13:15.291Z"
+  },
+  {
+    "_id": "1771639603818",
+    "name": "cbllrojnll",
+    "email": "caballerojenellep@gmail.com",
+    "password": "$2b$10$I6kdyraBnRsKogTd80GfNelbb6luKuuAkkybstxDfn12jPZGxQ09q",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-02-21T02:06:43.818Z",
+    "updatedAt": "2026-04-18T09:13:16.258Z",
+    "bankInfo": {
+      "accountHolderName": "Jenelle Caballero",
+      "bankName": "GoTyme Bank Philippines",
+      "branchName": "Head Office",
+      "accountNumber": "017578636116",
+      "ibanSwiftCode": "GOTYPHM2XXX",
+      "currency": "PHP",
+      "registeredEmail": "cbllrojnll@gmail.com",
+      "registeredPhone": "+63 976 228 0873",
+      "ethAddress": ""
+    }
+  },
+  {
+    "_id": "1771840933357",
+    "name": "uphan.recruitment_anttech",
+    "email": "uphan.sophie98@gmail.com",
+    "password": "$2b$10$s5VfnDqrwf6qhhlIr5s7i./ByvfvySHWah/lHQ7w50M40oHk6PTPK",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-02-23T10:02:13.357Z",
+    "updatedAt": "2026-03-01T14:39:32.448Z",
+    "bankInfo": {
+      "accountHolderName": "",
+      "bankName": "",
+      "branchName": "",
+      "accountNumber": "",
+      "ibanSwiftCode": "",
+      "currency": "VNĐ",
+      "registeredEmail": "",
+      "registeredPhone": ""
+    }
+  },
+  {
+    "_id": "1771940533850",
+    "name": "Nhunghrsg",
+    "email": "nhunghrsg@gmail.com",
+    "password": "$2b$10$7tstlToDOqUegMRpR8LfXOjpArqj2oQSCSTYU27cN8YrZWXOYYKB.",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-02-24T13:42:13.851Z",
+    "updatedAt": "2026-02-24T13:48:26.136Z"
+  },
+  {
+    "_id": "1772181830604",
+    "name": "Nguyen Quoc An",
+    "email": "nguyenanfx@gmail.com",
+    "password": "$2b$10$iYm/siDfqp/CFGxfdcpP0OYVCC2mQkPe3VpgnpqGfjKqZwlsFugO6",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-02-27T08:43:50.604Z",
+    "updatedAt": "2026-02-27T08:59:44.394Z"
+  },
+  {
+    "_id": "1772213972016",
+    "name": "mirzafaizan",
+    "email": "faizanfarooq420@gmail.com",
+    "password": "$2b$10$gXQfmHwyGdte7zKB9iz0UOGFsEVBphrtErkcrW9CHfCZP/g7Gx/Ha",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-02-27T17:39:32.016Z",
+    "updatedAt": "2026-04-18T09:13:17.517Z"
+  },
+  {
+    "_id": "1772260026139",
+    "name": "GataGlobal",
+    "email": "info@gataglobal.com.vn",
+    "password": "$2b$10$OL3/AAAHXaznVsEomzbjf.DteMzJIsYZLo6/7AaumLkhwLqEo75LW",
+    "role": "recruiter",
+    "status": "Rejected",
+    "credit": 0,
+    "createdAt": "2026-02-28T06:27:06.139Z",
+    "updatedAt": "2026-09-22T05:43:59.757Z"
+  },
+  {
+    "_id": "1772475727783",
+    "name": "Leah044",
+    "email": "elisabetta.talent@gmail.com",
+    "password": "$2b$10$uw8IhdOPUob2wldDG97Y3eq75zV.UxEiEYHAbvEL30Tf5CwY/rttm",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-03-02T18:22:07.783Z",
+    "updatedAt": "2026-03-23T12:00:25.899Z"
+  },
+  {
+    "_id": "1772483421973",
+    "name": "Virginie",
+    "email": "vivya@hotmail.com",
+    "password": "$2b$10$lEmmJwVmcxO95AFhpm0/JuyQOPqQCHhX4UnH7lwByLqft3WCQ84N6",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-03-02T20:30:21.973Z",
+    "updatedAt": "2026-03-23T12:00:26.420Z"
+  },
+  {
+    "_id": "1772484628345",
+    "name": "ayeshailyas93@gmail.com",
+    "email": "ayeshailyas93@gmail.com",
+    "password": "$2b$10$1Tnsp.iAfRvM9c1jslKV3O.jywwIcF/UK1GPy0TTuJ/X6f.5413A.",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-03-02T20:50:28.345Z",
+    "updatedAt": "2026-03-23T12:00:27.506Z"
+  },
+  {
+    "_id": "1772494630605",
+    "name": "Wesley Ivan",
+    "email": "wesleyivan1981@gmail.com",
+    "password": "$2b$10$zoVqbMYiwOoFz9rkqaKSFO2.8SKcOQmoo.mpLxliw2ehqIg1pxs.K",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-03-02T23:37:10.605Z",
+    "updatedAt": "2026-03-23T12:00:27.920Z"
+  },
+  {
+    "_id": "1772500849543",
+    "name": "raycong",
+    "email": "raycong3009@gmail.com",
+    "password": "$2b$10$sCuVqYuK7KO56vDZwXV46.o1rTXe3omQLIarQY3KL8FcHSrrXIzXS",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-03-03T01:20:49.543Z",
+    "updatedAt": "2026-03-23T12:00:28.552Z"
+  },
+  {
+    "_id": "1772513120990",
+    "name": "ravisintu",
+    "email": "ravisintu123@gmail.com",
+    "password": "$2b$10$xE7Szx3PjYaIaA936wbzo.E.4qLJ5kHUvaupQfTx.mk0J8VWCCJES",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-03-03T04:45:20.990Z",
+    "updatedAt": "2026-03-23T12:00:29.877Z"
+  },
+  {
+    "_id": "1772520924821",
+    "name": "Sameer Zafar",
+    "email": "sameer.zc@gmail.com",
+    "password": "$2b$10$EodxyMjLAGfTimh.1/DrCu1.nqVz8SWXCC22eG9zAzzniuq2BqTQK",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-03-03T06:55:24.821Z",
+    "updatedAt": "2026-03-23T12:00:30.329Z"
+  },
+  {
+    "_id": "1772526736429",
+    "name": "Vanhien",
+    "email": "hienngo090800@gmail.com",
+    "password": "$2b$10$YSdt0qhN20HRjWrN/f7yx.JIKQwrs/RiorrDkSkOht52.esjb1dzW",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-03-03T08:32:16.429Z",
+    "updatedAt": "2026-03-23T12:00:31.538Z"
+  },
+  {
+    "_id": "1772553406998",
+    "name": "briannambm",
+    "email": "blackwoodmbm@gmail.com",
+    "password": "$2b$10$xP0ES3khz.ES/yxaSkMJz.hlcAwxGXByggVjsYFBYY8vdT/Vt8gga",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-03-03T15:56:46.998Z",
+    "updatedAt": "2026-03-23T12:00:32.010Z"
+  },
+  {
+    "_id": "1772565959675",
+    "name": "kolawolebolarinwa771@gmail.com",
+    "email": "kolawolebolarinwa771@gmail.com",
+    "password": "$2b$10$/lDVLbcPdlCgY55MC8cdf.rnBLlp.6O9TEuL6Iyh1XwbVtpeMj.ou",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-03-03T19:25:59.675Z",
+    "updatedAt": "2026-03-05T17:16:05.382Z"
+  },
+  {
+    "_id": "1772574655816",
+    "name": "Virginie",
+    "email": "virginie.agbobli@gmail.com",
+    "password": "$2b$10$zc84RN6aIE6rIONGaCWWneU.xxi3Q8dRnqYTdtIWz6c3a/4d0tbLy",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-03-03T21:50:55.816Z",
+    "updatedAt": "2026-04-22T09:41:41.433Z"
+  },
+  {
+    "_id": "1772707766981",
+    "name": "shahista",
+    "email": "shahistaanjum184@gmail.com",
+    "password": "$2b$10$jLieYWWcFHmhAfxeQ/V0he2jWVGorl4QnnfBtM.bgUf8JPjxATyLS",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-03-05T10:49:26.981Z",
+    "updatedAt": "2026-04-22T09:41:42.009Z"
+  },
+  {
+    "_id": "1773294163009",
+    "name": "Li",
+    "email": "maianhly.hr@gmail.com",
+    "password": "$2b$10$ztyiKfeProAtXw3ZyYf1vuEvFq9SbQQFIC998Bv8X6fDgVfjpHO3m",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-03-12T05:42:43.009Z",
+    "updatedAt": "2026-03-12T12:28:47.048Z"
+  },
+  {
+    "_id": "1773627365770",
+    "name": "tyree",
+    "email": "ndatien.people@gmail.com",
+    "password": "$2b$10$voRo1iKt3HCb2Zt33eFYEe89n8ZOZc5CCY/fl6OTtorRsF4REfBf2",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-03-16T02:16:05.770Z",
+    "updatedAt": "2026-04-08T14:45:00.141Z"
+  },
+  {
+    "_id": "1773632532059",
+    "name": "Anna Nguyen",
+    "email": "nguyenmaicamnhung@gmail.com",
+    "password": "$2b$10$sbnuLvoXGGsld7hsxL7aQenrEo5WGw95IKabJXWJV0zlN7o9TQAf.",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-03-16T03:42:12.059Z",
+    "updatedAt": "2026-04-08T14:44:58.686Z"
+  },
+  {
+    "_id": "1773632824408",
+    "name": "Anmol",
+    "email": "anmolaggarwal1412@gmail.com",
+    "password": "$2b$10$u0yl6j9fRWzIvpKXyZeZZefuJbjCjOZKBTdRBWpVxocZxQDL88752",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-03-16T03:47:04.408Z",
+    "updatedAt": "2026-04-18T09:07:54.048Z"
+  },
+  {
+    "_id": "1773994331685",
+    "name": "Lien Nguyen",
+    "email": "lienng1004@gmail.com",
+    "password": "$2b$10$XYyA9f4QRM5r7jquT6NQWOYGadXPNFmtjVu7Zal1jYSpYdnFc.1n6",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-03-20T08:12:11.685Z",
+    "updatedAt": "2026-04-18T09:07:54.712Z"
+  },
+  {
+    "_id": "1773994527501",
+    "name": "Ngo Van Hien",
+    "email": "vanhien09082005@gmail.com",
+    "password": "$2b$10$Sz0UNPo.Uzo7310o21rUIuIAad2.HD.zFfKpVorFBkVzQIXSjuSAa",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-03-20T08:15:27.501Z",
+    "updatedAt": "2026-04-18T09:07:55.808Z"
+  },
+  {
+    "_id": "1773994597896",
+    "name": "ganesh j",
+    "email": "bejeb17682@isfew.com",
+    "password": "$2b$10$TNVzwGdWQ9pE0y.2PdC.M.xIeCS4qfXIoGoQLuRFe5UQxW.xSqU0i",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-03-20T08:16:37.896Z",
+    "updatedAt": "2026-04-18T09:07:56.370Z"
+  },
+  {
+    "_id": "1773996169931",
+    "name": "Nguyen Pham Dinh Man",
+    "email": "nmlop10lucifer@gmail.com",
+    "password": "$2b$10$Qso4V9EU3Rgt21yrj99tZO8DmrFL7nooHNnpWUBZTBvlpBlef4aPG",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-03-20T08:42:49.931Z",
+    "updatedAt": "2026-04-18T09:07:57.136Z"
+  },
+  {
+    "_id": "1774000552942",
+    "name": "aries nguyen",
+    "email": "athena.nzland@gmail.com",
+    "password": "$2b$10$xo3XbnMVfIOOl/NC.4OWPu4BBm82sFbG2rL32.PKDsFc18EuD86Ny",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-03-20T09:55:52.942Z",
+    "updatedAt": "2026-03-20T15:21:39.332Z"
+  },
+  {
+    "_id": "1774010303893",
+    "name": "HUONG SEN",
+    "email": "huongsenrecruitment@gmail.com",
+    "password": "$2b$10$asNWQmSr.EZleBvC5RgcAeFgbejwUPwPS16TjWpEs6ctLfI3ivCoW",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-03-20T12:38:23.893Z",
+    "updatedAt": "2026-03-20T15:21:38.473Z"
+  },
+  {
+    "_id": "1774062161608",
+    "name": "Deborah Oluchi Uchenwoke",
+    "email": "debbygirl36@gmail.com",
+    "password": "$2b$10$wuTLl8prgOwca/0Yg72RfeRmP6AvtuKIgQ1fpzxvfAP/aKPdrBlVe",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-03-21T03:02:41.608Z",
+    "updatedAt": "2026-03-26T13:15:23.581Z"
+  },
+  {
+    "_id": "1774078605406",
+    "name": "Văn Như Hão",
+    "email": "haovan.work@gmail.com",
+    "password": "$2b$10$umniaGm06WwIY.kIgEuAo.Rz0mTUgk4/1dRjSojTD8bPoN41wZmMa",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-03-21T07:36:45.407Z",
+    "updatedAt": "2026-06-22T14:23:05.186Z",
+    "bankInfo": {
+      "accountHolderName": "VAN NHU HAO",
+      "bankName": "Techcombank",
+      "branchName": "Techcombank Da Nang, Vietnam",
+      "accountNumber": "19032891229011",
+      "ibanSwiftCode": "VTCBVNVX ",
+      "currency": "VNĐ",
+      "registeredEmail": "vnhuhao.dn201@gmail.com",
+      "registeredPhone": "0906562893",
+      "ethAddress": ""
+    }
+  },
+  {
+    "_id": "1774185466985",
+    "name": "Linh",
+    "email": "ngoclinh290904@gmail.com",
+    "password": "$2b$10$CibPPCvqr1KbE9qDbg/ZZe7YvccYqyO2S1sktRVJF/7DQNolPwVI6",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-03-22T13:17:46.985Z",
+    "updatedAt": "2026-06-22T14:23:05.794Z"
+  },
+  {
+    "_id": "1774233680288",
+    "name": "Nhung HR",
+    "email": "nhunghr.work@gmail.com",
+    "password": "$2b$10$QzgM95B46Ov/rj7pMiLA1ujZS9eXplEzNXCnB.P8nKKMDYoOUKP.C",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-03-23T02:41:20.288Z",
+    "updatedAt": "2026-03-23T08:38:46.771Z"
+  },
+  {
+    "_id": "1774271309072",
+    "name": "Akikochan",
+    "email": "thuuyennguyen.hr@gmail.com",
+    "password": "$2b$10$wNgPXDDqmizas7io5AUlDeHXQxL/Gtx9GvgHxek3Jvcv4cDXViAL6",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-03-23T13:08:29.072Z",
+    "updatedAt": "2026-03-26T13:18:40.141Z"
+  },
+  {
+    "_id": "1774351837316",
+    "name": "Florante Lapina Baljon",
+    "email": "fbaljon@gnail.com",
+    "password": "$2b$10$IjlLVWk214OJYEtDEbVkxeeg9tom/4qpicJ.BeZhp/sQkcXXpiI82",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-03-24T11:30:37.316Z",
+    "updatedAt": "2026-03-26T13:19:05.456Z"
+  },
+  {
+    "_id": "1774422592915",
+    "name": "Hau Hoang",
+    "email": "cungkhongvuilam@gmail.com",
+    "password": "$2b$10$AnMmpwJld8VoxV1ZCwM4zuAPQ4o6/mqDw2bfUX8vcztVuirXd.6y2",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-03-25T07:09:52.915Z",
+    "updatedAt": "2026-03-26T13:19:33.383Z"
+  },
+  {
+    "_id": "1774437216143",
+    "name": "May Vu",
+    "email": "vuthingoan2405@gmail.com",
+    "password": "$2b$10$Gf8ZWPbq2Aef4yRZ8pk.ge.CC2HZlr/ghNDrhSi/R.G2WeZhrMrN6",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-03-25T11:13:36.143Z",
+    "updatedAt": "2026-03-25T16:41:53.588Z"
+  },
+  {
+    "_id": "1774455539373",
+    "name": "Tran Ngoc Xuan Quynh",
+    "email": "tnxuanquynh.consultant@gmail.com",
+    "password": "$2b$10$H7uZYBd7qIA8w8Hi4of9Wu63gEIzZuaV753X0WGa3U5thmk6d0ESK",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-03-25T16:18:59.373Z",
+    "updatedAt": "2026-03-30T15:04:37.552Z"
+  },
+  {
+    "_id": "1774456995600",
+    "name": "Nhung",
+    "email": "nhung@ant-tech.asia",
+    "password": "$2b$10$ufgUvsWh5BCMaDQ6HaEuSu6oZx3lXowcsnm3fJPi7XvB4QUH1Q.yO",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-03-25T16:43:15.600Z",
+    "updatedAt": "2026-03-30T15:08:41.782Z"
+  },
+  {
+    "_id": "1774756596693",
+    "name": "Sarah Nguyen",
+    "email": "sarahnguyentml2204@gmail.com",
+    "password": "$2b$10$dIbGo3teOdYcvbOcZrKktO8DFPaLGcuZ5vWwZXD0KigC15kWnbvSW",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-03-29T03:56:36.693Z",
+    "updatedAt": "2026-03-30T15:09:09.668Z"
+  },
+  {
+    "_id": "1774922544692",
+    "name": "Luan La",
+    "email": "luanla1310@gmail.com",
+    "password": "$2b$10$zjYv6MICE2d4JJIMUg5rmu2hcSEFhN05XBr/28e9bVgA4dpiH/CkG",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-03-31T02:02:24.692Z",
+    "updatedAt": "2026-03-31T05:24:37.945Z"
+  },
+  {
+    "_id": "1774949880271",
+    "name": "Yen Nguyen",
+    "email": "yennguyen.hr3@gmail.com",
+    "password": "$2b$10$cqHbfCVI3OIdTyg15Qr09uWBNzFaGFoFb/MQury4F2i7Xi/uP5gxa",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-03-31T09:38:00.271Z",
+    "updatedAt": "2026-04-04T07:16:58.974Z"
+  },
+  {
+    "_id": "1775098996201",
+    "name": "Tri Hoang Minh Nguyen",
+    "email": "nhmtri@gmail.com",
+    "password": "$2b$10$3VPgsNDYwf.DP2MdXA0eCuzxqfFccwjO4im2pP2YaBmpt605ftD22",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-04-02T03:03:16.201Z",
+    "updatedAt": "2026-04-04T07:16:59.412Z"
+  },
+  {
+    "_id": "1775203460563",
+    "name": "Le Thuy Linh",
+    "email": "ltlinh47@gmail.com",
+    "password": "$2b$10$Q4fzoXl19doENX4.t/NpD.Pyb6o1vQ.ooHrjhutkaiatRS3mka7AK",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-04-03T08:04:20.563Z",
+    "updatedAt": "2026-04-04T07:16:59.990Z"
+  },
+  {
+    "_id": "1775297489136",
+    "name": "Choong Qi Xing",
+    "email": "xing201049@gmail.com",
+    "password": "$2b$10$bk2moNB9jk0BpyF5S/iwyuwPYyf1HWpnM7c0zmP7xczesr1UjtkPO",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-04-04T10:11:29.136Z",
+    "updatedAt": "2026-04-04T10:14:10.427Z"
+  },
+  {
+    "_id": "1775657849205",
+    "name": "Paulina Baranowska",
+    "email": "paulina@pbtalent.io",
+    "password": "$2b$10$8s0se9dKNQziNjkDQhCXNesQre/P1TkJJQDZjUUJk528hZE3s6HVq",
+    "role": "recruiter",
+    "status": "Pending",
+    "credit": 0,
+    "createdAt": "2026-04-08T14:17:29.205Z"
+  },
+  {
+    "_id": "1775790624288",
+    "name": "Nhu",
+    "email": "nhutran41793@gmail.com",
+    "password": "$2b$10$9TrUwbbcMMkt44Di.NkzbO/UXF2k6f0kpes31acpzFJk1ae97nVFS",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-04-10T03:10:24.288Z",
+    "updatedAt": "2026-04-15T12:00:13.951Z"
+  },
+  {
+    "_id": "1775980568997",
+    "name": "Ha Pham",
+    "email": "pandarainbi150@gmail.com",
+    "password": "$2b$10$UE.LlUT1s8li1izl9oxKnut353ZLUSiGQLhVopsVUEPkWnYipOSZa",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-04-12T07:56:08.997Z",
+    "updatedAt": "2026-04-15T12:00:46.159Z"
+  },
+  {
+    "_id": "1776244467713",
+    "name": "Nguyễn Thị Bích Lệ",
+    "email": "ntbl178@gmail.com",
+    "password": "$2b$10$0tgfB.NxxRjBKEMqlRoYh.PVUY6I0WmsZ7qLc1jljegOv42mxGTAO",
+    "role": "recruiter",
+    "status": "Rejected",
+    "credit": 0,
+    "createdAt": "2026-04-15T09:14:27.713Z",
+    "updatedAt": "2026-04-15T16:53:08.847Z"
+  },
+  {
+    "_id": "1776244519284",
+    "name": "Nguyễn Thị Bích Lệ",
+    "email": "lentb178@gmail.com",
+    "password": "$2b$10$AH9tm.J8N.48pGIycfvoaeQIv9qAidlJ5E/Nmu82SEAlESwIpljdS",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-04-15T09:15:19.284Z",
+    "updatedAt": "2026-04-15T12:01:56.716Z"
+  },
+  {
+    "_id": "1776340344203",
+    "name": "Abdulgafar Ojewale Olamide",
+    "email": "abdulgafarojewale@gmail.com",
+    "password": "$2b$10$ppv8RdrnTmzzFAkpAs631OcqxrPAkDLrv9QF2v169jIT/672Ld19e",
+    "role": "recruiter",
+    "status": "Pending",
+    "credit": 0,
+    "createdAt": "2026-04-16T11:52:24.203Z"
+  },
+  {
+    "_id": "1776492567527",
+    "name": "Vu Huyen",
+    "email": "huyenvu.ta@gmail.com",
+    "password": "$2b$10$TVGuLmMorBgo8GEZ2k351eFV4Gfsm65.RWqpeUAaorai/0s2g65NO",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-04-18T06:09:27.527Z",
+    "updatedAt": "2026-04-18T08:47:40.457Z"
+  },
+  {
+    "_id": "1776503553890",
+    "name": "Sally HR",
+    "email": "hrsally27@gmail.com",
+    "password": "$2b$10$n7wdY.hXOxLkKPeTVuKV.uWtSd8NVQbJBDBtUO.kUFLGV2hJuiElG",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-04-18T09:12:33.890Z",
+    "updatedAt": "2026-04-18T09:13:28.707Z"
+  },
+  {
+    "_id": "1776678003306",
+    "name": "Mai lee",
+    "email": "lemai180298@gmail.com",
+    "password": "$2b$10$ud4rqMYBs3YFWVBjB8EQM.JHNa4C5IoZkSuhDHvL/tK2MvoZb4SjW",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-04-20T09:40:03.306Z",
+    "updatedAt": "2026-04-20T10:30:04.447Z"
+  },
+  {
+    "_id": "1777624726513",
+    "name": "Hanna",
+    "email": "hana.tran4201@gmail.com",
+    "password": "$2b$10$9PZn42iaeqOC89XLSeNAMeMomkWasICF/WDDwxpGuGn5UqkpYF6O2",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-05-01T08:38:46.513Z",
+    "updatedAt": "2026-05-02T09:18:18.647Z"
+  },
+  {
+    "_id": "1777648501126",
+    "name": "Jade Phan",
+    "email": "pndquyenworkspace@gmail.com",
+    "password": "$2b$10$NpKxUe7sCmHJVusricSrte5UcIsT5gKcQ67.BVXoMhkX/B3CF9qo2",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-05-01T15:15:01.126Z",
+    "updatedAt": "2026-05-02T09:17:09.143Z"
+  },
+  {
+    "_id": "1777988665430",
+    "name": "LYNN LEE",
+    "email": "lltrading23@outlook.com",
+    "password": "$2b$10$zROg9BfR31mQX5oAKmztY.bSBIcKIz9lN6xDurWnleNWQIydBGtL.",
+    "role": "recruiter",
+    "status": "Pending",
+    "credit": 0,
+    "createdAt": "2026-05-05T13:44:25.430Z"
+  },
+  {
+    "_id": "1778020413036",
+    "name": "Tu Nguyen",
+    "email": "tn9503@gmail.com",
+    "password": "$2b$10$BI9m.svOvweOk5utDRdJPelqAzH5ulY7cmLOXUuAup8RV9q0bU//2",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-05-05T22:33:33.036Z",
+    "updatedAt": "2026-05-11T09:43:09.602Z"
+  },
+  {
+    "_id": "1778346544594",
+    "name": "Phuc Nguyen",
+    "email": "thanh.phuc.bliss97@gmail.com",
+    "password": "$2b$10$b5O.edQmFktx2dSul4PBDumCgN.NJLX1nabWvV4a/4gkYfZb.ftDm",
+    "role": "recruiter",
+    "status": "Rejected",
+    "credit": 0,
+    "createdAt": "2026-05-09T17:09:04.594Z",
+    "updatedAt": "2026-05-11T11:40:18.896Z"
+  },
+  {
+    "_id": "1778481384400",
+    "name": "Ellie Luong",
+    "email": "luonghoaivi29012004@gmail.com",
+    "password": "$2b$10$f/GF7RwX6eUfyqahwweeb.kmSeulldPwvouw14.8r8zWk5npFHdrG",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-05-11T06:36:24.400Z",
+    "updatedAt": "2026-05-11T09:43:07.716Z"
+  },
+  {
+    "_id": "1778522885818",
+    "name": "Vu Bao Ngoc",
+    "email": "vubaongochr95@gmail.com",
+    "password": "$2b$10$q9sLTKAJSxu9iMHvdpAKxO8kgXqyL5ozjcr83sFpW3mvSAaWWbB1O",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-05-11T18:08:05.818Z",
+    "updatedAt": "2026-05-12T03:58:02.813Z"
+  },
+  {
+    "_id": "1782128119018",
+    "name": "Trinh Nguyen",
+    "email": "nguyentuyettrinh2301@gmail.com",
+    "password": "$2b$10$vz4Q7mXoNFfIE.i3FBaBSuz.vTd1A.rPKO1iXamQYIP0IYngG1LRy",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-06-22T11:35:19.018Z",
+    "updatedAt": "2026-06-23T02:22:33.925Z"
+  },
+  {
+    "_id": "1782134697456",
+    "name": "Trang Kieu",
+    "email": "kieu.thanhtrang@yahoo.com.vn",
+    "password": "$2b$10$.zwyRJ/LiMeg2NQzpeElMOnLbcaD8U.SbyV1Yt.Mjw1C9VXQogUiS",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-06-22T13:24:57.456Z",
+    "updatedAt": "2026-06-23T02:22:34.537Z"
+  },
+  {
+    "_id": "1782135000587",
+    "name": "Nguyen Trong",
+    "email": "minhhnguyenn2003@gmail.com",
+    "password": "$2b$10$zxctoKqP0MAYEjImJaBoHe0Yj1Ems/BtRA8z1hO5Xr3HdifjXENnO",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-06-22T13:30:00.587Z",
+    "updatedAt": "2026-06-23T02:22:35.041Z"
+  },
+  {
+    "_id": "1782206959078",
+    "name": "Huynh Thi My Thu",
+    "email": "huynhthimythu98@gmail.com",
+    "password": "$2b$10$/oL56Zmx7JKF9mWr8wnQHOLReV7oMTa7v34AHq5W2BbMaWdbSYERq",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-06-23T09:29:19.078Z",
+    "updatedAt": "2026-06-23T09:57:39.240Z"
+  },
+  {
+    "_id": "1782271107601",
+    "name": "Mine",
+    "email": "kimthuymai16@gmail.com",
+    "password": "$2b$10$mlyrsNjXxIodgegdjUdo4ugH7T.oqW0T7HsnBKC0AhZQaw2AeFsTq",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-06-24T03:18:27.601Z",
+    "updatedAt": "2026-06-25T06:36:22.350Z"
+  },
+  {
+    "_id": "1782302657245",
+    "name": "Shruti Bhatt",
+    "email": "shruti.bhatt1864@gmail.com",
+    "password": "$2b$10$eYPLyCB1KarSeq9H3frGv.DG2eJTAp/SmPEMq3drgXyGWTOZ/pep6",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-06-24T12:04:17.246Z",
+    "updatedAt": "2026-06-25T16:09:27.107Z"
+  },
+  {
+    "_id": "1782378917336",
+    "name": "Bushra Mahmud",
+    "email": "bushramahmud5@gmail.com",
+    "password": "$2b$10$IySW44HRHJdcPqQdtKTwseorOubNEt92i/6Ak1nqOrhhOCoZVdECS",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-06-25T09:15:17.336Z",
+    "updatedAt": "2026-07-14T06:45:14.890Z",
+    "bankInfo": {
+      "accountHolderName": "Bushra Mahmud ",
+      "bankName": "Standard Chartered Bank ",
+      "branchName": "Gulshan Branch ",
+      "accountNumber": "24132978101",
+      "ibanSwiftCode": "SCBLBDDXXXX",
+      "currency": "BDT",
+      "registeredEmail": "bushramahmud5@gmail.com",
+      "registeredPhone": "+8801709271031",
+      "ethAddress": ""
+    }
+  },
+  {
+    "_id": "1782470112772",
+    "name": "Shakshi Dhaduk",
+    "email": "shakshidhaduk@gmail.com",
+    "password": "$2b$10$oHdXFOGWzBs.GkPkd4vSg.UqqBBcuY3vwLdhWHpS66jHVJZfjR0GS",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-06-26T10:35:12.772Z",
+    "updatedAt": "2026-06-26T11:10:29.903Z"
+  },
+  {
+    "_id": "1782796940860",
+    "name": "Y Recruiter",
+    "email": "yrecruiter9@gmail.com",
+    "password": "$2b$10$mxNGDBcB5QKAKjVlYGc6hO7ryyhy3D5sYX67HM5KzkA5TdT5LXh/.",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-06-30T05:22:20.860Z",
+    "updatedAt": "2026-07-02T08:17:00.118Z"
+  },
+  {
+    "_id": "1782901426078",
+    "name": "Ankita Sharma",
+    "email": "ankitasharma042000@gmail.com",
+    "password": "$2b$10$e1gHjvI6klxlFkOJcSp3DuAmcfudTbibo/WoEsddHKyUwCnlSQidu",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-07-01T10:23:46.078Z",
+    "updatedAt": "2026-07-02T07:47:29.443Z"
+  },
+  {
+    "_id": "1782977618597",
+    "name": "Aliyah Mae Pabustan",
+    "email": "aliyahmae0401@gmail.com",
+    "password": "$2b$10$48Bl30V3BKfYnvwUBQFHYOP2e9EODZrHpAIIuoWFgMdJuuWvtKBCe",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-07-02T07:33:38.597Z",
+    "updatedAt": "2026-07-02T07:47:27.298Z"
+  },
+  {
+    "_id": "1782998015613",
+    "name": "Nimisha k k",
+    "email": "nimisha.kk001@gmail.com",
+    "password": "$2b$10$DtUGXi0URYqCX04PDN/WDO.ubF8qn4eIFLOscuyFEuLJryQA6MHNm",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-07-02T13:13:35.613Z",
+    "updatedAt": "2026-07-02T13:57:13.143Z"
+  },
+  {
+    "_id": "1783010199624",
+    "name": "Inthuja.G.J",
+    "email": "inthucrazy16@gmail.com",
+    "password": "$2b$10$VU8kgy6N9XVZ.5XlM8RqYOiQDjH.YgQDOq/rcqADad9YFWkIOei5.",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-07-02T16:36:39.624Z",
+    "updatedAt": "2026-07-03T02:04:46.274Z"
+  },
+  {
+    "_id": "1783057047642",
+    "name": "Richa Bharti",
+    "email": "bhartiricha1607@gmail.com",
+    "password": "$2b$10$KxVJ2am8SDPG8PcikNrbOuao8pSumc7XxsVMsgNvV7xyHBCyVNcYO",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-07-03T05:37:27.642Z",
+    "updatedAt": "2026-07-03T06:32:37.683Z"
+  },
+  {
+    "_id": "1783061406411",
+    "name": "Amit Dorwal",
+    "email": "amitdorwaal121@gmail.com",
+    "password": "$2b$10$gOJLK5AMdS856DlTCCyS0umrYd6Dm1AsPCyh3.MzRLk63rkLQ5O2O",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-07-03T06:50:06.411Z",
+    "updatedAt": "2026-07-03T07:01:14.190Z"
+  },
+  {
+    "_id": "1783066073553",
+    "name": "Nalin Sharma",
+    "email": "nalinsha08@gmail.com",
+    "password": "$2b$10$1j4jlCo5axRvwaffy3A.jORnCmM4ictLyUWkTy..ngopzGHTVevGG",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-07-03T08:07:53.553Z",
+    "updatedAt": "2026-07-03T10:00:56.227Z"
+  },
+  {
+    "_id": "1783085741916",
+    "name": "Megha.K",
+    "email": "meghamadhu441@gmail.com",
+    "password": "$2b$10$0BXnkEoDn5s3wdyVvg2vVuDsOjKtKqBHiFjVfrSuX91S4yCYGQxS.",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-07-03T13:35:41.916Z",
+    "updatedAt": "2026-07-04T09:45:33.740Z"
+  },
+  {
+    "_id": "1783089334280",
+    "name": "Fathima Fidha",
+    "email": "fathimafidha998@gmail.com",
+    "password": "$2b$10$USa6DfLFvwlQq7VZG4XPQe3Vfa/uEJBKWBQa/hpEfzVnWtzgV.ev2",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-07-03T14:35:34.280Z",
+    "updatedAt": "2026-07-04T09:45:34.247Z"
+  },
+  {
+    "_id": "1783370531923",
+    "name": "Dushyant Verma",
+    "email": "vermadushyant1@gmail.com",
+    "password": "$2b$10$fxamCvoUVoUDejSJk9E1Ee0rJwG3DmtE856/n52XQZlAaaLr3ACj6",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-07-06T20:42:11.923Z",
+    "updatedAt": "2026-07-08T01:57:18.180Z"
+  },
+  {
+    "_id": "1783408838112",
+    "name": "Nnamdi Odili",
+    "email": "edwardodili@gmail.com",
+    "password": "$2b$10$pDjuvylAzuVAs22NfXFa1OVj5sPlmll37gHSnIHOw90LXLEvFB9lK",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-07-07T07:20:38.112Z",
+    "updatedAt": "2026-07-08T04:36:20.519Z",
+    "bankInfo": {
+      "accountHolderName": "",
+      "bankName": "",
+      "branchName": "",
+      "accountNumber": "",
+      "ibanSwiftCode": "",
+      "currency": "VNĐ",
+      "registeredEmail": "",
+      "registeredPhone": "",
+      "ethAddress": ""
+    }
+  },
+  {
+    "_id": "1784811793680",
+    "name": "Uyên Nguyễn",
+    "email": "uyencareeradvisor@gmail.com",
+    "password": "$2b$10$EMjV9ZAbJgupAg08a97Pq.1o87p7h5saGtAN920t6eIn2r4x6hDZ6",
+    "role": "recruiter",
+    "status": "Rejected",
+    "credit": 0,
+    "createdAt": "2026-07-23T13:03:13.680Z",
+    "updatedAt": "2026-09-03T03:56:40.206Z"
+  },
+  {
+    "_id": "1784865372389",
+    "name": "Nhu-Y Le Cook",
+    "email": "nhuylcook@gmail.com",
+    "password": "$2b$10$RgTH8EQccX.H3ANrVzUjuOt9uA7hdowawhUNWG/D5gbHBGzNKuhFW",
+    "role": "recruiter",
+    "status": "Pending",
+    "credit": 0,
+    "createdAt": "2026-07-24T03:56:12.389Z"
+  },
+  {
+    "_id": "1786006824035",
+    "name": "Lan",
+    "email": "Headhuntfreelancer11@gmail.com",
+    "password": "$2b$10$QnrvFl2v5UDg/OosJbDZn.7ZpqVjGdccUe7CpdHPUsU/RRFH84R1u",
+    "role": "recruiter",
+    "status": "Rejected",
+    "credit": 0,
+    "createdAt": "2026-08-06T09:00:24.035Z",
+    "updatedAt": "2026-09-03T03:52:15.902Z"
+  },
+  {
+    "_id": "1786088313015",
+    "name": "Lan",
+    "email": "lankt2412@gmail.com",
+    "password": "$2b$10$1SUD..GiNORYrPtMoZPz3.NViBDati5rgfE7f7gyaqqqwnvvp9Cc6",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-08-07T07:38:33.016Z",
+    "updatedAt": "2026-09-28T02:41:53.441Z",
+    "bankInfo": {
+      "accountHolderName": "",
+      "bankName": "",
+      "branchName": "",
+      "accountNumber": "",
+      "ibanSwiftCode": "",
+      "currency": "VNĐ",
+      "registeredEmail": "",
+      "registeredPhone": "",
+      "ethAddress": ""
+    }
+  },
+  {
+    "_id": "1786862070421",
+    "name": "Wu Jinzhou",
+    "email": "wujinzhou@outlook.com",
+    "password": "$2b$10$Ri06WIVc329M9FOpXgitJ.5LGRKgve.paB.8Fp19cbmYnY0/sHApi",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-08-16T06:34:30.421Z",
+    "updatedAt": "2026-09-01T04:21:14.085Z"
+  },
+  {
+    "_id": "1788405561290",
+    "name": "Chau Vo",
+    "email": "vophambc@gmail.com",
+    "password": "Ch@u130222",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-09-03T03:19:21.290Z",
+    "updatedAt": "2026-09-09T13:50:51.852Z",
+    "bankInfo": {
+      "accountHolderName": "",
+      "bankName": "",
+      "branchName": "",
+      "accountNumber": "",
+      "ibanSwiftCode": "",
+      "currency": "VNĐ",
+      "registeredEmail": "",
+      "registeredPhone": "",
+      "ethAddress": ""
+    }
+  },
+  {
+    "_id": "1788408146883",
+    "name": "SHRUTI ROHATGI",
+    "email": "shrutirohatgi256@gmail.com",
+    "password": "$2b$10$WqDgmMUvHg3bRYgE3TrPXut4UU7fSAVvmzkIxltOA.rvS07gho5Hu",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-09-03T04:02:26.883Z",
+    "updatedAt": "2026-09-03T07:52:20.261Z"
+  },
+  {
+    "_id": "1788416787113",
+    "name": "Priyanka",
+    "email": "priyanka@ant-tech.com",
+    "password": "$2b$10$FyiHDevL2tZ.trxy3oAoq..iPt9/OHBPdk8msO8KZgTbp1j3iLqlG",
+    "role": "recruiter",
+    "status": "Pending",
+    "credit": 0,
+    "createdAt": "2026-09-03T06:26:27.113Z"
+  },
+  {
+    "_id": "1788419407042",
+    "name": "Heena Jain",
+    "email": "heenajain2508@gmail.com",
+    "password": "$2b$10$riQIzjua.DNdA7iJQTGsCuPK2Gs21bIKJfcmUEh92iafi5f7lC5gW",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-09-03T07:10:07.042Z",
+    "updatedAt": "2026-09-03T07:52:57.286Z"
+  },
+  {
+    "_id": "1788436061878",
+    "name": "Shama perween",
+    "email": "ayeshaperween90@gmail.com",
+    "password": "$2b$10$eAsZfJR0pQ8pl0WfgJIkuuWebntpHG5da4MWlJO4n9ZRPt6U/oLMy",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-09-03T11:47:41.878Z",
+    "updatedAt": "2026-09-04T01:36:18.602Z"
+  },
+  {
+    "_id": "1789623389722",
+    "name": "Amida Nguyen",
+    "email": "thanh.ngvt@gmail.com",
+    "password": "$2b$10$c80Y4n/TOdf2JqoWVNw19epvNaG3YcopZulQigtmq.54VsOML3i76",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-09-17T05:36:29.722Z",
+    "updatedAt": "2026-09-17T05:37:12.344Z"
+  },
+  {
+    "_id": "1789714127624",
+    "name": "Mohd Raza",
+    "email": "mohammadraza9123@gmail.com",
+    "password": "$2b$10$VXwSyTbWSJB0pmGeDp53tOY6J0X6P3a.o/ClBjY96GyQYE2PHQEym",
+    "role": "recruiter",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-09-18T06:48:47.625Z",
+    "updatedAt": "2026-09-30T18:15:01.127Z"
+  },
+  {
+    "_id": "1791646552405",
+    "name": "John Doe",
+    "email": "jd@ant-tech.com",
+    "password": "$2b$10$dRCFVRja4zms/gqRhMLaUuUp1G.fLuED6wLaZ6TWkL0Q/cS02FZyO",
+    "company": "Ant Tech",
+    "role": "recruiter_fulltime",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-10-10T15:35:52.405Z",
+    "updatedAt": "2026-10-10T15:37:00.139Z"
   }
 ]

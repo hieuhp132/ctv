@@ -57,7 +57,13 @@ export default function Card({
     return t.replace(/\s+/g, " ").trim().slice(0, 180);
   })();
 
-  const jobUrl = `/${role}/job/${job._id}`;
+  const isFreelancerRecruiter = ["recruiter", "recruiter_freelancer"].includes(role);
+  const rolePath = ["admin", "lower_admin"].includes(role)
+    ? "admin"
+    : isFreelancerRecruiter
+      ? "recruiter"
+      : role;
+  const jobUrl = `/${rolePath}/job/${job._id}`;
 
   const pipeline = job.pipeline || {};
 
@@ -169,7 +175,7 @@ export default function Card({
 
         {/* ACTIONS */}
         <div className="job-actions">
-          {role === "admin" && (
+          {(role === "admin" || role === "lower_admin") && (
             <>
               <button
                 onClick={(e) => {
@@ -204,7 +210,7 @@ export default function Card({
             </>
           )}
 
-          {role === "recruiter" && (
+          {isFreelancerRecruiter && (
             <>
               {/* <button
                 onClick={(e) => {

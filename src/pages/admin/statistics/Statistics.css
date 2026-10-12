@@ -5,6 +5,164 @@
   --text-muted: #64748b;
 }
 
+.admin-analytics-dashboard {
+  --analytics-panel: #ffffff;
+  --analytics-panel-soft: #f7f9fc;
+  --analytics-border: #dce4ed;
+  --analytics-text: #202d3c;
+  --analytics-muted: #526274;
+  width: 100%;
+  color: var(--analytics-text);
+}
+
+.admin-analytics-dashboard > div {
+  width: min(100%, 1280px);
+}
+
+.admin-analytics-dashboard header h2 {
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  line-height: 1.15;
+}
+
+.admin-analytics-dashboard header p {
+  color: var(--analytics-muted) !important;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.admin-analytics-dashboard [data-dashboard-card] {
+  border-color: var(--analytics-border) !important;
+  color: var(--analytics-text);
+}
+
+.admin-analytics-dashboard .text-xs {
+  font-size: 0.82rem !important;
+  line-height: 1.45;
+}
+
+.admin-analytics-dashboard .text-sm {
+  font-size: 0.94rem !important;
+  line-height: 1.5;
+}
+
+.admin-analytics-dashboard .text-lg {
+  font-size: 1.18rem !important;
+  line-height: 1.4;
+}
+
+.admin-analytics-dashboard .text-2xl {
+  font-size: 1.7rem !important;
+}
+
+.admin-analytics-dashboard .text-3xl {
+  font-size: 2rem !important;
+}
+
+.admin-analytics-dashboard .recharts-cartesian-axis-tick-value,
+.admin-analytics-dashboard .recharts-legend-item-text {
+  font-size: 12px;
+}
+
+.admin-analytics-dashboard .recharts-cartesian-grid line {
+  stroke: #cbd5e1;
+}
+
+html[data-theme="dark"] .admin-analytics-dashboard {
+  --analytics-panel: #151d28;
+  --analytics-panel-soft: #101720;
+  --analytics-border: #2a3747;
+  --analytics-text: #e2eaf2;
+  --analytics-muted: #afbdcb;
+  background: #0e141c !important;
+}
+
+html[data-theme="dark"] .admin-analytics-dashboard [class~="bg-white"],
+html[data-theme="dark"] .admin-analytics-dashboard [class~="bg-white/50"] {
+  background-color: var(--analytics-panel) !important;
+}
+
+html[data-theme="dark"] .admin-analytics-dashboard [class~="bg-gray-50/50"],
+html[data-theme="dark"] .admin-analytics-dashboard [class~="bg-gray-50/80"],
+html[data-theme="dark"] .admin-analytics-dashboard [class~="bg-gray-50"] {
+  background-color: var(--analytics-panel-soft) !important;
+}
+
+html[data-theme="dark"] .admin-analytics-dashboard .text-gray-900,
+html[data-theme="dark"] .admin-analytics-dashboard .text-gray-800,
+html[data-theme="dark"] .admin-analytics-dashboard .text-gray-700 {
+  color: #e6edf5 !important;
+}
+
+html[data-theme="dark"] .admin-analytics-dashboard .text-gray-600,
+html[data-theme="dark"] .admin-analytics-dashboard .text-gray-500,
+html[data-theme="dark"] .admin-analytics-dashboard .text-gray-400 {
+  color: #b0becc !important;
+}
+
+html[data-theme="dark"] .admin-analytics-dashboard .border-gray-50,
+html[data-theme="dark"] .admin-analytics-dashboard .border-gray-100,
+html[data-theme="dark"] .admin-analytics-dashboard .border-gray-200 {
+  border-color: var(--analytics-border) !important;
+}
+
+html[data-theme="dark"] .admin-analytics-dashboard .text-indigo-600 {
+  color: #64d9e3 !important;
+}
+
+html[data-theme="dark"] .admin-analytics-dashboard .text-rose-500,
+html[data-theme="dark"] .admin-analytics-dashboard .text-amber-500,
+html[data-theme="dark"] .admin-analytics-dashboard .text-teal-500 {
+  color: #c3a3ed !important;
+}
+
+html[data-theme="dark"] .admin-analytics-dashboard [class~="bg-indigo-50"],
+html[data-theme="dark"] .admin-analytics-dashboard [class~="bg-rose-50"],
+html[data-theme="dark"] .admin-analytics-dashboard [class~="bg-amber-50"],
+html[data-theme="dark"] .admin-analytics-dashboard [class~="bg-teal-50"] {
+  background-color: #263142 !important;
+}
+
+html[data-theme="dark"] .admin-analytics-dashboard .recharts-cartesian-axis-tick-value,
+html[data-theme="dark"] .admin-analytics-dashboard .recharts-legend-item-text {
+  fill: #b5c2d0 !important;
+  color: #b5c2d0 !important;
+}
+
+html[data-theme="dark"] .admin-analytics-dashboard .recharts-cartesian-grid line {
+  stroke: #334153;
+}
+
+html[data-theme="dark"] .admin-analytics-dashboard .recharts-tooltip-wrapper .recharts-default-tooltip {
+  border: 1px solid #354456 !important;
+  border-radius: 12px !important;
+  background: #182331 !important;
+  color: #e2eaf2 !important;
+}
+
+html[data-theme="dark"] .admin-analytics-dashboard .recharts-tooltip-label,
+html[data-theme="dark"] .admin-analytics-dashboard .recharts-tooltip-item {
+  color: #e2eaf2 !important;
+}
+
+@media (max-width: 640px) {
+  .admin-analytics-dashboard {
+    padding-top: 28px;
+    padding-right: 14px;
+    padding-bottom: 32px;
+    padding-left: 14px;
+  }
+
+  .admin-analytics-dashboard [data-dashboard-card] {
+    padding: 20px !important;
+    border-radius: 20px !important;
+  }
+
+  .admin-analytics-dashboard .recharts-cartesian-axis-tick-value,
+  .admin-analytics-dashboard .recharts-legend-item-text {
+    font-size: 11px;
+  }
+}
+
 .custom-scrollbar::-webkit-scrollbar {
   width: 4px;
 }

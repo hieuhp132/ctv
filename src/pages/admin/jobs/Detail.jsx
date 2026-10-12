@@ -22,8 +22,8 @@ import { createPDF } from "../../../utils/createPDF.js";
 export default function JobDetail() {
   const { id } = useParams();
   const { user } = useAuth();
-  const isCTV = user?.role === "recruiter";
-  const isAdmin = user?.role === "admin";
+  const isCTV = ["recruiter", "recruiter_freelancer"].includes(user?.role);
+  const isAdmin = ["admin", "lower_admin"].includes(user?.role);
   const recruiterId = useMemo(() => user?.email || user?.id, [user]);
 
   const [job, setJob] = useState(null);
@@ -123,7 +123,7 @@ export default function JobDetail() {
 
       await createSubmissionL({
         jobId: id, recruiterId, ...candidateForm,
-        cvUrl: res.publicUrl, bonus: job.bonus,
+        cvUrl: res.publicUrl,
       });
 
       alert("Candidate submitted successfully!");
