@@ -171,7 +171,7 @@ const LoginPage = ({ recruiterType = "freelancer" }) => {
             <div className="auth-heading">
 
               <h1>
-                {isFulltimeRecruiter ? "Employer sign In" : "AntTech Asia"}
+                {isFulltimeRecruiter ? "Employer sign in" : "AntTech Asia"}
               </h1>
 
               <p>
