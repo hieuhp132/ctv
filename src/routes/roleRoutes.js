@@ -24,9 +24,9 @@ export const ROLE_ROUTES = {
     notification: "/recruiter/notifications",
   },
   recruiter_fulltime: {
-    dashboard: "/employee",
-    jobs: "/employee",
-    candidates: "/employee",
+    dashboard: "/employer",
+    jobs: "/employer",
+    candidates: "/employer",
   },
 };
 
@@ -37,7 +37,7 @@ export function getRoleLabel(role) {
     candidate: "Candidate",
     recruiter: "Freelance Recruiter",
     recruiter_freelancer: "Freelance Recruiter",
-    recruiter_fulltime: "Employee",
+    recruiter_fulltime: "Employer",
   };
   return labels[role] || role || "";
 }
@@ -67,7 +67,7 @@ export const ROLE_NAV_ITEMS = {
     { label: "Saved Jobs", path: ROLE_ROUTES.recruiter_freelancer.savedJobs },
   ],
   recruiter_fulltime: [
-    { label: "Employee workspace", path: ROLE_ROUTES.recruiter_fulltime.dashboard },
+    { label: "Employer workspace", path: ROLE_ROUTES.recruiter_fulltime.dashboard },
   ],
 };
 

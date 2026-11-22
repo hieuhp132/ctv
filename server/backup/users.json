@@ -3,7 +3,7 @@
     "_id": "68bdcf22131c403154a093e8",
     "name": "Admin",
     "email": "admin@ant-tech.asia",
-    "password": "$2b$10$3sfAc0CP0OevM8IZpbVHzOBswF2DDBPo35e2G90pntoR/AMK5aWGW",
+    "password": "$2b$10$73bo2NGwvH/FVouat5H77uhZMuzPk2jjZ7SwDfjBKC9EJkyMaggm6",
     "credit": 0,
     "role": "admin",
     "jobs": [
@@ -11,7 +11,7 @@
       "68bdcf23131c403154a093f0"
     ],
     "__v": 1,
-    "updatedAt": "2025-12-22T09:04:33.083Z"
+    "updatedAt": "2026-11-22T06:54:33.133Z"
   },
   {
     "_id": "68c021ae824dc44d6e0831c5",
@@ -822,7 +822,7 @@
     "role": "recruiter",
     "updatedAt": "2025-12-22T16:53:49.220Z"
   },
-    {
+  {
     "_id": "1766372713740",
     "name": "Nhatcuong",
     "email": "dao.nhatcuong171001@gmail.com",

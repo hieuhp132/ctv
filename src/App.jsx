@@ -38,14 +38,14 @@ import RecrSavedJobs from "./pages/recruiter/jobs/Saved";
 import RecrCandidates from "./pages/recruiter/candidates_tracker/Candidates";
 import RecrNotification from "./pages/recruiter/notifications/Notification";
 import RecruiterWorkspace from "./pages/recruiter/dashboard/RecruiterWorkspace";
-import EmployeeWorkspace from "./pages/employee/EmployeeWorkspace";
+import EmployeeWorkspace from "./pages/employer/EmployeeWorkspace";
 import Update from "./pages/update/Update";
 import TermsPage from "./pages/terms/Terms";
 
 function PrivateRoute({ roles }) {
   const { user, authReady } = useAuth();
   const loginPath = roles?.includes("recruiter_fulltime")
-    ? "/employee/login"
+    ? "/employer/login"
     : "/recruiter/login";
 
   if (!authReady) return null;
@@ -91,16 +91,16 @@ function AppRoutes() {
         <Route path="/freelancer" element={<NewHome />} />
         <Route path="/company" element={<EmployerHome />} />
         <Route path="/recruiter/login" element={<Login />} />
-        <Route path="/employee/login" element={<Login recruiterType="fulltime" />} />
+        <Route path="/employer/login" element={<Login recruiterType="fulltime" />} />
         <Route path="/recruiter/signup" element={<SignUp />} />
-        <Route path="/employee/signup" element={<SignUp recruiterType="fulltime" />} />
+        <Route path="/employer/signup" element={<SignUp recruiterType="fulltime" />} />
         <Route path="/login" element={<Navigate to="/recruiter/login" replace />} />
         <Route path="/login/recruiter-freelancer" element={<Navigate to="/recruiter/login" replace />} />
-        <Route path="/login/recruiter-fulltime" element={<Navigate to="/employee/login" replace />} />
+        <Route path="/login/recruiter-fulltime" element={<Navigate to="/employer/login" replace />} />
         <Route path="/signup" element={<Navigate to="/recruiter/signup" replace />} />
         <Route path="/signup/recruiter-freelancer" element={<Navigate to="/recruiter/signup" replace />} />
-        <Route path="/signup/recruiter-fulltime" element={<Navigate to="/employee/signup" replace />} />
-        <Route path="/signup/employee" element={<Navigate to="/employee/signup" replace />} />
+        <Route path="/signup/recruiter-fulltime" element={<Navigate to="/employer/signup" replace />} />
+        <Route path="/signup/employer" element={<Navigate to="/employer/signup" replace />} />
         <Route path="/pending" element={<Pending />} />
         <Route path="/dashboard" element={<DashboardRedirect />} />
         <Route path="/notifications/update" element={<Update />} />
@@ -152,8 +152,8 @@ function AppRoutes() {
         </Route>
 
         <Route element={<PrivateRoute roles={["recruiter_fulltime"]} />}>
-          <Route path="/employee" element={<EmployeeWorkspace />} />
-          <Route path="/recruiter-fulltime" element={<Navigate to="/employee" replace />} />
+          <Route path="/employer" element={<EmployeeWorkspace />} />
+          <Route path="/recruiter-fulltime" element={<Navigate to="/employer" replace />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />

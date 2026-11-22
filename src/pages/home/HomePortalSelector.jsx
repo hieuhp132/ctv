@@ -15,14 +15,14 @@ const portals = [
     tone: "freelancer",
   },
   {
-    title: "Employee",
+    title: "Employer",
     description:
       "Manage hiring needs, track candidates, and collaborate with your team in one place.",
     detail: "For in-house teams · Centralized recruitment management",
     icon: BriefcaseBusiness,
     home: "/company",
-    login: "/employee/login",
-    signup: "/employee/signup",
+    login: "/employer/login",
+    signup: "/employer/signup",
     tone: "company",
   },
 ];

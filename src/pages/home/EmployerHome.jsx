@@ -24,7 +24,7 @@ export default function EmployerHome() {
   return (
     <main className="employer-home">
       <section className="employer-home__hero">
-        <span className="employer-home__eyebrow">EMPLOYEE WORKSPACE</span>
+        <span className="employer-home__eyebrow">EMPLOYER WORKSPACE</span>
         <h1>
           Find the right people,
           <br />
@@ -79,7 +79,7 @@ export default function EmployerHome() {
         </div>
         <div className="employer-home__switch">
           <span>Are you an independent recruiter?</span>
-          <Link to="/freelancer">Explore the Freelance Recruiter portal <ArrowRight size={14} /></Link>
+          <Link to="/freelancer">Explore the Freelancer Recruiter portal <ArrowRight size={14} /></Link>
         </div>
       </section>
     </main>

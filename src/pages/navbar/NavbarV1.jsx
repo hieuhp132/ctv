@@ -37,13 +37,13 @@ export default function NavbarV1() {
   const location = useLocation();
   const isFulltimePortal =
     location.pathname.startsWith("/company") ||
-    location.pathname.startsWith("/employee") ||
+    location.pathname.startsWith("/employer") ||
     location.pathname.includes("recruiter-fulltime");
   const loginPath = isFulltimePortal
-    ? "/employee/login"
+    ? "/employer/login"
     : "/recruiter/login";
   const signupPath = isFulltimePortal
-    ? "/employee/signup"
+    ? "/employer/signup"
     : "/recruiter/signup";
   const roleItems = ROLE_NAV_ITEMS[user?.role] || [];
 
@@ -91,7 +91,7 @@ export default function NavbarV1() {
   const handleLogout = () => {
     const loggedOutLoginPath =
       user?.role === "recruiter_fulltime"
-        ? "/employee/login"
+        ? "/employer/login"
         : "/recruiter/login";
     logout();
     setAccountMenuOpen(false);
@@ -125,7 +125,7 @@ export default function NavbarV1() {
               <UsersRound size={15} /> Freelancer
             </Link>
             <Link className="navbar-v1__link" to="/company" target="_blank" rel="noopener noreferrer">
-              <BriefcaseBusiness size={15} /> Employee
+              <BriefcaseBusiness size={15} /> Employer
             </Link>
             <Link className="navbar-v1__link" to="/" target="_blank" rel="noopener noreferrer">
               Choose portal
@@ -142,7 +142,7 @@ export default function NavbarV1() {
                   to={item.path}
                 >
                   <RoleIcon className="navbar-v1__role-icon" size={16} aria-hidden="true" />
-                  {item.label}
+                  {item.label} 
                 </Link>
               );
             })}
@@ -272,7 +272,7 @@ export default function NavbarV1() {
                 <UsersRound size={15} /> Freelancer
               </Link>
               <Link className="navbar-v1__link" to="/company" target="_blank" rel="noopener noreferrer" onClick={closeMobileMenu}>
-                <BriefcaseBusiness size={15} /> Employee
+                <BriefcaseBusiness size={15} /> Employer
               </Link>
               <Link className="navbar-v1__link" to="/" target="_blank" rel="noopener noreferrer" onClick={closeMobileMenu}>
                 Choose portal

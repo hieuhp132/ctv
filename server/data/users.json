@@ -3,7 +3,7 @@
     "_id": "68bdcf22131c403154a093e8",
     "name": "Admin Ant-Tech ",
     "email": "admin@ant-tech.asia",
-    "password": "$2b$10$e2ie3c7rKw2XaHAz5Y1lDe7eQ0P66yTi4MsNUeLNB/2MDL8C8BSYm",
+    "password": "$2b$10$73bo2NGwvH/FVouat5H77uhZMuzPk2jjZ7SwDfjBKC9EJkyMaggm6",
     "credit": 0,
     "role": "admin",
     "jobs": [
@@ -11,7 +11,7 @@
       "68bdcf23131c403154a093f0"
     ],
     "__v": 1,
-    "updatedAt": "2026-10-08T09:34:23.957Z",
+    "updatedAt": "2026-11-22T06:54:33.133Z",
     "bankInfo": {
       "accountHolderName": "BANK OWNER",
       "bankName": "BANK NAME",
@@ -2498,5 +2498,17 @@
     "credit": 0,
     "createdAt": "2026-10-10T15:35:52.405Z",
     "updatedAt": "2026-10-10T15:37:00.139Z"
+  },
+  {
+    "_id": "1795329261817",
+    "name": "employer_1",
+    "email": "employer_1@test.com",
+    "password": "$2b$10$LXnYAE5vsU4ihk7EhBu2YumasDalHxTGLUYDX53Lyqy7b2BrG1ikW",
+    "company": "employer_1@test.com",
+    "role": "recruiter_fulltime",
+    "status": "Active",
+    "credit": 0,
+    "createdAt": "2026-11-22T06:34:21.817Z",
+    "updatedAt": "2026-11-22T06:34:21.817Z"
   }
 ]

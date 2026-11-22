@@ -83,7 +83,7 @@ const SignUp = ({ recruiterType = "freelancer" }) => {
   };
 
   const onBackToLogin = () => {
-    navigate(isFulltimeRecruiter ? "/employee/login" : "/recruiter/login");
+    navigate(isFulltimeRecruiter ? "/employer/login" : "/recruiter/login");
   }
 
   return (
@@ -109,7 +109,7 @@ const SignUp = ({ recruiterType = "freelancer" }) => {
             <div className="auth-heading">
 
               <h1>
-                {isFulltimeRecruiter ? "Create an Employee Account" : "Create Account"}
+                {isFulltimeRecruiter ? "Create an employer account" : "Create account"}
               </h1>
 
               <p>
@@ -255,7 +255,7 @@ const SignUp = ({ recruiterType = "freelancer" }) => {
                 {isSubmitting ? (
                   <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                 ) : (
-                  isFulltimeRecruiter ? "CREATE EMPLOYEE ACCOUNT" : "CREATE FREELANCE RECRUITER ACCOUNT"
+                  isFulltimeRecruiter ? "CREATE EMPLOYER ACCOUNT" : "CREATE FREELANCER RECRUITER ACCOUNT"
                 )}
               </button>
             </form>
@@ -271,13 +271,13 @@ const SignUp = ({ recruiterType = "freelancer" }) => {
                 </button>
               </p>
               <p>
-                {isFulltimeRecruiter ? "Are you a freelance recruiter? " : "Are you an employee? "}
+                {isFulltimeRecruiter ? "Are you a freelance recruiter? " : "Are you an employer? "}
                 <button
-                  onClick={() => navigate(isFulltimeRecruiter ? "/recruiter/signup" : "/employee/signup")}
+                  onClick={() => navigate(isFulltimeRecruiter ? "/recruiter/signup" : "/employer/signup")}
                   className="auth-inline-link"
                   type="button"
                 >
-                  {isFulltimeRecruiter ? "Join as a Freelance Recruiter" : "Join as an Employee"}
+                  {isFulltimeRecruiter ? "Join as a freelance recruiter" : "Join as an employer"}
                 </button>
               </p>
             </div>
@@ -292,7 +292,7 @@ const SignUp = ({ recruiterType = "freelancer" }) => {
 
           <div className="auth-visual-copy">
             <h2>
-              {isFulltimeRecruiter ? "Your Hiring Workspace" : "Join the Network"}
+              {isFulltimeRecruiter ? "Your hiring workspace" : "Join the network"}
             </h2>
 
             <p>

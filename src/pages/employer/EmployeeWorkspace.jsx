@@ -260,7 +260,7 @@ export default function EmployeeWorkspace() {
       <div className="ft-container">
         <header className="ft-header">
           <div>
-            <span className="ft-eyebrow">EMPLOYEE WORKSPACE</span>
+            <span className="ft-eyebrow">EMPLOYER WORKSPACE</span>
             <h1>Good to see you, {user?.name?.split(" ")[0] || "Recruiter"}</h1>
             <p>Own every step from the first conversation to a successful first day.</p>
           </div>

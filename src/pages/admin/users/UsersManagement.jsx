@@ -32,7 +32,7 @@ const ADMIN_ROLES = [
   { id: "admin", label: "Admins", icon: ShieldCheck, description: "Full workspace access" },
   { id: "lower_admin", label: "Lower admins", icon: UserRoundCog, description: "Admin workspace, limited user access" },
   { id: "recruiter_freelancer", label: "Freelance recruiters", icon: UserRoundCog, description: "Refer candidates and track commissions" },
-  { id: "recruiter_fulltime", label: "Employees", icon: UserRoundCog, description: "Manage hiring workflows and talent" },
+  { id: "recruiter_fulltime", label: "Employers", icon: UserRoundCog, description: "Manage hiring workflows and talent" },
   { id: "candidate", label: "Candidates", icon: UserRound, description: "Access candidate features" },
 ];
 const LOWER_ADMIN_ROLES = ADMIN_ROLES.filter(({ id }) => ["recruiter_freelancer", "recruiter_fulltime", "candidate"].includes(id));

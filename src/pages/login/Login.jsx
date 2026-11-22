@@ -58,7 +58,7 @@ const LoginPage = ({ recruiterType = "freelancer" }) => {
 
 
   const onGoToSignup = () => {
-    navigate(isFulltimeRecruiter ? "/employee/signup" : "/recruiter/signup");
+    navigate(isFulltimeRecruiter ? "/employer/signup" : "/recruiter/signup");
   };
 
   /* 🔹 Google OAuth Login */
@@ -171,13 +171,13 @@ const LoginPage = ({ recruiterType = "freelancer" }) => {
             <div className="auth-heading">
 
               <h1>
-                {isFulltimeRecruiter ? "Employee Sign In" : "AntTech Asia"}
+                {isFulltimeRecruiter ? "Employer sign In" : "AntTech Asia"}
               </h1>
 
               <p>
                 {isFulltimeRecruiter
                   ? "Log in to manage your team's hiring activity."
-                  : "Welcome Back, Please login to your account !"}
+                  : "Welcome back, Please login to your account !"}
               </p>
             </div>
 
@@ -296,13 +296,13 @@ const LoginPage = ({ recruiterType = "freelancer" }) => {
                 </button>
               </p>
               <p>
-                {isFulltimeRecruiter ? "Are you a freelance recruiter?" : "Are you an employee?"}{" "}
+                {isFulltimeRecruiter ? "Are you a freelance recruiter?" : "Are you an employer?"}{" "}
                 <button
                   className="auth-inline-link"
-                  onClick={() => navigate(isFulltimeRecruiter ? "/recruiter/login" : "/employee/login")}
+                  onClick={() => navigate(isFulltimeRecruiter ? "/recruiter/login" : "/employer/login")}
                   type="button"
                 >
-                  {isFulltimeRecruiter ? "Switch to Freelance Recruiter" : "Switch to Employee"}
+                  {isFulltimeRecruiter ? "Switch to freelance recruiter" : "Go this way"}
                 </button>
               </p>
             </div>
